@@ -116,7 +116,7 @@ The Exponential distribution (class name Exponential) is an instance of the Gamm
 \[
 f(y; \beta) =
 	\begin{cases}
-		\frac{1}{\beta} e^1{y/\beta}, & 0 \le y \le \infty\\
+		\frac{1}{\beta} e^{-y/\beta}, & 0 \le y \le \infty\\
 		0 & elsewhere
 	\end{cases}
 \]
@@ -126,6 +126,17 @@ Variance: $\sigma^2 = \beta^2$
 
 
 \subsubsection*{Beta Distribution}
+The Beta distribution (class name Beta) is often used to model proportions over the range of 0 to 1. It has two parameters, $\alpha > 0$ and $\beta > 0$, the domain of the dependent variable is $0 \le y \le 1$, however it is possible to scale variables to fit within this range for use with the beta distribution. The probability density function is modelled as:
+\[
+f(y; \alpha, \beta) = 
+	\begin{cases}
+		\frac{ y^{\alpha - 1} (1- y)^{\beta - 1} }{ \beta(\alpha, \beta) } & 0 \le y \le 1\\
+		0 & \text{elsewhere}
+	\end{cases}
+\]
+Note the $\beta(\alpha, \beta)$ is the Beta function described in "The Beta Function" earlier in this document. The distribution has the following simple properties:\\
+Mean: $\mu = \frac{\alpha}{\alpha + \beta}$\\
+Variance: $\sigma^2 = \frac{\alpha\beta}{(\alpha + \beta)^2(\alpha + \beta + 1)}$
 
 \subsubsection*{Normal Distribution}
 

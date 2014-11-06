@@ -16,6 +16,7 @@ package au.id.cxd.math.probability.continuous
 class Exponential(val beta:Double) extends Gamma(1.0, beta) {
 
 }
+
 object Exponential {
   def apply(beta:Double) = new Exponential(beta)
 }
