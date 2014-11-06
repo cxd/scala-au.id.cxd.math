@@ -58,7 +58,81 @@ $$
 \input{./au.id.cxd.math.probability.discrete.tex}
 
 
+
+\subsubsection{Functions}
+
+\subsubsection*{Package au.id.cxd.math.function}
+
+The package au.id.cxd.math.function contains a set of supporting functions. 
+
+\subsubsection*{The Gamma Function}
+
+The gamma function (class name GammaFn) supports the gamma distribution and is implemented very simply as 
+
+$$\Gamma(\alpha) = (\alpha - 1)!$$
+
+\subsubsection*{The Beta Function}
+
+The beta function (class name BetaFn) supports the beta distribution and is built upon the gamma function in the following manner:
+
+$$\beta(\alpha, \beta) = \frac{ (\alpha - 1)! (\beta - 1)! }{ (\alpha - \beta - 1)! }$$
+
 \subsubsection{Continuous Distributions}
+
+\subsubsection*{Package au.id.cxd.math.probability.continuous}
+
+The package au.id.cxd.math.probability.continuous contains a set of classes that can be used to model continuous distributions and their simple properties.
+
+\subsubsection*{Uniform Distribution}
+
+The uniform distribution (class name Uniform) provides a uniform output for $y$ between a $min$ and $max$ and is implemented as follows.
+\[
+f(y; min, max) = 
+	\begin{cases}
+		\frac{1}{max - min} & \text{if } min \le y \le max \\
+		0 & \text{otherwise}
+		
+	\end{cases}
+\]
+The distribution has the following simple properties:\\
+Mean: $\mu = \frac{max + min}{2}$\\
+Variance: $\sigma^2 = \frac{(max - min)^2}{12}$
+
+\subsubsection*{Gamma Distribution}
+The Gamma distribution (class name Gamma) is suitable for modelling distributions that are left skewed and is useful for things such as time measurements (similar to the Poisson distribution for discrete events). The distribution is defined as:
+\[
+f(y; \alpha, \beta) = 
+	\begin{cases}
+		\frac{ y^{\alpha - 1}e^{-y/\beta} }{ \beta^{\alpha} \Gamma(\alpha) } & \text{for } 0 \le y \le \infty \\
+		0 & \text{elsewhere}
+	\end{cases}
+\]
+The simple properties of the distribution are:\\
+Mean: $\mu = \alpha\beta$\\
+Variance: $\sigma^2 = \alpha\beta^2$\\
+The Gamma distribution also has an important relationship with the chi-square distribution where $\nu$ is the degrees of freedom, if the gamma distribution has the parameters $\alpha = \nu/2$ and $\beta = 2$ then it is also a $\chi^2$ distribution with $\nu$ degrees of freedom. \\
+\subsubsection*{Exponential Distribution}
+The Exponential distribution (class name Exponential) is an instance of the Gamma distribution where the $\alpha$ parameter equals 1, leaving the parameter $\beta$ to be provided. The distribution can be used to model processes with "lifetimes" or decay. The distribution is defined as:
+\[
+f(y; \beta) =
+	\begin{cases}
+		\frac{1}{\beta} e^1{y/\beta}, & 0 \le y \le \infty\\
+		0 & elsewhere
+	\end{cases}
+\]
+The exponential distribution has the following simple properties:\\
+Mean: $\mu = \beta$\\
+Variance: $\sigma^2 = \beta^2$
+
+
+\subsubsection*{Beta Distribution}
+
+\subsubsection*{Normal Distribution}
+
+\subsubsection*{Chi-square Distribution}
+
+\subsubsection*{F Distribution}
+
 
 \subsubsection{Inference}
 
