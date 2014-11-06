@@ -1,0 +1,30 @@
+
+\section{Methods of Counting}
+
+\subsection{package au.id.cxd.math.count}
+
+The count package contains a series of modules dedicated to methods of counting.
+
+\subsubsection{Factorial}
+
+The factorial operation is provided as $n!$ implementing:
+$$
+\prod_{i=1}^{n-1} (n-i)
+$$
+The Factorial implementation will memoize results, allowing for efficient reuse during runtime. 
+
+\subsubsection{Choose}
+
+The choose module implements $n \choose m$, how many ways can m items be selected with replacement from a set of n items. \\
+Determined as:
+$$
+\frac{n!}{m!n!}
+$$
+
+\subsubsection{Permutation}
+
+The method of selecting m ordered items from a set of n ordered items $P {n \choose m}$.\\
+$$
+\frac{n!}{(n-m)!}
+$$
+

@@ -5,6 +5,15 @@ import scala.math._
  * Created by cd on 6/09/2014.
  *
  * Geometric distribution with 1 parameter p = probability
+ *
+ * $$
+ *   P(y;p) = p(1-p)^{y-1}
+ * $$
+ *
+ * Mean: $\mu = \frac{1}{p}$
+ *
+ * Variance: $\sigma^2 = \frac{1-p}{p^2}
+ *
  */
 class Geometric(p:Double) extends DiscreteDistribution {
 

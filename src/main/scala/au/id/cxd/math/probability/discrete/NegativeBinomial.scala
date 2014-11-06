@@ -6,6 +6,15 @@ import au.id.cxd.math.count.Choose
 /**
  * Created by cd on 7/09/2014.
  *
+ * The Negative Binomial Distribution (class name NegativeBinomial) provides the probability of the $nth$ success or potentially $nth$ failure of a bernoulli trial. The parameters are $r$ representing the $r -1$ initial trials that where the successful and $y$ the total number of trials before the next success $r$ occurs. The distribution is calculated as follows:
+ * $$
+ * P(y;r) = {y - 1 \choose r - 1}p^rq^{y-r}
+ * $$
+ * where $y = r, r + 1, ...$\\\\
+ * The simple properties of the distribution are:\\\\
+ * Mean:$\mu = \frac{r}{p}$\\
+ * Variance:$\sigma^2 = \frac{r(1-p)}{p^2}$\\
+ *
  * r - the first success
  * p the probability
  * y - the number of trials when the rth success occurs

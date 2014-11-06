@@ -1,0 +1,57 @@
+
+\subsubsection{Discrete Distributions}
+
+The discrete distributions packages contains the following. 
+
+\subsubsection*{Binomial}
+
+The binomial distribution (class name Binomial) has the parameters $p$ for the prior proportion of successes and $n$ for the total number of trials and calculates the probability of $y$ successes 
+$$
+P(y; n; p) = \sum_{i=1}^n {n \choose y_i} p^y_i (1-p)^{n-y_i} 
+$$
+The properties of the binomial are:\\\\
+Mean: $\mu = np$\\
+Variance: $\sigma^2 = np \left( 1-p \right) = npq$
+
+
+\subsubsection*{Geometric Distribution}
+The geometric distribution (class name Geometric) with 1 parameter for probability p and $y \ge 1$.
+The variable represents the nth trial where the success occurs (for instance if y=2 then the trial was successful on the 2nd attempt). The parameter p represents the probability of success. The probability  function calculates the probability of success at the nth trial.
+$$
+P(y;p) = p(1-p)^{y-1}
+$$
+The simple properties of the distribution are:\\\\
+Mean: $\mu = \frac{1}{p}$\\
+Variance: $\sigma^2 = \frac{1-p}{p^2}$
+
+\subsubsection*{Hyper Geometric Distribution}
+The Hypergeometric (class name HyperGeometric) distribution represents the probability of choosing y number of events of the same kind from a subset of r like items within a population of all N possible items (of different kinds) for the sample of size n containing the mixed items. The constraints are such that $r \le n \le N$ and $y \le r \le n$. The parameters are $y,r,n,N$.
+The probability distribution is defined as follows.
+$$
+P(y; r,n,N) = \frac{ {r \choose y } {{N - r} \choose {n - y} } } {  {N \choose n} }
+$$
+The simple properties of the distribution are:\\\\
+Mean: $\mu = \frac{nr}{N}$\\
+Variance: $\sigma^2 = n \left( \frac{r}{N} \right) \left( \frac{N - r}{N} \right) \left( \frac{N - n}{N-1}\right)$
+
+\subsubsection*{Negative Binomial Distribution}
+The Negative Binomial Distribution (class name NegativeBinomial) provides the probability of the nth success or potentially nth failure of a bernoulli trial. The parameters are r representing the (r -1) initial trials that where the successful and y the total number of trials before the next success r occurs. The distribution is calculated as follows:
+$$
+P(y;r) = {y - 1 \choose r - 1}p^rq^{y-r} 
+$$
+where $y = r, r + 1, ...$\\\\
+The simple properties of the distribution are:\\\\
+Mean: $\mu = \frac{r}{p}$\\
+Variance: $\sigma^2 = \frac{r(1-p)}{p^2}$
+
+\subsubsection*{The Poisson Distribution}
+The Poisson Distribution (class name Poisson) provides the probability of an event occurring a certain number of times within an interval. It is commonly used to model a number of events occuring in a certain period of time. We can use the two parameters lambda and y to represent the number of events, and period of time respectively.
+The distribution is defined as:
+$$
+P(y;\lambda) = \frac{ \lambda^y e^{-\lambda} }{ y! }
+$$
+where $y \ge 0$ and $\lambda > 0$\\
+The simple properties of the distribution are:\\\\
+Mean: $\mu = \lambda$\\
+Variance: $\sigma^2 = \lambda$
+

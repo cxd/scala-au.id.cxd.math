@@ -21,41 +21,13 @@
 \pagestyle{headings}
 \begin{document}
 
-\input{./au.id.cxd.math.count.tex}
-
 \section{Overview}
 
-This library implements a number of functions for mathematical operations, it has dependencies upon the scala-nlp-breeze matrix library, and it's purpose is to explore the implementation of various mathematical functions.
+This library implements a number of functions for mathematical operations, it has dependencies upon the scala-nlp-breeze matrix library, and its purpose is to explore the implementation of various mathematical functions.
+This document is structured with the main headings corresponding to the subject areas implemented in the library, and minor headings corresponding to the major package names in the project. Each subsection below the minor headings is also decomposed into individual subject areas, and the lowest level heading represents a class.
 
-This document is structured with the headings corresponding to the major package names in the project.
+\input{./au.id.cxd.math.count.tex}
 
-\section{Methods of Counting}
-
-\subsection{package au.id.cxd.math.count}
-
-The count package contains a series of modules dedicated to methods of counting.
-
-\subsubsection{Factorial}
-
-The factorial operation is provided as $n!$ implementing:
-$$
-\prod_{i=1}^{n-1} (n-i)
-$$
-
-\subsubsection{Choose}
-
-The choose module implements $n \choose m$, how many ways can m items be selected with replacement from a set of n items. \\
-Determined as:
-$$
-\frac{n!}{m!n!}
-$$
-
-\subsubsection{Permutation}
-
-The method of selecting m ordered items from a set of n ordered items $P {n \choose m}$.\\
-$$
-\frac{n!}{(n-m)!}
-$$
 
 \section{Probability}
 
@@ -82,16 +54,8 @@ $$
 p = 1 - \frac{1}{k^2}
 $$
 
-\subsubsection{Discrete Distributions}
 
-The discrete distributions packages contains the following. 
-
-\subsubsection{Binomial}
-
-The binomial module has the parameters $p$ for the prior proportion of successes and $n$ for the total number of trials and calculates the probability of $y$ successes 
-$$
-P(y; n; p) = \sum_{i=1}^n {n \choose y_i} p^y_i (1-p)^{n-y_i} 
-$$
+\input{./au.id.cxd.math.probability.discrete.tex}
 
 
 \subsubsection{Continuous Distributions}

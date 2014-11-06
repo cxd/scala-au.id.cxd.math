@@ -7,24 +7,32 @@ import au.id.cxd.math.count.Choose
  *
  * Hyper geometric
  *
- * N - population size
- * n - sample size
  *
- * r - size of subset of items or events
- * y - selected number events
+ * The Hypergeometric (class name HyperGeometric) distribution represents the probability of choosing $y$ number of events of the same kind
+ * from a subset of $r$ like items within a population of all $N$ possible items (of different kinds) for the sample of size $n$ containing
+ * the mixed items.
+ *
+ * The constraints are such that $r \le n \le N$ and $y \le r \le n$. The parameters are $y,r,n,N$.
+ *
+ * The probability distribution is defined as follows.
+ * $$
+ * P(y; r,n,N) = \frac{ {r \choose y } {{N - r} \choose {n - y} } } {  {N \choose n} }
+ * $$
+ *
+ * The simple properties of the distribution are:\\\\
+ * Mean: $\mu = \frac{nr}{N}$\\
+ * Variance: $\sigma^2 = n \left( \frac{r}{N} \right) \left( \frac{N - r}{N} \right) \left( \frac{N - n}{N-1}\right)$
+ *
  *
  * r <= n <= N
  * y <= r <= n
  *
- */
+ **/
 class HyperGeometric(rSubsetSize:Double, sampleSize:Double, populationSize:Double) extends DiscreteDistribution {
 
   /**
    *
-   * r = size of subset of items or events
-   * y = selected number of items
-   *
-   * y <= r
+   * calculate the probability of selecting y (select Size) samples
    *
    * @param selectSize
    * @return
