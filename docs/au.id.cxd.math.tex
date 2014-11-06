@@ -1,0 +1,104 @@
+\documentclass[a4paper]{article}
+
+
+\title{au.id.cxd.math}
+\date{03/10/2014}
+\author{Chris Davey}
+
+\usepackage[pdftex]{graphicx}
+
+\usepackage{times}
+
+\usepackage{mathptmx}
+
+\usepackage{amsmath}
+
+\usepackage{enumitem}
+
+\usepackage{graphicx}
+
+
+\pagestyle{headings}
+\begin{document}
+
+\input{./au.id.cxd.math.count.tex}
+
+\section{Overview}
+
+This library implements a number of functions for mathematical operations, it has dependencies upon the scala-nlp-breeze matrix library, and it's purpose is to explore the implementation of various mathematical functions.
+
+This document is structured with the headings corresponding to the major package names in the project.
+
+\section{Methods of Counting}
+
+\subsection{package au.id.cxd.math.count}
+
+The count package contains a series of modules dedicated to methods of counting.
+
+\subsubsection{Factorial}
+
+The factorial operation is provided as $n!$ implementing:
+$$
+\prod_{i=1}^{n-1} (n-i)
+$$
+
+\subsubsection{Choose}
+
+The choose module implements $n \choose m$, how many ways can m items be selected with replacement from a set of n items. \\
+Determined as:
+$$
+\frac{n!}{m!n!}
+$$
+
+\subsubsection{Permutation}
+
+The method of selecting m ordered items from a set of n ordered items $P {n \choose m}$.\\
+$$
+\frac{n!}{(n-m)!}
+$$
+
+\section{Probability}
+
+\subsection{package au.id.cxd.math.probability}
+
+This package provides a series of modules that support operations for inference via probability, and for estimation of distributions.
+
+\subsubsection{Inequalities}
+
+The class TchebysheffInequality implements a simple estimation of a pdf using the inequality rule:\\
+$$
+P(\mu - k\sigma < Y < \mu + k\sigma) \ge 1 - \frac{1}{k^2}
+$$
+Which can be restated as:
+$$
+P(lower < Y < upper) \ge 1 - \frac{1}{k^2}
+$$
+The value of $k$ is derived from either upper and lower bounds since:
+$$
+k = \frac{upper - \mu} {\sigma}
+$$
+After determining the value of $k$ the probability can be estimated by substituting
+$$
+p = 1 - \frac{1}{k^2}
+$$
+
+\subsubsection{Discrete Distributions}
+
+The discrete distributions packages contains the following. 
+
+\subsubsection{Binomial}
+
+The binomial module has the parameters $p$ for the prior proportion of successes and $n$ for the total number of trials and calculates the probability of $y$ successes 
+$$
+P(y; n; p) = \sum_{i=1}^n {n \choose y_i} p^y_i (1-p)^{n-y_i} 
+$$
+
+
+\subsubsection{Continuous Distributions}
+
+\subsubsection{Inference}
+
+\subsubsection{Regression}
+
+
+\end{document}
