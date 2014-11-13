@@ -1,5 +1,9 @@
 package au.id.cxd.math.probability.analysis
 
+
+import Stream.cons
+import collection.immutable._
+import au.id.cxd.math.probability.continuous.FDistribution
 import breeze.linalg.{DenseVector, DenseMatrix}
 
 /**
@@ -40,7 +44,19 @@ import breeze.linalg.{DenseVector, DenseMatrix}
  * $
  * Created by cd on 17/09/2014.
  */
-class Anova(X:DenseMatrix[Double]) extends StatisticalTest {
+class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
+
+  /**
+   * f distribution
+   * n = rows * cols
+   * k = cols
+   *
+   * df = (k-1), (n-k)
+   *
+   */
+  val fdist = FDistribution(X.cols-1, X.cols*X.rows-X.cols)
+
+  val criticalVal = CriticalValue(fdist.cdf, UpperTail()) _
 
   /**
    * the correction for the mean
@@ -158,13 +174,27 @@ class Anova(X:DenseMatrix[Double]) extends StatisticalTest {
     F
   }
 
+  /**
+   * perform the anova test at the supplied critical level
+   * @param alpha
+   * @return
+   */
   def test(alpha:Double) : TestResult = {
+    def sequence(last:Double):Stream[Double] = {
+      last #:: sequence(last+0.1)
+    }
     val stat = statistic()
     val n = X.cols*X.rows
     val k = X.cols
-    // TODO: calculate the critical value F statistic for (k-1), (n-k) df at alpha level
-    //
-    return TestResult(alpha, false, 0.0, stat, 0.0)
+    // calculate the critical value F statistic for (k-1), (n-k) df at alpha level
+    val critical = criticalVal(sequence(0.0))
+    val test  = critical.value(alpha)
+    val reject = stat > test
+    val prob = fdist.integral(0.0, stat)
+    return TestResult(alpha, reject, prob, stat, test)
   }
 
+}
+object Anova {
+  def apply(X:DenseMatrix[Double]) = new Anova(X)
 }

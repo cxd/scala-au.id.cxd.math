@@ -59,7 +59,7 @@ class FDistribution(val numeratorDf:Double, val denominatorDf:Double) extends Co
     val b = Math.pow(numeratorDf*y + denominatorDf, numeratorDf+denominatorDf)
     val c = Math.sqrt( a / b )
     val d = y * beta
-    (c / d)
+    ( c / d )
   }
 }
 
