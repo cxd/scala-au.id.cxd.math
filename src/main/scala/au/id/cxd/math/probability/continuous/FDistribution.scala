@@ -12,6 +12,9 @@ import au.id.cxd.math.function.{GammaFn, BetaFn}
  * $$
  * f(x; d_1, d_2) = \frac{ \Gamma\left( \frac{ d_1 + d_2 }{2} \right) d_1^{d_1/2} d_2^{d_2/2} } {\Gamma(d_1/2)\Gamma(d_2/2) } \frac{x^{d_1/2 - 1}}{(d_1 + d_2x)^{(d_1 + d_2)/2}}
  * $$
+ * $$
+ * = \frac{ d_1^{d_1/2} d_2^{d_2/2}x^{d_1/2 - 1} } { (d_2 + d_1x)^{(d_1+d_2)/2} B(d_1/2, d_2/2)}
+ * $$
  * where B is the beta function (from the gamma function)
  * $$
  * B(a, b) = \frac{ (a - 1)!(b - 1)! }{ (a + b - 1)! }
@@ -58,9 +61,17 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
   def pdf(y: Double): Double = {
     if (y <= 0.0) 0.0
     else {
-      val a = Math.pow(numeratorDf, numeratorDf/2.0) * Math.pow(denominatorDf, denominatorDf/2.0) * Math.pow(y, numeratorDf/2.0 - 1.0)
-      val b = Math.pow((denominatorDf + numeratorDf*y), (numeratorDf+denominatorDf)/2.0) * beta
-      (a / b)
+
+      val a = Math.sqrt(Math.pow(denominatorDf, denominatorDf)) * Math.sqrt(Math.pow(numeratorDf, numeratorDf)) * Math.sqrt(Math.pow(y, numeratorDf-2.0))
+      val b = Math.sqrt(Math.pow(denominatorDf + numeratorDf*y, numeratorDf + denominatorDf)) * beta
+      a / b
+      /**  is equivalent to
+      val a = Math.pow(numeratorDf*y, numeratorDf)*Math.pow(denominatorDf, denominatorDf)
+      val b = Math.pow(numeratorDf*y + denominatorDf, numeratorDf+denominatorDf)
+      val c = Math.sqrt(a / b)
+      val d = y * beta
+      c / d
+        **/
     }
   }
 }

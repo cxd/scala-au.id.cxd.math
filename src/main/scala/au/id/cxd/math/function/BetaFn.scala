@@ -12,7 +12,7 @@ import au.id.cxd.math.count.Factorial
  */
 class BetaFn {
 
-  def op(a:Double, b:Double) = Factorial(Math.round(a) - 1.0) * Factorial(Math.round(b) - 1.0) / Factorial((Math.round(a) + Math.round(b)) - 1.0)
+  def op(a:Double, b:Double) = GammaFn(a) * GammaFn(b) / GammaFn(a + b)
 
 }
 object BetaFn {
