@@ -16,7 +16,7 @@ class Factorial() {
   def op: (Double => Double) = {
    def innerOp(num:Double) = {
      if (num < 0.0) {
-       0.0
+       1.0
      } else {
        num match {
          case 0.0 => 1.0

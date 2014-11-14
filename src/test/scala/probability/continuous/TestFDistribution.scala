@@ -10,7 +10,7 @@ import scala.collection.immutable.NumericRange
  */
 class TestFDistribution extends FlatSpec with ShouldMatchers {
 
-  val range:NumericRange[Double] = Range.Double.apply(-4.0, 4.0, 0.1)
+  val range:NumericRange[Double] = Range.Double.apply(0.1, 4.0, 0.1)
 
 
   "FDistribution" should "have pdf" in {
