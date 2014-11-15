@@ -6,6 +6,7 @@ import org.scalatest._
 import scala.collection.immutable.NumericRange
 
 /**
+ * A simple comparison with output from R.
  * Created by cd on 13/11/14.
  */
 class TestFDistribution extends FlatSpec with ShouldMatchers {

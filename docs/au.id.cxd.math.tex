@@ -174,6 +174,16 @@ Variance: $Var[Y] = \sigma^2$
 
 \subsubsection*{Chi-square Distribution}
 
+The chi-square $\chi^2$ distribution with degree of freedom $df$ is implemented as a Gamma distribution in the class "ChiSquare" with the distribution having the parameters $\alpha = df/2$ and $\beta = 2$:
+
+\[
+\chi_{df}^2 = f(y; \alpha = df/2, \beta = 2) = 
+	\begin{cases}
+		\frac{ y^{df/2 - 1}e^{-y/2} }{ 2^{\alpha} \Gamma(df/2) } & \text{for } 0 \le y \le \infty \\
+		0 & \text{elsewhere}
+	\end{cases}
+\]
+
 \subsubsection*{F Distribution}
 
 The F distribution is the ration of two chi-square distributions divided by their respective degrees of freedom.
@@ -203,6 +213,50 @@ The f distribution is most often used in testing hypothesis about an unknown var
 
 
 \subsubsection{Inference}
+
+\subsubsection*{Analysis of Variance (Anova)}
+
+The ratio of Mean Square of Treatment ($MST$) and Mean Square of Error ($MSE$) is used in the test of the hypothesis that the means of $k$ normally distributed populations are equal $H_0: \mu_1 = \mu_2 = ... = \mu_k$ assuming that variances are also equal, $\sigma_1^2 = \sigma_2^2 = ... = \sigma_k^2$. The alternate hypothesis states that at least one of the population means are not equal to the others. The test statistic is calculated as 
+$$F = \frac{MST}{MSE}$$
+and the rejection region is given for the critical value of the F distribution at $k-1$ and $n - k$ degrees of freedom.
+$$
+F > F_{\alpha,(k-1),(n-k)}
+$$
+The procedure of calculating the test statistic involves the calculation of the Total Sum of Square Treatment and the Sum of Square Error.\\
+Firstly the correction for the mean is calculated ($CM$).
+$$
+CM = \frac{1}{n} \left( \sum_{i=1}^k \sum_{j=1}^{n_i} Y_{ij} \right)^2 = n\bar{Y}^2
+$$
+The total sum of squares is calculated.
+$$
+Total SS = \sum_{i=1}^k \sum_{j=1}^{n_i} (Y_{ij} - \bar{Y})^2 = \sum_{i=1}^k \sum_{j=1}^{n_i}  Y_{ij}^2 - CM
+$$
+The Sum of square treatment is calculated as:
+$$
+SST = \sum_{i=1}^k n_i (\bar{Y}_{i \bullet } - \bar{Y})^2 = \sum_{i=1}^k \frac{Y_{i .}^2}{n_i} - CM
+$$
+where $Y_{i \bullet } = \sum_{j=1}^{n_i} Y_{ij}$ and $\bar{Y}_{i \bullet } = \left( \frac{1}{n_i} \right) \sum_{j=1}^{n_i} Y_{ij} = \left( \frac{1}{n_i} \right) Y_{i \bullet }$.\\
+The Sum of square error is calculated from the Sum of Square treatment:
+$$
+SSE = TotalSS - SST
+$$
+Note that the $SSE$ is also equal to the pooled sum of squares for all samples:
+$$
+SSE = \sum_{i=1}^k (n_i - 1)S_i^2
+$$
+where
+$$
+S_i^2 = \frac{1}{n_i - 1} \sum_{j=1}^{n_i} (Y_{ij} - \bar{Y}_{i\bullet}) ^ 2 
+$$
+The mean squared error is the pooled variance defined as:
+$$
+S^2 = MSE = \frac{SSE}{n - k}
+$$
+and the mean sum of square treatment is the sum of square treatment divided by the degree of freedom $k-1$.
+$$
+MST = \frac{SST}{k-1}
+$$
+The implementing class "Anova" performs the calculation for a multivariate set of k samples by breaking the calculations into their components as described above. Note that the operation is performed on a matrix, hence for samples of unequal sizes, a sparse matrix is used where empty values for samples of smaller sizes are padded with $0s$, the total number of rows is the maximum $n_i$ of the $k$ samples.
 
 \subsubsection{Regression}
 

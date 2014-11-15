@@ -187,10 +187,11 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
     val n = X.cols*X.rows
     val k = X.cols
     // calculate the critical value F statistic for (k-1), (n-k) df at alpha level
-    val critical = criticalVal(sequence(0.0))
+    val critical = criticalVal(sequence(0.0).take(100))
     val test  = critical.value(alpha)
     val reject = stat > test
-    val prob = fdist.integral(0.0, stat)
+    // upper tail
+    val prob = 1.0 - fdist.integral(0.0, stat)
     return TestResult(alpha, reject, prob, stat, test)
   }
 
