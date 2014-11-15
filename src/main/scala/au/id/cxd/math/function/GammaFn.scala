@@ -8,7 +8,7 @@ import scalaz.Memo
  * The gamma function $\Rho(a)$ is equivalent to $(a - 1)!$
  *
  * $$
- *   \Gamma(z) = \int{ t^{z-1} e^{-t} dt}_0^\infty
+ *   \Gamma(z) = \int_0^\infty  t^{z-1} e^{-t} dt
  * $$
  *
  * It can be approximated using the equation:

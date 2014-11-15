@@ -67,15 +67,38 @@ The package au.id.cxd.math.function contains a set of supporting functions.
 
 \subsubsection*{The Gamma Function}
 
-The gamma function (class name GammaFn) supports the gamma distribution and is implemented very simply as 
+The gamma function (class name GammaFn) provides the integral for the following:
+
+$$
+  \Gamma(z) = \int_0^\infty  t^{z-1} e^{-t} dt
+$$
+
+It is equivalent to:
 
 $$\Gamma(\alpha) = (\alpha - 1)!$$
+
+In order to support real numbers, it can be approximated using:
+ $$
+   \Gamma(z+1) = \sqrt{2\pi}\left(z + \gamma + \frac{1}{2} \right)^{z + \frac{1}{2}} e^{-\left(z + \gamma + \frac{1}{2} \right)}\left[ c_0 + \sum_{i=1}^N \frac{C_i}{z+i} \right]
+ $$
+Note that the approximation is minimized when $\gamma = 5$ and $N = 6$
+
+The implementation of the gamma function is taken from
+Grant Palmer "Technical Java : Developing Scientific and Engineering Applications", Prentice Hall 2007
+It is also described in  "Numerical Recipes The Art of Scientific Computing" pp213..215. Both define $c_0$ and $C_{1..6}$ as constants.
+
 
 \subsubsection*{The Beta Function}
 
 The beta function (class name BetaFn) supports the beta distribution and is built upon the gamma function in the following manner:
 
-$$\beta(\alpha, \beta) = \frac{ (\alpha - 1)! (\beta - 1)! }{ (\alpha - \beta - 1)! }$$
+$$\beta(\alpha, \beta) = \frac{ (\alpha - 1)! (\beta - 1)! }{ (\alpha + \beta - 1)! }$$
+
+and is implemented as:
+
+$$
+\beta(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}
+$$
 
 \subsubsection{Continuous Distributions}
 
@@ -152,6 +175,31 @@ Variance: $Var[Y] = \sigma^2$
 \subsubsection*{Chi-square Distribution}
 
 \subsubsection*{F Distribution}
+
+The F distribution is the ration of two chi-square distributions divided by their respective degrees of freedom.
+$$
+f(x; d_1; d_2) = \frac{\chi_{d_1}^2/d_1}{\chi_{d_2}^2/d_2}
+$$
+It is defined as:
+$$
+f(x; d_1, d_2) = \frac{ \Gamma\left( \frac{ d_1 + d_2 }{2} \right) d_1^{d_1/2} d_2^{d_2/2} } {\Gamma(d_1/2)\Gamma(d_2/2) } \frac{x^{d_1/2 - 1}}{(d_1 + d_2x)^{(d_1 + d_2)/2}}
+$$
+$$
+= \frac{ d_1^{d_1/2} d_2^{d_2/2}x^{d_1/2 - 1} } { (d_2 + d_1x)^{(d_1+d_2)/2} B(d_1/2, d_2/2)}
+$$
+$$
+= \frac{ \sqrt{d_2^{d_2}}  \sqrt{ d_1^{d_1}  } \sqrt{ x^{d_1-2} }  }{\sqrt{ (d_2+d_1x)^{d_1 + d_2} } \beta(d_1/2, d_2/2) }
+$$
+where $\beta$ is the beta function (from the gamma function) and $x > 0$\\
+The mean of the distribution is defined where denominator $df > 2$.
+$$
+\mu = \frac{ d_2 }{d_2 - 2}
+$$
+And the variance of the distribution is defined where the denominator $df > 4$
+$$
+\sigma^2 = \frac{ 2 d_2^2 (d_1 + d_2 - 2) }{ d_1 (d_2 - 2)^2 (d_2 - 4) }
+$$
+The f distribution is most often used in testing hypothesis about an unknown variance.
 
 
 \subsubsection{Inference}
