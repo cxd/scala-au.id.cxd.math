@@ -17,9 +17,10 @@ class CriticalValue(val cdf: Seq[Double] => Double, val region: Region, val rang
    * return the critical value for the current cdf and probability
    * @return
    */
-  def value:(Double => Double) = {
-    def innerOp(prob: Double) = {
+  def value: (Double => Double) = {
+    def innerOp(region: Region)(prob: Double) = {
       // take the first value of the operation
+      // TODO: work on perhaps a search procedure for the critical value that is not sequential perhaps split the search space successively in half
       range.map(i => (i, i + 0.01))
         .map(pair => {
         val c = region match {
@@ -32,9 +33,10 @@ class CriticalValue(val cdf: Seq[Double] => Double, val region: Region, val rang
         .head
         ._2
     }
-    Memo.mutableHashMapMemo {
-      innerOp
-    }
+    // TODO: determine how to memoize the pair (region x double) since we want either upper or lower tail critical regions
+    //Memo.mutableHashMapMemo {
+    innerOp(region)
+    //}
   }
 
 }
