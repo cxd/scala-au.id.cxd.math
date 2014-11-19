@@ -1,6 +1,7 @@
 package au.id.cxd.math.probability.analysis
 
 
+import scala.Function1
 import Stream.cons
 import collection.immutable._
 import au.id.cxd.math.probability.continuous.FDistribution
@@ -44,7 +45,18 @@ import breeze.linalg.{DenseVector, DenseMatrix}
  * $
  * Created by cd on 17/09/2014.
  */
-class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
+class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
+
+  /**
+   * internal class for intermediate results
+   * @param cm
+   * @param totalSS
+   * @param sst
+   * @param sse
+   * @param mst
+   * @param mse
+   */
+  private class Intermediate(val cm:Double, val totalSS:Double, val sst:Double, val sse:Double, val mst:Double, val mse:Double) {}
 
   /**
    * f distribution
@@ -54,7 +66,7 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
    * df = (k-1), (n-k)
    *
    */
-  val fdist = FDistribution(X.cols-1, X.cols*X.rows-X.cols)
+  val fdist = FDistribution(X.cols - 1, X.cols * X.rows - X.cols)
 
   val criticalVal = CriticalValue(fdist.cdf, UpperTail()) _
 
@@ -62,12 +74,13 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
    * the correction for the mean
    * @return
    */
-  def cm():Double = {
+  private def cm(): Intermediate = {
     val sum = X.toArray.foldLeft(0.0) {
-      (n, d) => n+d
+      (n, d) => n + d
     }
     val n = X.rows * X.cols
-    ( 1.0 / n.toDouble ) * Math.pow(sum, 2.0)
+    val cm = (1.0 / n.toDouble) * Math.pow(sum, 2.0)
+    new Intermediate(cm, 0.0, 0.0, 0.0, 0.0, 0.0)
   }
 
   /**
@@ -76,9 +89,9 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
    * @param M
    * @return
    */
-  def sumCol (col:Int, M:DenseMatrix[Double])(fn:Double => Double) = {
-    val sum = M(::,col).foldLeft(0.0){
-      (n,d) => n+fn(d)
+  private def sumCol(col: Int, M: DenseMatrix[Double])(fn: Double => Double) = {
+    val sum = M(::, col).foldLeft(0.0) {
+      (n, d) => n + fn(d)
     }
     sum
   }
@@ -89,9 +102,9 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
    * @param fn
    * @return
    */
-  def foldColumns(M:DenseMatrix[Double])(fn:Double => Double):Seq[Double] = {
+  private def foldColumns(M: DenseMatrix[Double])(fn: Double => Double): Seq[Double] = {
     val cols = M.cols
-    val idx = (0 to (cols-1))
+    val idx = (0 to (cols - 1))
     val sums = idx.map(i => sumCol(i, M)(fn))
     sums
   }
@@ -103,13 +116,14 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
    * $$ CM = \frac{1}{n} ( \sum_{i=1}^k\sum_{j=1}^{n_i} Y_{ij} ) ^2  $$
    * @return
    */
-  def totalSS() = {
-    val CM = cm()
+  private def totalSS(accum:Intermediate):Intermediate = {
+    val CM = accum.cm
     val rows = X.rows
     val cols = X.cols
-    val sums = foldColumns(X) { (y:Double) => Math.pow(y, 2.0) }
+    val sums = foldColumns(X) { (y: Double) => Math.pow(y, 2.0)}
     val total = sums.sum
-    total - CM
+    val totalSS = total - CM
+    new Intermediate(CM, totalSS, 0.0, 0.0, 0.0, 0.0)
   }
 
   /**
@@ -120,42 +134,46 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
    *
    * $$
    */
-  def ssTreatment() = {
-    val CM = cm()
+  private def ssTreatment(accum:Intermediate):Intermediate = {
+    val CM = accum.cm
     val rows = X.rows
     val cols = X.cols
-    val sums = foldColumns(X) { (y:Double) => y }
+    val sums = foldColumns(X) { (y: Double) => y}
     val ss = sums.map {
-      (y:Double) => Math.pow(y, 2.0) / rows
+      (y: Double) => Math.pow(y, 2.0) / rows
     }.sum
-    ss - CM
+    val sstr = ss - CM
+    new Intermediate(CM, accum.totalSS, sstr, 0.0, 0.0, 0.0)
   }
 
   /**
    * the sum of squares error
    * @return
    */
-  def sse() = {
-    totalSS - ssTreatment
+  private def sse(accum:Intermediate):Intermediate = {
+    val sse = accum.totalSS - accum.sst
+    new Intermediate(accum.cm, accum.totalSS, accum.sst, sse, 0.0, 0.0)
   }
 
   /**
    * the mean sum of squares
    * @return
    */
-  def mse() : Double = {
+  private def mse(accum:Intermediate): Intermediate = {
     val k = X.cols
-    val n = X.rows*X.cols
-    sse / (n - k)
+    val n = X.rows * X.cols
+    val mse = accum.sse / (n - k)
+    new Intermediate(accum.cm, accum.totalSS, accum.sst, accum.sse, 0.0, mse)
   }
 
   /**
    * the mean sum of squares statistic
    * @return
    */
-  def mst() : Double = {
+  private def mst(accum:Intermediate): Intermediate = {
     val k = X.cols
-    ssTreatment / (k - 1.0)
+    val mst = accum.sst / (k - 1.0)
+    new Intermediate(accum.cm, accum.totalSS, accum.sst, accum.sse, mst, accum.mse)
   }
 
   /**
@@ -167,11 +185,24 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
    *
    * @return
    */
-  def statistic() : Double = {
+  private def statistic(): (Double, Intermediate) = {
     val k = X.cols
-    val n = X.cols*X.rows
-    val F = mst / mse
-    F
+    val n = X.cols * X.rows
+    val builder = PartialFunction[Intermediate,Intermediate](_)
+    val result = builder {
+      case i => mst(i)
+    } compose builder {
+      case i => mse(i)
+    } compose builder {
+      case i => sse(i)
+    } compose builder {
+      case i => ssTreatment(i)
+    } compose builder {
+      case i => totalSS(i)
+    }
+    val interim = result(cm)
+    val F = interim.mst / interim.mse
+    (F, interim)
   }
 
   /**
@@ -179,23 +210,113 @@ class Anova(val X:DenseMatrix[Double]) extends StatisticalTest {
    * @param alpha
    * @return
    */
-  def test(alpha:Double) : TestResult = {
-    def sequence(last:Double):Stream[Double] = {
-      last #:: sequence(last+0.1)
+  def test(alpha: Double): TestResult = {
+    def sequence(last: Double): Stream[Double] = {
+      last #:: sequence(last + 0.1)
     }
-    val stat = statistic()
-    val n = X.cols*X.rows
+    val (stat, interim) = statistic()
+    val n = X.cols * X.rows
     val k = X.cols
     // calculate the critical value F statistic for (k-1), (n-k) df at alpha level
     val critical = criticalVal(sequence(0.0).take(100))
-    val test  = critical.value(alpha)
+    val test = critical.value(alpha)
     val reject = stat > test
     // upper tail
     val prob = 1.0 - fdist.integral(0.0, stat)
-    return TestResult(alpha, reject, prob, stat, test)
+    return new AnovaTable(alpha,
+      reject,
+      prob,
+      stat,
+      test,
+      k-1,
+      n-k,
+      interim.sst,
+      interim.mst,
+      interim.sse,
+      interim.mse, n-1,
+      interim.totalSS)
   }
 
 }
+
 object Anova {
-  def apply(X:DenseMatrix[Double]) = new Anova(X)
+  def apply(X: DenseMatrix[Double]) = new Anova(X)
+}
+
+class AnovaTable(/**
+                  * significance
+                  * test at the level of significance
+                  * alpha
+                  */
+                 significance: Double,
+
+                 /**
+                  * determine whether $H_0$ can be rejected
+                  */
+                 reject: Boolean,
+
+                 /**
+                  * The p-value for the observed statistic
+                  */
+                 pValue: Double,
+
+                 /**
+                  * the observed value
+                  */
+                 observedValue: Double,
+
+                 /**
+                  * the critical value for the observed statistic.
+                  */
+                 criticalValue: Double,
+
+                 /**
+                  * k-1 df
+                  */
+                 numeratorDf: Int,
+
+                 /**
+                  * n-k df
+                  */
+                 denominatorDf: Int,
+
+                 /**
+                  * SSTr
+                  */
+                 ssTreatment: Double,
+
+                 /**
+                  * mean sum of square treatment
+                  */
+                 mst: Double,
+
+                 /**
+                  * sum of square error
+                  */
+                 sse: Double,
+
+                 /**
+                  * mean sum of square error
+                  */
+                 mse: Double,
+
+                 /**
+                  * total df
+                  */
+                 totalDf: Int,
+
+                 /**
+                  * Total SS
+                  */
+                 totalSS: Double
+
+                  ) extends TestResult(significance, reject, pValue, observedValue, criticalValue) {
+
+  override def toString() = {
+    s"""NumeratorDF: $numeratorDf\nDenominatorDF: $denominatorDf\n""" +
+    s"""SST: $ssTreatment\nSSE: $sse\n""" +
+    s"""MSE: $mse\n MST: $mst\n"""+
+    s"""TotalDF: $totalDf\nTotalSS: $totalSS\n"""
+  }
+
 }

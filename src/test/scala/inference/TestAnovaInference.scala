@@ -35,8 +35,8 @@ class TestAnovaInference extends FlatSpec with ShouldMatchers {
   "Anova " should "reject null hypothesis" in {
     val anova = Anova(table)
     val testResult = anova.test(0.05)
-    testResult.reject should be(true)
     println(testResult)
+    testResult.reject should be(true)
   }
 
 }
