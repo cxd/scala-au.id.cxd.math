@@ -316,7 +316,12 @@ class AnovaTable(/**
     s"""NumeratorDF: $numeratorDf\nDenominatorDF: $denominatorDf\n""" +
     s"""SST: $ssTreatment\nSSE: $sse\n""" +
     s"""MSE: $mse\n MST: $mst\n"""+
-    s"""TotalDF: $totalDf\nTotalSS: $totalSS\n"""
+    s"""TotalDF: $totalDf\nTotalSS: $totalSS\n"""+
+    s"""F-stat (observed statistic): $observedValue\n"""+
+    s"""F-alpha (critical value): $criticalValue\n"""+
+    s"""P-Value: $pValue\n"""+
+    s"""alpha (significance level):$significance"""
+
   }
 
 }

@@ -32,6 +32,18 @@ class TestAnovaInference extends FlatSpec with ShouldMatchers {
     (69.0, 79.0, 76.0, 0.0),
     (0.0, 90.0, 0.0, 0.0))
 
+
+  /**
+   * the equvalent test in R  file testanova.R
+   * the output we are looking for is:
+   * testanova(X)
+[1] "Total SS 139447.464285714"
+[1] "SST 19866.6071428571"
+[1] "SSE 119580.857142857"
+[1] "MST 6622.20238095238"
+[1] "MSE 4982.53571428571"
+[1] "F-stat 1.32908277244566"
+   */
   "Anova " should "reject null hypothesis" in {
     val anova = Anova(table)
     val testResult = anova.test(0.05)
