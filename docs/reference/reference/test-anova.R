@@ -3,7 +3,7 @@
 
 cm <- function(X) {
   size <- dim(X)[1]*dim(X)[2]
-  total <- sum(X)
+  total <- sum(X)^2
   cm1 <- (1/size)*total
   return (cm1)
 }
@@ -20,7 +20,7 @@ sst <- function(X) {
                  function(i) {
                    C <- X[,i]
                    ni <- length(C)
-                   total <- sum( C^2 / ni )
+                   total <- sum( C )^2 / ni
                    return (total)
                  })
   total <- sum(unlist(data))
@@ -65,6 +65,11 @@ testanova <- function(X) {
   print(paste("MST", mst1))
   print(paste("MSE", mse1))
   print(paste("F-stat", f1))
+  n <- dim(X)[1]*dim(X)[2]
+  k <- dim(X)[2]
+  F <- qf(0.05, k-1, n-k, lower.tail=FALSE)
+  print(paste("Critical Value: ", F))
+  print(paste("P-Value: ", df(F, k-1, n-k)))
 }
 
 X <- t(data.frame(c(65.0, 75.0, 59.0, 94.0),
@@ -76,3 +81,5 @@ c(69.0, 79.0, 76.0, 0.0),
 c(0.0, 90.0, 0.0, 0.0)))
 
 testanova(X)
+
+

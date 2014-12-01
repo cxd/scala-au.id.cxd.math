@@ -56,7 +56,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    * @param mst
    * @param mse
    */
-  private class Intermediate(val cm:Double, val totalSS:Double, val sst:Double, val sse:Double, val mst:Double, val mse:Double) {}
+  class Intermediate(val cm:Double, val totalSS:Double, val sst:Double, val sse:Double, val mst:Double, val mse:Double) {}
 
   /**
    * f distribution
@@ -74,12 +74,12 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    * the correction for the mean
    * @return
    */
-  private def cm(): Intermediate = {
+  def cm(): Intermediate = {
     val sum = X.toArray.foldLeft(0.0) {
       (n, d) => n + d
     }
     val n = X.rows * X.cols
-    val cm = (1.0 / n.toDouble) * Math.pow(sum, 2.0)
+    val cm = (Math.pow(sum, 2.0) / n.toDouble)
     new Intermediate(cm, 0.0, 0.0, 0.0, 0.0, 0.0)
   }
 
@@ -116,7 +116,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    * $$ CM = \frac{1}{n} ( \sum_{i=1}^k\sum_{j=1}^{n_i} Y_{ij} ) ^2  $$
    * @return
    */
-  private def totalSS(accum:Intermediate):Intermediate = {
+  def totalSS(accum:Intermediate):Intermediate = {
     val CM = accum.cm
     val rows = X.rows
     val cols = X.cols
@@ -134,7 +134,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    *
    * $$
    */
-  private def ssTreatment(accum:Intermediate):Intermediate = {
+  def ssTreatment(accum:Intermediate):Intermediate = {
     val CM = accum.cm
     val rows = X.rows
     val cols = X.cols
@@ -150,7 +150,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    * the sum of squares error
    * @return
    */
-  private def sse(accum:Intermediate):Intermediate = {
+  def sse(accum:Intermediate):Intermediate = {
     val sse = accum.totalSS - accum.sst
     new Intermediate(accum.cm, accum.totalSS, accum.sst, sse, 0.0, 0.0)
   }
@@ -159,7 +159,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    * the mean sum of squares
    * @return
    */
-  private def mse(accum:Intermediate): Intermediate = {
+  def mse(accum:Intermediate): Intermediate = {
     val k = X.cols
     val n = X.rows * X.cols
     val mse = accum.sse / (n - k)
@@ -170,7 +170,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    * the mean sum of squares statistic
    * @return
    */
-  private def mst(accum:Intermediate): Intermediate = {
+  def mst(accum:Intermediate): Intermediate = {
     val k = X.cols
     val mst = accum.sst / (k - 1.0)
     new Intermediate(accum.cm, accum.totalSS, accum.sst, accum.sse, mst, accum.mse)
@@ -185,7 +185,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    *
    * @return
    */
-  private def statistic(): (Double, Intermediate) = {
+  def statistic(): (Double, Intermediate) = {
     val k = X.cols
     val n = X.cols * X.rows
     val builder = PartialFunction[Intermediate,Intermediate](_)

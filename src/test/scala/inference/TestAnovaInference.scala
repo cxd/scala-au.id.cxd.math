@@ -37,18 +37,32 @@ class TestAnovaInference extends FlatSpec with ShouldMatchers {
    * the equvalent test in R  file testanova.R
    * the output we are looking for is:
    * testanova(X)
-[1] "Total SS 139447.464285714"
-[1] "SST 19866.6071428571"
-[1] "SSE 119580.857142857"
-[1] "MST 6622.20238095238"
-[1] "MSE 4982.53571428571"
-[1] "F-stat 1.32908277244566"
+[1] "Total SS 26480.9642857143"
+[1] "SST 2876.10714285716"
+[1] "SSE 23604.8571428571"
+[1] "MST 958.702380952387"
+[1] "MSE 983.535714285714"
+[1] "F-stat 0.974750959245682"
+[1] "Critical Value:  3.00878657044736"
+[1] "P-Value:  0.0497996204738284"
    */
   "Anova " should "reject null hypothesis" in {
     val anova = Anova(table)
     val testResult = anova.test(0.05)
     println(testResult)
     testResult.reject should be(true)
+  }
+
+  /**
+  > cm(X)
+[1] 113030
+   */
+  "Anova " should "calculate TotalSS" in {
+    val anova = Anova(table)
+    val result = anova.cm()
+    println("CM: " + result.cm)
+    (result.cm > 113030.5) should not be(true)
+    val result2 = anova.totalSS(result)
   }
 
 }
