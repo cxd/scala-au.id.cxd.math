@@ -468,4 +468,16 @@ class SequenceEstimation {
     }
   }
 
+  /**
+   * retrieve the indices for supplied index
+   * @param modelSeq
+   * @param examples
+   * @return
+   */
+  def indices (modelSeq:List[String]) (examples:List[String]) = {
+    examples.map {
+      (item) => modelSeq.indexWhere { p => p.equalsIgnoreCase(item) }
+    }
+  }
+
 }
