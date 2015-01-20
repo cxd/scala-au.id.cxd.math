@@ -481,3 +481,7 @@ class SequenceEstimation {
   }
 
 }
+
+object SequenceEstimation {
+  def apply() = new SequenceEstimation()
+}

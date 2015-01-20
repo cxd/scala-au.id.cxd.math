@@ -1,5 +1,7 @@
 package au.id.cxd.math.model.sequence
 
+import au.id.cxd.math.data.SequenceEstimation
+import au.id.cxd.math.model.entity.hmm.{Model, Prediction}
 import breeze.linalg._
 import breeze.math._
 import breeze.numerics._
@@ -361,7 +363,7 @@ class HiddenMarkovModel {
       (t >= (T - 1)) match {
         case true => accum
         case false =>
-          V.foldLeft(accum) { k => inner(k)(t + 1)(accum)}
+          V.foldLeft(accum) { (accum, k) => inner(k)(t + 1)(accum)}
       }
     }
     // initialising beta matrix with priors
@@ -397,7 +399,101 @@ class HiddenMarkovModel {
   }
 
 
+  /**
+   * use the viterbi algortihm to determine the most likeli state sequence
+  for the evidence sequence
+  based on pseudo code from: http://en.wikipedia.org/wiki/Viterbi_algorithm
+   * @param model
+   * @param evidenceSequence
+   * @return
+   */
+  def viterbiPredict(model: Model)(evidenceSequence: List[String]): List[Prediction] = {
+    // locally scoped cache
+    val localMap = Map[Int, DenseMatrix[Double]]()
 
+    /**
+     * local cache
+     * @param i
+     * @param methodFn
+     * @return
+     */
+    def cache(i: Int)(methodFn: () => DenseMatrix[Double]) = {
+      localMap.contains(i) match {
+        case true => {
+          localMap.get(i)
+        }
+        case _ => {
+          val (mat: DenseMatrix[Double]) = methodFn()
+          localMap += (i -> mat)
+          mat
+        }
+      }
+    }
+
+    val pi = model.pi
+    val A = model.A
+    val B = model.B
+
+    val V = SequenceEstimation().indices(model.evidence)(evidenceSequence)
+    val K = model.states.length
+    val T = V.length
+    val T1 = DenseMatrix.tabulate(K, T) { (i, j) => 0.0}
+    val T2 = DenseMatrix.tabulate(K, T) { (i, j) => 0.0}
+    // initialisation
+    val T1p = (0 to (K - 1)).foldLeft(T1) {
+      (t1, i) => {
+        val j = V.apply(0)
+        val p = pi.apply(i) * B.apply(j, i)
+        t1(i, 0) = p
+        t1
+      }
+    }
+    // calculate scores for time T
+    val (t1, t2) = (1 to (T - 1)).foldLeft(T1p, T2) {
+      (pair, t) => {
+        (0 to (K - 1)).foldLeft(pair) {
+          (pair, j) => {
+            val (t1, t2) = pair
+            val v = V.apply(t)
+            val args = DenseVector.tabulate(K) {
+              k => {
+                t1.apply(k, t - 1) * A.apply(k, j) * B.apply(v, j)
+              }
+            }
+            val max = max(args)
+            val amax = argmax(args)
+            t1(j, t) = max
+            t2(j, t) = amax.toDouble
+            (t1, t2)
+          }
+        }
+      }
+    }
+    // back track from T.. T-1
+    val lastT = t1(::, (T - 1))
+    val amax = argmax(lastT)
+    val max = max(lastT)
+    val Z = DenseVector.tabulate(T) { i => 0.0}
+    val S = DenseVector.tabulate(T) { i => 0.0}
+    Z(T - 1) = amax.toDouble
+    S(T - 1) = max
+    val sT = model.states.apply(amax)
+    val v = V.apply(T - 1)
+    val accum = List(Prediction(max, sT, model.evidence.apply(v), T, true))
+    // accumulate
+    (1 to (T - 1)).reverse.foldLeft(accum) {
+      (accum, i) => {
+        val index = Z.apply(i).toInt
+        Z(i - 1) = t2(index, i)
+        S(i - 1) = S(i)
+        val stIndex = Z(i - 1).toInt
+        val sT = model.states(stIndex)
+        val v = V(i - 1)
+        val predict = Prediction(t1(index, i), sT, model.evidence(v), i, true)
+        predict :: accum
+      }
+    }
+  }
 
 
 }
