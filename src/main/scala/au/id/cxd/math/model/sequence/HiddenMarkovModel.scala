@@ -1,10 +1,11 @@
 package au.id.cxd.math.model.sequence
 
 import au.id.cxd.math.data.SequenceEstimation
-import au.id.cxd.math.model.entity.hmm.{Model, Prediction}
+import au.id.cxd.math.model.entity.hmm.{InputModel, Model, Prediction}
 import breeze.linalg._
 import breeze.math._
 import breeze.numerics._
+import breeze.linalg.operators._
 import scala.collection.mutable._
 
 /**
@@ -495,6 +496,253 @@ class HiddenMarkovModel {
     }
   }
 
+
+  /**
+   * the training method makes use of the forward backward
+    algorithm.
+
+      input: the input model to start training
+    trainSequences: the training sequences to present for learning, the last item in each sequence is considered to be the target state
+  Note that training sequences need only be the set of complete sequences for each set of transitions.
+
+  theta: the threshold to use until convergence
+    maxEpochs: the maximum epochs to run if convergence is not met
+
+   * @param input
+   * @param trainSequences
+   * @param theta
+   * @param maxEpochs
+   * @return
+   */
+  def train(input: InputModel)(trainSequences: List[List[String]])(theta: Double)(maxEpochs: Int) = {
+    val A = input.A
+    val Bk = input.Bk
+    val pi = input.pi
+    val stateCount = input.states.length
+    val evidenceCount = input.evidence.length
+
+    val matA = DenseMatrix.tabulate(A.rows, A.cols) {
+      (i, j) => A(i, j)
+    }
+    val firstB = Bk.head
+    // the new B matrix will be multiplied against each sequence in Bk
+    // so it is initialised to 1.
+    val matB = DenseMatrix.tabulate(firstB.rows, firstB.cols) { (i, j) => 1.0}
+    val totalSequences = trainSequences.length
+
+    /**
+     * inner training function
+     * @param epoch
+     * @param error
+     * @param data
+     * @return
+     */
+    def innerTrain(epoch: Int)(error: Double)(data: (List[Double], DenseMatrix[Double], DenseMatrix[Double])): (Int, Double, List[Double], DenseMatrix[Double], DenseMatrix[Double]) = {
+      val (matPi, matA, matB) = data
+      (epoch >= maxEpochs) match {
+        case true => (epoch, error, matPi, matA, matB)
+        case _ => {
+          val (newPi, newA, newB) =
+            trainSequences.foldLeft(matPi, matA, matB) {
+              (oldData, trainSeq) => {
+                val example = trainSeq.take(trainSeq.length - 1)
+                val V = SequenceEstimation().indices(input.evidence)(example)
+
+                // for each step in V we compute \hat{a_ij} and \hat{b_ij} first compute alpha and beta
+                val T = example.length - 1
+                // the denominator is calculated for all B sequences
+
+                // the numerator is calculated only for the current e_t+1 in V for A
+                // and only for the current e_t in V for B
+
+                // calculate the denominator
+
+                // firstly the normalisation factor P(O^k|model) this is the joint of the probability of the sequence in row B.[t, ]
+                val range = (T <= 1) match {
+                  case true => List()
+                  case _ => (0 to (T - 1))
+                }
+                // for each matrix in B
+                val (newPi, newA, newB) =
+                  Bk.foldLeft(oldData) {
+                    (oldData, B) => {
+                      val (oldPi, oldA, oldB) = oldData
+                      // since we are supplying a sequence B of matrice we will attempt to regularise
+                      // the B matrix by multiplying it with oldB
+                      val Bjoint = DenseMatrix.tabulate(B.rows, B.cols) {
+                        (i, j) => {
+                          B(i, j) * oldB(i, j)
+                        }
+                      }
+                      normalize(Bjoint(*, ::))
+
+                      // calculate the normalising factor from the joint distribution of V in B accross all states
+                      // for each index in V calculate the joint probability in all states
+                      // multiply it with the joint probability of the other indices in V
+                      val P = V.foldLeft(0.0) {
+                        (n, t) => {
+                          val p =
+                            (0 to Bjoint.cols).map {
+                              (i) => {
+                                Bjoint.apply(t, i)
+                              }
+                            }.reduce { (a, b) => a * b}
+                          n + p
+                        }
+                      }
+                      val p = P match {
+                        case 0.0 => 1.0
+                        case _ => 1.0 / P
+                      }
+                      // calculate alpha and beta
+                      val alpha1 = alpha(stateCount - 1)(pi)(oldA)(Bjoint)(stateCount)(evidenceCount)(V)
+                      val beta1 = beta(stateCount - 1)(pi)(oldA)(Bjoint)(stateCount)(evidenceCount)(V)
+
+                      // fold over time t 2 times
+                      // first to calculate the denominator
+                      // this is the sum over all evidence vars e from 0 to T-1
+                      // in the matrix A (the rows of A 0..T-1
+                      val (denomA1, denomB1) =
+                        (0 to (T - 1)).foldLeft((0.0, 0.0)) {
+                          (pair, t_index) => {
+                            val e_t = V(t_index)
+                            val e_tplus1 = V(t_index + 1)
+                            (0 to oldA.rows).foldLeft(pair) {
+                              (pair1, i) => {
+                                val (a, b) = pair1
+                                val alpha_i = alpha1(e_t, i)
+                                val beta_i = beta1(e_tplus1, i)
+                                val a1 = a + (alpha_i * beta_i)
+                                val b1 = b + (alpha_i * beta_i)
+                                (a1, b1)
+                              }
+                            }
+                          }
+                        }
+                      val (denomA, denomB) = (denomA1 * p, denomB1 * p)
+
+                      /**
+                       * restimating \bar{\pi}
+
+                       expected frequency in state i at time 1
+                       $$
+                       \bar{pi_i} = \gamma_1 (i)
+                       $$
+                       **/
+                      def piNew(lpi: List[Double])(lA: DenseMatrix[Double])(lB: DenseMatrix[Double]): List[Double] = {
+                        (0 to (alpha1.cols - 1)).map {
+                          (i) => {
+                            val denom =
+                              (0 to (alpha1.cols - 1)).map {
+                                j => {
+                                  alpha1(0, j) * beta1(0, j)
+                                }
+                              }.sum
+                            val num = alpha1(0, i) * beta1(0, i)
+                            (num / denom)
+                          }
+                        }
+                      }.toList
+                      //
+                      val newPi = piNew(oldPi)(oldA)(oldB)
+                      //
+                      // now fold over time t to calculate the numerators
+                      // this is the probability in the sequence V (the range) from 0 to T-1
+                      val newA = (0 to (oldA.rows - 1)).foldLeft(oldA) {
+                        (newA, i) => {
+                          (0 to (oldA.cols - 1)).foldLeft(newA) {
+                            (newA1, j) => {
+                              // fold accross t in range (0..T-1)
+                              val a = (T <= 1) match {
+                                case true => 0.0
+                                case _ => {
+                                  range.foldLeft(0.0) {
+                                    (n, t_index) => {
+                                      val e_t = V(t_index)
+                                      val e_tplus1 = V(t_index + 1)
+                                      val alpha_i = alpha1(e_t, i)
+                                      val beta_j = beta1(e_tplus1, j)
+                                      val a1 = n + (alpha_i * matA(i, j) * Bjoint(e_tplus1, j) * beta_j)
+                                      a1
+                                    }
+                                  }
+                                }
+                              }
+                              newA1(i, j) = (denomA == 0.0) match {
+                                case true => newA1(i, j)
+                                case _ => newA1(i, j) + (a / denomA)
+                              }
+                              newA1
+                            }
+                          }
+                        }
+                      }
+
+                      // fold over time T-1 calculate the normalising factor
+                      // of e_t in time A
+                      // now from i to j we update a_ij
+                      val newB = (0 to (B.rows - 1)).foldLeft(Bjoint) {
+                        (newB, i) => {
+                          (0 to (B.cols - 1)).foldLeft(newB) {
+                            (newB1, j) => {
+                              val a = (T <= 1) match {
+                                case true => 0.0
+                                case _ => {
+                                  range.foldLeft(0.0) {
+                                    (n, t_index) => {
+                                      val e_t = V(t_index)
+                                      val e_tplus1 = V(t_index + 1)
+                                      val alpha_j = alpha1(e_t, j)
+                                      val beta_i = beta1(e_tplus1, i)
+                                      val a1 = n + (alpha_j * beta_i)
+                                      a1
+                                    }
+                                  }
+                                }
+                              }
+                              newB1(i, j) = (denomB == 0.0) match {
+                                case true => newB1(i, j)
+                                case _ => {
+                                  newB1(i, j) + (a / denomB)
+                                }
+                              }
+                              newB1
+                            }
+                          }
+                        }
+                      }
+                      (newPi, newA, newB)
+                    }
+                  }
+                  (newPi, newA, newB)
+              }
+            }
+
+
+          normalize(newA(*,::))
+          normalize(newB(*, ::))
+
+          val deltaA = newA - matA
+          val deltaB = newB - matB
+          val tempA = abs(deltaA)
+          val absA = sum(sum(tempA(*, ::)))
+          val tempB = abs(deltaB)
+          val absB = sum(sum(tempB(*, ::)))
+          val max = (absA > absB) match {
+            case true => absA
+            case _ => absB
+          }
+          (max <= theta) match {
+            case true => (epoch, max, newPi, newA, newB)
+            case _ => innerTrain (epoch + 1)(max)(newPi, newA, newB)
+          }
+        }
+      }
+    }
+    // train sequences
+    val (epoch, error, newPi, newA, newB) = innerTrain(1)(0.0)(pi, matA, matB)
+    Model(newPi, newA, newB, states, evidence, epoch, error)
+  }
 
 }
 

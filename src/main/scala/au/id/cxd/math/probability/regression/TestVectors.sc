@@ -44,3 +44,7 @@ val B = DenseMatrix((1.5, 2.0),
   (1.5, 2.0))
 val C = DenseMatrix.horzcat(A, B)
 C.rows
+
+val test = normalize(M(*,::))
+
+val test2 = M - test
