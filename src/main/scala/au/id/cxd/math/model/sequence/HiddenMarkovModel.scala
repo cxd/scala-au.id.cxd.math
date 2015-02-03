@@ -14,7 +14,7 @@ import scala.collection.mutable._
  *
  * Created by cd on 10/01/15.
  */
-class HiddenMarkovModel {
+object HiddenMarkovModel {
 
   /**
    * forward equation
@@ -44,10 +44,10 @@ class HiddenMarkovModel {
      * @param methodFn
      * @return
      */
-    def cache(i: Int)(methodFn: () => DenseMatrix[Double]) = {
+    def cache(i: Int)(methodFn: () => DenseMatrix[Double]) : DenseMatrix[Double] = {
       localMap.contains(i) match {
         case true => {
-          localMap.get(i)
+          localMap.get(i).get
         }
         case _ => {
           val (mat: DenseMatrix[Double]) = methodFn()
@@ -87,16 +87,16 @@ class HiddenMarkovModel {
 
         val totals = DenseMatrix.tabulate(accum.rows, accum.cols) {
           (i, j) => {
-            alpha2.apply(i, t - 1) * A.apply(t, j)
+            alpha2(i, t - 1) * A(t, j)
           }
         }
         // sum columns
         val sums = sum(totals(::, *))
 
         val total = DenseVector.tabulate(totals.cols) {
-          (j) => sums.apply(0, j) * B.apply(vk, j)
+          (j) => sums(0, j) * B(vk, j)
         }
-        accum(vk, ::) := total
+        accum(vk, ::) := total.t
         accum
       }
       T match {
@@ -120,20 +120,20 @@ class HiddenMarkovModel {
         val vlen = V.length
         (t < vlen) match {
           case true => {
-            val idx = V.apply(t)
-            pi.apply(j) * B.apply(idx, j)
+            val idx = V(t)
+            pi(j) * B(idx, j)
           }
-          case _ => pi.apply(j)
+          case _ => pi(j)
         }
       }
     }
     val accum1 = DenseMatrix.tabulate(evidenceCount, stateCount) {
       (i, j) => {
         val row = accum(i, ::)
-        val c = sum(row)
+        val c = sum(row.t)
         (c == 0.0) match {
-          case true => accum.apply(i, j)
-          case _ => accum.apply(i, j) / c
+          case true => accum(i, j)
+          case _ => accum(i, j) / c
         }
       }
     }
@@ -176,10 +176,10 @@ class HiddenMarkovModel {
      * @param methodFn
      * @return
      */
-    def cache(i: Int)(methodFn: () => DenseMatrix[Double]) = {
+    def cache(i: Int)(methodFn: () => DenseMatrix[Double]):DenseMatrix[Double] = {
       localMap.contains(i) match {
         case true => {
-          localMap.get(i)
+          localMap.get(i).get
         }
         case _ => {
           val (mat: DenseMatrix[Double]) = methodFn()
@@ -223,16 +223,16 @@ class HiddenMarkovModel {
 
         val totals = DenseMatrix.tabulate(accum.rows, accum.cols) {
           (i, j) => {
-            alpha2.apply(i, t - 1) * A.apply(t, j)
+            alpha2(i, t - 1) * A(t, j)
           }
         }
         // sum columns
         val sums = sum(totals(::, *))
 
         val total = DenseVector.tabulate(totals.cols) {
-          (j) => sums.apply(0, j) * B.apply(vk, j)
+          (j) => sums(0, j) * B(vk, j)
         }
-        accum(vk, ::) := total
+        accum(vk, ::) := total.t
         accum
       }
       T match {
@@ -264,20 +264,20 @@ class HiddenMarkovModel {
         val vlen = V.length
         (t < vlen) match {
           case true => {
-            val idx = V.apply(t)
-            pi.apply(j) * B.apply(idx, j)
+            val idx = V(t)
+            pi(j) * B(idx, j)
           }
-          case _ => pi.apply(j)
+          case _ => pi(j)
         }
       }
     }
     val accum1 = DenseMatrix.tabulate(evidenceCount, stateCount) {
       (i, j) => {
         val row = accum(i, ::)
-        val c = sum(row)
+        val c = sum(row.t)
         (c == 0.0) match {
-          case true => accum.apply(i, j)
-          case _ => accum.apply(i, j) / c
+          case true => accum(i, j)
+          case _ => accum(i, j) / c
         }
       }
     }
@@ -319,10 +319,10 @@ class HiddenMarkovModel {
      * @param methodFn
      * @return
      */
-    def cache(i: Int)(methodFn: () => DenseMatrix[Double]) = {
+    def cache(i: Int)(methodFn: () => DenseMatrix[Double]):DenseMatrix[Double] = {
       localMap.contains(i) match {
         case true => {
-          localMap.get(i)
+          localMap.get(i).get
         }
         case _ => {
           val (mat: DenseMatrix[Double]) = methodFn()
@@ -347,15 +347,16 @@ class HiddenMarkovModel {
         // \beta_i(t) = \sum_{j=1}^C \beta_j(t+1)a_{ij}b_{jk}v(t+1)
         val totals = DenseMatrix.tabulate(accum.rows, accum.cols) {
           (i, j) => {
-            beta2.apply(i, t + 1) * A.apply(t, j) * B.apply(vk, t + 1)
+            beta2(i, t + 1) * A(t, j) * B(vk, t + 1)
           }
         }
         // sum columns
-        val total = sum(totals(::, *))
+        val total = sum(totals(*, ::))
         (d == 0.0) match {
           case true => accum
           case false => {
-            accum(vk, *) := total / d
+            val total1 = total / d
+            accum(vk, ::) := total1.t
             accum
           }
         }
@@ -373,11 +374,11 @@ class HiddenMarkovModel {
         val vlen = V.length
         (t < vlen) match {
           case true => {
-            val idx = V.apply(t)
-            pi.apply(j) * B.apply(idx, j)
+            val idx = V(t)
+            pi(j) * B(idx, j)
           }
           case false => {
-            pi.apply(j) / (evidenceCount.toDouble)
+            pi(j) / (evidenceCount.toDouble)
           }
         }
       }
@@ -386,10 +387,10 @@ class HiddenMarkovModel {
     val accum1 = DenseMatrix.tabulate(evidenceCount, stateCount) {
       (i, j) => {
         val row = accum(i, ::)
-        val c = sum(row)
+        val c = sum(row.t)
         (c == 0.0) match {
-          case false => accum.apply(i, j) / c
-          case true => accum.apply(i, j)
+          case false => accum(i, j) / c
+          case true => accum(i, j)
         }
       }
     }
@@ -443,8 +444,8 @@ class HiddenMarkovModel {
     // initialisation
     val T1p = (0 to (K - 1)).foldLeft(T1) {
       (t1, i) => {
-        val j = V.apply(0)
-        val p = pi.apply(i) * B.apply(j, i)
+        val j = V(0)
+        val p = pi(i) * B(j, i)
         t1(i, 0) = p
         t1
       }
@@ -455,15 +456,15 @@ class HiddenMarkovModel {
         (0 to (K - 1)).foldLeft(pair) {
           (pair, j) => {
             val (t1, t2) = pair
-            val v = V.apply(t)
+            val v = V(t)
             val args = DenseVector.tabulate(K) {
               k => {
-                t1.apply(k, t - 1) * A.apply(k, j) * B.apply(v, j)
+                t1(k, t - 1) * A(k, j) * B(v, j)
               }
             }
-            val max = max(args)
+            val max1 = max(args)
             val amax = argmax(args)
-            t1(j, t) = max
+            t1(j, t) = max1
             t2(j, t) = amax.toDouble
             (t1, t2)
           }
@@ -473,18 +474,18 @@ class HiddenMarkovModel {
     // back track from T.. T-1
     val lastT = t1(::, (T - 1))
     val amax = argmax(lastT)
-    val max = max(lastT)
+    val max1 = max(lastT)
     val Z = DenseVector.tabulate(T) { i => 0.0}
     val S = DenseVector.tabulate(T) { i => 0.0}
     Z(T - 1) = amax.toDouble
-    S(T - 1) = max
-    val sT = model.states.apply(amax)
-    val v = V.apply(T - 1)
-    val accum = List(Prediction(max, sT, model.evidence.apply(v), T, true))
+    S(T - 1) = max1
+    val sT = model.states(amax)
+    val v = V(T - 1)
+    val accum = List(Prediction(max1, sT, model.evidence(v), T, true))
     // accumulate
     (1 to (T - 1)).reverse.foldLeft(accum) {
       (accum, i) => {
-        val index = Z.apply(i).toInt
+        val index = Z(i).toInt
         Z(i - 1) = t2(index, i)
         S(i - 1) = S(i)
         val stIndex = Z(i - 1).toInt
@@ -582,9 +583,9 @@ class HiddenMarkovModel {
                       val P = V.foldLeft(0.0) {
                         (n, t) => {
                           val p =
-                            (0 to Bjoint.cols).map {
+                            (0 to (Bjoint.cols - 1)).map {
                               (i) => {
-                                Bjoint.apply(t, i)
+                                Bjoint(t, i)
                               }
                             }.reduce { (a, b) => a * b}
                           n + p
@@ -607,7 +608,7 @@ class HiddenMarkovModel {
                           (pair, t_index) => {
                             val e_t = V(t_index)
                             val e_tplus1 = V(t_index + 1)
-                            (0 to oldA.rows).foldLeft(pair) {
+                            (0 to (oldA.rows - 1)).foldLeft(pair) {
                               (pair1, i) => {
                                 val (a, b) = pair1
                                 val alpha_i = alpha1(e_t, i)
@@ -741,7 +742,7 @@ class HiddenMarkovModel {
     }
     // train sequences
     val (epoch, error, newPi, newA, newB) = innerTrain(1)(0.0)(pi, matA, matB)
-    Model(newPi, newA, newB, states, evidence, epoch, error)
+    Model(newPi, newA, newB, input.states, input.evidence, epoch, error)
   }
 
 }

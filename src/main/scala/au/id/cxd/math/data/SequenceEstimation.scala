@@ -37,7 +37,6 @@ class SequenceEstimation {
         }
       }
     }.distinct
-      .sorted
   }
 
   /**
@@ -52,7 +51,8 @@ class SequenceEstimation {
         val state = data.reverse.head
         val terms = data.reverse.tail.reverse
         state match {
-          case endTerm => terms :: accum
+            // matching against parameter
+          case `endTerm` => terms :: accum
           case _ => accum
         }
       }
@@ -89,7 +89,7 @@ class SequenceEstimation {
    * @param states
    * @return
    */
-  def statePriors(dataSet: List[List[String]])(states: List[String]): List[(Double, String)] = {
+  def statePriorPairs(dataSet: List[List[String]])(states: List[String]): List[(Double, String)] = {
     val frequencies = countStateFreq(dataSet)(states)
     val sum = frequencies.foldLeft(0.0) {
       (total, pair) => {
@@ -102,6 +102,18 @@ class SequenceEstimation {
         val (n, state) = pair
         (n / sum, state)
       }
+    }
+  }
+
+  /**
+   * return the state priors without the tuple for state label
+   * @param dataSet
+   * @param states
+   * @return
+   */
+  def statePriors(dataSet:List[List[String]])(states:List[String]):List[Double] = {
+    statePriorPairs (dataSet)(states).map {
+      (pair) => pair._1
     }
   }
 
@@ -150,7 +162,7 @@ class SequenceEstimation {
     val test = listB.indices.map {
       i => {
         if (i >= (listA.length - 1)) ""
-        else arr.apply(i)
+        else arr(i)
       }
     }
     val pairs = test.zip(listB)
@@ -158,8 +170,8 @@ class SequenceEstimation {
       (n, pair) => {
         val (itemA, itemB) = pair
         matches(itemA)(itemB) match {
-          case true => n + 1.0
-          case _ => n
+          case true => n
+          case _ => n + 1.0
         }
       }
     }
@@ -192,14 +204,14 @@ class SequenceEstimation {
     val endSeqs = findSeq(stateB)
 
     val freqs = startSeqs.map {
-      start => {
+      startSeq => {
         // find others 1 longer than start
         val otherSeqs = endSeqs.filter {
-          end => end.length == (start.length + 1)
+          end => end.length == (startSeq.length + 1)
         }
         otherSeqs.foldLeft(1.0) {
           (n, otherSeq) => {
-            val delta = countDeltaState(start)(otherSeq)
+            val delta = countDeltaState(startSeq)(otherSeq)
             delta > 2 match {
               case false => n + 1.0
               case _ => n
@@ -225,8 +237,8 @@ class SequenceEstimation {
     val stateArr = states.toIndexedSeq
     DenseMatrix.tabulate(states.length, states.length) {
       (i, j) => {
-        val stateA = stateArr.apply(i)
-        val stateB = stateArr.apply(j)
+        val stateA = stateArr(i)
+        val stateB = stateArr(j)
         countTransitionFreq(dataSet)(stateA)(stateB)
       }
     }
@@ -387,8 +399,8 @@ class SequenceEstimation {
   def priorEvidences(data: List[List[String]])(terms: List[String])(states: List[String]) = {
     terms.map {
       (term) => {
-        val data = extractEndTermSeq(data)(term)
-        priorEvidence(data)(terms)(states)
+        val data1 = extractEndTermSeq(data)(term)
+        priorEvidence(data1)(terms)(states)
       }
     }
   }
@@ -414,7 +426,7 @@ class SequenceEstimation {
           (accum, i) => {
             (0 to (m - 1)).foldLeft(accum) {
               (arr, j) => {
-                val (freq, totalFreq) = countTermAtEndOfState(data)(termArr.apply(j))(stateArr.apply(i))
+                val (freq, totalFreq) = countTermAtEndOfState(data)(termArr(i))(stateArr(j))
 
                 ((i, j), (freq, totalFreq)) :: arr
               }
@@ -461,8 +473,8 @@ class SequenceEstimation {
     val B = pairs._2
     DenseMatrix.tabulate(n, m) {
       (i, j) => {
-        val t = V.apply(i)
-        val f = B.apply(i, j)
+        val t = V(i)
+        val f = B(i, j)
         f / t
       }
     }
