@@ -11,7 +11,7 @@ class Prediction(val prob:Double, val state:String, val evidence:String, val t:I
    * @return
    */
   override def toString() = {
-    s"Prob: $prob State: $state Evidence: $evidence T: $t Success: $success"
+    s"{\n\tprob: $prob,\n\tstate: $state\n\tevidence: $evidence\n\tT: $t\n\tsuccess: $success\n}"
   }
 
 }

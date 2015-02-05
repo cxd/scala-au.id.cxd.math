@@ -296,7 +296,8 @@ class SequenceEstimation {
    */
   def countTermInEndOfSeq(items: List[String])(term: String): Double = {
     val rev = items.reverse
-    val endTerm = rev.tail.head
+    val (st, terms) = (rev.head, rev.tail)
+    val endTerm = terms.head
     endTerm.equalsIgnoreCase(term) match {
       case true => 2.0
       case _ => 1.0
@@ -471,13 +472,15 @@ class SequenceEstimation {
     val pairs = innerPriorEvidence(data) (terms) (states)
     val V = pairs._1
     val B = pairs._2
-    DenseMatrix.tabulate(n, m) {
+    val Bk = DenseMatrix.tabulate(n, m) {
       (i, j) => {
         val t = V(i)
         val f = B(i, j)
         f / t
       }
     }
+    // normalize rows
+    normalize(Bk(*,::))
   }
 
   /**
