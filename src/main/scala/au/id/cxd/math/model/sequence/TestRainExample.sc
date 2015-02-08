@@ -33,7 +33,7 @@ val data =
 
   )
 val reader = SequenceReader()
-val states = reader.readStates (data)
+val states =  reader.readStates (data)
 val evidenceVars = reader.readEvidenceVars (data)
 val estimator = SequenceEstimation()
 val test = estimator.countStateFreq(data)(states)

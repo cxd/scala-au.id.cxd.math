@@ -351,11 +351,13 @@ object HiddenMarkovModel {
           }
         }
         // sum columns
-        val total = sum(totals(*, ::))
+        val (total:DenseVector[Double]) = (sum(totals(::, *))).toDenseVector
         (d == 0.0) match {
           case true => accum
           case false => {
-            val total1 = total / d
+            val (total1:DenseVector[Double]) = DenseVector.tabulate(total.size) {
+              a => (total(a) / d)
+            }
             accum(vk, ::) := total1.t
             accum
           }
@@ -692,9 +694,8 @@ object HiddenMarkovModel {
                                   range.foldLeft(0.0) {
                                     (n, t_index) => {
                                       val e_t = V(t_index)
-                                      val e_tplus1 = V(t_index + 1)
                                       val alpha_j = alpha1(e_t, j)
-                                      val beta_i = beta1(e_tplus1, i)
+                                      val beta_i = beta1(e_t, j)
                                       val a1 = n + (alpha_j * beta_i)
                                       a1
                                     }
