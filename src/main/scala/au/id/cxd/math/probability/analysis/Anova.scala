@@ -120,7 +120,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
     val CM = accum.cm
     val rows = X.rows
     val cols = X.cols
-    val sums = foldColumns(X) { (y: Double) => Math.pow(y, 2.0)}
+    val sums = foldColumns(X) { (y: Double) => Math.pow(y, 2.0) }
     val total = sums.sum
     val totalSS = total - CM
     new Intermediate(CM, totalSS, 0.0, 0.0, 0.0, 0.0)

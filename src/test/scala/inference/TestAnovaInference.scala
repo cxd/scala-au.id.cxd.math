@@ -63,6 +63,7 @@ class TestAnovaInference extends FlatSpec with ShouldMatchers {
     println("CM: " + result.cm)
     (result.cm > 113030.5) should not be(true)
     val result2 = anova.totalSS(result)
+    println ("TotalSS: " + result2.totalSS)
   }
 
 }
