@@ -17,7 +17,9 @@ package au.id.cxd.math.function
   *
   * http://www.gnu.org/software/gsl/manual/html_node/Numerical-Integration.html#Numerical-Integration
   *
+  * https://en.wikipedia.org/wiki/Numerical_integration
   *
+  * https://en.wikipedia.org/wiki/Trapezoidal_Rule
   *
   * Created by cd on 17/11/2015.
   */
