@@ -23,15 +23,16 @@ trait ContinuousDistribution extends Distribution {
    * @return
    */
   def approxIntegral(start:Double, end:Double)(pdf:(Double) => Double):Double = {
-    { (min(start, end) until max(start, end) by 0.01)
-      .zip(start+0.01 until end+0.01 by 0.01)
-      .map((pair:(Double, Double)) => {
-      val a = pdf(pair._1)
-      val b = pdf(pair._2)
-      val w = (pair._2-pair._1)/2.0
-      w*(a+b)
-    })
-      .sum }
+    (min(start, end) to max(start, end-0.01) by 0.01)
+      .zip(start+0.01 to end by 0.01)
+      .map {
+        (pair:(Double, Double)) => {
+          val a = pdf(pair._1)
+          val b = pdf(pair._2)
+          val w = (pair._2-pair._1)/2.0
+          w*(a+b)
+    }
+      }.sum
   }
 
 

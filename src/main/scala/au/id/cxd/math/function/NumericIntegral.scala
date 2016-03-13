@@ -62,22 +62,23 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
       val (a, b) = limit
 
       val nextX = if (level == 1) {
-        0.5 * (b - a) * (f(a + b))
+        0.5 * (b - a) * (f(a) + f(b))
       }
       else {
         var len = 1
-        for (i <- 1 to level) {
+        for (i <- 1 to level-1) {
           len = len << 1
         }
         val delta = (b - a) / len
         val x = a + 0.5 * delta
-        val steps = for (j <- 0 to len) yield (x + j * delta)
+        val steps = for (j <- 1 to len) yield (x + j * delta)
         val steps2 = steps map { xn => f(xn) }
-        steps2 reduce (_ + _)
+        val sum = steps2 reduce (_ + _)
+        delta * sum
       }
       val temp = level
       val tempF = f (_)
-      val result = (nextX + xPrior, limit)
+      val result = (0.5 * (nextX + xPrior), limit)
       (result, new Trapezoid {
         val prevStep = result
         override def level = temp + 1
@@ -95,25 +96,25 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
     * @param epsilon
     * @return
     */
-  def trapezoid(epsilon:Double = Math.E): Double = {
+  def trapezoid(epsilon:Double = 1.0/Math.E, max:Int = 20): Double = {
 
     def step (max:Int, j:Int, trap:Trapezoid, oldS:Double):Double = (j == max) match {
       case true => oldS
       case _ => {
         val (nextS, nextT) = trap next()
-        if (Math.abs(nextS._1 - oldS) < epsilon * Math.abs(oldS) ) {
-          nextS._1
-        } else step (max, j+1, nextT, nextS._1)
+        //if (j > (max+1)/2 && (Math.abs(nextS._1 - oldS) < epsilon * Math.abs(oldS) ) )  {
+        //  nextS._1
+        //} else
+        step (max, j+1, nextT, nextS._1)
       }
     }
 
-    val max = 20
     // iterative method
     val trap = new Trapezoid {
       val prevStep = (0.0, (lower,upper))
       def f = genFn
     }
-    step (max, 0, trap, 0.0)
+    step (max, 1, trap, 0.0)
   }
 
   /**
@@ -129,25 +130,25 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
     * @param epsilon
     * @return
     */
-  def simpson(epsilon:Double = Math.E) : Double = {
+  def simpson(epsilon:Double = Math.E, max:Int = 20) : Double = {
     def step (max:Int, j:Int, trap:Trapezoid, prevStep:Double, oldS:Double):Double = (j == max) match {
       case true => oldS
       case _ => {
         val (nextS, nextT) = trap next()
-        val curS = 4.0*(nextS._1 - prevStep) / 3.0
-        if (Math.abs (curS - oldS) < epsilon * Math.abs(oldS)) {
-          curS
-        } else step  (max, j+1, nextT, nextS._1, curS)
+        val curS = (4.0*nextS._1 - prevStep) / 3.0
+        //if (j > (max+1)/2 && (Math.abs (curS - oldS) < epsilon * Math.abs(oldS)) ) {
+        //  curS
+        //} else
+        step  (max, j+1, nextT, nextS._1, curS)
       }
     }
 
-    val max = 20
     val trap = new Trapezoid {
       val prevStep = (0.0, (lower, upper))
       def f = genFn
     }
 
-    step (max, 0, trap, 0.0, 0.0)
+    step (max, 1, trap, 0.0, 0.0)
   }
 
   /**
