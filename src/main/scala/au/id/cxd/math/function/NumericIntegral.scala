@@ -1,5 +1,6 @@
 package au.id.cxd.math.function
 
+import breeze.linalg.{max, min}
 /**
   *
   * Numeric integration for a given range
@@ -149,6 +150,29 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
     }
 
     step (max, 1, trap, 0.0, 0.0)
+  }
+
+  /**
+    * approximate the integral using the summation using the midpoint rule.
+    *
+    * This is a simplistic implementation of the approximate integral
+    * a = x+deltax
+    * b = x+2deltax
+    * w = (a+b)/2
+    * p = [pdf(a)+pdf(b)]*w
+    * @return
+    */
+  def approxIntegral():Double = {
+    (min(lower, upper) to max(lower, upper-0.01) by 0.01)
+      .zip(lower+0.01 to upper by 0.01)
+      .map {
+        (pair:(Double, Double)) => {
+          val a = genFn(pair._1)
+          val b = genFn(pair._2)
+          val w = (pair._2-pair._1)/2.0
+          w*(a+b)
+        }
+      }.sum
   }
 
   /**

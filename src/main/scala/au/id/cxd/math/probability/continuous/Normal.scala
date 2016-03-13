@@ -1,5 +1,7 @@
 package au.id.cxd.math.probability.continuous
 
+import au.id.cxd.math.function.NumericIntegral
+
 import scala.math._
 
 /**
@@ -17,14 +19,6 @@ class Normal(mu:Double, variance:Double) extends ContinuousDistribution {
   def mean():Double = mu
 
   def stddev():Double = sqrt(variance)
-
-  /**
-   * since the normal dist cannot be integrated, the integral needs to be approximated
-   * as the sum of the pdf for very small increments between start and end
-   * @param start
-   * @param end
-   */
-  def integral(start:Double, end:Double):Double = approxIntegral(start, end)(pdf)
 
 }
 

@@ -1,6 +1,6 @@
 package au.id.cxd.math.probability.continuous
 
-import au.id.cxd.math.function.BetaFn
+import au.id.cxd.math.function.{NumericIntegral, BetaFn}
 
 /**
  * The beta distribution
@@ -28,8 +28,6 @@ class Beta(val alpha:Double, val beta:Double) extends ContinuousDistribution {
   def mean(): Double = alpha / (alpha + beta)
 
   def stddev(): Double = alpha*beta / (Math.pow(alpha+beta, 2.0)*(alpha + beta + 1))
-
-  def integral(start: Double, end: Double): Double = approxIntegral(start, end)(pdf)
 
   def pdf(y: Double): Double = Math.pow(y, alpha - 1)*Math.pow(1 - y, beta - 1) / betaVal
 }

@@ -1,7 +1,7 @@
 package au.id.cxd.math.probability.continuous
 
 import au.id.cxd.math.count.Factorial
-import au.id.cxd.math.function.{GammaFn, BetaFn}
+import au.id.cxd.math.function.{NumericIntegral, GammaFn, BetaFn}
 
 /**
  * The F distribution is the ratio of two chi-square distributions
@@ -51,7 +51,6 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
       (2 * Math.pow(denominatorDf, 2.0) * (numeratorDf + denominatorDf - 2.0)) / (numeratorDf * Math.pow(denominatorDf - 2.0, 2.0) * (denominatorDf - 4.0))
     else 0.0
 
-  def integral(start: Double, end: Double): Double = approxIntegral(start, end)(pdf)
 
   /**
    * calculate the pdf of the f distribution

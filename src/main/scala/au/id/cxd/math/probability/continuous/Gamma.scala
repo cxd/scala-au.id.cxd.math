@@ -45,15 +45,6 @@ class Gamma(alpha:Double, beta:Double) extends ContinuousDistribution {
 
   def stddev(): Double = a*pow(b,2.0)
 
-  /**
-   * the probability of the range between start and end
-   * end must be greater than start
-   * @param start
-   * @param end
-   * @return
-   */
-  def integral(start:Double, end:Double):Double = approxIntegral(start, end)(pdf)
-
 }
 object Gamma {
   def apply(alpha:Double)(beta:Double) = new Gamma(alpha, beta)

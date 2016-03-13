@@ -1,5 +1,7 @@
 package au.id.cxd.math.probability.continuous
 
+import au.id.cxd.math.function.NumericIntegral
+
 import scala.math._
 
 /**
@@ -28,19 +30,20 @@ class Uniform(min:Double, max:Double) extends ContinuousDistribution {
    * the integral of the distribution
    *
    * integral 1/(theta2 - theta1) dy
+ *
    * = 1/(theta2-theta1)*y_upper - 1/(theta2-theta2)*ylower
    * @param start
    * @param end
    * @return
    */
-  def integral(start:Double, end:Double) = {
+  override def integral(start:Double, end:Double) = {
     val low = if (start >= min && start <= max) {
       start
     } else min
     val high = if (end >= min && end <= max) {
       end
     } else max
-    approxIntegral(low, high)(pdf)
+    NumericIntegral(low, high, pdf(_)).integrate()
   }
 }
 
