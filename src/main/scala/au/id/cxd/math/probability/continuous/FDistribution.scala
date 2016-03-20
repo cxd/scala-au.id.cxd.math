@@ -31,7 +31,7 @@ import au.id.cxd.math.function.{NumericIntegral, GammaFn, BetaFn}
  * \sigma^2 = \frac{ 2 d_2^2 (d_1 + d_2 - 2) }{ d_1 (d_2 - 2)^2 (d_2 - 4) }
  * $$
  *
- * The f distribution is most often used in testing hypothesis about unknown variance.
+ * The f distribution is most often used in testing hypothesis about an unknown variance.
  *
  * Created by cd on 5/11/14.
  */

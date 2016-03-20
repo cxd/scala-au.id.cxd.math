@@ -1,9 +1,9 @@
 import breeze.linalg._
 import breeze.numerics.pow
-
 import au.id.cxd.math.probability.regression._
 import au.id.cxd.math.count.Factorial
 import au.id.cxd.math.function._
+import au.id.cxd.math.probability.continuous.FDistribution
 
 val numeratorDf = 1.0
 val denominatorDf = 2.0
@@ -30,3 +30,15 @@ a2 / b2
   **/
 
 val a3 = GammaFn((numeratorDf + denominatorDf)/2.0)
+
+val fdist = FDistribution(2,2)
+/*
+> df(1,2,2)
+  [1] 0.25
+*/
+val p = fdist.pdf(1.0)
+/*
+  > pf(1,2,2)
+[1] 0.5
+ */
+val i = fdist.integral(0,1.0)

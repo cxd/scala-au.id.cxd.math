@@ -50,7 +50,14 @@ class TestAnovaInference extends FlatSpec with ShouldMatchers {
     val anova = Anova(table)
     val testResult = anova.test(0.05)
     println(testResult)
-    testResult.reject should be(true)
+
+    /**
+      * The test result in R rests if the observed value of F = MST/MSE > F_alpha at the critical value.
+      * It should reject the null hypothesis if F > F_alpha
+      * and should not reject it otherwise.
+      * In this case F-stat is not > Critical value hence should not be rejected.
+      */
+    testResult.reject should be(false)
   }
 
   /**

@@ -66,7 +66,9 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
    * df = (k-1), (n-k)
    *
    */
-  val fdist = FDistribution(X.cols - 1, X.cols * X.rows - X.cols)
+  val n = X.cols * X.rows
+  val k = X.cols
+  val fdist = FDistribution(k - 1, n - k)
 
   val criticalVal = CriticalValue(fdist.cdf, UpperTail()) _
 
@@ -222,19 +224,24 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
     val test = critical.value(alpha)
     val reject = stat > test
     // upper tail
-    val prob = 1.0 - fdist.integral(0.0, stat)
-    return new AnovaTable(alpha,
-      reject,
-      prob,
-      stat,
-      test,
-      k-1,
-      n-k,
-      interim.sst,
-      interim.mst,
-      interim.sse,
-      interim.mse, n-1,
-      interim.totalSS)
+    // get the probability of the observed F value
+    val prob = fdist.pdf(stat)
+    // TODO: work on calculating the minimum alpha-value for the p Value see Wackerly section 10.6
+    val pValue = 1 - fdist.integral(0.0, test)
+    return new AnovaTable(significance=alpha,
+      reject=reject,
+      pValue=pValue,
+      observedProb=prob,
+      observedValue=stat,
+      criticalValue=test,
+      numeratorDf=k-1,
+      denominatorDf=n-k,
+      ssTreatment=interim.sst,
+      mst=interim.mst,
+      sse=interim.sse,
+      mse=interim.mse,
+      totalDf=n-1,
+      totalSS=interim.totalSS)
   }
 
 }
@@ -256,9 +263,16 @@ class AnovaTable(/**
                  reject: Boolean,
 
                  /**
-                  * The p-value for the observed statistic
+                  * The p-value for the test the smallest level of significance
+                   * for alpha to indicate the null hypothesis should be rejected
+                   * therefore the P(X ) < p-value will be rejected.
                   */
                  pValue: Double,
+
+                 /**
+                   * the observed probability of the value.
+                   */
+                 observedProb: Double,
 
                  /**
                   * the observed value
@@ -320,6 +334,7 @@ class AnovaTable(/**
     s"""F-stat (observed statistic): $observedValue\n"""+
     s"""F-alpha (critical value): $criticalValue\n"""+
     s"""P-Value: $pValue\n"""+
+    s"""Observed-Prob $observedProb\n""" +
     s"""alpha (significance level):$significance"""
 
   }

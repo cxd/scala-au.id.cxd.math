@@ -69,7 +69,9 @@ testanova <- function(X) {
   k <- dim(X)[2]
   F <- qf(0.05, k-1, n-k, lower.tail=FALSE)
   print(paste("Critical Value: ", F))
-  print(paste("P-Value: ", df(F, k-1, n-k)))
+  print(paste("P-Value: ", df(f1, k-1, n-k)))
+  print(paste("Area: ", pf(F,k-1,n-k, lower.tail=FALSE)) )
+  print(paste("F > F_alpha ", f1 > F))
 }
 
 X <- t(data.frame(c(65.0, 75.0, 59.0, 94.0),
@@ -82,4 +84,11 @@ c(0.0, 90.0, 0.0, 0.0)))
 
 testanova(X)
 
+# example alpha value is 0.05, for df1/10
+# F_0.05 is about 4.96
+qf(0.05, 1, 10)
+#
+# the probability integral also demonstrates the equivalent for the qf 
+# 0.05 = p(CriticalValue, 1, 10)
+pf(4.96, 1, 10, lower.tail=FALSE)
 
