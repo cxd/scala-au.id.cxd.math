@@ -8,64 +8,66 @@ import au.id.cxd.math.probability.continuous.FDistribution
 import breeze.linalg.{DenseVector, DenseMatrix}
 
 /**
- *
- * $$ Total SS = \sum_{i=1}^k\sum_{j=1}^{n_i} (Y_{ij} - \bar{Y})^2 =  \sum_{i=1}^k\sum_{j=1}^{n_i}Y_{ij}^2 - CM $$
- *
- * $$ CM = \frac{1}{n} ( \sum_{i=1}^k\sum_{j=1}^{n_i} Y_{ij} ) ^2 $$
- *
- * $$ Y_i. = \sum_{j=1}^{n_i} Y_{ij} $$
- * $$
- * \bar{Y_{i.} } = \frac{1}{n_i} \sum_{j=1}^n_i Y_{ij} =  \frac{1}{n_i} Y_{i.}
- *
- * $$
- * $$
- *
- * SST = \sum_{i=1}^k n_i (\bar{Y_{i.} } - \bar{Y} )^2  = \sum_{i=1}^k \frac{Y_{i.}^2}{n_i} - CM
- *
- * $$
- * $$
- *
- * SSE = Total SS - SST
- *
- * $$
- * $$
- *
- * MSE = \frac{SSE}{n-k}
- *
- * $$
- * $$
- *
- * MST = \frac{SST}{k-1}
- *
- * $$
- * $$
- *
- * F = \frac{MST}{MSE} > F_\alpha
- *
- * $
- * Created by cd on 17/09/2014.
- */
+  *
+  *
+  * $$ Total SS = \sum_{i=1}^k\sum_{j=1}^{n_i} (Y_{ij} - \bar{Y})^2 =  \sum_{i=1}^k\sum_{j=1}^{n_i}Y_{ij}^2 - CM $$
+  *
+  * $$ CM = \frac{1}{n} ( \sum_{i=1}^k\sum_{j=1}^{n_i} Y_{ij} ) ^2 $$
+  *
+  * $$ Y_i. = \sum_{j=1}^{n_i} Y_{ij} $$
+  * $$
+  * \bar{Y_{i.} } = \frac{1}{n_i} \sum_{j=1}^n_i Y_{ij} =  \frac{1}{n_i} Y_{i.}
+  *
+  * $$
+  * $$
+  *
+  * SST = \sum_{i=1}^k n_i (\bar{Y_{i.} } - \bar{Y} )^2  = \sum_{i=1}^k \frac{Y_{i.}^2}{n_i} - CM
+  *
+  * $$
+  * $$
+  *
+  * SSE = Total SS - SST
+  *
+  * $$
+  * $$
+  *
+  * MSE = \frac{SSE}{n-k}
+  *
+  * $$
+  * $$
+  *
+  * MST = \frac{SST}{k-1}
+  *
+  * $$
+  * $$
+  *
+  * F = \frac{MST}{MSE} > F_\alpha
+  *
+  * $
+  * Created by cd on 17/09/2014.
+  */
 class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
 
   /**
-   * internal class for intermediate results
-   * @param cm
-   * @param totalSS
-   * @param sst
-   * @param sse
-   * @param mst
-   * @param mse
-   */
-  class Intermediate(val cm:Double, val totalSS:Double, val sst:Double, val sse:Double, val mst:Double, val mse:Double) {}
+    * internal class for intermediate results
+    *
+    * @param cm
+    * @param totalSS
+    * @param sst
+    * @param sse
+    * @param mst
+    * @param mse
+    */
+  class Intermediate(val cm: Double, val totalSS: Double, val sst: Double, val sse: Double, val mst: Double, val mse: Double) {}
 
   /**
-   * f distribution
-   * n = rows * cols
-   * k = cols
-   *
-   * df = (k-1), (n-k)
-   *
-   */
+    * f distribution
+    * n = rows * cols
+    * k = cols
+    *
+    * df = (k-1), (n-k)
+    *
+    */
   val n = X.cols * X.rows
   val k = X.cols
   val fdist = FDistribution(k - 1, n - k)
@@ -73,9 +75,10 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   val criticalVal = CriticalValue(fdist.cdf, UpperTail()) _
 
   /**
-   * the correction for the mean
-   * @return
-   */
+    * the correction for the mean
+    *
+    * @return
+    */
   def cm(): Intermediate = {
     val sum = X.toArray.foldLeft(0.0) {
       (n, d) => n + d
@@ -86,11 +89,12 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   }
 
   /**
-   * sum the supplied column in the matrix
-   * @param col
-   * @param M
-   * @return
-   */
+    * sum the supplied column in the matrix
+    *
+    * @param col
+    * @param M
+    * @return
+    */
   private def sumCol(col: Int, M: DenseMatrix[Double])(fn: Double => Double) = {
     val sum = M(::, col).foldLeft(0.0) {
       (n, d) => n + fn(d)
@@ -99,11 +103,12 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   }
 
   /**
-   * fold an operation accross a matrix and accumulate the output in a vector
-   * @param M
-   * @param fn
-   * @return
-   */
+    * fold an operation accross a matrix and accumulate the output in a vector
+    *
+    * @param M
+    * @param fn
+    * @return
+    */
   private def foldColumns(M: DenseMatrix[Double])(fn: Double => Double): Seq[Double] = {
     val cols = M.cols
     val idx = (0 to (cols - 1))
@@ -112,13 +117,13 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   }
 
   /**
-   * compute the total SS.
-   * $$ Total SS = \sum_{i=1}^k\sum_{j=1}^{n_i} (Y_{ij} - \bar{Y})^2 =  \sum_{i=1}^k\sum_{j=1}^{n_i}Y_{ij}^2 - CM $$
-   *
-   * $$ CM = \frac{1}{n} ( \sum_{i=1}^k\sum_{j=1}^{n_i} Y_{ij} ) ^2  $$
-   * @return
-   */
-  def totalSS(accum:Intermediate):Intermediate = {
+    * compute the total SS.
+    * $$ Total SS = \sum_{i=1}^k\sum_{j=1}^{n_i} (Y_{ij} - \bar{Y})^2 =  \sum_{i=1}^k\sum_{j=1}^{n_i}Y_{ij}^2 - CM $$
+    *
+    * $$ CM = \frac{1}{n} ( \sum_{i=1}^k\sum_{j=1}^{n_i} Y_{ij} ) ^2  $$
+    * @return
+    */
+  def totalSS(accum: Intermediate): Intermediate = {
     val CM = accum.cm
     val rows = X.rows
     val cols = X.cols
@@ -129,18 +134,18 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   }
 
   /**
-   * sum of squares treatment
-   * $$
-   *
-   * SST = \sum_{i=1}^k n_i (\bar{Y_{i.} } - \bar{Y} )^2  = \sum_{i=1}^k \frac{Y_{i.}^2}{n_i} - CM
-   *
-   * $$
-   */
-  def ssTreatment(accum:Intermediate):Intermediate = {
+    * sum of squares treatment
+    * $$
+    *
+    * SST = \sum_{i=1}^k n_i (\bar{Y_{i.} } - \bar{Y} )^2  = \sum_{i=1}^k \frac{Y_{i.}^2}{n_i} - CM
+    *
+    * $$
+    */
+  def ssTreatment(accum: Intermediate): Intermediate = {
     val CM = accum.cm
     val rows = X.rows
     val cols = X.cols
-    val sums = foldColumns(X) { (y: Double) => y}
+    val sums = foldColumns(X) { (y: Double) => y }
     val ss = sums.map {
       (y: Double) => Math.pow(y, 2.0) / rows
     }.sum
@@ -149,19 +154,21 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   }
 
   /**
-   * the sum of squares error
-   * @return
-   */
-  def sse(accum:Intermediate):Intermediate = {
+    * the sum of squares error
+    *
+    * @return
+    */
+  def sse(accum: Intermediate): Intermediate = {
     val sse = accum.totalSS - accum.sst
     new Intermediate(accum.cm, accum.totalSS, accum.sst, sse, 0.0, 0.0)
   }
 
   /**
-   * the mean sum of squares
-   * @return
-   */
-  def mse(accum:Intermediate): Intermediate = {
+    * the mean sum of squares
+    *
+    * @return
+    */
+  def mse(accum: Intermediate): Intermediate = {
     val k = X.cols
     val n = X.rows * X.cols
     val mse = accum.sse / (n - k)
@@ -169,28 +176,29 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   }
 
   /**
-   * the mean sum of squares statistic
-   * @return
-   */
-  def mst(accum:Intermediate): Intermediate = {
+    * the mean sum of squares statistic
+    *
+    * @return
+    */
+  def mst(accum: Intermediate): Intermediate = {
     val k = X.cols
     val mst = accum.sst / (k - 1.0)
     new Intermediate(accum.cm, accum.totalSS, accum.sst, accum.sse, mst, accum.mse)
   }
 
   /**
-   * compute the F-statistic
-   * this is the assertion that
-   * $H_0: \mu_1 = \mu_2 = ... = \mu_k$
-   * vs
-   * $H_a: $ none of the means are equal.
-   *
-   * @return
-   */
+    * compute the F-statistic
+    * this is the assertion that
+    * $H_0: \mu_1 = \mu_2 = ... = \mu_k$
+    * vs
+    * $H_a: $ none of the means are equal.
+    *
+    * @return
+    */
   def statistic(): (Double, Intermediate) = {
     val k = X.cols
     val n = X.cols * X.rows
-    val builder = PartialFunction[Intermediate,Intermediate](_)
+    val builder = PartialFunction[Intermediate, Intermediate](_)
     val result = builder {
       case i => mst(i)
     } compose builder {
@@ -208,10 +216,11 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   }
 
   /**
-   * perform the anova test at the supplied critical level
-   * @param alpha
-   * @return
-   */
+    * perform the anova test at the supplied critical level
+    *
+    * @param alpha
+    * @return
+    */
   def test(alpha: Double): TestResult = {
     def sequence(last: Double): Stream[Double] = {
       last #:: sequence(last + 0.1)
@@ -226,22 +235,24 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
     // upper tail
     // get the probability of the observed F value
     val prob = fdist.pdf(stat)
-    // TODO: work on calculating the minimum alpha-value for the p Value see Wackerly section 10.6
-    val pValue = 1 - fdist.integral(0.0, test)
-    return new AnovaTable(significance=alpha,
-      reject=reject,
-      pValue=pValue,
-      observedProb=prob,
-      observedValue=stat,
-      criticalValue=test,
-      numeratorDf=k-1,
-      denominatorDf=n-k,
-      ssTreatment=interim.sst,
-      mst=interim.mst,
-      sse=interim.sse,
-      mse=interim.mse,
-      totalDf=n-1,
-      totalSS=interim.totalSS)
+    // calculating the minimum alpha-value for the p Value see Wackerly section 10.6
+    // the pvalue in the case of the F-Distribution is equal to P(w_0 >= observedStat)
+    // P(w_0 >= W) = 1 - P(w_0 < W)
+    val pValue = 1 - fdist.integral(0.0, stat)
+    return new AnovaTable(significance = alpha,
+      reject = reject,
+      pValue = pValue,
+      observedProb = prob,
+      observedValue = stat,
+      criticalValue = test,
+      numeratorDf = k - 1,
+      denominatorDf = n - k,
+      ssTreatment = interim.sst,
+      mst = interim.mst,
+      sse = interim.sse,
+      mse = interim.mse,
+      totalDf = n - 1,
+      totalSS = interim.totalSS)
   }
 
 }
@@ -251,22 +262,22 @@ object Anova {
 }
 
 class AnovaTable(/**
-                  * significance
-                  * test at the level of significance
-                  * alpha
-                  */
+                   * significance
+                   * test at the level of significance
+                   * alpha
+                   */
                  significance: Double,
 
                  /**
-                  * determine whether $H_0$ can be rejected
-                  */
+                   * determine whether $H_0$ can be rejected
+                   */
                  reject: Boolean,
 
                  /**
-                  * The p-value for the test the smallest level of significance
+                   * The p-value for the test the smallest level of significance
                    * for alpha to indicate the null hypothesis should be rejected
                    * therefore the P(X ) < p-value will be rejected.
-                  */
+                   */
                  pValue: Double,
 
                  /**
@@ -275,67 +286,67 @@ class AnovaTable(/**
                  observedProb: Double,
 
                  /**
-                  * the observed value
-                  */
+                   * the observed value
+                   */
                  observedValue: Double,
 
                  /**
-                  * the critical value for the observed statistic.
-                  */
+                   * the critical value for the observed statistic.
+                   */
                  criticalValue: Double,
 
                  /**
-                  * k-1 df
-                  */
+                   * k-1 df
+                   */
                  numeratorDf: Int,
 
                  /**
-                  * n-k df
-                  */
+                   * n-k df
+                   */
                  denominatorDf: Int,
 
                  /**
-                  * SSTr
-                  */
+                   * SSTr
+                   */
                  ssTreatment: Double,
 
                  /**
-                  * mean sum of square treatment
-                  */
+                   * mean sum of square treatment
+                   */
                  mst: Double,
 
                  /**
-                  * sum of square error
-                  */
+                   * sum of square error
+                   */
                  sse: Double,
 
                  /**
-                  * mean sum of square error
-                  */
+                   * mean sum of square error
+                   */
                  mse: Double,
 
                  /**
-                  * total df
-                  */
+                   * total df
+                   */
                  totalDf: Int,
 
                  /**
-                  * Total SS
-                  */
+                   * Total SS
+                   */
                  totalSS: Double
 
-                  ) extends TestResult(significance, reject, pValue, observedValue, criticalValue) {
+                ) extends TestResult(significance, reject, pValue, observedValue, criticalValue) {
 
   override def toString() = {
     s"""NumeratorDF: $numeratorDf\nDenominatorDF: $denominatorDf\n""" +
-    s"""SST: $ssTreatment\nSSE: $sse\n""" +
-    s"""MSE: $mse\n MST: $mst\n"""+
-    s"""TotalDF: $totalDf\nTotalSS: $totalSS\n"""+
-    s"""F-stat (observed statistic): $observedValue\n"""+
-    s"""F-alpha (critical value): $criticalValue\n"""+
-    s"""P-Value: $pValue\n"""+
-    s"""Observed-Prob $observedProb\n""" +
-    s"""alpha (significance level):$significance"""
+      s"""SST: $ssTreatment\nSSE: $sse\n""" +
+      s"""MSE: $mse\n MST: $mst\n""" +
+      s"""TotalDF: $totalDf\nTotalSS: $totalSS\n""" +
+      s"""F-stat (observed statistic): $observedValue\n""" +
+      s"""F-alpha (critical value): $criticalValue\n""" +
+      s"""P-Value: $pValue\n""" +
+      s"""Observed-Prob $observedProb\n""" +
+      s"""alpha (significance level):$significance"""
 
   }
 
