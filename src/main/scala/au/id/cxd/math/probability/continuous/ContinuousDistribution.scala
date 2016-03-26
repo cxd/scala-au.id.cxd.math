@@ -15,6 +15,9 @@ trait ContinuousDistribution extends Distribution {
 
   /**
     * integral from start to end for the pdf
+    *
+    * For those distributions that cannot be integrated the numeric integral is used.
+    *
     * @param start
     * @param end
     * @return

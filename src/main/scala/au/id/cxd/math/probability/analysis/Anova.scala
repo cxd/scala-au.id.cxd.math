@@ -72,7 +72,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   val k = X.cols
   val fdist = FDistribution(k - 1, n - k)
 
-  val criticalVal = CriticalValue(fdist.cdf, UpperTail()) _
+  val criticalVal = CriticalValue(fdist, UpperTail()) _
 
   /**
     * the correction for the mean
