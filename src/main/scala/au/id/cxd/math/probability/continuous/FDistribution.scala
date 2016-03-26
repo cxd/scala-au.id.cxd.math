@@ -46,7 +46,7 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
     denominatorDf / (denominatorDf - 2.0)
   else 0.0
 
-  def stddev(): Double =
+  def variance(): Double =
     if (denominatorDf != 4.0)
       (2 * Math.pow(denominatorDf, 2.0) * (numeratorDf + denominatorDf - 2.0)) / (numeratorDf * Math.pow(denominatorDf - 2.0, 2.0) * (denominatorDf - 4.0))
     else 0.0

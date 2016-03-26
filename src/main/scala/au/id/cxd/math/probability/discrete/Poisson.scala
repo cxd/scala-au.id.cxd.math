@@ -12,7 +12,7 @@ class Poisson(lambda:Double) extends DiscreteDistribution {
 
   def mean() = lambda
 
-  def stddev() = lambda
+  def variance() = lambda
 }
 
 object Poisson {

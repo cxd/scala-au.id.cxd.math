@@ -1,5 +1,5 @@
 import au.id.cxd.math.probability
-import au.id.cxd.math.probability.TchebysheffInequality
+import au.id.cxd.math.probability.analysis.TchebysheffInequality
 import au.id.cxd.math.probability.continuous.{Gamma, Normal}
 
 val mu = 20.0

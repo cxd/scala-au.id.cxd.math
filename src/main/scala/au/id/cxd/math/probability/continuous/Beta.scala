@@ -27,7 +27,7 @@ class Beta(val alpha:Double, val beta:Double) extends ContinuousDistribution {
    */
   def mean(): Double = alpha / (alpha + beta)
 
-  def stddev(): Double = alpha*beta / (Math.pow(alpha+beta, 2.0)*(alpha + beta + 1))
+  def variance(): Double = alpha*beta / (Math.pow(alpha+beta, 2.0)*(alpha + beta + 1))
 
   def pdf(y: Double): Double = Math.pow(y, alpha - 1)*Math.pow(1 - y, beta - 1) / betaVal
 }

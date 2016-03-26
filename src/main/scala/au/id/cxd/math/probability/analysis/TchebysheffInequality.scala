@@ -1,4 +1,4 @@
-package au.id.cxd.math.probability
+package au.id.cxd.math.probability.analysis
 
 import scala.math._
 /**
@@ -10,7 +10,7 @@ import scala.math._
  *
  * P(mu - ksigma < Y < mu + ksigma) >= 1 - 1/k^2
  *
- * this can be used to estimate P when the distribution is unknown.
+ * this can be used to estimate P(.) when the distribution is unknown.
  *
  */
 class TchebysheffInequality(mu:Double, sigma:Double) {

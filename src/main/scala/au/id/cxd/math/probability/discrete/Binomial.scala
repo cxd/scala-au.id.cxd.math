@@ -34,7 +34,7 @@ class Binomial(n:Double, p:Double) extends DiscreteDistribution {
 
   def mean():Double = n*p
 
-  def stddev():Double = n*p*(1-p)
+  def variance():Double = n*p*(1-p)
 
 }
 

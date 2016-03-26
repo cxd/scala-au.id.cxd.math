@@ -42,7 +42,7 @@ class HyperGeometric(rSubsetSize:Double, sampleSize:Double, populationSize:Doubl
 
   def mean() = sampleSize*rSubsetSize / populationSize
 
-  def stddev() = sampleSize * (rSubsetSize/populationSize) * ((populationSize - rSubsetSize)/populationSize) * ((populationSize - sampleSize)/(populationSize - 1.0))
+  def variance() = sampleSize * (rSubsetSize/populationSize) * ((populationSize - rSubsetSize)/populationSize) * ((populationSize - sampleSize)/(populationSize - 1.0))
 
 }
 

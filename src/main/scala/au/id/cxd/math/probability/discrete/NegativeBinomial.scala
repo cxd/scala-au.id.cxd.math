@@ -34,7 +34,7 @@ class NegativeBinomial(r:Double, p:Double) extends DiscreteDistribution {
 
   def mean() = r / p
 
-  def stddev() = r * (1.0 - p) / pow(p, 2.0)
+  def variance() = r * (1.0 - p) / pow(p, 2.0)
 }
 
 object NegativeBinomial {

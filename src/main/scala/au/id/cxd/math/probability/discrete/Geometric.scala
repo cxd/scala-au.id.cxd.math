@@ -26,7 +26,7 @@ class Geometric(p:Double) extends DiscreteDistribution {
 
   def mean():Double = 1.0/p
 
-  def stddev():Double = (1.0-p)/pow(p,2.0)
+  def variance():Double = (1.0-p)/pow(p,2.0)
 }
 
 object Geometric {

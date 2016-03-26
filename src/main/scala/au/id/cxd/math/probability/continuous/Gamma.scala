@@ -43,7 +43,7 @@ class Gamma(alpha:Double, beta:Double) extends ContinuousDistribution {
   def mean(): Double = a*b
 
 
-  def stddev(): Double = a*pow(b,2.0)
+  def variance(): Double = a*pow(b,2.0)
 
 }
 object Gamma {

@@ -24,7 +24,7 @@ class Uniform(min:Double, max:Double) extends ContinuousDistribution {
 
   def mean():Double = (max + min) / 2.0
 
-  def stddev():Double = pow((max - min),2.0) / 12.0
+  def variance():Double = pow((max - min),2.0) / 12.0
 
   /**
    * the integral of the distribution

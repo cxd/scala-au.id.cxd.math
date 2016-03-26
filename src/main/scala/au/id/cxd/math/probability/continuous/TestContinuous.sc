@@ -1,6 +1,6 @@
 import au.id.cxd.math.probability
-import au.id.cxd.math.probability.TchebysheffInequality
-import au.id.cxd.math.probability.continuous.{Uniform, Gamma, Normal}
+import au.id.cxd.math.probability.analysis.TchebysheffInequality
+import au.id.cxd.math.probability.continuous.{Gamma, Normal, Uniform}
 //
 val norm = Normal(0.0)(1.0)
 norm.integral(-1.0, 1.0)

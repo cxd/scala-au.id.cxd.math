@@ -10,7 +10,7 @@ import scala.math._
  * the normal distribution
  *
  */
-class Normal(mu:Double, variance:Double) extends ContinuousDistribution {
+class Normal(mu:Double, varianceVal:Double) extends ContinuousDistribution {
 
   def pdf(y:Double):Double = {
     (1/sqrt(variance*2.0*Pi) ) * exp(-1.0 * pow(y - mu, 2.0) / (2.0*variance) )
@@ -18,7 +18,7 @@ class Normal(mu:Double, variance:Double) extends ContinuousDistribution {
 
   def mean():Double = mu
 
-  def stddev():Double = sqrt(variance)
+  def variance():Double = varianceVal
 
 }
 
