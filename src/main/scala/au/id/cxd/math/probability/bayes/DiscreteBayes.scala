@@ -58,3 +58,8 @@ class DiscreteBayes(val likelihood: Distribution, val prior: Distribution) {
   }
 
 }
+
+object DiscreteBayes {
+
+  def apply(likelihood: Distribution, prior: Distribution) = new DiscreteBayes(likelihood, prior)
+}
