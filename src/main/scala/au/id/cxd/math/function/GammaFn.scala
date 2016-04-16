@@ -7,16 +7,19 @@ import scalaz.Memo
 /**
   * ##import MathJax
   *
-  * The gamma function $\Rho(a)$ is equivalent to $(a - 1)!$
+  * The gamma function $\Gamma(a)$ is equivalent to $(a - 1)!$
   *
-  * $$
-  * \Gamma(z) = \int_0^\infty  t^{z-1} e^{-t} dt
-  * $$
+  *
+  * $\Gamma(z)$ = $\int_0^\infty pow(t, z-1) exp(-t) dt$
+  *
+  *
+  *
   *
   * It can be approximated using the equation:
   * $$
-  * \Gamma(z+1) = \sqrt{2\pi}\left(z + \gamma + \frac{1}{2} \right)^{z + \frac{1}{2}} e^{-\left(z + \gamma + \frac{1}{2} \right)}\left[ c_0 + \sum_{i=1}^N \frac{C_i}{z+i} \right]
+  * \Gamma(z+1) = \sqrt{2\pi} \times pow \left(  z + \gamma + \frac{1}{2} , {z + \frac{1}{2}} \right) \exp\left[ -\left(z + \gamma + \frac{1}{2} \right) \right] \left[ c_0 + \sum_{i=1}^N \frac{C_i}{z+i} \right]
   * $$
+  *
   * Note that the approximation is minimized when $\gamma = 5$ and $N = 6$
   *
   * The implementation of the gamma function is taken from

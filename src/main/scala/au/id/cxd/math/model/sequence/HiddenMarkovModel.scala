@@ -10,7 +10,171 @@ import scala.collection.mutable._
 
 /**
   * ##import MathJax
-  * HiddenMarkovModel implementation, based on F# implementation in test-hmm.
+  *
+  * The HMM is calculated out of two processes, a forward and backward process.
+  *
+  * The model itself consists of two matrices and a prior matrix.
+  *
+  * A state transition matrix $A$ of $M \times M$ representing the likelihood of transitioning
+  * to state $X_{t+1}$ at time $t+1$ from the previous state $X_t$ at time $t$.
+  * The values $a_{ij}$ represent the transition from $X_t$ to $X_{t+1}$ hence $i = t$ and $j = t + 1$.
+  * The table forms the likelihood $P(X_{t+1}|X_t)$ such that
+  *
+  * $$
+  *   a_{ij} = P(x_j | x_i)
+  * $$
+  *
+  * The second matrix $B$ represents a state evidence transition matrix. Given $M$ states there are $N$
+  * evidence variables, hence $B$ is an $M \times N$ matrix where
+  * $$
+  *   b_{ij} = P(x_j | e_i)
+  * $$
+  *
+  * Additionally there is a prior probability for each state $X$ provided by a vector $\pi$ of length $M$ where
+  *
+  * $$
+  *   \pi_i = P(x_i)
+  * $$
+  *
+  * The Hidden Markov model comprises of
+  *
+  * $$
+  *   HMM = \lambda = (A, B, \pi)
+  * $$
+  *
+  * The procedure of learning the hidden markov model is to seek to learn the posterior matrices for $B$
+  * given an initial condition. This implementation addresses the discrete model, rather than the continuous model
+  * and seeks to learn the matrix $A$ relating state $X$ to the other states $x$ and the matrix $B$ relating
+  * the state $X$ to the evidence variable $e$ give the stream of previous events in time $1 : t$ it seeks to
+  * use the posterior model to predice the next state at time $t + k + 1$ and the prior states from the
+  * sequential model in time $t + k$.
+  *
+  * $$
+  *   P(X_{t+k+1}|e_{1:t}) = \sum_{x_t+k} P(X_{t+k+1}|x_{t+k})P(x_{t+k}|e_{1:t})
+  * $$
+  *
+  * Note that both $A$ and $B$ are as the likelihood model, and $\pi$ is initialised as the prior.
+  *
+  * This is estimated from the training data. The raw format of the training data is a jagged array
+  * which consists of a
+  *
+  *{{{
+  *   List[List[String]]
+  * }}}
+  *
+  * Where the last item in the list represents a discrete state label for the domain.
+  * Each item preceding that represents a discrete token for an evidence label in the domain.
+  *
+  * So each row in the jagged array contains a variable sequence of evidence labels and terminates with a state label
+  * which is emitted by the sequence.
+  *
+  * Both the domain of evidence labels and state labels are deterministic in this model.
+  * For example, if we have a simple weather world and we observe two evidence variables:
+  *
+  * {{{
+  * Umbrella, NoUmbrella
+  * }}}
+  *
+  * And we have two state variables,
+  *
+  * {{{
+  * Raining,Sunny
+  * }}}
+  *
+  * We can describe a sequence that leads up to Raining as
+  *
+  *{{{
+  * Umbrella,Raining
+  * }}}
+  *
+  * Or
+  *
+  *{{{
+  * Umbrella,Umbrella,Raining
+  * }}}
+  *
+  * We may potentially have a sequence that terminates in Sunny as
+  *
+  *{{{
+  * Umbrella,Umbrella,NoUmbrella,Sunny
+  *}}}
+  *
+  * For example.
+  *
+  * The matrix $A$ is estimated by identifying the sequences of length $n$ and $n+1$ and then counting the frequency
+  * of the transition between $x_n$ and $x_{n+1}$.
+  *
+  * $$
+  *  a_{ij} = \frac{c_{ij}}{\sum_k c_{ik}}
+  * $$
+  *
+  * The evidence matrix $B$ is estimated by identifying the frequency of $b_{m}$ terminating in $x_{n+1}$
+  * for rows in the traning data $M$ and terminal states in $N$ lines ending in state $x_n$.
+  *
+  * $$
+  * b_{ij} = \frac{ c(e_i, x_j) }{ \sum_k c(e_i, x_k) }
+  * $$
+  *
+  * The class [[au.id.cxd.math.data.SequenceEstimation]] is used in this library to estimate these original likelihoods
+  * and the prior distribution for $X$.
+  *
+  * $$
+  * \pi_i = \frac{c_i}{\sum_k c_{ik}}
+  * $$
+  *
+  *
+  *
+  * <br/>
+  *
+  * The procedure for learning is performed using a "forward backward" algorithm, there are two stages.
+  *
+  * The backward variable represents the probability that the model is in state $x_i(t)$ at time $t$.
+  *
+  * A matrix $\beta$ is defined to store the transition model at time $t$ such that
+  *
+  * $$
+  *   \beta_i(t) = 0 \text{ if } x_i \ne x_0 \text{ and } t = T
+  * $$
+  * $$
+  *   \beta_i(t) = 1 \text{ if } x_i = x_0 \text{ and } t = T
+  * $$
+  * $$
+  *   \beta_i(t) = \sum_j^N a_{ij}b_j(e_{t+1})\beta_j(t + 1) \text{ otherwise }
+  * $$
+  *
+  *  this matrix represents the probability that the sequence of evidence variables seen up until time $T$
+  *  from $1:t \rightarrow T$ will generate the state $x_i$
+  *
+  * $$
+  *    \beta_i(t) = P(e_{t+1}, e_{t+2}, ..., e_T | x_i, \lambda)
+  * $$
+  *
+  *The second part of the algorithm is to compute the forward variable $\alpha$ a matrix that is defined
+  * to represent the probability that the model is in state $x_i$ given the sequence of evidence variables
+  * observed so far.
+  *
+  * $$
+  *   \alpha_j(t) = P(e_1, e_2, ..., e_t, x_i | \lambda)
+  * $$
+  *
+  * it is defined as follows
+  *
+  * $$
+  *   \alpha_j(t) = 0 \text{ if } t = 0 \text{ and } x_j \ne x_0
+  * $$
+  * $$
+  *   \alpha_j(t) = 1 \text{ if } t = 0 \text{ and } x_j = x_0
+  * $$
+  * $$
+  *   \alpha_j(t) = \left[\sum_i^N \alpha_i(t-1)a_{ij}\right]b_j(e_t) \text{ otherwise }
+  * $$
+  *
+  * as both are recursive procedures a dynamic programming technique is required to compute the values.
+  *
+  * The model for $A$ is iteratively updated for each transition at time $t$ and $t + 1$ by estimating the
+  * probability of transitiong from state $x_i$ to state $x_j$ at time $t$ and $t+1$ given the current model $\lambda$
+  * and the set of evidence variables $V_{t+1} = e_1,e_2,e_3,...,e_{t+1}$ the new estimates are stored
+  * in a matrix $\Gamma$
   *
   *
   * Created by cd on 10/01/15.
@@ -21,7 +185,7 @@ object HiddenMarkovModel {
     * forward equation
     * *
     * $$
-    * T = time T
+    * T = time_T
     * $$
     * $$
     * pi = P(x_i)
@@ -35,7 +199,7 @@ object HiddenMarkovModel {
     * *
     * $T$ represents $i$ current state we need to predict $j$ next state
     * *
-    * V - indices of evidence variables observed up to time T
+    * $V$ - indices of evidence variables observed up to time $T$
     *
     * @param T
     * @param pi
@@ -81,10 +245,10 @@ object HiddenMarkovModel {
 
       /**
         * compute new probabilities for evidence var at vk, at time t and update the row t in matrix accum
-        * *
+        * $$
         * \alpha_j(t) = b_{jk}v(t)\sum_{i=1}^c \alpha_i(t-1)a_{ij}
-        * *
-        * vk = current evidence variable in V
+        * $$
+        * v_k = current evidence variable in V
         * t = index of state at time t
         *
         * @param vk
@@ -159,12 +323,12 @@ object HiddenMarkovModel {
 
   /**
     * forward equation
-    * *
-    * T = time T
+    * $$
+    * T = time_T
     * pi = P(x_i)
     * a_ij = P(x_j | x_i)
     * b_ij = P(x_j | e_i)
-    * *
+    * $$
     * T represents i current state we need to predict j next state
     * *
     * V - indices of evidence variables observed up to time T
@@ -218,11 +382,11 @@ object HiddenMarkovModel {
 
       /**
         * compute new probabilities for evidence var at vk, at time t and update the row t in matrix accum
-        * *
+        * $$
         * \alpha_j(t) = b_{jk}v(t)\sum_{i=1}^c \alpha_i(t-1)a_{ij}
-        * *
-        * vk = current evidence variable in V
-        * t = index of state at time t
+        * $$
+        * $v_k$ = current evidence variable in V
+        * $t$ = index of state at time t
         *
         * @param vk
         * @param t
@@ -306,12 +470,12 @@ object HiddenMarkovModel {
   /**
     * this is the time reversed algorithm of alpha
     * moving from t = 1 to T
-    **
+    * $$
     * T = time T
     * pi = P(x_i)
     * a_ij = P(x_j | x_i)
     * b_ij = P(x_j | e_i)
-    **
+    * $$
     * T represents i current state we need to predict j next state
     **
     * V - indices of evidence variables observed up to time T
@@ -350,12 +514,22 @@ object HiddenMarkovModel {
     }
 
     val alpha0 = alphaUnscaled(T)(pi)(A)(B)(stateCount)(evidenceCount)(V)
-
+    /**
+      $$
+        \beta_i(t) = \sum_{j=1}^C \beta_j(t+1)a_{ij}b_{jk}v(t+1)
+      $$
+      * @param T
+      * @param t
+      * @param pi
+      * @param A
+      * @param B
+      * @param V
+      * @param accum
+      * @return
+      */
     def betaInner(T: Int)(t: Int)(pi: List[Double])(A: DenseMatrix[Double])(B: DenseMatrix[Double])(V: List[Int])(accum: DenseMatrix[Double]): DenseMatrix[Double] = {
       // perform the calculation
-      /*
-        \beta_i(t) = \sum_{j=1}^C \beta_j(t+1)a_{ij}b_{jk}v(t+1)
-      */
+
       def inner(vk: Int)(t: Int)(accum: DenseMatrix[Double]): DenseMatrix[Double] = {
         val (beta2: DenseMatrix[Double]) = cache(t + 1) { () => betaInner(T)(t + 1)(pi)(A)(B)(V)(accum) }
         // calculate the scaling factor D_t = \prod_{\t=1}^T c_t
