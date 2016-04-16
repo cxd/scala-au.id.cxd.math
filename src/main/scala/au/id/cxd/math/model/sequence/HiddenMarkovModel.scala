@@ -9,42 +9,53 @@ import breeze.linalg.operators._
 import scala.collection.mutable._
 
 /**
- * HiddenMarkovModel implementation, based on F# implementation in test-hmm.
- *
- *
- * Created by cd on 10/01/15.
- */
+  * ##import MathJax
+  * HiddenMarkovModel implementation, based on F# implementation in test-hmm.
+  *
+  *
+  * Created by cd on 10/01/15.
+  */
 object HiddenMarkovModel {
 
   /**
-   * forward equation
-
-    T = time T
-    pi = P(x_i)
-    a_ij = P(x_j | x_i)
-   b_ij = P(x_j | e_i)
-
-   T represents i current state we need to predict j next state
-
-   V - indices of evidence variables observed up to time T
-   * @param T
-   * @param pi
-   * @param A
-   * @param B
-   * @param stateCount
-   * @param evidenceCount
-   * @param V
-   * @return
-   */
+    * forward equation
+    * *
+    * $$
+    * T = time T
+    * $$
+    * $$
+    * pi = P(x_i)
+    * $$
+    * $$
+    * a_ij = P(x_j | x_i)
+    * $$
+    * $$
+    * b_ij = P(x_j | e_i)
+    * $$
+    * *
+    * $T$ represents $i$ current state we need to predict $j$ next state
+    * *
+    * V - indices of evidence variables observed up to time T
+    *
+    * @param T
+    * @param pi
+    * @param A
+    * @param B
+    * @param stateCount
+    * @param evidenceCount
+    * @param V
+    * @return
+    */
   def alpha(T: Int)(pi: List[Double])(A: DenseMatrix[Double])(B: DenseMatrix[Double])(stateCount: Int)(evidenceCount: Int)(V: List[Int]): DenseMatrix[Double] = {
     val localMap = Map[Int, DenseMatrix[Double]]()
     /**
-     * local cache
-     * @param i
-     * @param methodFn
-     * @return
-     */
-    def cache(i: Int)(methodFn: () => DenseMatrix[Double]) : DenseMatrix[Double] = {
+      * local cache
+      *
+      * @param i
+      * @param methodFn
+      * @return
+      */
+    def cache(i: Int)(methodFn: () => DenseMatrix[Double]): DenseMatrix[Double] = {
       localMap.contains(i) match {
         case true => {
           localMap.get(i).get
@@ -58,31 +69,32 @@ object HiddenMarkovModel {
     }
 
     /**
-     * recurse on
-        time T
-        with priors pi
-        and state transition matrix A
-        with evidence matrix B
-        and index of transitions V
-        accumulate in matrix accum
-     */
+      * recurse on
+      * time T
+      * with priors pi
+      * and state transition matrix A
+      * with evidence matrix B
+      * and index of transitions V
+      * accumulate in matrix accum
+      */
     def alphaInner(T: Int)(pi: List[Double])(A: DenseMatrix[Double])(B: DenseMatrix[Double])(V: List[Int])(accum: DenseMatrix[Double]): DenseMatrix[Double] = {
 
       /**
-       * compute new probabilities for evidence var at vk, at time t and update the row t in matrix accum
-
-            \alpha_j(t) = b_{jk}v(t)\sum_{i=1}^c \alpha_i(t-1)a_{ij}
-
-            vk = current evidence variable in V
-            t = index of state at time t
-       * @param vk
-       * @param t
-       * @param accum
-       * @return
-       */
+        * compute new probabilities for evidence var at vk, at time t and update the row t in matrix accum
+        * *
+        * \alpha_j(t) = b_{jk}v(t)\sum_{i=1}^c \alpha_i(t-1)a_{ij}
+        * *
+        * vk = current evidence variable in V
+        * t = index of state at time t
+        *
+        * @param vk
+        * @param t
+        * @param accum
+        * @return
+        */
       def inner(vk: Int)(t: Int)(accum: DenseMatrix[Double]): DenseMatrix[Double] = {
 
-        val (alpha2: DenseMatrix[Double]) = cache(t - 1) { () => alphaInner(t - 1)(pi)(A)(B)(V)(accum)}
+        val (alpha2: DenseMatrix[Double]) = cache(t - 1) { () => alphaInner(t - 1)(pi)(A)(B)(V)(accum) }
 
 
         val totals = DenseMatrix.tabulate(accum.rows, accum.cols) {
@@ -146,37 +158,39 @@ object HiddenMarkovModel {
 
 
   /**
-   * forward equation
-
-    T = time T
-    pi = P(x_i)
-    a_ij = P(x_j | x_i)
-   b_ij = P(x_j | e_i)
-
-   T represents i current state we need to predict j next state
-
-   V - indices of evidence variables observed up to time T
-   * @param T
-   * @param pi
-   * @param A
-   * @param B
-   * @param stateCount
-   * @param evidenceCount
-   * @param V
-   * @return
-   */
+    * forward equation
+    * *
+    * T = time T
+    * pi = P(x_i)
+    * a_ij = P(x_j | x_i)
+    * b_ij = P(x_j | e_i)
+    * *
+    * T represents i current state we need to predict j next state
+    * *
+    * V - indices of evidence variables observed up to time T
+    *
+    * @param T
+    * @param pi
+    * @param A
+    * @param B
+    * @param stateCount
+    * @param evidenceCount
+    * @param V
+    * @return
+    */
   def alphaUnscaled(T: Int)(pi: List[Double])(A: DenseMatrix[Double])(B: DenseMatrix[Double])(stateCount: Int)(evidenceCount: Int)(V: List[Int]): DenseMatrix[Double] = {
 
     // locally scoped cache
     val localMap = Map[Int, DenseMatrix[Double]]()
 
     /**
-     * local cache
-     * @param i
-     * @param methodFn
-     * @return
-     */
-    def cache(i: Int)(methodFn: () => DenseMatrix[Double]):DenseMatrix[Double] = {
+      * local cache
+      *
+      * @param i
+      * @param methodFn
+      * @return
+      */
+    def cache(i: Int)(methodFn: () => DenseMatrix[Double]): DenseMatrix[Double] = {
       localMap.contains(i) match {
         case true => {
           localMap.get(i).get
@@ -192,28 +206,29 @@ object HiddenMarkovModel {
     val finalT = T
 
     /**
-     * recurse on
-        time T
-        with priors pi
-        and state transition matrix A
-        with evidence matrix B
-        and index of transitions V
-        accumulate in matrix accum
-     */
+      * recurse on
+      * time T
+      * with priors pi
+      * and state transition matrix A
+      * with evidence matrix B
+      * and index of transitions V
+      * accumulate in matrix accum
+      */
     def alphaInner(T: Int)(pi: List[Double])(A: DenseMatrix[Double])(B: DenseMatrix[Double])(V: List[Int])(accum: DenseMatrix[Double]): DenseMatrix[Double] = {
 
       /**
-       * compute new probabilities for evidence var at vk, at time t and update the row t in matrix accum
-
-            \alpha_j(t) = b_{jk}v(t)\sum_{i=1}^c \alpha_i(t-1)a_{ij}
-
-            vk = current evidence variable in V
-            t = index of state at time t
-       * @param vk
-       * @param t
-       * @param accum
-       * @return
-       */
+        * compute new probabilities for evidence var at vk, at time t and update the row t in matrix accum
+        * *
+        * \alpha_j(t) = b_{jk}v(t)\sum_{i=1}^c \alpha_i(t-1)a_{ij}
+        * *
+        * vk = current evidence variable in V
+        * t = index of state at time t
+        *
+        * @param vk
+        * @param t
+        * @param accum
+        * @return
+        */
       def inner(vk: Int)(t: Int)(accum: DenseMatrix[Double]): DenseMatrix[Double] = {
 
         val (alpha2: DenseMatrix[Double]) = cache(t - 1) {
@@ -289,37 +304,39 @@ object HiddenMarkovModel {
   }
 
   /**
-   * this is the time reversed algorithm of alpha
-    moving from t = 1 to T
-
-    T = time T
-    pi = P(x_i)
-    a_ij = P(x_j | x_i)
-   b_ij = P(x_j | e_i)
-
-   T represents i current state we need to predict j next state
-
-   V - indices of evidence variables observed up to time T
-   * @param T
-   * @param pi
-   * @param A
-   * @param B
-   * @param stateCount
-   * @param evidenceCount
-   * @param V
-   * @return
-   */
+    * this is the time reversed algorithm of alpha
+    * moving from t = 1 to T
+    **
+    * T = time T
+    * pi = P(x_i)
+    * a_ij = P(x_j | x_i)
+    * b_ij = P(x_j | e_i)
+    **
+    * T represents i current state we need to predict j next state
+    **
+    * V - indices of evidence variables observed up to time T
+    *
+    * @param T
+    * @param pi
+    * @param A
+    * @param B
+    * @param stateCount
+    * @param evidenceCount
+    * @param V
+    * @return
+    */
   def beta(T: Int)(pi: List[Double])(A: DenseMatrix[Double])(B: DenseMatrix[Double])(stateCount: Int)(evidenceCount: Int)(V: List[Int]): DenseMatrix[Double] = {
     // locally scoped cache
     val localMap = Map[Int, DenseMatrix[Double]]()
 
     /**
-     * local cache
-     * @param i
-     * @param methodFn
-     * @return
-     */
-    def cache(i: Int)(methodFn: () => DenseMatrix[Double]):DenseMatrix[Double] = {
+      * local cache
+      *
+      * @param i
+      * @param methodFn
+      * @return
+      */
+    def cache(i: Int)(methodFn: () => DenseMatrix[Double]): DenseMatrix[Double] = {
       localMap.contains(i) match {
         case true => {
           localMap.get(i).get
@@ -340,9 +357,9 @@ object HiddenMarkovModel {
         \beta_i(t) = \sum_{j=1}^C \beta_j(t+1)a_{ij}b_{jk}v(t+1)
       */
       def inner(vk: Int)(t: Int)(accum: DenseMatrix[Double]): DenseMatrix[Double] = {
-        val (beta2: DenseMatrix[Double]) = cache(t + 1) { () => betaInner(T)(t + 1)(pi)(A)(B)(V)(accum)}
+        val (beta2: DenseMatrix[Double]) = cache(t + 1) { () => betaInner(T)(t + 1)(pi)(A)(B)(V)(accum) }
         // calculate the scaling factor D_t = \prod_{\t=1}^T c_t
-        val d = alpha0.toArray.reduce { (a, b) => a + b}
+        val d = alpha0.toArray.reduce { (a, b) => a + b }
         // vk = i, t
         // \beta_i(t) = \sum_{j=1}^C \beta_j(t+1)a_{ij}b_{jk}v(t+1)
         val totals = DenseMatrix.tabulate(accum.rows, accum.cols) {
@@ -351,11 +368,11 @@ object HiddenMarkovModel {
           }
         }
         // sum columns
-        val (total:DenseVector[Double]) = (sum(totals(::, *))).toDenseVector
+        val (total: DenseVector[Double]) = (sum(totals(::, *))).toDenseVector
         (d == 0.0) match {
           case true => accum
           case false => {
-            val (total1:DenseVector[Double]) = DenseVector.tabulate(total.size) {
+            val (total1: DenseVector[Double]) = DenseVector.tabulate(total.size) {
               a => (total(a) / d)
             }
             accum(vk, ::) := total1.t
@@ -367,7 +384,7 @@ object HiddenMarkovModel {
       (t >= (T - 1)) match {
         case true => accum
         case false =>
-          V.foldLeft(accum) { (accum, k) => inner(k)(t + 1)(accum)}
+          V.foldLeft(accum) { (accum, k) => inner(k)(t + 1)(accum) }
       }
     }
     // initialising beta matrix with priors
@@ -404,23 +421,25 @@ object HiddenMarkovModel {
 
 
   /**
-   * use the viterbi algortihm to determine the most likeli state sequence
-  for the evidence sequence
-  based on pseudo code from: http://en.wikipedia.org/wiki/Viterbi_algorithm
-   * @param model
-   * @param evidenceSequence
-   * @return
-   */
+    * use the viterbi algortihm to determine the most likeli state sequence
+    * for the evidence sequence
+    * based on pseudo code from: http://en.wikipedia.org/wiki/Viterbi_algorithm
+    *
+    * @param model
+    * @param evidenceSequence
+    * @return
+    */
   def viterbiPredict(model: Model)(evidenceSequence: List[String]): List[Prediction] = {
     // locally scoped cache
     val localMap = Map[Int, DenseMatrix[Double]]()
 
     /**
-     * local cache
-     * @param i
-     * @param methodFn
-     * @return
-     */
+      * local cache
+      *
+      * @param i
+      * @param methodFn
+      * @return
+      */
     def cache(i: Int)(methodFn: () => DenseMatrix[Double]) = {
       localMap.contains(i) match {
         case true => {
@@ -441,8 +460,8 @@ object HiddenMarkovModel {
     val V = SequenceEstimation().indices(model.evidence)(evidenceSequence)
     val K = model.states.length
     val T = V.length
-    val T1 = DenseMatrix.tabulate(K, T) { (i, j) => 0.0}
-    val T2 = DenseMatrix.tabulate(K, T) { (i, j) => 0.0}
+    val T1 = DenseMatrix.tabulate(K, T) { (i, j) => 0.0 }
+    val T2 = DenseMatrix.tabulate(K, T) { (i, j) => 0.0 }
     // initialisation
     val T1p = (0 to (K - 1)).foldLeft(T1) {
       (t1, i) => {
@@ -477,8 +496,8 @@ object HiddenMarkovModel {
     val lastT = t1(::, (T - 1))
     val amax = argmax(lastT)
     val max1 = max(lastT)
-    val Z = DenseVector.tabulate(T) { i => 0.0}
-    val S = DenseVector.tabulate(T) { i => 0.0}
+    val Z = DenseVector.tabulate(T) { i => 0.0 }
+    val S = DenseVector.tabulate(T) { i => 0.0 }
     Z(T - 1) = amax.toDouble
     S(T - 1) = max1
     val sT = model.states(amax)
@@ -501,22 +520,22 @@ object HiddenMarkovModel {
 
 
   /**
-   * the training method makes use of the forward backward
-    algorithm.
-
-      input: the input model to start training
-    trainSequences: the training sequences to present for learning, the last item in each sequence is considered to be the target state
-  Note that training sequences need only be the set of complete sequences for each set of transitions.
-
-  theta: the threshold to use until convergence
-    maxEpochs: the maximum epochs to run if convergence is not met
-
-   * @param input
-   * @param trainSequences
-   * @param theta
-   * @param maxEpochs
-   * @return
-   */
+    * the training method makes use of the forward backward
+    * algorithm.
+    * *
+    * input: the input model to start training
+    * trainSequences: the training sequences to present for learning, the last item in each sequence is considered to be the target state
+    * Note that training sequences need only be the set of complete sequences for each set of transitions.
+    * *
+    * theta: the threshold to use until convergence
+    * maxEpochs: the maximum epochs to run if convergence is not met
+    *
+    * @param input
+    * @param trainSequences
+    * @param theta
+    * @param maxEpochs
+    * @return
+    */
   def train(input: InputModel)(trainSequences: List[List[String]])(theta: Double)(maxEpochs: Int) = {
     val A = input.A
     val Bk = input.Bk
@@ -530,16 +549,17 @@ object HiddenMarkovModel {
     val firstB = Bk.head
     // the new B matrix will be multiplied against each sequence in Bk
     // so it is initialised to 1.
-    val matB = DenseMatrix.tabulate(firstB.rows, firstB.cols) { (i, j) => 1.0}
+    val matB = DenseMatrix.tabulate(firstB.rows, firstB.cols) { (i, j) => 1.0 }
     val totalSequences = trainSequences.length
 
     /**
-     * inner training function
-     * @param epoch
-     * @param error
-     * @param data
-     * @return
-     */
+      * inner training function
+      *
+      * @param epoch
+      * @param error
+      * @param data
+      * @return
+      */
     def innerTrain(epoch: Int)(error: Double)(data: (List[Double], DenseMatrix[Double], DenseMatrix[Double])): (Int, Double, List[Double], DenseMatrix[Double], DenseMatrix[Double]) = {
       val (matPi, matA, matB) = data
       (epoch >= maxEpochs) match {
@@ -589,7 +609,7 @@ object HiddenMarkovModel {
                               (i) => {
                                 Bjoint(t, i)
                               }
-                            }.reduce { (a, b) => a * b}
+                            }.reduce { (a, b) => a * b }
                           n + p
                         }
                       }
@@ -625,13 +645,13 @@ object HiddenMarkovModel {
                       val (denomA, denomB) = (denomA1 * p, denomB1 * p)
 
                       /**
-                       * restimating \bar{\pi}
-
-                       expected frequency in state i at time 1
-                       $$
-                       \bar{pi_i} = \gamma_1 (i)
-                       $$
-                       **/
+                        * restimating \bar{\pi}
+                        * *
+                        * expected frequency in state i at time 1
+                        * $$
+                        * \bar{pi_i} = \gamma_1 (i)
+                        * $$
+                        **/
                       def piNew(lpi: List[Double])(lA: DenseMatrix[Double])(lB: DenseMatrix[Double]): List[Double] = {
                         (0 to (alpha1.cols - 1)).map {
                           (i) => {
@@ -716,12 +736,12 @@ object HiddenMarkovModel {
                       (newPi, newA, newB)
                     }
                   }
-                  (newPi, newA, newB)
+                (newPi, newA, newB)
               }
             }
 
 
-          normalize(newA(*,::))
+          normalize(newA(*, ::))
           normalize(newB(*, ::))
 
           val deltaA = newA - matA
@@ -736,7 +756,7 @@ object HiddenMarkovModel {
           }
           (max <= theta) match {
             case true => (epoch, max, newPi, newA, newB)
-            case _ => innerTrain (epoch + 1)(max)(newPi, newA, newB)
+            case _ => innerTrain(epoch + 1)(max)(newPi, newA, newB)
           }
         }
       }

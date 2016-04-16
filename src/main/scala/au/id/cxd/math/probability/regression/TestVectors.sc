@@ -48,3 +48,7 @@ C.rows
 val test = normalize(M(*,::))
 
 val test2 = M - test
+
+
+val X3 = DenseMatrix((1,1,1),(2,2,2))
+val C1 = X3.t * X3

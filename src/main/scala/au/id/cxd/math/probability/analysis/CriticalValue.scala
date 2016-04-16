@@ -14,6 +14,8 @@ case class LowerTail() extends Region {}
 
 
 /**
+  * ##import MathJax
+  *
   * An abstract class with a dependency on a distributon
   * it is used to tabulate the distribution to find a value that corresponds
   * to the critical region.
@@ -38,13 +40,13 @@ case class LowerTail() extends Region {}
   * It uses the CDF for discrete distributions since the CDF computes P(X <= Y) = alpha
   *
   * For the upper tail the CDF is inverted so that P(X >= Y) = alpha
-  *
+  * $$
   * P(X >= Y) = 1 - CDF(X)
-  *
+  * $$
   * For continuous distributions we need to use the integral for
-  *
+  * $$
   * P(X >= Y) = \int_Y^\infty p(.) dX
-  *
+  * $$
   *
   *
   * Created by cd on 11/11/14.

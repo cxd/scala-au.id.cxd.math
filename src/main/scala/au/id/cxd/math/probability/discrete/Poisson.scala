@@ -3,12 +3,27 @@ package au.id.cxd.math.probability.discrete
 import au.id.cxd.math.count.Factorial
 
 import scala.math._
-/**
- * Created by cd on 7/09/2014.
- */
-class Poisson(lambda:Double) extends DiscreteDistribution {
 
-  def pdf(y:Double) = pow(lambda, y) * exp(-1.0*lambda) / Factorial(y)
+/**
+  * ##import MathJax
+  *
+  * $$
+  *   f(y; \lambda) = \lambda^y \frac{\exp{ \left[ -\lambda \right] }}{y!}
+  * $$
+  *
+  * $$
+  *   \mu = \lambda
+  * $$
+  *
+  * $$
+  *   \sigma^2 = \lambda
+  * $$
+  *
+  * Created by cd on 7/09/2014.
+  */
+class Poisson(lambda: Double) extends DiscreteDistribution {
+
+  def pdf(y: Double) = pow(lambda, y) * exp(-1.0 * lambda) / Factorial(y)
 
   def mean() = lambda
 
@@ -16,5 +31,5 @@ class Poisson(lambda:Double) extends DiscreteDistribution {
 }
 
 object Poisson {
-  def apply(lambda:Double) = new Poisson(lambda)
+  def apply(lambda: Double) = new Poisson(lambda)
 }

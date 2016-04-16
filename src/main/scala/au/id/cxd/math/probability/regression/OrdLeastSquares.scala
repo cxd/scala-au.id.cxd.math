@@ -4,25 +4,27 @@ import breeze.linalg._
 import breeze.numerics.pow
 
 /**
- * Created by cd on 28/06/2014.
- * A class to perform regression by means of ordinary least squares.
- */
+  * ##import MathJax
+  *
+  * Created by cd on 28/06/2014.
+  * A class to perform regression by means of ordinary least squares.
+  */
 class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1, threshold: Double = 0.5) {
 
   /**
-   * initial weight vector up to size M
-   */
-  var W = DenseVector.ones[Double](m+1)
+    * initial weight vector up to size M
+    */
+  var W = DenseVector.ones[Double](m + 1)
 
   val powers = for {
     i <- 0 to m
   } yield i.toDouble
 
-  var P = DenseMatrix.ones[Double](X.size, m+1)
+  var P = DenseMatrix.ones[Double](X.size, m + 1)
 
   /**
-   * initialise the collection of powers
-   */
+    * initialise the collection of powers
+    */
   def init() {
     val pair = X.foldLeft(Tuple2[DenseMatrix[Double], Int](P, 0)) {
       (pair, x: Double) => {
@@ -37,29 +39,31 @@ class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1
   }
 
   /**
-   * multiply the factor vector by the
-   * @param F matrix of factors
-   */
-  def multWeights(F: DenseMatrix[Double]):DenseVector[Double] = {
+    * multiply the factor vector by the
+    *
+    * @param F matrix of factors
+    */
+  def multWeights(F: DenseMatrix[Double]): DenseVector[Double] = {
     P * W
   }
 
   /**
-   * calculate the squared error between the target column vector and the function column vector
-   * vectors must have same dimension
-   * @param T
-   * @param Y
-   */
-  def squaredError(T:DenseVector[Double], Y:DenseVector[Double]):Double = {
-    val delta = pow((Y-T), 2.0)
+    * calculate the squared error between the target column vector and the function column vector
+    * vectors must have same dimension
+    *
+    * @param T
+    * @param Y
+    */
+  def squaredError(T: DenseVector[Double], Y: DenseVector[Double]): Double = {
+    val delta = pow((Y - T), 2.0)
     val total = sum(delta)
     total.asInstanceOf[Double] * 0.5
   }
 
   /**
-   * update the weight matrix using the inverse of the covariance matrix and the residuals
-   */
-  def updateWeights(F:DenseMatrix[Double], T:DenseVector[Double], Y:DenseVector[Double]):DenseVector[Double] = {
+    * update the weight matrix using the inverse of the covariance matrix and the residuals
+    */
+  def updateWeights(F: DenseMatrix[Double], T: DenseVector[Double], Y: DenseVector[Double]): DenseVector[Double] = {
     val Cov = F.t * F
     val I = inv(Cov)
     val B = (I * F.t).asInstanceOf[DenseMatrix[Double]]
@@ -67,9 +71,9 @@ class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1
   }
 
   /**
-   * train the least squares model.
-   */
-  def train():Tuple2[DenseVector[Double], Double] = {
+    * train the least squares model.
+    */
+  def train(): Tuple2[DenseVector[Double], Double] = {
     val T = multWeights(P)
     val error = squaredError(T, Y)
     if (error < threshold) {
@@ -81,14 +85,15 @@ class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1
   }
 
   /**
-   * having trained the model predict a value for the new x input.
-   * @param x
-   */
-  def predict(x:Double) = {
+    * having trained the model predict a value for the new x input.
+    *
+    * @param x
+    */
+  def predict(x: Double) = {
     // convert to a polynomial
     val X = DenseVector((for {i <- 0 to m} yield Math.pow(x, i)).toArray)
     val M = DenseMatrix.ones[Double](1, X.size)
-    M(1,::) := X.t
+    M(1, ::) := X.t
     multWeights(M)
   }
 

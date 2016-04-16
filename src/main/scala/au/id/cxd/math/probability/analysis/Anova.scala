@@ -9,6 +9,9 @@ import breeze.linalg.{DenseVector, DenseMatrix}
 
 /**
   *
+  * ##import MathJax
+  *
+  * The anova table comprising of:
   *
   * $$ Total SS = \sum_{i=1}^k\sum_{j=1}^{n_i} (Y_{ij} - \bar{Y})^2 =  \sum_{i=1}^k\sum_{j=1}^{n_i}Y_{ij}^2 - CM $$
   *
@@ -39,11 +42,14 @@ import breeze.linalg.{DenseVector, DenseMatrix}
   * MST = \frac{SST}{k-1}
   *
   * $$
+  *
+  * The F-Test
+  *
   * $$
   *
   * F = \frac{MST}{MSE} > F_\alpha
   *
-  * $
+  * $$
   * Created by cd on 17/09/2014.
   */
 class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {

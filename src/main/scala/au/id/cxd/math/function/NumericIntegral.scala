@@ -2,6 +2,7 @@ package au.id.cxd.math.function
 
 import breeze.linalg.{max, min}
 /**
+  * ##import MathJax
   *
   * Numeric integration for a given range
   *
