@@ -53,16 +53,17 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>The exponential distribution is a special case of the Gamma distribution
 where alpha is set to 1</p><p>$$
-f(y) = \frac{ e^-{y/\beta} } {\beta}
+f(y) = \frac{ e^{-{y/\beta}} } {\beta}
 $$
 $$
-0 \le y \le \infnty
+0 \le y \le \infty
 $$</p><p>Created by cd on 6/11/14.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -264,7 +265,7 @@ $$</p><p>Created by cd on 6/11/14.
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">cumulative density function</p><div class="fullcomment"><div class="comment cmt"><p>cumulative density function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -430,7 +431,7 @@ $$</p><p>Created by cd on 6/11/14.
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">mean $\mu$ of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>mean $\mu$ of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -519,7 +520,7 @@ equivalent to &quot;dgamma&quot; in R
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">standard deviation $\sigma$</p><div class="fullcomment"><div class="comment cmt"><p>standard deviation $\sigma$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -570,7 +571,7 @@ equivalent to &quot;dgamma&quot; in R
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">variance for the distribution $\sigma^2$</p><div class="fullcomment"><div class="comment cmt"><p>variance for the distribution $\sigma^2$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

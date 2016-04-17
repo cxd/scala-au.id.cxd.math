@@ -84,24 +84,93 @@
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
-</p><p>The anova table comprising of:</p><p>$$ Total SS = \sum_{i=1}<sup>k\sum_{j=1}</sup>{n_i} (Y_{ij} - \bar{Y})<sup>2 =  \sum_{i=1}</sup>k\sum_{j=1}<sup>{n_i}Y_{ij}</sup>2 - CM $$</p><p>$$ CM = \frac{1}{n} ( \sum_{i=1}<sup>k\sum_{j=1}</sup>{n_i} Y_{ij} ) ^2 $$</p><p>$$ Y_i. = \sum_{j=1}<sup>{n_i} Y_{ij} $$
+</p><p>This class implements an Anova procedure as derived from 'Mathematical Statistics with Applications' 7th edition by Wackerly, et el.</p><p>That resource provides a full explanation, however a summary is given below.</p><p>The goal of Anova is to &quot;identify the important independent variables and determine how they affect the response&quot;.</p><p>Where each independent variable is a factor and the intensity of the variable the level.</p><p>The procedure calculates the Total Sum of Squares which is the sum of the squared deviations of each
+variable from the mean and a remainder random error.</p><p>We consider that under the null hypothesis the independent variables are assumed to be unrelated
+to the response variable, and each portion of the total sum of squares divided
+by a corresponding constant provides an independent and unbiased estimator of $\sigma^2$ of the
+experimental error.</p><p>If a variable is highly related to the response its contribution to the total sum of squares
+will be large.</p><p>The variable sum of squares total $SST$ is compared with the sum of squares for the error $SSE$</p><p>An F test is used to determine whether the null hypothesis should be rejected.</p><p>This implementation addresses the case for $k$ variables, and is used to determine
+the F test for the null hypothesis $\mu_1 = \mu_2 = ... = \mu_k$ and common variance $\sigma^2$.</p><p>In this case we are working with matrices provided by the breeze library, at this time.
+However, it would be useful to later change the implementation to use another structure
+which allows uneven lengths of samples, since the number of rows for each sample will be equal in the matrix form.</p><p>It is possible however to use unqual sample sizes for each $ith$ sample.</p><p>An <a href="AnovaTable.html" class="extype" name="au.id.cxd.math.probability.analysis.AnovaTable">AnovaTable</a> is used to contain the variables for the anova process
+providing a &quot;one way layout&quot; that comprises of the following elements.</p><p>The total sum of squares is computed form the $SSE$ and the $SST$</p><p>$$
+TotalSS = \sum_{i=1 \in k} \sum_{j=1 \in n_i} (Y_{ij} - \bar{Y})^2
+$$</p><p>It can be summarised as being the total of all observations squared subtracting the correction for the mean $CM$</p><p>$$
+\sum_{i=1 \in k} \sum_{j=1 \in n_i} Y_{ij}^2 - CM
+$$</p><p>where the correction for the mean is calculated as the total for all observations squared divided by $n$</p><p>$$
+CM = \frac{1}{n} ( \sum_{i=1 \in k} \sum_{j=1 \in n_i} Y_{ij} )^2
+$$</p><p>The total of each sample set is defined as $Y_{i.}$:</p><p>$$
+Y_i. = \sum_{j=1 \in n_i} Y_{ij}
+$$</p><p>and the mean of each sample set is estimated as $\bar{Y_{i.}}$.</p><p>$$
+\bar{Y_{i.} } = \frac{1}{n_i} \sum_{j=1 \in n_i} Y_{ij}
 $$
-\bar{Y_{i.} } = \frac{1}{n_i} \sum_{j=1}</sup>n_i Y_{ij} =  \frac{1}{n_i} Y_{i.}</p><p>$$
-$$</p><p>SST = \sum_{i=1}<sup>k n_i (\bar{Y_{i.} } - \bar{Y} )</sup>2  = \sum_{i=1}<sup>k \frac{Y_{i.}</sup>2}{n_i} - CM</p><p>$$
-$$</p><p>SSE = Total SS - SST</p><p>$$
-$$</p><p>MSE = \frac{SSE}{n-k}</p><p>$$
-$$</p><p>MST = \frac{SST}{k-1}</p><p>$$</p><p>The F-Test</p><p>$$</p><p>F = \frac{MST}{MSE} &gt; F_\alpha</p><p>$$
-Created by cd on 17/09/2014.
+$$
+\frac{1}{n_i} Y_{i.}
+$$</p><p>This is used in calculating the Sum of squares for treatments which will be large if the
+differences between the treatments is also large.</p><p>$$
+SST = \sum_{i=1 \in k} n_i (\bar{Y_{i.}} - \bar{Y})^2
+$$</p><p>Note also that ${Z\ squared} = \frac{SST}{{\sigma^2}}$</p><p>having a $\chi^2$</p><p>distribution with $k-1$ df for $k$ factors.</p><p>$$
+SST = \sum_{i=1 \in k} \frac{Y_{i.}^2}{n_i} - CM
+$$</p><p>The second part the sum of squared errors is computed as
+$$
+SSE = Total SS - SST
+$$</p><p>However it can also represent a total of the sample variances multiplied by a degree of freedom as shown in Wackerly.</p><p>$$
+SSE = \sum_{i=1 \in k} (n_i - 1) S_i^2
+$$</p><p>where the sample variance $S^2$ is</p><p>$$
+{S \ squared} = \frac{1}{n_i-1} \sum_{j=1 \in n_i} (Y_{ij} - \bar{Y_{i.}})^2
+$$</p><p>which is an unbiased estimator of $ \sigma_i&#94;2) = \sigma&#94;2) $</p><p>The Mean squared error is an estimator for the pooled variance $S&#94;2$
+with $n-k$ degrees of freedom.</p><p>$$
+MSE = \frac{SSE}{n-k}
+$$</p><p>The Mean square total is accumulated from the estimates of the mean for each sample with degree of freedom $k-1$.
+$$
+MST = \frac{SST}{k-1}
+$$</p><p>Once the anova table is calculated the F-Test is used to test the null hypothesis
+$\mu_1 = \mu_2 = ... = \mu_k$ with even variance, and is rejected at
+the critical level $\alpha$</p><p>$$
+F = \frac{MST}{MSE} &gt; F_\alpha
+$$
+The statistic is an F distribution with $k-1$ and $n-k$ numerator and denominator degrees of freedom.</p><p>The key assumptions are the normal assumption for the $k$ samples, with equal means and variance.</p><p><u>Exampel Usage</u></p><p>The example is derived from the test case TestAnovaInference which is also derived from an
+example in Wackerly on page 671.</p><p>The test data for the example is the following matrix with $k = 4$ sets of observations.</p><pre>  <span class="cmt">/**
+columns correspond to k samples
+rows correspond to sample observation Y_ij
+*/</span>
+<span class="kw">val</span> table = DenseMatrix(
+(<span class="num">65.0</span>, <span class="num">75.0</span>, <span class="num">59.0</span>, <span class="num">94.0</span>),
+(<span class="num">87.0</span>, <span class="num">69.0</span>, <span class="num">78.0</span>, <span class="num">89.0</span>),
+(<span class="num">73.0</span>, <span class="num">83.0</span>, <span class="num">67.0</span>, <span class="num">80.0</span>),
+(<span class="num">79.0</span>, <span class="num">81.0</span>, <span class="num">62.0</span>, <span class="num">88.0</span>),
+(<span class="num">81.0</span>, <span class="num">72.0</span>, <span class="num">83.0</span>, <span class="num">0.0</span>),
+(<span class="num">69.0</span>, <span class="num">79.0</span>, <span class="num">76.0</span>, <span class="num">0.0</span>),
+(<span class="num">0.0</span>, <span class="num">90.0</span>, <span class="num">0.0</span>, <span class="num">0.0</span>))</pre><p>Note that incomplete examples have been padded with 0.
+In this implementation it would be best to use a &quot;balanced&quot; set of samples where the number for
+each observation is equal.</p><p>The Anova table is created as</p><pre><span class="kw">val</span> anova = Anova(table)</pre><p>And a test for the null hypothesis at the critical level for $\alpha = 0.05$ to be performed using</p><pre><span class="kw">val</span> testResult = anova.test(<span class="num">0.05</span>)</pre><p>The test result will contain the anova table which can be printed or inspected for each of the table values.
+Inspecting the table will give a report for example:</p><pre>     NumeratorDF: <span class="num">3</span>
+DenominatorDF: <span class="num">24</span>
+SST: <span class="num">2876.107142857145</span>
+SSE: <span class="num">23604.857142857145</span>
+MSE: <span class="num">983.5357142857143</span>
+MST: <span class="num">958.7023809523816</span>
+TotalDF: <span class="num">27</span>
+TotalSS: <span class="num">26480.96428571429</span>
+F-stat (observed statistic): <span class="num">0.9747509592456765</span>
+F-alpha (critical value): <span class="num">3.0000000000000013</span>
+P-Value: <span class="num">0.4219003172019309</span>
+Observed-Prob <span class="num">0.44613162513336035</span>
+alpha (significance level):<span class="num">0.05</span></pre><p>In this example the F-stat &gt; F-alpha and the test case rejects the null hypothesis.</p><p>The test result also has the &quot;rejected&quot; flag which indicates whether the null hypothesis is rejected.
+It is possible to use a $k$ fold approach to determine which of the samples may be rejected after the initial test.</p><p>The critival value is approximated using the trait <a href="CriticalValue.html" class="extype" name="au.id.cxd.math.probability.analysis.CriticalValue">CriticalValue</a> for the <a href="UpperTail.html" class="extype" name="au.id.cxd.math.probability.analysis.UpperTail">UpperTail</a>
+of the <span class="extype" name="FDistribution">FDistribution</span>.</p><p>Created by cd on 17/09/2014.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.analysis.AnovaTable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AnovaTableextendsTestResult"></a>
@@ -155,13 +224,15 @@ Created by cd on 17/09/2014.
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -229,13 +300,15 @@ $$</p><p>Created by cd on 11/11/14.
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -295,19 +368,24 @@ for a given type of distribution, or method of testing.</p><p>Created by cd on 1
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>Created by cd on 7/09/2014.</p><p>apply tchebysheff's inequality</p><p>used to provide a lower bound estimate for P where</p><p>$$
 P(\mu - k\sigma &lt; Y &lt; \mu + k\sigma) &gt;= 1 - 1/k^2
-$$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p></div></div>
+$$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p><p>The parameters for $\mu$ and $\sigma$ are estimated.</p><p><u>Example Usage</u></p><p>The following provides an example for estimating a distribution with</p><p>$\mu = 20$ and $\sigma = 2$</p><pre>  <span class="kw">val</span> mu = <span class="num">20.0</span>
+<span class="kw">val</span> std = <span class="num">2.0</span>
+<span class="kw">val</span> inequality = TchebysheffInequality(mu)(std)</pre><p>Estimating the pdf for the value 16 for example:</p><pre><span class="kw">val</span> p = inequality.pdf(<span class="num">16</span>, <span class="num">24</span>)
+<span class="lit">"Probability "</span> + p</pre><p>yields</p><pre>Probability <span class="num">0.75</span></pre></div></div>
     </li><li name="au.id.cxd.math.probability.analysis.TestResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="TestResultextendsAnyRef"></a>
       <a id="TestResult:TestResult"></a>

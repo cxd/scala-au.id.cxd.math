@@ -51,7 +51,8 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -141,7 +142,7 @@ $$</p><p>The update rules for $\hat{A}$ and $\hat{B}$ are changed as follows.</p
 \bar{a_{ij}} = \frac{c \sum_{t=1} \alpha_{k,i}(t)b_j(e_{k,t+1})\beta_{k,j}(t+1)}{c \sum_{t=1} \alpha_{k,i}(t)\beta_{k,i}(t+1)}
 $$</p><p>$$
 \bar{b_{ij}} = \frac{c \sum_{t=1,e_j} \alpha_{k,i}(t)\beta_{k,ij}(t) }{c \sum_{k=1} \alpha_{k,i}(t)\beta_{k,i}(t) }
-$$</p><p>the summations above are from $t=1$ to $T-1$ in both numerator and denominator.</p><p><u>Example Usage</u></p><p>The library is used in combination with the <a href="../../data/SequenceReader.html" class="extype" name="au.id.cxd.math.data.SequenceReader"></a> and
+$$</p><p>the summations above are from $t=1$ to $T-1$ in both numerator and denominator.</p><p><u>Example Usage</u></p><p>The library is used in combination with the <a href="../../data/SequenceReader.html" class="extype" name="au.id.cxd.math.data.SequenceReader">au.id.cxd.math.data.SequenceReader</a> and
 <a href="../../data/SequenceEstimation.html" class="extype" name="au.id.cxd.math.data.SequenceEstimation">au.id.cxd.math.data.SequenceEstimation</a> classes the purpose of these classes are to
 read data from CSV and then generate the initial likelihood for matrices $A$, $B$ and
 the prior vector $\pi$.</p><p>The test class &quot;TestTrainRainModel&quot; in the test cases for the project provides an example
@@ -215,7 +216,7 @@ with a corresponding state label, and the probability of that state label.</p><p
         evidence: Dialing(Consult)
         T: <span class="num">7</span>
         success: <span class="kw">true</span>
-})</pre><p>For further references refer to:</p><p>Norvig, Peter. Russell, Stuart. (2003) $Artificial\ Intelligence\ A\ Modern\ Approach.\ Second\ Edition.$ USA: Pearson Education, Inc. pp537-583, 724-733.</p><p>Bishop, Christopher M. (2006) $Pattern\ Recognition\ and\ Machine\ Learning$ USA: Springer Science + Business Media, LLC. pp607-635.</p><p>Rabiner, Lawrence R. (1989) <code><code>A Tutorial on Hidden Markov Models and Seleted Applications in Speech Recognition<i>. USA: Proceedings of the IEEE, VOL 77, NO.2 pp257-286</i></code></code></p><p>Created by cd on 10/01/15.
+})</pre><p>For further reading refer to:</p><p>Norvig, Peter. Russell, Stuart. (2003) $Artificial\ Intelligence\ A\ Modern\ Approach.\ Second\ Edition.$ USA: Pearson Education, Inc. pp537-583, 724-733.</p><p>Bishop, Christopher M. (2006) $Pattern\ Recognition\ and\ Machine\ Learning$ USA: Springer Science + Business Media, LLC. pp607-635.</p><p>Rabiner, Lawrence R. (1989) <code><code>A Tutorial on Hidden Markov Models and Seleted Applications in Speech Recognition<i>. USA: Proceedings of the IEEE, VOL 77, NO.2 pp257-286</i></code></code></p><p>Created by cd on 10/01/15.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>

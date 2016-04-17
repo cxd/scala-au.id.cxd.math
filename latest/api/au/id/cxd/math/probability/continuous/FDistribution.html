@@ -53,25 +53,25 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>The F distribution is the ratio of two chi-square distributions
-with a numerator and denominator degree of freedom.</p><p>The definition of f distribution is given as:</p><p>$$
-f(x; d_1, d_2) = \frac{ \Gamma\left( \frac{ d_1 + d_2 }{2} \right) d_1<sup>{d_1/2} d_2</sup>{d_2/2} } {\Gamma(d_1/2)\Gamma(d_2/2) } \frac{x<sup>{d_1/2 - 1}}{(d_1 + d_2x)</sup>{(d_1 + d_2)/2}}
+with a numerator $d_1$ and denominator $d_2$ degree of freedom.</p><p>The definition of f distribution is given as:</p><p>$$
+f(x; d_1, d_2) = \frac{ \Gamma \left( \frac{ d_1 + d_2 }{2} \right) d_1&#94;{d_1/2} d_2&#94;{d_2/2} } {\Gamma(d_1/2)\Gamma(d_2/2) } \frac{ x&#94;{d_1/2 - 1} } {(d_1 + d_2x)&#94;{(d_1 + d_2)/2} }
+$$</p><p>$$
+\frac{ d_1&#94;{d_1/2} d_2&#94;{d_2/2} x&#94;{d_1/2 - 1} } { (d_2 + d_1x)&#94;{(d_1+d_2)/2} B(d_1/2, d_2/2)}
+$$</p><p>where B is the beta function (from the gamma function)
 $$
-$$</p><h3> \frac{ d_1<sup>{d_1/2} d_2</sup>{d_2/2}x<sup>{d_1/2 - 1} } { (d_2 + d_1x)</sup>{(d_1+d_2)/2} B(d_1/2, d_2/2)}
+B(a, b) = \frac{ (a - 1)!(b - 1)! }{ (a + b - 1)! }
 $$
-where B is the beta function (from the gamma function)
-$$
-B(a, b) </h3><p>$$
 and $x &gt; 0$</p><p>The mean of the distribution is defined where denominator df &gt; 2
 $$
 \mu = \frac{ d_2 }{d_2 - 2}
-$$</p><p>And the variance of the distribution is defined where the denominator df &gt; 4
-$$
-\sigma<sup>2 = \frac{ 2 d_2</sup>2 (d_1 + d_2 - 2) }{ d_1 (d_2 - 2)^2 (d_2 - 4) }
+$$</p><p>And the variance $\sigma^2$</p><p>of the distribution is defined where the denominator df &gt; 4</p><p>$$
+\frac{ 2 {d_2&#94;2} (d_1 + d_2 - 2) }{ d_1 {(d_2 - 2)}&#94;2 (d_2 - 4) }
 $$</p><p>The f distribution is most often used in testing hypothesis about an unknown variance.</p><p>Created by cd on 5/11/14.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -240,7 +240,7 @@ $$</p><p>The f distribution is most often used in testing hypothesis about an un
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">cumulative density function</p><div class="fullcomment"><div class="comment cmt"><p>cumulative density function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -423,7 +423,7 @@ $$</p><p>The f distribution is most often used in testing hypothesis about an un
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.FDistribution">FDistribution</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">mean $\mu$ of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>mean $\mu$ of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.FDistribution">FDistribution</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -527,7 +527,7 @@ $$</p><p>The f distribution is most often used in testing hypothesis about an un
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">standard deviation $\sigma$</p><div class="fullcomment"><div class="comment cmt"><p>standard deviation $\sigma$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -578,7 +578,7 @@ $$</p><p>The f distribution is most often used in testing hypothesis about an un
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.FDistribution">FDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">variance for the distribution $\sigma^2$</p><div class="fullcomment"><div class="comment cmt"><p>variance for the distribution $\sigma^2$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.FDistribution">FDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

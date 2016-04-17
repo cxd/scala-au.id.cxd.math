@@ -53,7 +53,22 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The sequence reader class reads staggered sequences
 where the last value on the line is seen as a state label
-and all preceding items are regarded as features or observations.</p><p>All tokens are separated by a comma</p><p>Created by cd on 10/01/15.
+and all preceding items are regarded as features or observations.</p><p>All tokens are separated by a comma.</p><p>For example from the CTI telephony world where evidence variables represent events and states represent call states:</p><pre># The last column in each line represents the state label.
+# evidence variables are those items appearing in each column before the last column.
+Ringing(inbound),OnCall
+Ringing(inbound),AttachedDataChanged,OffHook,OnCall
+Ringing(inbound),AttachedDataChanged,OffHook,Established,OnCall
+Ringing(inbound),UserEvent(Start),UserEvent(Stop),AttachedDataChanged,OffHook,Established,OnCall
+Ringing(inbound),UserEvent(Start),UserEvent(Stop),AttachedDataChanged,AttachedDataChanged,OffHook,Established,OnCall</pre><p>Example usage:</p><pre><span class="kw">val</span> fileName = <span class="lit">"data/example_train_data.csv"</span>
+<span class="kw">val</span> file = <span class="kw">new</span> File(fileName)
+<span class="kw">val</span> reader = SequenceReader()
+<span class="cmt">// the data set (jagged array)</span>
+<span class="kw">val</span> data = reader.readSequences(file)
+<span class="cmt">// unique set of states</span>
+<span class="kw">val</span> states =  reader.readStates (data)
+<span class="cmt">// the unique labels for evidence variables</span>
+<span class="kw">val</span> evidenceVars = reader.readEvidenceVars (data)</pre><p>This is used in conjunction with a <a href="SequenceEstimation.html" class="extype" name="au.id.cxd.math.data.SequenceEstimation">SequenceEstimation</a> in order to prepare a model for use
+with the <a href="../model/sequence/HiddenMarkovModel$.html" class="extype" name="au.id.cxd.math.model.sequence.HiddenMarkovModel">au.id.cxd.math.model.sequence.HiddenMarkovModel</a>.</p><p>Created by cd on 10/01/15.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="TextReader.html" class="extype" name="au.id.cxd.math.data.TextReader">TextReader</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -403,7 +418,9 @@ evidence variables are considered to be each item prior to the state label.</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">read all lines in a supplied file</p><div class="fullcomment"><div class="comment cmt"><p>read all lines in a supplied file</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextReader.html" class="extype" name="au.id.cxd.math.data.TextReader">TextReader</a></dd></dl></div>
+      <p class="shortcomment cmt">read all lines in a supplied file
+</p><div class="fullcomment"><div class="comment cmt"><p>read all lines in a supplied file
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextReader.html" class="extype" name="au.id.cxd.math.data.TextReader">TextReader</a></dd></dl></div>
     </li><li name="au.id.cxd.math.data.SequenceReader#readSequences" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="readSequences(file:java.io.File):List[List[String]]"></a>
       <a id="readSequences(File):List[List[String]]"></a>
@@ -421,7 +438,8 @@ evidence variables are considered to be each item prior to the state label.</p>
       </a>
     </span>
       <p class="shortcomment cmt">read all sequences from a file
-split on commas in each line</p>
+split on commas in each line
+</p>
     </li><li name="au.id.cxd.math.data.SequenceReader#readStates" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="readStates(data:List[List[String]]):List[String]"></a>
       <a id="readStates(List[List[String]]):List[String]"></a>
@@ -439,7 +457,8 @@ split on commas in each line</p>
       </a>
     </span>
       <p class="shortcomment cmt">read all states from the data
-the last item in each line is considered to be a state</p>
+the last item in each line is considered to be a state
+</p>
     </li><li name="au.id.cxd.math.data.TextReader#removeComments" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="removeComments(lines:List[String]):List[String]"></a>
       <a id="removeComments(List[String]):List[String]"></a>
@@ -456,7 +475,9 @@ the last item in each line is considered to be a state</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">skip all lines that are either empty or start with the hash # token</p><div class="fullcomment"><div class="comment cmt"><p>skip all lines that are either empty or start with the hash # token</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextReader.html" class="extype" name="au.id.cxd.math.data.TextReader">TextReader</a></dd></dl></div>
+      <p class="shortcomment cmt">skip all lines that are either empty or start with the hash # token
+</p><div class="fullcomment"><div class="comment cmt"><p>skip all lines that are either empty or start with the hash # token
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextReader.html" class="extype" name="au.id.cxd.math.data.TextReader">TextReader</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

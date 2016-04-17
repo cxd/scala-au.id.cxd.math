@@ -84,19 +84,28 @@
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>The beta distribution</p><p>Implements the pdf.
-$$ f(y) = \frac{ y<sup>{\alpha - 1}(1-y)</sup>{\beta-1} } { \Beta(\alpha, \beta) }</p><p>Where the $\Beta$ is the beta function <a href="../../function/BetaFn.html" class="extype" name="au.id.cxd.math.function.BetaFn">au.id.cxd.math.function.BetaFn</a></p><p>Properties of the distribution:
-$$\mu = \frac{\alpha}{\alpha + \beta}$$</p><p>$$\sigma<sup>2 = \frac{ \alpha\beta } {(\alpha + \beta)</sup>2(\alpha + \beta + 1)}$$</p><p>Created by cd on 5/11/14.
+$$
+f(y) = \frac{ y&#94;{\alpha - 1} (1-y)&#94;{\beta-1} } { Beta(\alpha, \beta) }
+$$</p><p>Where the $Beta$ is the beta function <a href="../../function/BetaFn.html" class="extype" name="au.id.cxd.math.function.BetaFn">au.id.cxd.math.function.BetaFn</a></p><p>Properties of the distribution:
+Mean $\mu$:
+$$
+\frac{\alpha}{\alpha + \beta}
+$$</p><p>Variance $\sigma&#94;2$</p><p>$$
+\sigma&#94;2 = \frac{ \alpha\beta } { {(\alpha + \beta)&#94;2} (\alpha + \beta + 1)}
+$$</p><p>Created by cd on 5/11/14.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.ChiSquare" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ChiSquareextendsGamma"></a>
@@ -116,18 +125,20 @@ $$\mu = \frac{\alpha}{\alpha + \beta}$$</p><p>$$\sigma<sup>2 = \frac{ \alpha\bet
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
-</p><p>Chi Square distribution is a special case of the gamma distribution
-with the parameter &quot;df&quot; for degrees of freedom (or k)</p><p>This results in a gamma distribution with alpha = df/2 and beta = 2</p><p>Created by cd on 5/11/14.
+</p><p>Chi Square distribution is a special case of the <a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> distribution
+with the parameter &quot;df&quot; for degrees of freedom (or $k$)</p><p>This results in a gamma distribution with $\alpha = df/2$ and $\beta = 2$</p><p>Created by cd on 5/11/14.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ContinuousDistributionextendsDistribution"></a>
@@ -164,22 +175,24 @@ with the parameter &quot;df&quot; for degrees of freedom (or k)</p><p>This resul
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>The exponential distribution is a special case of the Gamma distribution
 where alpha is set to 1</p><p>$$
-f(y) = \frac{ e^-{y/\beta} } {\beta}
+f(y) = \frac{ e^{-{y/\beta}} } {\beta}
 $$
 $$
-0 \le y \le \infnty
+0 \le y \le \infty
 $$</p><p>Created by cd on 6/11/14.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.FDistribution" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -200,31 +213,32 @@ $$</p><p>Created by cd on 6/11/14.
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>The F distribution is the ratio of two chi-square distributions
-with a numerator and denominator degree of freedom.</p><p>The definition of f distribution is given as:</p><p>$$
-f(x; d_1, d_2) = \frac{ \Gamma\left( \frac{ d_1 + d_2 }{2} \right) d_1<sup>{d_1/2} d_2</sup>{d_2/2} } {\Gamma(d_1/2)\Gamma(d_2/2) } \frac{x<sup>{d_1/2 - 1}}{(d_1 + d_2x)</sup>{(d_1 + d_2)/2}}
+with a numerator $d_1$ and denominator $d_2$ degree of freedom.</p><p>The definition of f distribution is given as:</p><p>$$
+f(x; d_1, d_2) = \frac{ \Gamma \left( \frac{ d_1 + d_2 }{2} \right) d_1&#94;{d_1/2} d_2&#94;{d_2/2} } {\Gamma(d_1/2)\Gamma(d_2/2) } \frac{ x&#94;{d_1/2 - 1} } {(d_1 + d_2x)&#94;{(d_1 + d_2)/2} }
+$$</p><p>$$
+\frac{ d_1&#94;{d_1/2} d_2&#94;{d_2/2} x&#94;{d_1/2 - 1} } { (d_2 + d_1x)&#94;{(d_1+d_2)/2} B(d_1/2, d_2/2)}
+$$</p><p>where B is the beta function (from the gamma function)
 $$
-$$</p><h3> \frac{ d_1<sup>{d_1/2} d_2</sup>{d_2/2}x<sup>{d_1/2 - 1} } { (d_2 + d_1x)</sup>{(d_1+d_2)/2} B(d_1/2, d_2/2)}
+B(a, b) = \frac{ (a - 1)!(b - 1)! }{ (a + b - 1)! }
 $$
-where B is the beta function (from the gamma function)
-$$
-B(a, b) </h3><p>$$
 and $x &gt; 0$</p><p>The mean of the distribution is defined where denominator df &gt; 2
 $$
 \mu = \frac{ d_2 }{d_2 - 2}
-$$</p><p>And the variance of the distribution is defined where the denominator df &gt; 4
-$$
-\sigma<sup>2 = \frac{ 2 d_2</sup>2 (d_1 + d_2 - 2) }{ d_1 (d_2 - 2)^2 (d_2 - 4) }
+$$</p><p>And the variance $\sigma^2$</p><p>of the distribution is defined where the denominator df &gt; 4</p><p>$$
+\frac{ 2 {d_2&#94;2} (d_1 + d_2 - 2) }{ d_1 {(d_2 - 2)}&#94;2 (d_2 - 4) }
 $$</p><p>The f distribution is most often used in testing hypothesis about an unknown variance.</p><p>Created by cd on 5/11/14.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.Gamma" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -245,21 +259,21 @@ $$</p><p>The f distribution is most often used in testing hypothesis about an un
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
-</p><p>Gamma distribution</p><p>$Gamma(alpha) = (alpha-1)!$</p><p>$$
-[y<sup>alpha-1 * exp(-y/beta)]/[beta</sup>alpha * Gamma(alpha)]
-$$</p><p>Note the constraints are</p><p>alpha &gt; 0
-beta &gt; 0
-0 &lt;= y &lt; infinity</p><p>Created by cd on 11/09/2014.
+</p><p>Gamma distribution</p><p>$\Gamma(alpha) = (alpha-1)!$</p><p>$$
+\left[y&#94;{alpha-1} * \exp(-y/beta)\right]/\left[\beta&#94;\alpha * \Gamma(alpha)\right]
+$$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p><p>$0 \leq y &lt; \infty$</p><p>Created by cd on 11/09/2014.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.Normal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NormalextendsContinuousDistribution"></a>
@@ -279,18 +293,20 @@ beta &gt; 0
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>Created by cd on 9/09/2014.</p><p>the normal distribution</p><p>$$
-  N(x; \mu, \sigma<sup>2) = \frac{1}{\sqrt{2\pi\sigma</sup>2}} \exp\left[frac{1}{2\sigma<sup>2} (x - \mu)</sup>2 \right]
+  N(x; \mu, \sigma&#94;2) = \frac{1}{\sqrt{2\pi\sigma&#94;2}} \exp\left[\frac{1}{2\sigma&#94;2} (x - \mu)&#94;2 \right]
 $$</p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.Uniform" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="UniformextendsContinuousDistribution"></a>
@@ -310,13 +326,15 @@ $$</p></div></div>
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>

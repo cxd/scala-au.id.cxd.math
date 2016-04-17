@@ -83,7 +83,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">Created by cd on 10/02/15.</p>
-    </li><li name="au.id.cxd.math.data.SequenceEstimation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.id.cxd.math.data.SequenceEstimation" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SequenceEstimationextendsAnyRef"></a>
       <a id="SequenceEstimation:SequenceEstimation"></a>
       <h4 class="signature">
@@ -99,7 +99,43 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Created by cd on 12/01/15.</p>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><p>The sequence estimation class is used in preparing matrices for the initialisation
+of the HMM model <a href="../model/sequence/HiddenMarkovModel$.html" class="extype" name="au.id.cxd.math.model.sequence.HiddenMarkovModel">au.id.cxd.math.model.sequence.HiddenMarkovModel</a></p><p>The usage of the class is in counting discrete values in sequences which are expected
+to terminate with a state label, all preceding items are treated as &quot;evidence&quot; variable labels.</p><p>An example of its usage:</p><p>Intiialising the model for example:</p><pre><span class="kw">val</span> fileName = <span class="lit">"data/example_train_data.csv"</span>
+<span class="kw">val</span> file = <span class="kw">new</span> File(fileName)
+<span class="kw">val</span> reader = SequenceReader()
+<span class="cmt">// the data set (jagged array)</span>
+<span class="kw">val</span> data = reader.readSequences(file)
+<span class="cmt">// unique set of states</span>
+<span class="kw">val</span> states =  reader.readStates (data)
+<span class="cmt">// the unique labels for evidence variables</span>
+<span class="kw">val</span> evidenceVars = reader.readEvidenceVars (data)</pre><p>Once the reader has extracted the state labels and evidence variables, it is used
+by the SequenceEstimation to extract</p><p>$\pi$ a prior vector of state probabilities</p><p>$A$ a matrix of state transition probabilties where $a_{ij}$ represents the likelihood of transitioning
+from state $x_i$ to state $x_j$.</p><p>$B_k$ is a set of evidence to state transition matrices, were each matrix represents
+the likelihood of transitioning from evidence $e_i$ to state $x_j$ at time $k$.</p><p>The sequence estimation is used to prepare an input model for use with training a hidden markov model.</p><pre><span class="kw">val</span> estimator = SequenceEstimation()
+
+<span class="kw">val</span> pi = estimator.statePriors(data)(states)
+
+<span class="kw">val</span> A = estimator.stateTransitions(data)(states)
+
+<span class="kw">val</span> Bk = estimator.avgPriorEvidences(data)(evidenceVars)(states)
+
+<span class="kw">val</span> input = InputModel(pi, A, <span class="std">List</span>(Bk), states, evidenceVars)</pre><p>The input model is then used to train the HMM</p><pre><span class="kw">val</span> model = HiddenMarkovModel.train(input)(data)(<span class="num">0.00001</span>)(<span class="num">50</span>)</pre><p>Created by cd on 12/01/15.
+</p></div></div>
     </li><li name="au.id.cxd.math.data.SequenceReader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SequenceReaderextendsTextReader"></a>
       <a id="SequenceReader:SequenceReader"></a>
@@ -120,9 +156,24 @@
 where the last value on the line is seen as a state label
 and all preceding items are regarded as features or observations.</p><div class="fullcomment"><div class="comment cmt"><p>The sequence reader class reads staggered sequences
 where the last value on the line is seen as a state label
-and all preceding items are regarded as features or observations.</p><p>All tokens are separated by a comma</p><p>Created by cd on 10/01/15.
+and all preceding items are regarded as features or observations.</p><p>All tokens are separated by a comma.</p><p>For example from the CTI telephony world where evidence variables represent events and states represent call states:</p><pre># The last column in each line represents the state label.
+# evidence variables are those items appearing in each column before the last column.
+Ringing(inbound),OnCall
+Ringing(inbound),AttachedDataChanged,OffHook,OnCall
+Ringing(inbound),AttachedDataChanged,OffHook,Established,OnCall
+Ringing(inbound),UserEvent(Start),UserEvent(Stop),AttachedDataChanged,OffHook,Established,OnCall
+Ringing(inbound),UserEvent(Start),UserEvent(Stop),AttachedDataChanged,AttachedDataChanged,OffHook,Established,OnCall</pre><p>Example usage:</p><pre><span class="kw">val</span> fileName = <span class="lit">"data/example_train_data.csv"</span>
+<span class="kw">val</span> file = <span class="kw">new</span> File(fileName)
+<span class="kw">val</span> reader = SequenceReader()
+<span class="cmt">// the data set (jagged array)</span>
+<span class="kw">val</span> data = reader.readSequences(file)
+<span class="cmt">// unique set of states</span>
+<span class="kw">val</span> states =  reader.readStates (data)
+<span class="cmt">// the unique labels for evidence variables</span>
+<span class="kw">val</span> evidenceVars = reader.readEvidenceVars (data)</pre><p>This is used in conjunction with a <a href="SequenceEstimation.html" class="extype" name="au.id.cxd.math.data.SequenceEstimation">SequenceEstimation</a> in order to prepare a model for use
+with the <a href="../model/sequence/HiddenMarkovModel$.html" class="extype" name="au.id.cxd.math.model.sequence.HiddenMarkovModel">au.id.cxd.math.model.sequence.HiddenMarkovModel</a>.</p><p>Created by cd on 10/01/15.
 </p></div></div>
-    </li><li name="au.id.cxd.math.data.TextReader" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.id.cxd.math.data.TextReader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="TextReaderextendsAnyRef"></a>
       <a id="TextReader:TextReader"></a>
       <h4 class="signature">
@@ -138,7 +189,8 @@ and all preceding items are regarded as features or observations.</p><p>All toke
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Created by cd on 10/01/15.</p>
+      <p class="shortcomment cmt">A text reader class that consumes a line delimited file.</p><div class="fullcomment"><div class="comment cmt"><p>A text reader class that consumes a line delimited file.</p><p>Created by cd on 10/01/15.
+</p></div></div>
     </li><li name="au.id.cxd.math.data.Writable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Writable[T]extendsAnyRef"></a>
       <a id="Writable[T]:Writable[T]"></a>

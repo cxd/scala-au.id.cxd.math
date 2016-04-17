@@ -51,7 +51,35 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by cd on 12/01/15.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><p>The sequence estimation class is used in preparing matrices for the initialisation
+of the HMM model <a href="../model/sequence/HiddenMarkovModel$.html" class="extype" name="au.id.cxd.math.model.sequence.HiddenMarkovModel">au.id.cxd.math.model.sequence.HiddenMarkovModel</a></p><p>The usage of the class is in counting discrete values in sequences which are expected
+to terminate with a state label, all preceding items are treated as &quot;evidence&quot; variable labels.</p><p>An example of its usage:</p><p>Intiialising the model for example:</p><pre><span class="kw">val</span> fileName = <span class="lit">"data/example_train_data.csv"</span>
+<span class="kw">val</span> file = <span class="kw">new</span> File(fileName)
+<span class="kw">val</span> reader = SequenceReader()
+<span class="cmt">// the data set (jagged array)</span>
+<span class="kw">val</span> data = reader.readSequences(file)
+<span class="cmt">// unique set of states</span>
+<span class="kw">val</span> states =  reader.readStates (data)
+<span class="cmt">// the unique labels for evidence variables</span>
+<span class="kw">val</span> evidenceVars = reader.readEvidenceVars (data)</pre><p>Once the reader has extracted the state labels and evidence variables, it is used
+by the SequenceEstimation to extract</p><p>$\pi$ a prior vector of state probabilities</p><p>$A$ a matrix of state transition probabilties where $a_{ij}$ represents the likelihood of transitioning
+from state $x_i$ to state $x_j$.</p><p>$B_k$ is a set of evidence to state transition matrices, were each matrix represents
+the likelihood of transitioning from evidence $e_i$ to state $x_j$ at time $k$.</p><p>The sequence estimation is used to prepare an input model for use with training a hidden markov model.</p><pre><span class="kw">val</span> estimator = SequenceEstimation()
+
+<span class="kw">val</span> pi = estimator.statePriors(data)(states)
+
+<span class="kw">val</span> A = estimator.stateTransitions(data)(states)
+
+<span class="kw">val</span> Bk = estimator.avgPriorEvidences(data)(evidenceVars)(states)
+
+<span class="kw">val</span> input = InputModel(pi, A, <span class="std">List</span>(Bk), states, evidenceVars)</pre><p>The input model is then used to train the HMM</p><pre><span class="kw">val</span> model = HiddenMarkovModel.train(input)(data)(<span class="num">0.00001</span>)(<span class="num">50</span>)</pre><p>Created by cd on 12/01/15.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -203,7 +231,8 @@
     </span>
       <p class="shortcomment cmt">calculate the prior evidences for all data sets
 assume each sample is independently and identically distributed
-return the average prior evidences</p>
+return the average prior evidences
+</p>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -244,7 +273,8 @@ return the average prior evidences</p>
       </a>
     </span>
       <p class="shortcomment cmt">count the number of items different between lists
-    listA should be length = listB length</p>
+listA should be length = listB length
+</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#countDeltaState" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="countDeltaState(listA:List[String])(listB:List[String]):Double"></a>
       <a id="countDeltaState(List[String])(List[String]):Double"></a>
@@ -262,8 +292,9 @@ return the average prior evidences</p>
       </a>
     </span>
       <p class="shortcomment cmt">count the number of items different between lists
-    listA should be length &lt;= listB length
-    This includes the state class and removes it</p>
+listA should be length &lt;= listB length
+This includes the state class and removes it
+</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#countStateFreq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="countStateFreq(dataSet:List[List[String]])(states:List[String]):List[(Double,String)]"></a>
       <a id="countStateFreq(List[List[String]])(List[String]):List[(Double,String)]"></a>
@@ -281,8 +312,9 @@ return the average prior evidences</p>
       </a>
     </span>
       <p class="shortcomment cmt">for each state in states count the frequency and return a vector
-this will add 1 to every state so there are no 0 values</p>
-    </li><li name="au.id.cxd.math.data.SequenceEstimation#countTermAtEndOfState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+this will add 1 to every state so there are no 0 values
+</p>
+    </li><li name="au.id.cxd.math.data.SequenceEstimation#countTermAtEndOfState" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="countTermAtEndOfState(subseq:List[List[String]])(term:String)(state:String):(Double,Double)"></a>
       <a id="countTermAtEndOfState(List[List[String]])(String)(String):(Double,Double)"></a>
       <h4 class="signature">
@@ -299,9 +331,15 @@ this will add 1 to every state so there are no 0 values</p>
       </a>
     </span>
       <p class="shortcomment cmt">this will count the total number of times a term appears at the end of a sequence
-    for the supplied state label</p><div class="fullcomment"><div class="comment cmt"><p>this will count the total number of times a term appears at the end of a sequence
-    for the supplied state label</p><p>    It will then count the total number of occurances of the term in all sequences</p><p>    and will return the tuple</p><p>    (endOfSeqCount, totalCount)</p></div></div>
-    </li><li name="au.id.cxd.math.data.SequenceEstimation#countTermInEndOfSeq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+for the supplied state label
+*
+It will then count the total number of occurances of the term in all sequences
+*
+and will return the tuple
+*
+(endOfSeqCount, totalCount)
+</p>
+    </li><li name="au.id.cxd.math.data.SequenceEstimation#countTermInEndOfSeq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="countTermInEndOfSeq(items:List[String])(term:String):Double"></a>
       <a id="countTermInEndOfSeq(List[String])(String):Double"></a>
       <h4 class="signature">
@@ -317,9 +355,14 @@ this will add 1 to every state so there are no 0 values</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">determine whether the end term matches the supplied term from the sequence</p><div class="fullcomment"><div class="comment cmt"><p>determine whether the end term matches the supplied term from the sequence</p><p>    The sequence is assumed to contain</p><p>    [term1; term2; ...; termN; state]</p><p>    This will reverse the term list and remove the state
-    it will then determine whether termN matches the supplied term.
-</p></div></div>
+      <p class="shortcomment cmt">determine whether the end term matches the supplied term from the sequence
+*
+The sequence is assumed to contain
+*
+[term1; term2; ...; termN; state]
+*
+This will reverse the term list and remove the state
+it will then determine whether termN matches the supplied term.</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#countTermInSeq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="countTermInSeq(items:List[String])(term:String):Double"></a>
       <a id="countTermInSeq(List[String])(String):Double"></a>
@@ -337,8 +380,8 @@ this will add 1 to every state so there are no 0 values</p>
       </a>
     </span>
       <p class="shortcomment cmt">count the occurance of the term in the sequence
-    this will always add 1.0 to every term count so there are no 0 values.</p>
-    </li><li name="au.id.cxd.math.data.SequenceEstimation#countTermInState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+this will always add 1.0 to every term count so there are no 0 values.</p>
+    </li><li name="au.id.cxd.math.data.SequenceEstimation#countTermInState" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="countTermInState(subseq:List[List[String]])(term:String)(state:String):(Double,Double)"></a>
       <a id="countTermInState(List[List[String]])(String)(String):(Double,Double)"></a>
       <h4 class="signature">
@@ -355,13 +398,13 @@ this will add 1 to every state so there are no 0 values</p>
       </a>
     </span>
       <p class="shortcomment cmt">count the frequency of the term in the sequence
-    return a tuple (double * double)
-    where _1 = term frequency for supplied state
-    _2 = total term frequency in subseq</p><div class="fullcomment"><div class="comment cmt"><p>count the frequency of the term in the sequence
-    return a tuple (double * double)
-    where _1 = term frequency for supplied state
-    _2 = total term frequency in subseq</p><p>    This method will always start with 1.0 adding 1.0 to every term count
-    so that there is no 0.0 values</p></div></div>
+return a tuple (double * double)
+where _1 = term frequency for supplied state
+_2 = total term frequency in subseq
+*
+This method will always start with 1.0 adding 1.0 to every term count
+so that there is no 0.0 values
+</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#countTransitionFreq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="countTransitionFreq(dataSet:List[List[String]])(stateA:String)(stateB:String):Double"></a>
       <a id="countTransitionFreq(List[List[String]])(String)(String):Double"></a>
@@ -379,7 +422,8 @@ this will add 1 to every state so there are no 0 values</p>
       </a>
     </span>
       <p class="shortcomment cmt">count transitions from stateA to stateB
-    this will always add 1 to every transition so there is no 0 values</p>
+this will always add 1 to every transition so there is no 0 values
+</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#countTransitions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="countTransitions(dataSet:List[List[String]])(states:List[String]):breeze.linalg.DenseMatrix[Double]"></a>
       <a id="countTransitions(List[List[String]])(List[String]):DenseMatrix[Double]"></a>
@@ -397,7 +441,8 @@ this will add 1 to every state so there are no 0 values</p>
       </a>
     </span>
       <p class="shortcomment cmt">count transitions between states
-from stateA (i) to stateB (j)</p>
+from stateA (i) to stateB (j)
+</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -465,7 +510,8 @@ from stateA (i) to stateB (j)</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">extract states from the supplied data</p>
+      <p class="shortcomment cmt">extract states from the supplied data
+</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#extractStateSequence" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="extractStateSequence(dataSet:List[List[String]]):List[String]"></a>
       <a id="extractStateSequence(List[List[String]]):List[String]"></a>
@@ -482,7 +528,8 @@ from stateA (i) to stateB (j)</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">extract states from the supplied data</p>
+      <p class="shortcomment cmt">extract states from the supplied data
+</p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -556,7 +603,8 @@ from stateA (i) to stateB (j)</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">retrieve the indices for supplied index</p>
+      <p class="shortcomment cmt">retrieve the indices for supplied index
+</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -590,7 +638,8 @@ from stateA (i) to stateB (j)</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">test whether a string matches b string</p>
+      <p class="shortcomment cmt">test whether a string matches b string
+</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -642,7 +691,7 @@ from stateA (i) to stateB (j)</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="au.id.cxd.math.data.SequenceEstimation#priorEvidence" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="au.id.cxd.math.data.SequenceEstimation#priorEvidence" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="priorEvidence(data:List[List[String]])(terms:List[String])(states:List[String]):breeze.linalg.DenseMatrix[Double]"></a>
       <a id="priorEvidence(List[List[String]])(List[String])(List[String]):DenseMatrix[Double]"></a>
       <h4 class="signature">
@@ -659,8 +708,9 @@ from stateA (i) to stateB (j)</p>
       </a>
     </span>
       <p class="shortcomment cmt">determine the prior evidence matrix P(e_i | x_j)
-    for state transitions</p><div class="fullcomment"><div class="comment cmt"><p>determine the prior evidence matrix P(e_i | x_j)
-    for state transitions</p><p>    each row will normalise to 1.</p></div></div>
+for state transitions
+*
+each row will normalise to 1.</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#priorEvidences" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="priorEvidences(data:List[List[String]])(terms:List[String])(states:List[String]):List[breeze.linalg.DenseMatrix[Double]]"></a>
       <a id="priorEvidences(List[List[String]])(List[String])(List[String]):List[DenseMatrix[Double]]"></a>
@@ -677,7 +727,8 @@ from stateA (i) to stateB (j)</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">calculate the prior evidences for all data sets</p>
+      <p class="shortcomment cmt">calculate the prior evidences for all data sets
+</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#statePriorPairs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="statePriorPairs(dataSet:List[List[String]])(states:List[String]):List[(Double,String)]"></a>
       <a id="statePriorPairs(List[List[String]])(List[String]):List[(Double,String)]"></a>
@@ -694,7 +745,8 @@ from stateA (i) to stateB (j)</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">calculate the priors for the states parameter pi</p>
+      <p class="shortcomment cmt">calculate the priors for the states parameter pi
+</p>
     </li><li name="au.id.cxd.math.data.SequenceEstimation#statePriors" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="statePriors(dataSet:List[List[String]])(states:List[String]):List[Double]"></a>
       <a id="statePriors(List[List[String]])(List[String]):List[Double]"></a>
@@ -711,8 +763,9 @@ from stateA (i) to stateB (j)</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">return the state priors without the tuple for state label</p>
-    </li><li name="au.id.cxd.math.data.SequenceEstimation#stateTransitions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">return the state priors without the tuple for state label
+</p>
+    </li><li name="au.id.cxd.math.data.SequenceEstimation#stateTransitions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="stateTransitions(dataSet:List[List[String]])(states:List[String]):breeze.linalg.DenseMatrix[Double]"></a>
       <a id="stateTransitions(List[List[String]])(List[String]):DenseMatrix[Double]"></a>
       <h4 class="signature">
@@ -728,7 +781,13 @@ from stateA (i) to stateB (j)</p>
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">determine the probability for the state transitions</p><div class="fullcomment"><div class="comment cmt"><p>determine the probability for the state transitions</p><p>    from stateA (i) to stateB (j)</p><p>    a_ij = P(x_j | x_i)</p><p>    Note each row will sum to 1.</p></div></div>
+      <p class="shortcomment cmt">determine the probability for the state transitions
+*
+from stateA (i) to stateB (j)
+*
+a_ij = P(x_j | x_i)
+*
+Note each row will sum to 1.</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

@@ -53,15 +53,14 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
-</p><p>Gamma distribution</p><p>$Gamma(alpha) = (alpha-1)!$</p><p>$$
-[y<sup>alpha-1 * exp(-y/beta)]/[beta</sup>alpha * Gamma(alpha)]
-$$</p><p>Note the constraints are</p><p>alpha &gt; 0
-beta &gt; 0
-0 &lt;= y &lt; infinity</p><p>Created by cd on 11/09/2014.
+</p><p>Gamma distribution</p><p>$\Gamma(alpha) = (alpha-1)!$</p><p>$$
+\left[y&#94;{alpha-1} * \exp(-y/beta)\right]/\left[\beta&#94;\alpha * \Gamma(alpha)\right]
+$$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p><p>$0 \leq y &lt; \infty$</p><p>Created by cd on 11/09/2014.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a>, <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -248,7 +247,7 @@ beta &gt; 0
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">cumulative density function</p><div class="fullcomment"><div class="comment cmt"><p>cumulative density function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -414,7 +413,7 @@ beta &gt; 0
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">mean $\mu$ of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>mean $\mu$ of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -503,7 +502,7 @@ equivalent to &quot;dgamma&quot; in R
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">standard deviation $\sigma$</p><div class="fullcomment"><div class="comment cmt"><p>standard deviation $\sigma$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -554,7 +553,7 @@ equivalent to &quot;dgamma&quot; in R
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">variance for the distribution $\sigma^2$</p><div class="fullcomment"><div class="comment cmt"><p>variance for the distribution $\sigma^2$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

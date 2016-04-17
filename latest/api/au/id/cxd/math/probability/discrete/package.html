@@ -84,13 +84,15 @@
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -98,7 +100,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
 p - probability of success</p><p>y - number of trials
 The binomial module has the parameters $p$ for the prior proportion of successes and $n$ for the total number of trials and calculates the probability of $y$ successes
 $$
-P(y; n; p) = \sum_{i=1}<sup>n {n \choose y_i} p</sup>y_i (1-p)^{n-y_i}
+P(y; n; p) = \sum_{i=1}&#94;n {n \choose y_i} p&#94;y_i (1-p)&#94;{n-y_i}
 $$</p></div></div>
     </li><li name="au.id.cxd.math.probability.discrete.DiscreteDistribution" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="DiscreteDistributionextendsDistribution"></a>
@@ -135,19 +137,21 @@ $$</p></div></div>
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>Created by cd on 6/09/2014.</p><p>Geometric distribution with 1 parameter p = probability</p><p>$$
-P(y;p) = p(1-p)^{y-1}
-$$</p><p>Mean: $\mu = \frac{1}{p}$</p><p>Variance: $\sigma<sup>2 = \frac{1-p}{p</sup>2}$</p></div></div>
+P(y;p) = p(1-p)&#94;{y-1}
+$$</p><p>Mean: $\mu = \frac{1}{p}$</p><p>Variance: $\sigma&#94;2 = \frac{1-p}{p&#94;2}$</p></div></div>
     </li><li name="au.id.cxd.math.probability.discrete.HyperGeometric" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="HyperGeometricextendsDiscreteDistribution"></a>
       <a id="HyperGeometric:HyperGeometric"></a>
@@ -166,13 +170,15 @@ $$</p><p>Mean: $\mu = \frac{1}{p}$</p><p>Variance: $\sigma<sup>2 = \frac{1-p}{p<
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -183,7 +189,7 @@ $$
 P(y; r,n,N) = \frac{ {r \choose y } {{N - r} \choose {n - y} } } {  {N \choose n} }
 $$</p><p>The simple properties of the distribution are:\\\\
 Mean: $\mu = \frac{nr}{N}$\\
-Variance: $\sigma^2 = n \left( \frac{r}{N} \right) \left( \frac{N - r}{N} \right) \left( \frac{N - n}{N-1}\right)$</p><p>r &lt;= n &lt;= N
+Variance: $\sigma&#94;2 = n \left( \frac{r}{N} \right) \left( \frac{N - r}{N} \right) \left( \frac{N - n}{N-1}\right)$</p><p>r &lt;= n &lt;= N
 y &lt;= r &lt;= n</p></div></div>
     </li><li name="au.id.cxd.math.probability.discrete.NegativeBinomial" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NegativeBinomialextendsDiscreteDistribution"></a>
@@ -203,24 +209,26 @@ y &lt;= r &lt;= n</p></div></div>
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>Created by cd on 7/09/2014.</p><p>The Negative Binomial Distribution (class name NegativeBinomial) provides the probability of the $nth$ success or potentially $nth$ failure of a bernoulli trial. The parameters are $r$ representing the $r -1$ initial trials that where the successful and $y$ the total number of trials before the next success $r$ occurs. The distribution is calculated as follows:
 $$
-P(y;r) = {y - 1 \choose r - 1}p<sup>rq</sup>{y-r}
+P(y;r) = {y - 1 \choose r - 1}p&#94;r q&#94;{y-r}
 $$
 where $y = r, r + 1, ...$\\\\
 The simple properties of the distribution are:\\\\
 Mean:$\mu = \frac{r}{p}$\\
-Variance:$\sigma<sup>2 = \frac{r(1-p)}{p</sup>2}$\\</p><p>r - the first success
+Variance:$\sigma&#94;2 = \frac{r(1-p)}{p&#94;2}$\\</p><p>r - the first success
 p the probability
 y - the number of trials when the rth success occurs</p><p>y &gt;= r</p></div></div>
     </li><li name="au.id.cxd.math.probability.discrete.Poisson" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -241,22 +249,24 @@ y - the number of trials when the rth success occurs</p><p>y &gt;= r</p></div></
     </span>
       <p class="shortcomment cmt"><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>$$
-  f(y; \lambda) = \lambda^y \frac{\exp{ \left[ -\lambda \right] }}{y!}
+  f(y; \lambda) = \lambda&#94;y \frac{\exp{ \left[ -\lambda \right] }}{y!}
 $$</p><p>$$
   \mu = \lambda
 $$</p><p>$$
-  \sigma^2 = \lambda
+  \sigma&#94;2 = \lambda
 $$</p><p>Created by cd on 7/09/2014.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.discrete.TableDistribution" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

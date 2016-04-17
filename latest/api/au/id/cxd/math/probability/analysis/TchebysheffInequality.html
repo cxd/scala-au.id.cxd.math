@@ -53,13 +53,17 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
 </p><p>Created by cd on 7/09/2014.</p><p>apply tchebysheff's inequality</p><p>used to provide a lower bound estimate for P where</p><p>$$
 P(\mu - k\sigma &lt; Y &lt; \mu + k\sigma) &gt;= 1 - 1/k^2
-$$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p></div><div class="toggleContainer block">
+$$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p><p>The parameters for $\mu$ and $\sigma$ are estimated.</p><p><u>Example Usage</u></p><p>The following provides an example for estimating a distribution with</p><p>$\mu = 20$ and $\sigma = 2$</p><pre>  <span class="kw">val</span> mu = <span class="num">20.0</span>
+<span class="kw">val</span> std = <span class="num">2.0</span>
+<span class="kw">val</span> inequality = TchebysheffInequality(mu)(std)</pre><p>Estimating the pdf for the value 16 for example:</p><pre><span class="kw">val</span> p = inequality.pdf(<span class="num">16</span>, <span class="num">24</span>)
+<span class="lit">"Probability "</span> + p</pre><p>yields</p><pre>Probability <span class="num">0.75</span></pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>

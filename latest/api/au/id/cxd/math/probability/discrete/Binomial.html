@@ -53,7 +53,8 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -61,7 +62,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
 p - probability of success</p><p>y - number of trials
 The binomial module has the parameters $p$ for the prior proportion of successes and $n$ for the total number of trials and calculates the probability of $y$ successes
 $$
-P(y; n; p) = \sum_{i=1}<sup>n {n \choose y_i} p</sup>y_i (1-p)^{n-y_i}
+P(y; n; p) = \sum_{i=1}&#94;n {n \choose y_i} p&#94;y_i (1-p)&#94;{n-y_i}
 $$</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="DiscreteDistribution.html" class="extype" name="au.id.cxd.math.probability.discrete.DiscreteDistribution">DiscreteDistribution</a>, <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -359,7 +360,7 @@ $$</p></div><div class="toggleContainer block">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.discrete.Binomial">Binomial</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">mean $\mu$ of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>mean $\mu$ of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.discrete.Binomial">Binomial</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -446,7 +447,7 @@ $$</p></div><div class="toggleContainer block">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">standard deviation $\sigma$</p><div class="fullcomment"><div class="comment cmt"><p>standard deviation $\sigma$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -497,7 +498,7 @@ $$</p></div><div class="toggleContainer block">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.discrete.Binomial">Binomial</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">variance for the distribution $\sigma^2$</p><div class="fullcomment"><div class="comment cmt"><p>variance for the distribution $\sigma^2$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.discrete.Binomial">Binomial</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
