@@ -114,7 +114,7 @@ import breeze.linalg.{DenseVector, DenseMatrix}
   * {S \ squared} = \frac{1}{n_i-1} \sum_{j=1 \in n_i} (Y_{ij} - \bar{Y_{i.}})^2
   * $$
   *
-  * which is an unbiased estimator of $ \sigma_i&#94;2) = \sigma&#94;2) $
+  * which is an unbiased estimator of $ \sigma_i&#94;2 = \sigma&#94;2 $
   *
   *
   *

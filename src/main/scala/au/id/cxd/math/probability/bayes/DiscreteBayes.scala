@@ -15,10 +15,10 @@ import au.id.cxd.math.probability.Distribution
   *
   * For discrete variables this is the likelihood multiplied by the prior divided by the marginalised P(A)
   * $$
-  * P(A) = \frac{ P(A|B_i) \times P(B_i) } { \sum_{j=1}^n P(A|B_j)\times P(B_j) }
+  * P(A) = \frac{ P(A|B_i) \times P(B_i) } { \sum_{j=1}&#94;n P(A|B_j)\times P(B_j) }
   * $$
   *
-  * For continuous values it is the marginalised value for P(A) is the integral \int_{-\infty}^\infty P(A|B)P(B)
+  * For continuous values it is the marginalised value for P(A) is the integral $\int_{-\infty}&#94;\infty P(A|B)P(B)$
   *
   *
   *
