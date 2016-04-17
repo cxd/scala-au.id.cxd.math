@@ -1,0 +1,711 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>HiddenMarkovModel - au.id.cxd.math.model.sequence.HiddenMarkovModel</title>
+          <meta name="description" content="HiddenMarkovModel - au.id.cxd.math.model.sequence.HiddenMarkovModel" />
+          <meta name="keywords" content="HiddenMarkovModel au.id.cxd.math.model.sequence.HiddenMarkovModel" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'au.id.cxd.math.model.sequence.HiddenMarkovModel$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Object" src="../../../../../../lib/object_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.model">model</a>.<a href="package.html" class="extype" name="au.id.cxd.math.model.sequence">sequence</a></p>
+        <h1>HiddenMarkovModel</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="au.id.cxd.math.model.sequence">package sequence</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">HiddenMarkovModel</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><p>The HMM is calculated out of two processes, a forward and backward process.</p><p>The model itself consists of two matrices and a prior matrix.</p><p>A state transition matrix $A$ of $M \times M$ representing the likelihood of transitioning
+to state $X_{t+1}$ at time $t+1$ from the previous state $X_t$ at time $t$.
+The values $a_{ij}$ represent the transition from $X_t$ to $X_{t+1}$ hence $i = t$ and $j = t + 1$.
+The table forms the likelihood $P(X_{t+1}|X_t)$ such that</p><p>$$
+  a_{ij} = P(x_j | x_i)
+$$</p><p>The second matrix $B$ represents a state evidence transition matrix. Given $M$ states there are $N$
+evidence variables, hence $B$ is an $M \times N$ matrix where
+$$
+  b_{ij} = P(x_j | e_i)
+$$</p><p>Additionally there is a prior probability for each state $X$ provided by a vector $\pi$ of length $M$ where</p><p>$$
+  \pi_i = P(x_i)
+$$</p><p>The Hidden Markov model comprises of</p><p>$$
+  HMM = \lambda = (A, B, \pi)
+$$</p><p>The procedure of learning the hidden markov model is to seek to learn the posterior matrices for $B$
+given an initial condition. This implementation addresses the discrete model, rather than the continuous model
+and seeks to learn the matrix $A$ relating state $X$ to the other states $x$ and the matrix $B$ relating
+the state $X$ to the evidence variable $e$ give the stream of previous events in time $1 : t$ it seeks to
+use the posterior model to predice the next state at time $t + k + 1$ and the prior states from the
+sequential model in time $t + k$.</p><p>$$
+  P(X_{t+k+1}|e_{1:t}) = \sum_{x_t+k} P(X_{t+k+1}|x_{t+k})P(x_{t+k}|e_{1:t})
+$$</p><p>Note that both $A$ and $B$ are as the likelihood model, and $\pi$ is initialised as the prior.</p><p>This is estimated from the training data. The raw format of the training data is a jagged array
+which consists of a</p><pre><span class="std">List</span>[<span class="std">List</span>[<span class="std">String</span>]]</pre><p>Where the last item in the list represents a discrete state label for the domain.
+Each item preceding that represents a discrete token for an evidence label in the domain.</p><p>So each row in the jagged array contains a variable sequence of evidence labels and terminates with a state label
+which is emitted by the sequence.</p><p>Both the domain of evidence labels and state labels are deterministic in this model.
+For example, if we have a simple weather world and we observe two evidence variables:</p><pre>Umbrella, NoUmbrella</pre><p>And we have two state variables,</p><pre>Raining,Sunny</pre><p>We can describe a sequence that leads up to Raining as</p><pre>Umbrella,Raining</pre><p>Or</p><pre>Umbrella,Umbrella,Raining</pre><p>We may potentially have a sequence that terminates in Sunny as</p><pre>Umbrella,Umbrella,NoUmbrella,Sunny</pre><p>For example.</p><p>The matrix $A$ is estimated by identifying the sequences of length $n$ and $n+1$ and then counting the frequency
+of the transition between $x_n$ and $x_{n+1}$.</p><p>$$
+ a_{ij} = \frac{c_{ij}}{\sum_k c_{ik}}
+$$</p><p>The evidence matrix $B$ is estimated by identifying the frequency of $b_{m}$ terminating in $x_{n+1}$
+for rows in the traning data $M$ and terminal states in $N$ lines ending in state $x_n$.</p><p>$$
+b_{ij} = \frac{ c(e_i, x_j) }{ \sum_k c(e_i, x_k) }
+$$</p><p>The class <a href="../../data/SequenceEstimation.html" class="extype" name="au.id.cxd.math.data.SequenceEstimation">au.id.cxd.math.data.SequenceEstimation</a> is used in this library to estimate these original likelihoods
+and the prior distribution for $X$.</p><p>$$
+\pi_i = \frac{c_i}{\sum_k c_{ik}}
+$$</p><p><br/></p><p>The procedure for learning is performed using a &quot;forward backward&quot; algorithm, there are two stages.</p><p>The backward variable represents the probability that the model is in state $x_i(t)$ at time $t$.</p><p>A matrix $\beta$ is defined to store the transition model at time $t$ such that</p><p>$$
+  \beta_i(t) = 0 \text{ if } x_i \ne x_0 \text{ and } t = T
+$$
+$$
+  \beta_i(t) = 1 \text{ if } x_i = x_0 \text{ and } t = T
+$$
+$$
+  \beta_i(t) = \sum_j^N a_{ij}b_j(e_{t+1})\beta_j(t + 1) \text{ otherwise }
+$$</p><p> this matrix represents the probability that the sequence of evidence variables seen up until time $T$
+ from $1:t \rightarrow T$ will generate the state $x_i$</p><p>$$
+   \beta_i(t) = P(e_{t+1}, e_{t+2}, ..., e_T | x_i, \lambda)
+$$</p><p>The second part of the algorithm is to compute the forward variable $\alpha$ a matrix that is defined
+to represent the probability that the model is in state $x_i$ given the sequence of evidence variables
+observed so far.</p><p>$$
+  \alpha_j(t) = P(e_1, e_2, ..., e_t, x_i | \lambda)
+$$</p><p>it is defined as follows</p><p>$$
+  \alpha_j(t) = 0 \text{ if } t = 0 \text{ and } x_j \ne x_0
+$$
+$$
+  \alpha_j(t) = 1 \text{ if } t = 0 \text{ and } x_j = x_0
+$$
+$$
+  \alpha_j(t) = \left[\sum_i^N \alpha_i(t-1)a_{ij}\right]b_j(e_t) \text{ otherwise }
+$$</p><p>as both are recursive procedures a dynamic programming technique is required to compute the values.</p><p>The model for $A$ is iteratively updated for each transition at time $t$ and $t + 1$ by estimating the
+probability of transitiong from state $x_i$ to state $x_j$ at time $t$ and $t+1$ given the current model $\lambda$
+and the set of evidence variables $V_{t+1} = e_1,e_2,e_3,...,e_{t+1}$ the new estimates are stored
+in a matrix $\epsilon$.</p><p>The equation for $\epsilon_{ij}$ is given as:</p><p>$$
+  \epsilon_{ij} = P(x_i(t), x_j(t+1)|V_{t+1}, \lambda)
+$$</p><p>$$
+\frac{\alpha_i(t)b_j(e_{t+1})\beta_j(t+1)}{P(V_{t+1}|\lambda)}
+$$</p><p>$$
+\frac{\alpha_i(t)b_j(e_{t+1})\beta_j(t+1)}{\sum_{i=1} \sum_{j=1} \alpha_i(t)a_{ij}b_j(e_{t+1})\beta_j(t+1)}
+$$</p><p>The expected number of times that state $x_i$ transitions to state $x_j$ is given by summing over the values
+of $\epsilon_{ij}$.</p><p>$$
+\gamma_i(t) = \sum_{j=1}^T \epsilon_t(i,j)
+$$</p><p>The total number of expected times a state $x_i$ is visited is given by summing over $\gamma_i$ for all time $T$.</p><p>$$
+  \sum_{t=1}^T \gamma_i(t)
+$$</p><p>The matrix $A$ can be updated with the new estimates for the state transitions as follows:</p><p>$$
+  \hat{a_{ij}} = \frac{\gamma_i(t)}{\sum_{i=1}^T \gamma_i(t)}
+$$</p><p>The matrix $B$ can be updated with new estimates for the evidence variables and states by calculating
+the ratio between the frequency that a particular evidence variable $e_k$ is produced and any evidence variable is produced.</p><p>$$
+  \hat{b_{ij}} = \frac{\sum_{t=1,e_k} \gamma_k(t) }{\sum_{t=1} \gamma_i(t)}
+$$</p><p>The learing process repeats until convergence where the changes in the previous values of
+$a_{ij}$ and $b_{ij}$ decrease below a threshold $\theta$.</p><p>When working with multiple sequences $B_k$ the sequences are assumed to be independent of each other
+and a normalisation factor is introduced in the estimate of $\hat{A}$.</p><p>$$
+  c = \sum_{k=1}^K \frac{1}{P_k}
+$$</p><p>which is the marginal distribution of observation sequence k from the set of observation sequences
+$O = e_1,...,e_n$ for each of the sequences in the input sample b. Assuming independence</p><p>$$
+  P(O|\lambda) = \prod_{k=1} P(O_k|\lambda)
+$$</p><p>The update rules for $\hat{A}$ and $\hat{B}$ are changed as follows.</p><p>$$</p><p>  \bar{a_{ij}} = \frac{c \sum_{t=1} \alpha_{k,i}(t)b_j(e_{k,t+1})\betea_{k,j}(t+1)}{c \sum_{t=1} \alpha_{k,i}(t)\beta_{k,i}(t+1)}
+$$</p><p>$$
+ \bar{b_{ij}} = \frac{c \sum_{t=1,e_j} \alpha_{k,i}(t)\beta_{k,ij}(t) }{c \sum_{k=1} \alpha_{k,i}(t)\beta_{k,i}(t) }
+$$</p><p>the summations above are from $t=1$ to $T-1$ in both numerator and denominator.</p><p>Created by cd on 10/01/15.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="au.id.cxd.math.model.sequence.HiddenMarkovModel"><span>HiddenMarkovModel</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.model.sequence.HiddenMarkovModel#alpha" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="alpha(T:Int)(pi:List[Double])(A:breeze.linalg.DenseMatrix[Double])(B:breeze.linalg.DenseMatrix[Double])(stateCount:Int)(evidenceCount:Int)(V:List[Int]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="alpha(Int)(List[Double])(DenseMatrix[Double])(DenseMatrix[Double])(Int)(Int)(List[Int]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">alpha</span><span class="params">(<span name="T">T: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="pi">pi: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="A">A: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="B">B: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="stateCount">stateCount: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="evidenceCount">evidenceCount: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="V">V: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@alpha(T:Int)(pi:List[Double])(A:breeze.linalg.DenseMatrix[Double])(B:breeze.linalg.DenseMatrix[Double])(stateCount:Int)(evidenceCount:Int)(V:List[Int]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">forward equation
+*
+$$
+T = time_T
+$$
+$$
+pi = P(x_i)
+$$
+$$
+a_ij = P(x_j | x_i)
+$$
+$$
+b_ij = P(x_j | e_i)
+$$
+*
+$T$ represents $i$ current state we need to predict $j$ next state
+*
+$V$ - indices of evidence variables observed up to time $T$
+</p>
+    </li><li name="au.id.cxd.math.model.sequence.HiddenMarkovModel#alphaUnscaled" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="alphaUnscaled(T:Int)(pi:List[Double])(A:breeze.linalg.DenseMatrix[Double])(B:breeze.linalg.DenseMatrix[Double])(stateCount:Int)(evidenceCount:Int)(V:List[Int]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="alphaUnscaled(Int)(List[Double])(DenseMatrix[Double])(DenseMatrix[Double])(Int)(Int)(List[Int]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">alphaUnscaled</span><span class="params">(<span name="T">T: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="pi">pi: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="A">A: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="B">B: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="stateCount">stateCount: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="evidenceCount">evidenceCount: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="V">V: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@alphaUnscaled(T:Int)(pi:List[Double])(A:breeze.linalg.DenseMatrix[Double])(B:breeze.linalg.DenseMatrix[Double])(stateCount:Int)(evidenceCount:Int)(V:List[Int]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">forward equation
+$$
+T = time_T
+pi = P(x_i)
+a_ij = P(x_j | x_i)
+b_ij = P(x_j | e_i)
+$$
+T represents i current state we need to predict j next state
+*
+V - indices of evidence variables observed up to time T
+</p>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.model.sequence.HiddenMarkovModel#beta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="beta(T:Int)(pi:List[Double])(A:breeze.linalg.DenseMatrix[Double])(B:breeze.linalg.DenseMatrix[Double])(stateCount:Int)(evidenceCount:Int)(V:List[Int]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="beta(Int)(List[Double])(DenseMatrix[Double])(DenseMatrix[Double])(Int)(Int)(List[Int]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beta</span><span class="params">(<span name="T">T: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="pi">pi: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="A">A: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="B">B: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="stateCount">stateCount: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="evidenceCount">evidenceCount: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="V">V: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@beta(T:Int)(pi:List[Double])(A:breeze.linalg.DenseMatrix[Double])(B:breeze.linalg.DenseMatrix[Double])(stateCount:Int)(evidenceCount:Int)(V:List[Int]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">this is the time reversed algorithm of alpha
+moving from t = 1 to T
+$$
+T = time T
+pi = P(x_i)
+a_ij = P(x_j | x_i)
+b_ij = P(x_j | e_i)
+$$
+T represents i current state we need to predict j next state
+*
+V - indices of evidence variables observed up to time T
+</p>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.model.sequence.HiddenMarkovModel#train" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="train(input:au.id.cxd.math.model.entity.hmm.InputModel)(trainSequences:List[List[String]])(theta:Double)(maxEpochs:Int):au.id.cxd.math.model.entity.hmm.Model"></a>
+      <a id="train(InputModel)(List[List[String]])(Double)(Int):Model"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">train</span><span class="params">(<span name="input">input: <a href="../entity/hmm/InputModel.html" class="extype" name="au.id.cxd.math.model.entity.hmm.InputModel">InputModel</a></span>)</span><span class="params">(<span name="trainSequences">trainSequences: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>)</span><span class="params">(<span name="theta">theta: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="params">(<span name="maxEpochs">maxEpochs: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../entity/hmm/Model.html" class="extype" name="au.id.cxd.math.model.entity.hmm.Model">Model</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@train(input:au.id.cxd.math.model.entity.hmm.InputModel)(trainSequences:List[List[String]])(theta:Double)(maxEpochs:Int):au.id.cxd.math.model.entity.hmm.Model" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the training method makes use of the forward backward
+algorithm.</p><div class="fullcomment"><div class="comment cmt"><p>the training method makes use of the forward backward
+algorithm.
+*
+input: the input model to start training
+trainSequences: the training sequences to present for learning, the last item in each sequence is considered to be the target state
+Note that training sequences need only be the set of complete sequences for each set of transitions.
+*
+theta: the threshold to use until convergence
+maxEpochs: the maximum epochs to run if convergence is not met
+</p></div></div>
+    </li><li name="au.id.cxd.math.model.sequence.HiddenMarkovModel#viterbiPredict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="viterbiPredict(model:au.id.cxd.math.model.entity.hmm.Model)(evidenceSequence:List[String]):List[au.id.cxd.math.model.entity.hmm.Prediction]"></a>
+      <a id="viterbiPredict(Model)(List[String]):List[Prediction]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">viterbiPredict</span><span class="params">(<span name="model">model: <a href="../entity/hmm/Model.html" class="extype" name="au.id.cxd.math.model.entity.hmm.Model">Model</a></span>)</span><span class="params">(<span name="evidenceSequence">evidenceSequence: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="../entity/hmm/Prediction.html" class="extype" name="au.id.cxd.math.model.entity.hmm.Prediction">Prediction</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@viterbiPredict(model:au.id.cxd.math.model.entity.hmm.Model)(evidenceSequence:List[String]):List[au.id.cxd.math.model.entity.hmm.Prediction]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">use the viterbi algortihm to determine the most likeli state sequence
+for the evidence sequence
+based on pseudo code from: http://en.wikipedia.org/wiki/Viterbi_algorithm
+</p>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.sequence.HiddenMarkovModel$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>discrete - au.id.cxd.math.probability.discrete</title>
+          <meta name="description" content="discrete - au.id.cxd.math.probability.discrete" />
+          <meta name="keywords" content="discrete au.id.cxd.math.probability.discrete" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'au.id.cxd.math.probability.discrete.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.probability">probability</a></p>
+        <h1>discrete</h1><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">discrete</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="au.id.cxd.math.probability.discrete.Binomial" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BinomialextendsDiscreteDistribution"></a>
+      <a id="Binomial:Binomial"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Binomial.html"><span class="name">Binomial</span></a><span class="result"> extends <a href="DiscreteDistribution.html" class="extype" name="au.id.cxd.math.probability.discrete.DiscreteDistribution">DiscreteDistribution</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@BinomialextendsDiscreteDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><p>Created by cd on 6/09/2014.</p><p>Binomial distribution</p><p>n - totalnumber of trials
+p - probability of success</p><p>y - number of trials
+The binomial module has the parameters $p$ for the prior proportion of successes and $n$ for the total number of trials and calculates the probability of $y$ successes
+$$
+P(y; n; p) = \sum_{i=1}<sup>n {n \choose y_i} p</sup>y_i (1-p)^{n-y_i}
+$$</p></div></div>
+    </li><li name="au.id.cxd.math.probability.discrete.DiscreteDistribution" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DiscreteDistributionextendsDistribution"></a>
+      <a id="DiscreteDistribution:DiscreteDistribution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DiscreteDistribution.html"><span class="name">DiscreteDistribution</span></a><span class="result"> extends <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@DiscreteDistributionextendsDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Created by cd on 6/09/2014.</p>
+    </li><li name="au.id.cxd.math.probability.discrete.Geometric" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="GeometricextendsDiscreteDistribution"></a>
+      <a id="Geometric:Geometric"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Geometric.html"><span class="name">Geometric</span></a><span class="result"> extends <a href="DiscreteDistribution.html" class="extype" name="au.id.cxd.math.probability.discrete.DiscreteDistribution">DiscreteDistribution</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@GeometricextendsDiscreteDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><p>Created by cd on 6/09/2014.</p><p>Geometric distribution with 1 parameter p = probability</p><p>$$
+P(y;p) = p(1-p)^{y-1}
+$$</p><p>Mean: $\mu = \frac{1}{p}$</p><p>Variance: $\sigma<sup>2 = \frac{1-p}{p</sup>2}$</p></div></div>
+    </li><li name="au.id.cxd.math.probability.discrete.HyperGeometric" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HyperGeometricextendsDiscreteDistribution"></a>
+      <a id="HyperGeometric:HyperGeometric"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HyperGeometric.html"><span class="name">HyperGeometric</span></a><span class="result"> extends <a href="DiscreteDistribution.html" class="extype" name="au.id.cxd.math.probability.discrete.DiscreteDistribution">DiscreteDistribution</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@HyperGeometricextendsDiscreteDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><p>Created by cd on 7/09/2014.</p><p>Hyper geometric</p><p>The Hypergeometric (class name HyperGeometric) distribution represents the probability of choosing $y$ number of events of the same kind
+from a subset of $r$ like items within a population of all $N$ possible items (of different kinds) for the sample of size $n$ containing
+the mixed items.</p><p>The constraints are such that $r \le n \le N$ and $y \le r \le n$. The parameters are $y,r,n,N$.</p><p>The probability distribution is defined as follows.
+$$
+P(y; r,n,N) = \frac{ {r \choose y } {{N - r} \choose {n - y} } } {  {N \choose n} }
+$$</p><p>The simple properties of the distribution are:\\\\
+Mean: $\mu = \frac{nr}{N}$\\
+Variance: $\sigma^2 = n \left( \frac{r}{N} \right) \left( \frac{N - r}{N} \right) \left( \frac{N - n}{N-1}\right)$</p><p>r &lt;= n &lt;= N
+y &lt;= r &lt;= n</p></div></div>
+    </li><li name="au.id.cxd.math.probability.discrete.NegativeBinomial" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NegativeBinomialextendsDiscreteDistribution"></a>
+      <a id="NegativeBinomial:NegativeBinomial"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NegativeBinomial.html"><span class="name">NegativeBinomial</span></a><span class="result"> extends <a href="DiscreteDistribution.html" class="extype" name="au.id.cxd.math.probability.discrete.DiscreteDistribution">DiscreteDistribution</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@NegativeBinomialextendsDiscreteDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><p>Created by cd on 7/09/2014.</p><p>The Negative Binomial Distribution (class name NegativeBinomial) provides the probability of the $nth$ success or potentially $nth$ failure of a bernoulli trial. The parameters are $r$ representing the $r -1$ initial trials that where the successful and $y$ the total number of trials before the next success $r$ occurs. The distribution is calculated as follows:
+$$
+P(y;r) = {y - 1 \choose r - 1}p<sup>rq</sup>{y-r}
+$$
+where $y = r, r + 1, ...$\\\\
+The simple properties of the distribution are:\\\\
+Mean:$\mu = \frac{r}{p}$\\
+Variance:$\sigma<sup>2 = \frac{r(1-p)}{p</sup>2}$\\</p><p>r - the first success
+p the probability
+y - the number of trials when the rth success occurs</p><p>y &gt;= r</p></div></div>
+    </li><li name="au.id.cxd.math.probability.discrete.Poisson" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PoissonextendsDiscreteDistribution"></a>
+      <a id="Poisson:Poisson"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Poisson.html"><span class="name">Poisson</span></a><span class="result"> extends <a href="DiscreteDistribution.html" class="extype" name="au.id.cxd.math.probability.discrete.DiscreteDistribution">DiscreteDistribution</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@PoissonextendsDiscreteDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+</p><p>$$
+  f(y; \lambda) = \lambda^y \frac{\exp{ \left[ -\lambda \right] }}{y!}
+$$</p><p>$$
+  \mu = \lambda
+$$</p><p>$$
+  \sigma^2 = \lambda
+$$</p><p>Created by cd on 7/09/2014.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.discrete.TableDistribution" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TableDistributionextendsDiscreteDistribution"></a>
+      <a id="TableDistribution:TableDistribution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TableDistribution.html"><span class="name">TableDistribution</span></a><span class="result"> extends <a href="DiscreteDistribution.html" class="extype" name="au.id.cxd.math.probability.discrete.DiscreteDistribution">DiscreteDistribution</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@TableDistributionextendsDiscreteDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A table distribution represents
+a discrete collection of values which correspond to a discrete distribution.</p><div class="fullcomment"><div class="comment cmt"><p>A table distribution represents
+a discrete collection of values which correspond to a discrete distribution.</p><p>The table must have at least two columns.</p><p>The domainColumn contains values of Y that map to the row associated with f(y).</p><p>The rangeColumn is the column contains the P(Y) values, all values of this column must sum to 1.</p><p>Created by cd on 26/03/2016.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="au.id.cxd.math.probability.discrete.Binomial" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Binomial"></a>
+      <a id="Binomial:Binomial"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Binomial$.html"><span class="name">Binomial</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@Binomial" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.discrete.Geometric" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Geometric"></a>
+      <a id="Geometric:Geometric"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Geometric$.html"><span class="name">Geometric</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@Geometric" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.discrete.HyperGeometric" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HyperGeometric"></a>
+      <a id="HyperGeometric:HyperGeometric"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HyperGeometric$.html"><span class="name">HyperGeometric</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@HyperGeometric" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.discrete.NegativeBinomial" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NegativeBinomial"></a>
+      <a id="NegativeBinomial:NegativeBinomial"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NegativeBinomial$.html"><span class="name">NegativeBinomial</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@NegativeBinomial" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.discrete.Poisson" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Poisson"></a>
+      <a id="Poisson:Poisson"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Poisson$.html"><span class="name">Poisson</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@Poisson" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.discrete.TableDistribution" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TableDistribution"></a>
+      <a id="TableDistribution:TableDistribution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TableDistribution$.html"><span class="name">TableDistribution</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.discrete.package@TableDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
