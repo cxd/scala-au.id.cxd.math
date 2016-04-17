@@ -2,6 +2,8 @@ import java.io.PrintWriter
 
 import scala.io.Source
 
+import com.typesafe.sbt.SbtGit.GitKeys._
+
 name := "au.id.cxd.math"
 
 version := "1.0"
@@ -24,8 +26,6 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-core" % "7.1.0"
 )
 
-lazy val root = (project in file(".")).
-  settings(unidocSettings: _*)
 
 // details here on how to post process the generated html and insert mathjax
 // http://stackoverflow.com/questions/15996651/is-there-a-way-to-include-math-formulae-in-scaladoc
@@ -66,3 +66,8 @@ def listHtmlFile(dir: java.io.File): List[java.io.File] = {
     else                            List[File]()
   }
 }
+
+
+
+lazy val root = (project in file(".")).
+  settings(unidocSettings: _*)

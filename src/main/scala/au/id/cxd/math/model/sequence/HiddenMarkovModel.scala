@@ -174,8 +174,77 @@ import scala.collection.mutable._
   * The model for $A$ is iteratively updated for each transition at time $t$ and $t + 1$ by estimating the
   * probability of transitiong from state $x_i$ to state $x_j$ at time $t$ and $t+1$ given the current model $\lambda$
   * and the set of evidence variables $V_{t+1} = e_1,e_2,e_3,...,e_{t+1}$ the new estimates are stored
-  * in a matrix $\Gamma$
+  * in a matrix $\epsilon$.
   *
+  * The equation for $\epsilon_{ij}$ is given as:
+  *
+  * $$
+  *   \epsilon_{ij} = P(x_i(t), x_j(t+1)|V_{t+1}, \lambda)
+  * $$
+  *
+  * $$
+  * \frac{\alpha_i(t)b_j(e_{t+1})\beta_j(t+1)}{P(V_{t+1}|\lambda)}
+  * $$
+  *
+  * $$
+  * \frac{\alpha_i(t)b_j(e_{t+1})\beta_j(t+1)}{\sum_{i=1} \sum_{j=1} \alpha_i(t)a_{ij}b_j(e_{t+1})\beta_j(t+1)}
+  * $$
+  *
+  * The expected number of times that state $x_i$ transitions to state $x_j$ is given by summing over the values
+  * of $\epsilon_{ij}$.
+  *
+  * $$
+  * \gamma_i(t) = \sum_{j=1}^T \epsilon_t(i,j)
+  * $$
+  *
+  * The total number of expected times a state $x_i$ is visited is given by summing over $\gamma_i$ for all time $T$.
+  *
+  * $$
+  *   \sum_{t=1}^T \gamma_i(t)
+  * $$
+  *
+  * The matrix $A$ can be updated with the new estimates for the state transitions as follows:
+  *
+  * $$
+  *   \hat{a_{ij}} = \frac{\gamma_i(t)}{\sum_{i=1}^T \gamma_i(t)}
+  * $$
+  *
+  * The matrix $B$ can be updated with new estimates for the evidence variables and states by calculating
+  * the ratio between the frequency that a particular evidence variable $e_k$ is produced and any evidence variable is produced.
+  *
+  * $$
+  *   \hat{b_{ij}} = \frac{\sum_{t=1,e_k} \gamma_k(t) }{\sum_{t=1} \gamma_i(t)}
+  * $$
+  *
+  * The learing process repeats until convergence where the changes in the previous values of
+  * $a_{ij}$ and $b_{ij}$ decrease below a threshold $\theta$.
+  *
+  * When working with multiple sequences $B_k$ the sequences are assumed to be independent of each other
+  * and a normalisation factor is introduced in the estimate of $\hat{A}$.
+  *
+  * $$
+  *   c = \sum_{k=1}^K \frac{1}{P_k}
+  * $$
+  *
+  * which is the marginal distribution of observation sequence k from the set of observation sequences
+  * $O = e_1,...,e_n$ for each of the sequences in the input sample b. Assuming independence
+  *
+  * $$
+  *   P(O|\lambda) = \prod_{k=1} P(O_k|\lambda)
+  * $$
+  *
+  * The update rules for $\hat{A}$ and $\hat{B}$ are changed as follows.
+  *
+  * $$
+  *
+  *   \bar{a_{ij}} = \frac{c \sum_{t=1} \alpha_{k,i}(t)b_j(e_{k,t+1})\betea_{k,j}(t+1)}{c \sum_{t=1} \alpha_{k,i}(t)\beta_{k,i}(t+1)}
+  * $$
+  *
+  * $$
+  *  \bar{b_{ij}} = \frac{c \sum_{t=1,e_j} \alpha_{k,i}(t)\beta_{k,ij}(t) }{c \sum_{k=1} \alpha_{k,i}(t)\beta_{k,i}(t) }
+  * $$
+  *
+  * the summations above are from $t=1$ to $T-1$ in both numerator and denominator.
   *
   * Created by cd on 10/01/15.
   */
