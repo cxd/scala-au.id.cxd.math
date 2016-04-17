@@ -12,7 +12,7 @@ scalaVersion := "2.11.7"
 
 resolvers += Opts.resolver.sonatypeReleases
 
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 
 libraryDependencies ++= Seq(
   // other dependencies here

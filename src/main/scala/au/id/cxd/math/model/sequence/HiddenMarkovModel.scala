@@ -21,25 +21,25 @@ import scala.collection.mutable._
   * The table forms the likelihood $P(X_{t+1}|X_t)$ such that
   *
   * $$
-  *   a_{ij} = P(x_j | x_i)
+  * a_{ij} = P(x_j | x_i)
   * $$
   *
   * The second matrix $B$ represents a state evidence transition matrix. Given $M$ states there are $N$
   * evidence variables, hence $B$ is an $M \times N$ matrix where
   * $$
-  *   b_{ij} = P(x_j | e_i)
+  * b_{ij} = P(x_j | e_i)
   * $$
   *
   * Additionally there is a prior probability for each state $X$ provided by a vector $\pi$ of length $M$ where
   *
   * $$
-  *   \pi_i = P(x_i)
+  * \pi_i = P(x_i)
   * $$
   *
   * The Hidden Markov model comprises of
   *
   * $$
-  *   HMM = \lambda = (A, B, \pi)
+  * HMM = \lambda = (A, B, \pi)
   * $$
   *
   * The procedure of learning the hidden markov model is to seek to learn the posterior matrices for $B$
@@ -50,7 +50,7 @@ import scala.collection.mutable._
   * sequential model in time $t + k$.
   *
   * $$
-  *   P(X_{t+k+1}|e_{1:t}) = \sum_{x_t+k} P(X_{t+k+1}|x_{t+k})P(x_{t+k}|e_{1:t})
+  * P(X_{t+k+1}|e_{1:t}) = \sum_{x_t+k} P(X_{t+k+1}|x_{t+k})P(x_{t+k}|e_{1:t})
   * $$
   *
   * Note that both $A$ and $B$ are as the likelihood model, and $\pi$ is initialised as the prior.
@@ -58,7 +58,7 @@ import scala.collection.mutable._
   * This is estimated from the training data. The raw format of the training data is a jagged array
   * which consists of a
   *
-  *{{{
+  * {{{
   *   List[List[String]]
   * }}}
   *
@@ -83,21 +83,21 @@ import scala.collection.mutable._
   *
   * We can describe a sequence that leads up to Raining as
   *
-  *{{{
+  * {{{
   * Umbrella,Raining
   * }}}
   *
   * Or
   *
-  *{{{
+  * {{{
   * Umbrella,Umbrella,Raining
   * }}}
   *
   * We may potentially have a sequence that terminates in Sunny as
   *
-  *{{{
+  * {{{
   * Umbrella,Umbrella,NoUmbrella,Sunny
-  *}}}
+  * }}}
   *
   * For example.
   *
@@ -105,7 +105,7 @@ import scala.collection.mutable._
   * of the transition between $x_n$ and $x_{n+1}$.
   *
   * $$
-  *  a_{ij} = \frac{c_{ij}}{\sum_k c_{ik}}
+  * a_{ij} = \frac{c_{ij}}{\sum_k c_{ik}}
   * $$
   *
   * The evidence matrix $B$ is estimated by identifying the frequency of $b_{m}$ terminating in $x_{n+1}$
@@ -133,53 +133,53 @@ import scala.collection.mutable._
   * A matrix $\beta$ is defined to store the transition model at time $t$ such that
   *
   * $$
-  *   \beta_i(t) = 0 \text{ if } x_i \ne x_0 \text{ and } t = T
+  * \beta_i(t) = 0 \text{ if } x_i \ne x_0 \text{ and } t = T
   * $$
   * $$
-  *   \beta_i(t) = 1 \text{ if } x_i = x_0 \text{ and } t = T
+  * \beta_i(t) = 1 \text{ if } x_i = x_0 \text{ and } t = T
   * $$
   * $$
-  *   \beta_i(t) = \sum_j^N a_{ij}b_j(e_{t+1})\beta_j(t + 1) \text{ otherwise }
-  * $$
-  *
-  *  this matrix represents the probability that the sequence of evidence variables seen up until time $T$
-  *  from $1:t \rightarrow T$ will generate the state $x_i$
-  *
-  * $$
-  *    \beta_i(t) = P(e_{t+1}, e_{t+2}, ..., e_T | x_i, \lambda)
+  * \beta_i(t) = \sum_j^N a_{ij}b_j(e_{t+1})\beta_j(t + 1) \text{ otherwise }
   * $$
   *
-  *The second part of the algorithm is to compute the forward variable $\alpha$ a matrix that is defined
+  * this matrix represents the probability that the sequence of evidence variables seen up until time $T$
+  * from $1:t \rightarrow T$ will generate the state $x_i$
+  *
+  * $$
+  * \beta_i(t) = P(e_{t+1}, e_{t+2}, ..., e_T | x_i, \lambda)
+  * $$
+  *
+  * The second part of the algorithm is to compute the forward variable $\alpha$ a matrix that is defined
   * to represent the probability that the model is in state $x_i$ given the sequence of evidence variables
   * observed so far.
   *
   * $$
-  *   \alpha_j(t) = P(e_1, e_2, ..., e_t, x_i | \lambda)
+  * \alpha_j(t) = P(e_1, e_2, ..., e_t, x_i | \lambda)
   * $$
   *
   * it is defined as follows
   *
   * $$
-  *   \alpha_j(t) = 0 \text{ if } t = 0 \text{ and } x_j \ne x_0
+  * \alpha_j(t) = 0 \text{ if } t = 0 \text{ and } x_j \ne x_0
   * $$
   * $$
-  *   \alpha_j(t) = 1 \text{ if } t = 0 \text{ and } x_j = x_0
+  * \alpha_j(t) = 1 \text{ if } t = 0 \text{ and } x_j = x_0
   * $$
   * $$
-  *   \alpha_j(t) = \left[\sum_i^N \alpha_i(t-1)a_{ij}\right]b_j(e_t) \text{ otherwise }
+  * \alpha_j(t) = \left[\sum_i^N \alpha_i(t-1)a_{ij}\right]b_j(e_t) \text{ otherwise }
   * $$
   *
   * as both are recursive procedures a dynamic programming technique is required to compute the values.
   *
   * The model for $A$ is iteratively updated for each transition at time $t$ and $t + 1$ by estimating the
-  * probability of transitiong from state $x_i$ to state $x_j$ at time $t$ and $t+1$ given the current model $\lambda$
+  * probability of transition from state $x_i$ to state $x_j$ at time $t$ and $t+1$ given the current model $\lambda$
   * and the set of evidence variables $V_{t+1} = e_1,e_2,e_3,...,e_{t+1}$ the new estimates are stored
   * in a matrix $\epsilon$.
   *
   * The equation for $\epsilon_{ij}$ is given as:
   *
   * $$
-  *   \epsilon_{ij} = P(x_i(t), x_j(t+1)|V_{t+1}, \lambda)
+  * \epsilon_{ij} = P(x_i(t), x_j(t+1)|V_{t+1}, \lambda)
   * $$
   *
   * $$
@@ -200,20 +200,20 @@ import scala.collection.mutable._
   * The total number of expected times a state $x_i$ is visited is given by summing over $\gamma_i$ for all time $T$.
   *
   * $$
-  *   \sum_{t=1}^T \gamma_i(t)
+  * \sum_{t=1}^T \gamma_i(t)
   * $$
   *
   * The matrix $A$ can be updated with the new estimates for the state transitions as follows:
   *
   * $$
-  *   \hat{a_{ij}} = \frac{\gamma_i(t)}{\sum_{i=1}^T \gamma_i(t)}
+  * \hat{a_{ij}} = \frac{\gamma_i(t)}{\sum_{i=1}^T \gamma_i(t)}
   * $$
   *
   * The matrix $B$ can be updated with new estimates for the evidence variables and states by calculating
   * the ratio between the frequency that a particular evidence variable $e_k$ is produced and any evidence variable is produced.
   *
   * $$
-  *   \hat{b_{ij}} = \frac{\sum_{t=1,e_k} \gamma_k(t) }{\sum_{t=1} \gamma_i(t)}
+  * \hat{b_{ij}} = \frac{\sum_{t=1,e_k} \gamma_k(t) }{\sum_{t=1} \gamma_i(t)}
   * $$
   *
   * The learing process repeats until convergence where the changes in the previous values of
@@ -223,28 +223,158 @@ import scala.collection.mutable._
   * and a normalisation factor is introduced in the estimate of $\hat{A}$.
   *
   * $$
-  *   c = \sum_{k=1}^K \frac{1}{P_k}
+  * c = \sum_{k=1}^K \frac{1}{P_k}
   * $$
   *
   * which is the marginal distribution of observation sequence k from the set of observation sequences
   * $O = e_1,...,e_n$ for each of the sequences in the input sample b. Assuming independence
   *
   * $$
-  *   P(O|\lambda) = \prod_{k=1} P(O_k|\lambda)
+  * P(O|\lambda) = \prod_{k=1} P(O_k|\lambda)
   * $$
   *
   * The update rules for $\hat{A}$ and $\hat{B}$ are changed as follows.
   *
   * $$
-  *
-  *   \bar{a_{ij}} = \frac{c \sum_{t=1} \alpha_{k,i}(t)b_j(e_{k,t+1})\betea_{k,j}(t+1)}{c \sum_{t=1} \alpha_{k,i}(t)\beta_{k,i}(t+1)}
+  * \bar{a_{ij}} = \frac{c \sum_{t=1} \alpha_{k,i}(t)b_j(e_{k,t+1})\beta_{k,j}(t+1)}{c \sum_{t=1} \alpha_{k,i}(t)\beta_{k,i}(t+1)}
   * $$
   *
   * $$
-  *  \bar{b_{ij}} = \frac{c \sum_{t=1,e_j} \alpha_{k,i}(t)\beta_{k,ij}(t) }{c \sum_{k=1} \alpha_{k,i}(t)\beta_{k,i}(t) }
+  * \bar{b_{ij}} = \frac{c \sum_{t=1,e_j} \alpha_{k,i}(t)\beta_{k,ij}(t) }{c \sum_{k=1} \alpha_{k,i}(t)\beta_{k,i}(t) }
   * $$
   *
   * the summations above are from $t=1$ to $T-1$ in both numerator and denominator.
+  *
+  * __Example Usage__
+  *
+  * The library is used in combination with the [[au.id.cxd.math.data.SequenceReader ]] and
+  * [[au.id.cxd.math.data.SequenceEstimation]] classes the purpose of these classes are to
+  * read data from CSV and then generate the initial likelihood for matrices $A$, $B$ and
+  * the prior vector $\pi$.
+  *
+  * The test class "TestTrainRainModel" in the test cases for the project provides an example
+  * of the usage and the class TestRainExample provides an example of the data format. See also
+  * the example in TestTrainCtiModel for the use of CSV training data.
+  *
+  * The classes are used to create a [[au.id.cxd.math.model.entity.hmm.InputModel]]
+  * which contains the initialisation parameters and are fed to the hmm algorithm.
+  *
+  * Intiialising the model for example:
+  *
+  * {{{
+  * val fileName = "data/example_train_data.csv"
+  * val file = new File(fileName)
+  * val reader = SequenceReader()
+  * // the data set (jagged array)
+  * val data = reader.readSequences(file)
+  * // unique set of states
+  * val states =  reader.readStates (data)
+  * // the unique labels for evidence variables
+  * val evidenceVars = reader.readEvidenceVars (data)
+  *
+  * }}}
+  *
+  * After which the sequence estimator is used to generate the initial parameters of the model.
+  *
+  * {{{
+  * val estimator = SequenceEstimation()
+  *
+  * val pi = estimator.statePriors(data)(states)
+  *
+  * val A = estimator.stateTransitions(data)(states)
+  *
+  * val Bk = estimator.avgPriorEvidences(data)(evidenceVars)(states)
+  *
+  * val input = InputModel(pi, A, List(Bk), states, evidenceVars)
+  *
+  * }}}
+  *
+  * The input model is then used to train the HMM
+  *
+  * {{{
+  * val model = HiddenMarkovModel.train(input)(data)(0.00001)(50)
+  * }}}
+  *
+  * The parameters include the threshold for convergence and maximum iterations.
+  *
+  * Once trained the model can be used for prediction.
+  *
+  * The example below is from the "CTI" world where telephony events result in a call state.
+  * Refer also to the TestTrainRainModel for the weather world example.
+  *
+  * {{{
+  *   val test = List("Ringing(inbound)",
+         "UserEvent(Start)",
+         "UserEvent(Stop)",
+         "OffHook",
+         "Established",
+         "Held",
+         "Dialing(Consult)");
+
+       val predict1 = HiddenMarkovModel.viterbiPredict (model) (test)
+
+  * }}}
+  *
+  * The string of events that are sent to the predict model do not include the end state.
+  *
+  * The prediction model will return a result for each evidence transition in the input chain.
+  *
+  * For example, from the input above, each step in the sequence above is categorised
+  * with a corresponding state label, and the probability of that state label.
+  *
+  * {{{
+  *   List({
+        prob: 6.60507635396296E-44,
+        state: OnCall
+        evidence: Ringing(inbound)
+        T: 1
+        success: true
+}, {
+        prob: 7.758309697332233E-70,
+        state: Started
+        evidence: UserEvent(Start)
+        T: 2
+        success: true
+}, {
+        prob: 3.2302220856424765E-94,
+        state: Paused
+        evidence: UserEvent(Stop)
+        T: 3
+        success: true
+}, {
+        prob: 1.6782307523456403E-112,
+        state: OnCall
+        evidence: OffHook
+        T: 4
+        success: true
+}, {
+        prob: 1.1980508062616898E-131,
+        state: OnCall
+        evidence: Established
+        T: 5
+        success: true
+}, {
+        prob: 1.0950613538482917E-145,
+        state: OnHold
+        evidence: Held
+        T: 6
+        success: true
+}, {
+        prob: 1.0950613538482917E-145,
+        state: Consult
+        evidence: Dialing(Consult)
+        T: 7
+        success: true
+})
+  * }}}
+  *
+  * For further reading refer to:
+  *
+  * Norvig, Peter. Russell, Stuart. (2003) $Artificial\ Intelligence\ A\ Modern\ Approach.\ Second\ Edition.$ USA: Pearson Education, Inc. pp537-583, 724-733.
+  *
+  * Bishop, Christopher M. (2006) $Pattern\ Recognition\ and\ Machine\ Learning$ USA: Springer Science + Business Media, LLC. pp607-635.
+  *
+  * Rabiner, Lawrence R. (1989) ``A Tutorial on Hidden Markov Models and Seleted Applications in Speech Recognition''. USA: Proceedings of the IEEE, VOL 77, NO.2 pp257-286
   *
   * Created by cd on 10/01/15.
   */
@@ -319,6 +449,7 @@ object HiddenMarkovModel {
         * $$
         * v_k = current evidence variable in V
         * t = index of state at time t
+        *
         *
         * @param vk
         * @param t
@@ -457,6 +588,7 @@ object HiddenMarkovModel {
         * $v_k$ = current evidence variable in V
         * $t$ = index of state at time t
         *
+        *
         * @param vk
         * @param t
         * @param accum
@@ -546,7 +678,7 @@ object HiddenMarkovModel {
     * b_ij = P(x_j | e_i)
     * $$
     * T represents i current state we need to predict j next state
-    **
+    * *
     * V - indices of evidence variables observed up to time T
     *
     * @param T
@@ -584,9 +716,10 @@ object HiddenMarkovModel {
 
     val alpha0 = alphaUnscaled(T)(pi)(A)(B)(stateCount)(evidenceCount)(V)
     /**
-      $$
-        \beta_i(t) = \sum_{j=1}^C \beta_j(t+1)a_{ij}b_{jk}v(t+1)
-      $$
+      * $$
+      *
+      * \beta_i(t) = \sum_{j=1}^C \beta_j(t+1)a_{ij}b_{jk}v(t+1)
+      * $$
       * @param T
       * @param t
       * @param pi
