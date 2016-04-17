@@ -8,14 +8,23 @@ import au.id.cxd.math.function.{NumericIntegral, BetaFn}
   * The beta distribution
   *
   * Implements the pdf.
-  * $$ f(y) = \frac{ y^{\alpha - 1}(1-y)^{\beta-1} } { \Beta(\alpha, \beta) }
+  * $$
+  * f(y) = \frac{ y&#94;{\alpha - 1} (1-y)&#94;{\beta-1} } { Beta(\alpha, \beta) }
+  * $$
   *
-  * Where the $\Beta$ is the beta function [[au.id.cxd.math.function.BetaFn]]
+  * Where the $Beta$ is the beta function [[au.id.cxd.math.function.BetaFn]]
   *
   * Properties of the distribution:
-  * $$\mu = \frac{\alpha}{\alpha + \beta}$$
+  * Mean $\mu$:
+  * $$
+  * \frac{\alpha}{\alpha + \beta}
+  * $$
   *
-  * $$\sigma^2 = \frac{ \alpha\beta } {(\alpha + \beta)^2(\alpha + \beta + 1)}$$
+  * Variance $\sigma&#94;2$
+  *
+  * $$
+  * \sigma&#94;2 = \frac{ \alpha\beta } { {(\alpha + \beta)&#94;2} (\alpha + \beta + 1)}
+  * $$
   *
   * Created by cd on 5/11/14.
   */

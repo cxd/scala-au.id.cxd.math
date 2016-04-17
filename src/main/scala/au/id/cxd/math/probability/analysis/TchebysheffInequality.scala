@@ -17,6 +17,33 @@ import scala.math._
   *
   * this can be used to estimate P(.) when the distribution is unknown.
   *
+  * The parameters for $\mu$ and $\sigma$ are estimated.
+  *
+  * __Example Usage__
+  *
+  * The following provides an example for estimating a distribution with
+  *
+  * $\mu = 20$ and $\sigma = 2$
+  *
+  * {{{
+  *   val mu = 20.0
+  * val std = 2.0
+  * val inequality = TchebysheffInequality(mu)(std)
+  * }}}
+  *
+  * Estimating the pdf for the value 16 for example:
+  *
+  * {{{
+  *   val p = inequality.pdf(16, 24)
+  *   "Probability " + p
+  * }}}
+  *
+  * yields
+  *
+  * {{{
+  *   Probability 0.75
+  * }}}
+  *
   */
 class TchebysheffInequality(mu: Double, sigma: Double) {
 

@@ -16,7 +16,7 @@ import au.id.cxd.math.count.Choose
   * y - number of trials
   * The binomial module has the parameters $p$ for the prior proportion of successes and $n$ for the total number of trials and calculates the probability of $y$ successes
   * $$
-  * P(y; n; p) = \sum_{i=1}^n {n \choose y_i} p^y_i (1-p)^{n-y_i}
+  * P(y; n; p) = \sum_{i=1}&#94;n {n \choose y_i} p&#94;y_i (1-p)&#94;{n-y_i}
   * $$
   *
   */

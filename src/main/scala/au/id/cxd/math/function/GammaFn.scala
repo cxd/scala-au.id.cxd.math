@@ -10,7 +10,7 @@ import scalaz.Memo
   * The gamma function $\Gamma(a)$ is equivalent to $(a - 1)!$
   *
   *
-  * $\Gamma(z)$ = $\int_0^\infty pow(t, z-1) exp(-t) dt$
+  * $\Gamma(z)$ = $\int_0&#94;\infty t&#94;{z-1} \exp(-t) dt$
   *
   *
   *

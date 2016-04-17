@@ -247,7 +247,7 @@ import scala.collection.mutable._
   *
   * __Example Usage__
   *
-  * The library is used in combination with the [[au.id.cxd.math.data.SequenceReader ]] and
+  * The library is used in combination with the [[au.id.cxd.math.data.SequenceReader]] and
   * [[au.id.cxd.math.data.SequenceEstimation]] classes the purpose of these classes are to
   * read data from CSV and then generate the initial likelihood for matrices $A$, $B$ and
   * the prior vector $\pi$.

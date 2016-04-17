@@ -1,20 +1,46 @@
 package au.id.cxd.math.probability
 
 /**
- * Created by cd on 6/09/2014.
- */
+  * ##import MathJax
+  *
+  * The trait for all distribution functions, each distribution has
+  * the probability density function, the cumulative density function, mean and variance.
+  *
+  * Created by cd on 6/09/2014.
+  */
 trait Distribution {
 
-  def pdf(y:Double):Double
+  /**
+    * probability density function
+    * @param y
+    * @return
+    */
+  def pdf(y: Double): Double
 
-  def cdf(y:Seq[Double]):Double
+  /**
+    * cumulative density function
+    * @param y
+    * @return
+    */
+  def cdf(y: Seq[Double]): Double
 
-  def mean():Double
+  /**
+    * mean $\mu$ of the distribution
+    * @return
+    */
+  def mean(): Double
 
-  def variance():Double
+  /**
+    * variance for the distribution $\sigma^2$
+    * @return
+    */
+  def variance(): Double
 
-  def stddev():Double = Math.sqrt(variance)
-
+  /**
+    * standard deviation $\sigma$
+    * @return
+    */
+  def stddev(): Double = Math.sqrt(variance)
 
 
 }

@@ -10,12 +10,12 @@ import scala.math._
   * Geometric distribution with 1 parameter p = probability
   *
   * $$
-  * P(y;p) = p(1-p)^{y-1}
+  * P(y;p) = p(1-p)&#94;{y-1}
   * $$
   *
   * Mean: $\mu = \frac{1}{p}$
   *
-  * Variance: $\sigma^2 = \frac{1-p}{p^2}$
+  * Variance: $\sigma&#94;2 = \frac{1-p}{p&#94;2}$
   *
   */
 class Geometric(p: Double) extends DiscreteDistribution {

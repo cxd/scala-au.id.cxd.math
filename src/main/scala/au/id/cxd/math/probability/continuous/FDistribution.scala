@@ -7,16 +7,18 @@ import au.id.cxd.math.function.{NumericIntegral, GammaFn, BetaFn}
   * ##import MathJax
   *
   * The F distribution is the ratio of two chi-square distributions
-  * with a numerator and denominator degree of freedom.
+  * with a numerator $d_1$ and denominator $d_2$ degree of freedom.
   *
   * The definition of f distribution is given as:
   *
   * $$
-  * f(x; d_1, d_2) = \frac{ \Gamma\left( \frac{ d_1 + d_2 }{2} \right) d_1^{d_1/2} d_2^{d_2/2} } {\Gamma(d_1/2)\Gamma(d_2/2) } \frac{x^{d_1/2 - 1}}{(d_1 + d_2x)^{(d_1 + d_2)/2}}
+  * f(x; d_1, d_2) = \frac{ \Gamma \left( \frac{ d_1 + d_2 }{2} \right) d_1&#94;{d_1/2} d_2&#94;{d_2/2} } {\Gamma(d_1/2)\Gamma(d_2/2) } \frac{ x&#94;{d_1/2 - 1} } {(d_1 + d_2x)&#94;{(d_1 + d_2)/2} }
   * $$
+  *
   * $$
-  * = \frac{ d_1^{d_1/2} d_2^{d_2/2}x^{d_1/2 - 1} } { (d_2 + d_1x)^{(d_1+d_2)/2} B(d_1/2, d_2/2)}
+  * \frac{ d_1&#94;{d_1/2} d_2&#94;{d_2/2} x&#94;{d_1/2 - 1} } { (d_2 + d_1x)&#94;{(d_1+d_2)/2} B(d_1/2, d_2/2)}
   * $$
+  *
   * where B is the beta function (from the gamma function)
   * $$
   * B(a, b) = \frac{ (a - 1)!(b - 1)! }{ (a + b - 1)! }
@@ -28,9 +30,12 @@ import au.id.cxd.math.function.{NumericIntegral, GammaFn, BetaFn}
   * \mu = \frac{ d_2 }{d_2 - 2}
   * $$
   *
-  * And the variance of the distribution is defined where the denominator df > 4
+  * And the variance $\sigma^2$
+  *
+  * of the distribution is defined where the denominator df > 4
+  *
   * $$
-  * \sigma^2 = \frac{ 2 d_2^2 (d_1 + d_2 - 2) }{ d_1 (d_2 - 2)^2 (d_2 - 4) }
+  * \frac{ 2 {d_2&#94;2} (d_1 + d_2 - 2) }{ d_1 {(d_2 - 2)}&#94;2 (d_2 - 4) }
   * $$
   *
   * The f distribution is most often used in testing hypothesis about an unknown variance.

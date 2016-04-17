@@ -11,17 +11,19 @@ import scala.math._
   *
   * Gamma distribution
   *
-  * $Gamma(alpha) = (alpha-1)!$
+  * $\Gamma(alpha) = (alpha-1)!$
   *
   * $$
-  * [y^alpha-1 * exp(-y/beta)]/[beta^alpha * Gamma(alpha)]
+  * \left[y&#94;{alpha-1} * \exp(-y/beta)\right]/\left[\beta&#94;\alpha * \Gamma(alpha)\right]
   * $$
   *
   * Note the constraints are
   *
-  * alpha > 0
-  * beta > 0
-  * 0 <= y < infinity
+  * $\alpha > 0$
+  *
+  * $\beta > 0$
+  *
+  * $0 \leq y < \infty$
   *
   * Created by cd on 11/09/2014.
   */

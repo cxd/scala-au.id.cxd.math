@@ -23,7 +23,7 @@ import au.id.cxd.math.count.Choose
   *
   * The simple properties of the distribution are:\\\\
   * Mean: $\mu = \frac{nr}{N}$\\
-  * Variance: $\sigma^2 = n \left( \frac{r}{N} \right) \left( \frac{N - r}{N} \right) \left( \frac{N - n}{N-1}\right)$
+  * Variance: $\sigma&#94;2 = n \left( \frac{r}{N} \right) \left( \frac{N - r}{N} \right) \left( \frac{N - n}{N-1}\right)$
   *
   *
   * r <= n <= N

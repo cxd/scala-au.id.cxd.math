@@ -8,7 +8,7 @@ import scala.math._
   * ##import MathJax
   *
   * $$
-  *   f(y; \lambda) = \lambda^y \frac{\exp{ \left[ -\lambda \right] }}{y!}
+  *   f(y; \lambda) = \lambda&#94;y \frac{\exp{ \left[ -\lambda \right] }}{y!}
   * $$
   *
   * $$
@@ -16,7 +16,7 @@ import scala.math._
   * $$
   *
   * $$
-  *   \sigma^2 = \lambda
+  *   \sigma&#94;2 = \lambda
   * $$
   *
   * Created by cd on 7/09/2014.

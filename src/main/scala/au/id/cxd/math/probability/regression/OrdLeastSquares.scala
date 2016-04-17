@@ -8,6 +8,7 @@ import breeze.numerics.pow
   *
   * Created by cd on 28/06/2014.
   * A class to perform regression by means of ordinary least squares.
+  * This is the same approach as that taken in the [[LeastSquares]] approach, with slightly different parameterisation.
   */
 class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1, threshold: Double = 0.5) {
 
@@ -66,7 +67,7 @@ class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1
   def updateWeights(F: DenseMatrix[Double], T: DenseVector[Double], Y: DenseVector[Double]): DenseVector[Double] = {
     val Cov = F.t * F
     val I = inv(Cov)
-    val B = (I * F.t).asInstanceOf[DenseMatrix[Double]]
+    val B = (I * F.t)
     B * Y
   }
 

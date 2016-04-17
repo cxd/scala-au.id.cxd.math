@@ -12,7 +12,7 @@ import scala.math._
   * the normal distribution
   *
   * $$
-  *   N(x; \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left[frac{1}{2\sigma^2} (x - \mu)^2 \right]
+  *   N(x; \mu, \sigma&#94;2) = \frac{1}{\sqrt{2\pi\sigma&#94;2}} \exp\left[\frac{1}{2\sigma&#94;2} (x - \mu)&#94;2 \right]
   * $$
   *
   */

@@ -7,10 +7,10 @@ package au.id.cxd.math.probability.continuous
   * where alpha is set to 1
   *
   * $$
-  * f(y) = \frac{ e^-{y/\beta} } {\beta}
+  * f(y) = \frac{ e^{-{y/\beta}} } {\beta}
   * $$
   * $$
-  * 0 \le y \le \infnty
+  * 0 \le y \le \infty
   * $$
   *
   * Created by cd on 6/11/14.
