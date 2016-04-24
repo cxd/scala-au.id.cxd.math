@@ -1,5 +1,6 @@
 package au.id.cxd.math.probability.regression
 
+import au.id.cxd.math.function.PolynomialExpansion
 import breeze.linalg._
 import breeze.numerics.pow
 
@@ -8,44 +9,68 @@ import breeze.numerics.pow
   *
   * Created by cd on 28/06/2014.
   * A class to perform regression by means of ordinary least squares.
-  * This is the same approach as that taken in the [[LeastSquares]] approach, with slightly different parameterisation.
+  * This is the same approach as that taken in the [[LeastSquares]] approach,
+  * with slightly different parameterisation.
+  * In this case the degree of the polynomial is supplied to the constructure
+  * and the input vector has features added for the degree of the polynomial during training and prediction.
   */
-class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1, threshold: Double = 0.5) {
+class OrdLeastSquares(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int = 1, threshold: Double = 0.5) {
 
   /**
     * initial weight vector up to size M
     */
-  var W = DenseVector.ones[Double](m + 1)
+  var W = DenseMatrix.ones[Double](m + 1, 1)
 
   val powers = for {
     i <- 0 to m
   } yield i.toDouble
 
-  var P = DenseMatrix.ones[Double](X.size, m + 1)
+  var P = createPolynomial(X, m)
+
+  var Y1 = DenseMatrix.tabulate(Y.length, 1) { case (i, j) => Y(i) }
 
   /**
-    * initialise the collection of powers
+    * first determine how many features will be generated
+    * for the number of columns.
+    *
+    * For example if we have cols 2 and degree m = 2
+    * (a, b) will have (a, b, a&#94;2, 2ab, b&#94;2)  which is 3 extra features
+    *
+    * $$
+    * (a, b, c)&#94;n = (a, b, b, a&#94;2, ab, b&#94;2, bc, c&#94;2, x&#94;3, x&#94;2b, x&#94;2c, ab&#94;2, abc, ac&#94;2, b&#94;3, c&#94;3, ..., )
+    * $$
+    *
+    * We can use the multinomial theorem to do the expansion
+    *
+    * the coefficients up to n can be determined using the rule
+    *
+    * $$
+    *   \left( n \choose {k_1, k_2, k_3, ..., k_m} \right)
+    * $$
+    *
+    * where for any combination of $k$ $\sum_{i=1}&#94;m k$ must equal $n$.
+    *
+    * $m$ represents the number of columns in matrix $X$ and has
+    *
     */
-  def init() {
-    val pair = X.foldLeft(Tuple2[DenseMatrix[Double], Int](P, 0)) {
-      (pair, x: Double) => {
-        val tuple = pair.asInstanceOf[Tuple2[DenseMatrix[Double], Int]]
-        val P1 = tuple._1
-        val powerX = DenseVector[Double]((for {i <- 0 to m} yield Math.pow(x, i)).toArray)
-        P1(tuple._2, ::) := powerX.t
-        (P1, tuple._2 + 1)
-      }
-    }
-    P = pair.asInstanceOf[Tuple2[DenseMatrix[Double], Int]]._1
+
+  def createPolynomial(X1: DenseMatrix[Double], m: Int): DenseMatrix[Double] = {
+    PolynomialExpansion(X1, m)
   }
 
   /**
+    *
+    *
+    * http://brisbanepowerhouse.org/events/2016/06/30/daas-near-death-experience/
     * multiply the factor vector by the
     *
     * @param F matrix of factors
     */
-  def multWeights(F: DenseMatrix[Double]): DenseVector[Double] = {
-    P * W
+  def multWeights(F: DenseMatrix[Double]): DenseMatrix[Double] = {
+    //println(s"P dim = ${P.rows} x ${P.cols}")
+    //println(s"F dim = ${F.rows} x ${F.cols}")
+
+    F.t * P
   }
 
   /**
@@ -55,7 +80,7 @@ class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1
     * @param T
     * @param Y
     */
-  def squaredError(T: DenseVector[Double], Y: DenseVector[Double]): Double = {
+  def squaredError(T: DenseMatrix[Double], Y: DenseMatrix[Double]): Double = {
     val delta = pow((Y - T), 2.0)
     val total = sum(delta)
     total.asInstanceOf[Double] * 0.5
@@ -64,23 +89,25 @@ class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1
   /**
     * update the weight matrix using the inverse of the covariance matrix and the residuals
     */
-  def updateWeights(F: DenseMatrix[Double], T: DenseVector[Double], Y: DenseVector[Double]): DenseVector[Double] = {
+  def updateWeights(F: DenseMatrix[Double], T: DenseMatrix[Double], Y: DenseMatrix[Double]): DenseMatrix[Double] = {
     val Cov = F.t * F
-    val I = inv(Cov)
+    val I = pinv(Cov)
     val B = (I * F.t)
-    B * Y
+    //println(s"B dim ${B.rows} x ${B.cols}")
+    //println(s"Y dim ${Y.rows} x ${Y.cols}")
+    B*Y
   }
 
   /**
     * train the least squares model.
     */
-  def train(): Tuple2[DenseVector[Double], Double] = {
+  def train(): Tuple2[DenseMatrix[Double], Double] = {
     val T = multWeights(P)
-    val error = squaredError(T, Y)
+    val error = squaredError(T, Y1)
     if (error < threshold) {
       (T, error)
     } else {
-      W = updateWeights(P, T, Y)
+      W = updateWeights(P, T, Y1)
       train()
     }
   }
@@ -92,19 +119,28 @@ class OrdLeastSquares(X: DenseVector[Double], Y: DenseVector[Double], m: Int = 1
     */
   def predict(x: Double) = {
     // convert to a polynomial
-    val X = DenseVector((for {i <- 0 to m} yield Math.pow(x, i)).toArray)
-    val M = DenseMatrix.ones[Double](1, X.size)
-    M(1, ::) := X.t
+    // original column size: X1.cols
+    val cols = P.cols
+    val M = DenseMatrix.tabulate[Double](1, cols){
+      case (i, j) => Math.pow(x, i)
+    }
     multWeights(M)
+  }
+
+  def predictSeq(x: DenseVector[Double]) = {
+    val M = DenseMatrix.tabulate[Double](x.length,1) {
+      case (i, j) => x(i)
+    }
+    val M1 = createPolynomial(M, m)
+    multWeights(M1)
   }
 
 }
 
 object OrdLeastSquares {
 
-  def apply(X: DenseVector[Double], Y: DenseVector[Double], m: Int, threshold: Double = 0.5) = {
+  def apply(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int, threshold: Double = 0.5) = {
     val ols = new OrdLeastSquares(X, Y, m, threshold)
-    ols.init()
     ols
   }
 

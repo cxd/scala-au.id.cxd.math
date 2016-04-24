@@ -1,7 +1,10 @@
 package au.id.cxd.math.function
 
+import au.id.cxd.math.collection.{Node, Trie}
 import au.id.cxd.math.count.{Choose, Permutation}
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, DenseVector}
+
+import scala.collection.mutable
 
 /**
   * Expand a supplied matrix as series of polynomial factors.
@@ -14,7 +17,7 @@ import breeze.linalg.DenseMatrix
   * (a, b) will have (a, b, a&#94;2, 2ab, b&#94;2)  which is 3 extra features
   *
   * $$
-  * (a, b, c)^n = (a, b, b, a&#94;2, ab, b&#94;2, bc, c&#94;2, x&#94;3, x&#94;2b, x&#94;2c, ab&#94;2, abc, ac&#94;2, b&#94;3, c&#94;3, ..., )
+  * (a, b, c)&#94;n = (a, b, b, a&#94;2, ab, b&#94;2, bc, c&#94;2, x&#94;3, x&#94;2b, x&#94;2c, ab&#94;2, abc, ac&#94;2, b&#94;3, c&#94;3, ..., )
   * $$
   *
   * We can use the multinomial theorem to do the expansion of the sum
@@ -91,7 +94,7 @@ class PolynomialExpansion(val X: DenseMatrix[Double], val degree: Int) {
     val M2 = DenseMatrix.tabulate[Double](X.rows, powers.rows) {
       case (i, j) => {
         val row = powers(j, ::) .inner
-        val raised = for(k <- 0 to row.length) yield Math.pow(X(i, k), row(k))
+        val raised = for(k <- 0 until row.length) yield Math.pow(X(i, k), row(k))
         val prod = raised.reduce { (a, b) => a*b }
         prod
       }
@@ -154,17 +157,16 @@ class PolynomialExpansion(val X: DenseMatrix[Double], val degree: Int) {
 
     val rows = permutations
     // the permutations of powers in a table that is number of permutations x X.cols
-    val mat2 = generateTrie(DenseMatrix.zeros(permutations, X.cols))(seed, 0, (0, 0))
+    val mat2 = generateTrie(seed, 0, (0, 0))
 
-    val set2 = for (i <- 0 until X.cols) yield 1
+
     // we have the two special cases of set1 and set2
     // now we need to generate the permutations of the original padded set.
 
-    val powers = DenseMatrix.zeros(mat1.rows + mat2.rows + 1, X.cols)
+    val powers = DenseMatrix.ones[Double](mat1.rows + mat2.rows + 1, X.cols)
     powers(0 until mat1.rows, ::) := mat1
     powers(mat1.rows until mat1.rows + mat2.rows, ::) := mat2
-    powers(powers.rows - 1, ::) := set2
-
+    // the last row is unassigned and will equal 1.
     powers
   }
 
@@ -175,29 +177,61 @@ class PolynomialExpansion(val X: DenseMatrix[Double], val degree: Int) {
     * generate the trie where the matrix M is of rows $P_k&#94;k and cols X.cols
     * the coordinates represent the level of the traversal (or row) and the column (or position in the seed vector)
     *
-    * @param M
+    * TODO: continue work on reading off the powers from the trie after it is generated.
+    *
     * @param seed
     * @param level
     * @param parent
     * @return
     */
-  def generateTrie(M: DenseMatrix[Double])(seed: Seq[Int], level: Int, parent: (Int, Int)): DenseMatrix[Double] = {
-    level == 0 match {
-      case true => seed.foldLeft(M) { (accum, j) => {
-        accum(level, j) = j
-        generateTrie(accum)(seed, level + 1, (level, j))
+  def generateTrie(seed: Seq[Int], level: Int, parent: (Int, Int)): DenseMatrix[Double] = {
+    def innerGenerate(seed1:Seq[Int], level:Int):Trie[Int] = {
+      val nodes = seed1 map {
+        i => Node(i, innerGenerate(seed1 filterNot { j => j == i }, level + 1))
       }
-      }
-      case false => {
-        val subseq = seed filterNot { k => k == parent._2 }
-        subseq.foldLeft(M) {
-          (accum, j) => {
-            accum(level, j) = j
-            generateTrie(accum)(subseq, level + 1, (level, j))
+      Trie (nodes)
+    }
+    val trie = innerGenerate(seed, 0)
+    // now given the trie convert it into a sequence of vectors for each depth first traversal.
+    val accum = mutable.Seq(DenseVector.zeros[Double](seed.length))
+    def block (accum:(mutable.Seq[DenseVector[Double]], Int), node:Node[Int]) = {
+        node.children.nodes.length == 0 match {
+          case false => {
+            val state = accum._1
+            val i = accum._2
+            val len = state.length
+            val last = state(len - 1)
+            last(i) = node.data
+            (state, i+1)
+          }
+          case true => {
+            val state = accum._1
+            val i = accum._2
+            val len = state.length
+            val last = state(len - 1)
+            last(i) = node.data
+            val next = state :+ DenseVector.zeros[Double](seed.length)
+            (next, 0)
           }
         }
       }
+
+    val next = trie.fold((accum, 0))(block)
+    val M = DenseMatrix.zeros[Double](next._1.length, seed.length)
+    next._1.foldLeft((M, 0)) {
+      (state, vector) => {
+        val M1 = state._1
+        val row = state._2
+        val result = vector.toArray.foldLeft((M1, 0)) { (pair, value) => {
+          val M2 = pair._1
+          val j = pair._2
+          M2(row, j) = value
+          (M2, j+1)
+        }}
+        (result._1, row+1)
+      }
     }
+    M(0 until M.rows - 1, ::)
   }
 
   /**

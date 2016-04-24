@@ -23,7 +23,9 @@ libraryDependencies ++= Seq(
   // add breeze visualization
   "org.scalanlp" %% "breeze-viz" % "0.11.2",
   // add the scalaz library
-  "org.scalaz" %% "scalaz-core" % "7.1.0"
+  "org.scalaz" %% "scalaz-core" % "7.1.0",
+  // wrapper around jfreechart
+  "com.github.wookietreiber" %% "scala-chart" % "0.5.0"
 )
 
 

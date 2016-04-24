@@ -36,6 +36,13 @@ val X2 = DenseVector(X1)
 val Y = testY(X2)
 val ols = OrdLeastSquares(X2, Y, 3, 0.5)
 val T1 = ols.train()
+X1.map { x: Double => ols.predict(x) }
+val Y2 = for {
+  y <- X1.map { x: Double => ols.predict(x) }
+  yval = y.data.head
+} yield(yval)
+Y2
+
 val error = T1._2
 val A = DenseMatrix((1.0, 1.0, 1.0)).t
 
@@ -52,3 +59,19 @@ val test2 = M - test
 
 val X3 = DenseMatrix((1,1,1),(2,2,2))
 val C1 = X3.t * X3
+
+import scalax.chart.api._
+
+val data = for (i <- 0 until Y.length) yield(i+1, Y(i))
+val data2 = for (i <- 0 until Y2.length) yield(i+1, Y2(i))
+
+val series = new XYSeriesCollection()
+val series1 = new XYSeries("original")
+data foreach { pair => series1.add(pair._1, pair._2)}
+val series2 = new XYSeries("prediction")
+data2 foreach { pair => series2.add(pair._1, pair._2)}
+series.addSeries(series1)
+series.addSeries(series2)
+
+val chart = XYLineChart(series)
+chart.show()
