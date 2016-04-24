@@ -138,7 +138,8 @@ class PolynomialExpansion(val X: DenseMatrix[Double], val degree: Int) {
     */
   def generatePowers() = {
     // compute the set of vlaues that sum to n other than n + 0 and 1's
-    val sequence = for (i <- 0 until degree) yield i
+    // include degree n in the sequence.
+    val sequence = for (i <- 0 to degree) yield i
     // pad the sequence that is generated to the same number of columns as X
     val seed = pad(X.cols)(sumUntil(degree)(sequence))
 
