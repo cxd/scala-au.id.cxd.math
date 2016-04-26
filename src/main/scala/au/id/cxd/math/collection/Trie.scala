@@ -4,12 +4,12 @@ package au.id.cxd.math.collection
   * Created by cd on 24/04/2016.
   */
 
-class Node[T](val data: T, val children: Trie[T]) {
+class Node[T](val data: T, val prefix:Seq[T], val children: Trie[T]) {
 
 }
 
 object Node {
-  def apply[T](data: T, children: Trie[T]) = new Node[T](data, children)
+  def apply[T](data: T, prefix:Seq[T], children: Trie[T]) = new Node[T](data, prefix, children)
 }
 
 class Trie[T](val nodes: Seq[Node[T]]) {

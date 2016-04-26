@@ -185,37 +185,30 @@ class PolynomialExpansion(val X: DenseMatrix[Double], val degree: Int) {
     * @return
     */
   def generateTrie(seed: Seq[Int], level: Int, parent: (Int, Int)): DenseMatrix[Double] = {
-    def innerGenerate(seed1:Seq[Int], level:Int):Trie[Int] = {
+    def innerGenerate(seed1:Seq[Int], previous:Seq[Int], level:Int):Trie[Int] = {
       val nodes = seed1 map {
-        i => Node(i, innerGenerate(seed1 filterNot { j => j == i }, level + 1))
+        i => Node(i, previous, innerGenerate(seed1 filterNot { j => j == i }, previous :+ i, level + 1))
       }
       Trie (nodes)
     }
-    val trie = innerGenerate(seed, 0)
+    val trie = innerGenerate(seed, Seq[Int](), 0)
     // now given the trie convert it into a sequence of vectors for each depth first traversal.
-    val accum = mutable.Seq(DenseVector.zeros[Double](seed.length))
     def block (accum:(mutable.Seq[DenseVector[Double]], Int), node:Node[Int]) = {
         node.children.nodes.length == 0 match {
           case false => {
-            val state = accum._1
-            val i = accum._2
-            val len = state.length
-            val last = state(len - 1)
-            last(i) = node.data
-            (state, i+1)
+            accum
           }
           case true => {
             val state = accum._1
             val i = accum._2
-            val len = state.length
-            val last = state(len - 1)
-            last(i) = node.data
-            val next = state :+ DenseVector.zeros[Double](seed.length)
+            val sequence = (node.prefix :+ node.data)
+            val next = state :+ DenseVector.tabulate[Double](sequence.length) { n => sequence(n) }
             (next, 0)
           }
         }
       }
 
+    val accum = mutable.Seq[DenseVector[Double]]()
     val next = trie.fold((accum, 0))(block)
     val M = DenseMatrix.zeros[Double](next._1.length, seed.length)
     next._1.foldLeft((M, 0)) {
