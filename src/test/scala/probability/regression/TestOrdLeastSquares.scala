@@ -2,7 +2,10 @@ package probability.regression
 
 import au.id.cxd.math.probability.regression.OrdLeastSquares
 import breeze.linalg.{DenseMatrix, DenseVector}
+import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 import org.scalatest._
+
+import scalax.chart.module.ChartFactories.XYLineChart
 
 /**
  * Created by cd on 29/06/2014.
@@ -27,6 +30,24 @@ class TestOrdLeastSquares extends FlatSpec with ShouldMatchers {
 
     val Y2 = X1.map { x: Double => ols.predict(x) }
     println(Y2)
+
+    val Y3 = ols.predictSeq(DenseVector.tabulate[Double](X1.length) { j => X1(j) })
+    println(Y3)
+
+
+    /*
+    val series = new XYSeriesCollection()
+    val series1 = new XYSeries("original")
+    val index = for (i <- 0 until Y.length) yield i
+    index foreach { i => series1.add(X1(i), Y(i))}
+    val series2 = new XYSeries("prediction")
+    index foreach { i => series2.add(X1(i), Y3(i,0))}
+    series.addSeries(series1)
+    series.addSeries(series2)
+
+    val chart = XYLineChart(series)
+    chart.show()
+    */
   }
 
 }

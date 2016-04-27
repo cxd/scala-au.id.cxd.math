@@ -64,13 +64,14 @@ class OrdLeastSquares(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int = 1
     * http://brisbanepowerhouse.org/events/2016/06/30/daas-near-death-experience/
     * multiply the factor vector by the
     *
-    * @param F matrix of factors
+    * @param B beta matrix.
+    * @param X1 matrix of factors
     */
-  def multWeights(F: DenseMatrix[Double]): DenseMatrix[Double] = {
-    //println(s"P dim = ${P.rows} x ${P.cols}")
-    //println(s"F dim = ${F.rows} x ${F.cols}")
+  def multWeights(B: DenseMatrix[Double], X1:DenseMatrix[Double]): DenseMatrix[Double] = {
+    println(s"B dim = ${B.rows} x ${B.cols}")
+    println(s"X dim = ${X1.rows} x ${X1.cols}")
 
-    F.t * P
+    B * X1.t
   }
 
   /**
@@ -89,27 +90,23 @@ class OrdLeastSquares(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int = 1
   /**
     * update the weight matrix using the inverse of the covariance matrix and the residuals
     */
-  def updateWeights(F: DenseMatrix[Double], T: DenseMatrix[Double], Y: DenseMatrix[Double]): DenseMatrix[Double] = {
+  def updateWeights(F: DenseMatrix[Double], Y: DenseMatrix[Double]): DenseMatrix[Double] = {
     val Cov = F.t * F
     val I = pinv(Cov)
     val B = (I * F.t)
-    //println(s"B dim ${B.rows} x ${B.cols}")
-    //println(s"Y dim ${Y.rows} x ${Y.cols}")
-    B*Y
+    println(s"B dim ${B.rows} x ${B.cols}")
+    println(s"Y dim ${Y.rows} x ${Y.cols}")
+    Y*B.t
   }
 
   /**
     * train the least squares model.
     */
   def train(): Tuple2[DenseMatrix[Double], Double] = {
-    val T = multWeights(P)
+    W = updateWeights(P, Y1)
+    val T = multWeights(W, P)
     val error = squaredError(T, Y1)
-    if (error < threshold) {
-      (T, error)
-    } else {
-      W = updateWeights(P, T, Y1)
-      train()
-    }
+    (T, error)
   }
 
   /**
@@ -121,18 +118,19 @@ class OrdLeastSquares(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int = 1
     // convert to a polynomial
     // original column size: X1.cols
     val cols = P.cols
-    val M = DenseMatrix.tabulate[Double](1, cols){
+    val X1 = DenseMatrix.tabulate[Double](1, cols){
       case (i, j) => Math.pow(x, i)
     }
-    multWeights(M)
+    // TODO: check use of single value
+    multWeights(W,X1)
   }
 
   def predictSeq(x: DenseVector[Double]) = {
-    val M = DenseMatrix.tabulate[Double](x.length,1) {
-      case (i, j) => x(i)
+    val M = DenseMatrix.tabulate[Double](1,x.length) {
+      case (i, j) => x(j)
     }
     val M1 = createPolynomial(M, m)
-    multWeights(M1)
+    multWeights(W,M1)
   }
 
 }
