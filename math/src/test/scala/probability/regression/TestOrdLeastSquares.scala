@@ -1,6 +1,6 @@
 package probability.regression
 
-import au.id.cxd.math.probability.regression.OrdLeastSquares
+import au.id.cxd.math.examples.probability.regression.OrdLeastSquares
 import breeze.linalg.{DenseMatrix, DenseVector}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 import org.scalatest._

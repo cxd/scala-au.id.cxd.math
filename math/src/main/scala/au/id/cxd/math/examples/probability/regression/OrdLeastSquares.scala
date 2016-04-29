@@ -1,4 +1,4 @@
-package au.id.cxd.math.probability.regression
+package au.id.cxd.math.examples.probability.regression
 
 import au.id.cxd.math.function.PolynomialExpansion
 import breeze.linalg._

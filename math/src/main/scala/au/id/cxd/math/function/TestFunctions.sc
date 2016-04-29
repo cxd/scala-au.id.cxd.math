@@ -1,7 +1,6 @@
 import breeze.linalg._
 import breeze.numerics.pow
 
-import au.id.cxd.math.probability.regression._
 import au.id.cxd.math.count.Factorial
 import au.id.cxd.math.function._
 
