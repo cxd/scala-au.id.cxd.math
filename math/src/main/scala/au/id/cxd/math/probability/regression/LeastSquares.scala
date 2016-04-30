@@ -1,4 +1,4 @@
-package au.id.cxd.math.examples.probability.regression
+package au.id.cxd.math.probability.regression
 
 import breeze.linalg.{DenseMatrix, inv, DenseVector}
 

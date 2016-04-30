@@ -1,4 +1,4 @@
-package au.id.cxd.math.examples.probability.regression
+package au.id.cxd.math.probability.regression
 
 /**
   * Created by cd on 17/04/2016.

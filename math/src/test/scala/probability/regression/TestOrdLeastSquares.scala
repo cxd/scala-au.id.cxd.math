@@ -1,6 +1,6 @@
 package probability.regression
 
-import au.id.cxd.math.examples.probability.regression.OrdLeastSquares
+import au.id.cxd.math.probability.regression.OrdLeastSquares
 import breeze.linalg.{DenseMatrix, DenseVector}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 import org.scalatest._
@@ -21,7 +21,7 @@ class TestOrdLeastSquares extends FlatSpec with ShouldMatchers {
       case (i, j) => X1(j)
     }
     val Y = testY(X2)
-    val ols = OrdLeastSquares(X2, Y, 3, 0.5)
+    val ols = OrdLeastSquares(X2, Y, 3)
     val T1 = ols.train()
     val error = T1._2
     (error <= 0.5) should be (true)

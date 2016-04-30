@@ -31,16 +31,23 @@ class TextReader {
   }
 
   /**
+    * match comments prefixed with #
+    * @param line
+    * @return
+    */
+  def isComment(line:String) : Boolean =
+    line.isEmpty || line.startsWith("#")
+
+
+  /**
     * skip all lines that are either empty or start with the hash # token
     *
     * @param lines
     * @return
     */
-  def removeComments(lines: List[String]): List[String] = {
-    lines.filter {
-      (line) => !line.isEmpty && !line.startsWith("#")
-    }
-  }
+  def removeComments(lines: List[String]): List[String] =
+    lines.filter { line => ! isComment(line) }
+
 
 }
 

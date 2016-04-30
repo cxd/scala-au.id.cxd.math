@@ -1,5 +1,6 @@
 package au.id.cxd.math.examples.probability.regression
 
+import au.id.cxd.math.probability.regression.OrdLeastSquares
 import breeze.linalg.{DenseMatrix, DenseVector}
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 
@@ -18,44 +19,50 @@ object ExampleSinWave {
 
 
   def main(args:Array[String]):Unit = {
-    val X = DenseMatrix.tabulate[Double](1, input.length) {
-      case (i, j) => input(j)
+    val X = DenseMatrix.tabulate[Double](input.length, 1) {
+      case (i, j) => input(i)
     }
     val Y = DenseVector.tabulate[Double](input.length) {
       i => Math.sin(input(i))
     }
 
-    val ols1 = OrdLeastSquares(X, Y, 1, 0.5)
-    val ols2 = OrdLeastSquares(X, Y, 2, 0.5)
+    val ols1 = OrdLeastSquares(X, Y, 1)
+    val ols2 = OrdLeastSquares(X, Y, 2)
 
-    val ols3 = OrdLeastSquares(X, Y, 3, 0.5)
-    val (t, sqError) = ols3.train()
+    val ols3 = OrdLeastSquares(X, Y, 3)
+    println("Train df=1")
     val (t1, sqError1) = ols1.train()
+    println(s"df=1 MSE=$sqError1")
+    println("train df=2")
     val (t2, sqError2) = ols2.train()
+    println(s"df=2 MSE=$sqError2")
+    println("train df=2")
+    val (t, sqError) = ols3.train()
+    println(s"df=3 MSE=$sqError")
 
-    val predictX = DenseVector.tabulate[Double](input.length) { j => X(0,j) }
+    val predictX = X.toDenseVector
 
-    val Y1:DenseMatrix[Double] = ols1.predictSeq(predictX)
-    val Y2 = ols2.predictSeq(predictX)
+    val Y1 = ols1.predictSeq(predictX) .toDenseVector
+    val Y2 = ols2.predictSeq(predictX) .toDenseVector
 
-    val Y3 = ols3.predictSeq(predictX)
+    val Y3 = ols3.predictSeq(predictX) .toDenseVector
 
 
     val series = new XYSeriesCollection()
     val index = for (i <- 0 until Y.length) yield i
     val seriesA = new XYSeries("original")
-    index foreach { i => seriesA.add(X(0,i), Y(i))}
+    index foreach { i => seriesA.add(X(i,0), Y(i))}
 
     val series1 = new XYSeries("prediction df=1")
-    index foreach { i => series1.add(X(0,i), Y1(i,0))}
+    index foreach { i => series1.add(X(i,0), Y1(i))}
 
 
     val series2 = new XYSeries("prediction df=2")
-    index foreach { i => series2.add(X(0,i), Y2(i,0))}
+    index foreach { i => series2.add(X(i,0), Y2(i))}
 
 
     val series3 = new XYSeries("prediction df=3")
-    index foreach { i => series3.add(X(0,i), Y3(i,0))}
+    index foreach { i => series3.add(X(i,0), Y3(i))}
 
 
     series.addSeries(seriesA)
