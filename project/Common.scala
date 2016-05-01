@@ -2,7 +2,6 @@ import java.io.PrintWriter
 
 import sbt.Keys._
 import sbt._
-import sbt.plugins.JvmPlugin
 
 import scala.io.Source
 
