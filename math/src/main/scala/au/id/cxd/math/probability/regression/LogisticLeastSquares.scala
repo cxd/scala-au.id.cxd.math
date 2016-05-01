@@ -37,15 +37,16 @@ class LogisticLeastSquares(override val X: DenseMatrix[Double], override val Y: 
     * the conversion function can be used to transform
     * the logit function into the probabilities and class assignments
     * for the 2 class problem.
+    *
     * @param logitY
     * @return
     */
   def transform(logitY:DenseVector[Double]) = {
-    val resultP = DenseMatrix.tabulate(logitY.length, 3) {
+    val resultP = DenseMatrix.tabulate[Double](logitY.length, 3) {
       case (i, j) => {
         val y = logitY(i)
         val p0 = Math.exp(-y) / (1.0 + Math.exp(-y))
-        val p1 = 1 / (1.0 + Math.exp(-y))
+        val p1 = 1.0 / (1.0 + Math.exp(-y))
 
         j match {
           case 0 => {
@@ -54,11 +55,12 @@ class LogisticLeastSquares(override val X: DenseMatrix[Double], override val Y: 
           case 1 => {
             p1
           }
-          case 2 => {
+          case _ => {
             val classY = p0 > p1 match {
-              case true => 0
-              case _ => 1
+              case true => 0.0
+              case _ => 1.0
             }
+            classY
           }
         }
       }
@@ -72,10 +74,34 @@ class LogisticLeastSquares(override val X: DenseMatrix[Double], override val Y: 
     * The third column classifies as either 0 or 1 depending on the maximum value.
     *
     * @param X1
+    *
+    * @return (DenseVector[Double], DenseMatrix[Double])
+    *
+    * The tuple that is returned contains the estimate $B'X$ as the first value
+    * and the second value is a three column matrix containing the probabilities
+    * of class 0 and class 1 in the first  two columns and the classification 1 or 0
+    * in the third column.
+    *
+    *
     */
-  def estimate(X1: DenseMatrix[Double]) = {
+  def estimate(X1: DenseMatrix[Double]):(DenseVector[Double], DenseMatrix[Double]) = {
     // predict the logistic function produces a single row matrix with each column corresponding to the estimate.
     val logitY = predict(X1) .toDenseVector
-    transform (logitY)
+    (logitY, transform (logitY))
+  }
+}
+
+object LogisticLeastSquares {
+  /**
+    * generate a new ols model for supplied X and Y values at the corresponding degree m
+    *
+    * @param X
+    * @param Y
+    * @param m
+    * @return
+    */
+  def apply(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int) = {
+    val ols = new LogisticLeastSquares(X, Y, m)
+    ols
   }
 }
