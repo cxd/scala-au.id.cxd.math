@@ -4,7 +4,7 @@ import java.awt.GridLayout
 import java.io.File
 import javax.swing.JFrame
 
-import au.id.cxd.math.data.CsvReader
+import au.id.cxd.math.data.{CsvReader, MatrixReader}
 import au.id.cxd.math.probability.regression.OrdLeastSquares
 import breeze.linalg.DenseMatrix
 import org.jfree.chart.ChartPanel
@@ -34,25 +34,8 @@ object ExampleCarsStopDist {
     * read the cars file
     */
   def readCars() = {
-    val data = CsvReader() readCsv (new File(inputFile))
-    val rows = data.length - 1
-    val M = DenseMatrix.zeros[Double](rows, 2)
-    CsvReader().mapi (data, M) {
-      (pair, line) => {
-        val rowIdx:Int = pair._1
-        rowIdx match {
-          case 0 => pair._2
-          case _ => {
-            val mat:DenseMatrix[Double] = pair._2
-            val temp:DenseMatrix[Double] = DenseMatrix.tabulate[Double](1,line.length) { case (i,j) => line(j).toDouble }
-            val index = rowIdx - 1
-            // matrix assignment requires range
-            mat(index to index, ::) := temp
-            mat
-          }
-        }
-      }
-    }
+    val reader = new MatrixReader {}
+    val M = reader.read(new File(inputFile))
     val X = M(::,0)
     val Y = M(::,1)
     (X.toDenseMatrix.t,Y.toDenseVector)
