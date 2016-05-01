@@ -47,6 +47,16 @@ lazy val examples = (project in file("examples"))
   .dependsOn(math)
 
 
+lazy val ui = (project in file("ui"))
+  .settings(unidocSettings: _*)
+  .settings(commonSettings: _*)
+  .settings(
+    name := "au.id.cxd.math.ui"
+  )
+  .settings(Common.commonPluginSettings: _*)
+  .dependsOn(math)
+
+
 lazy val root = (project in file("."))
-  .aggregate(math, examples)
+  .aggregate(math, examples, ui)
 

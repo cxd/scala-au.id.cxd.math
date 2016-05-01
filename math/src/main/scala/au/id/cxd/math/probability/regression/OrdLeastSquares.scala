@@ -78,7 +78,7 @@ import breeze.numerics.pow
   * and the input vector has features added for the degree of the polynomial during training and prediction.
   */
 @SerialVersionUID(100L)
-class OrdLeastSquares(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int = 1) extends Serializable {
+class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], val m: Int = 1) extends Serializable {
 
   /**
     * The beta parameter is approximated by
