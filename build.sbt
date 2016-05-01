@@ -36,13 +36,14 @@ lazy val math = (project in file("math"))
 
     name := "au.id.cxd.math"
 
-  )
+  ).settings(Common.commonPluginSettings: _*)
 
 lazy val examples = (project in file("examples"))
   .settings(commonSettings: _*)
   .settings(
     name := "au.id.cxd.math.examples"
   )
+  .settings(Common.commonPluginSettings: _*)
   .dependsOn(math)
 
 
