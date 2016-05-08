@@ -20,17 +20,11 @@ trait MatrixReader {
   def skipHeader:Boolean = true
 
   /**
-    * read the CSV file and return a matrix of rows x columns
-    * @param file
+    * convert to a matrix
+    * @param data
     * @return
     */
-  def read(file:File) = {
-    val data = CsvReader().readCsv(file)
-    val rows = skipHeader match {
-      case true => data.length - 1
-      case _ => data.length
-    }
-    val cols = data(0).length
+  def convertToMatrix(rows:Int, cols:Int, data:List[Array[String]]) = {
     val M = DenseMatrix.zeros[Double](rows, cols)
     CsvReader().mapi (data, M) {
       (pair, line) => {
@@ -49,5 +43,20 @@ trait MatrixReader {
       }
     }
     M
+  }
+
+  /**
+    * read the CSV file and return a matrix of rows x columns
+    * @param file
+    * @return
+    */
+  def read(file:File) = {
+    val data = CsvReader().readCsv(file)
+    val rows = skipHeader match {
+      case true => data.length - 1
+      case _ => data.length
+    }
+    val cols = data(0).length
+    convertToMatrix(rows, cols, data)
   }
 }
