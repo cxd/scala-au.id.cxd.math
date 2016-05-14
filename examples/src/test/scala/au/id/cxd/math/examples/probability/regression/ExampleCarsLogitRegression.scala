@@ -107,7 +107,7 @@ object ExampleCarsLogitRegression {
     seriesA.addSeries(series2)
 
     val seriesB = new XYSeriesCollection()
-    val line1A = new XYSeries("class=0, df=3")
+    val line1A = new XYSeries("class=0, df=1")
     index foreach { i => classY1(i, 2) match {
       case 0 => {
         line1A.add(xMat(i, 0), xMat(i, 1))
@@ -115,7 +115,7 @@ object ExampleCarsLogitRegression {
       case 1 => ()
     }
     }
-    val line1B = new XYSeries("class=1, df=3")
+    val line1B = new XYSeries("class=1, df=1")
     index foreach { i => classY1(i, 2) match {
       case 1 => {
         line1B.add(xMat(i, 0), xMat(i, 1))

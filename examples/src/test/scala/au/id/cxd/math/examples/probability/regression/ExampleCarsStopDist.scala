@@ -47,15 +47,15 @@ object ExampleCarsStopDist {
     val (xMat, yMat) = readCars()
     val X = xMat
     val ols = OrdLeastSquares(X, yMat, 1)
-    val ols2 = OrdLeastSquares(X, yMat, 2)
-    val ols3 = OrdLeastSquares(X, yMat, 3)
+    val ols2 = OrdLeastSquares(X, yMat, 4)
+    val ols3 = OrdLeastSquares(X, yMat, 8)
     println(s"Train df=1")
     val (estimate, error) = ols.train()
     println(s"MSE: $error")
-    println(s"Train df=2")
+    println(s"Train df=4")
     val (estimate2, error2) = ols2.train()
     println(s"MSE: $error2")
-    println(s"Train df=3")
+    println(s"Train df=8")
     val (estimate3, error3) = ols3.train()
     println(s"MSE: $error3")
 
@@ -71,11 +71,11 @@ object ExampleCarsStopDist {
     val series1 = new XYSeries("predict df = 1")
     index foreach { i => series1.add(X(i,0), Y1(0,i))}
 
-    val series2 = new XYSeries("predict df = 2")
+    val series2 = new XYSeries("predict df = 4")
     index foreach { i => series2.add(X(i,0), Y2(0,i))}
 
 
-    val series3 = new XYSeries("predict df = 3")
+    val series3 = new XYSeries("predict df = 8")
     index foreach { i => series3.add(X(i,0), Y3(0,i))}
 
 
@@ -99,8 +99,8 @@ object ExampleCarsStopDist {
     val rSeries2 = List.tabulate(ols2.residuals.length) { i => ols2.residuals(i) }
     val rSeries3 = List.tabulate(residuals3.length) { i => residuals3(i) }
     dataset.add(rSeries1, "df-1", "df-1")
-    dataset.add(rSeries3, "df-2", "df-2")
-    dataset.add(rSeries3, "df-3", "df-3")
+    dataset.add(rSeries2, "df-4", "df-4")
+    dataset.add(rSeries3, "df-8", "df-8")
     val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset, title="Residuals of 3 models")
 
 

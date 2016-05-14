@@ -3,6 +3,7 @@ package au.id.cxd.math.data
 import java.io.File
 
 import au.id.cxd.math.data.{CsvReader, MatrixReader}
+import au.id.cxd.math.function.ContinuousTransform
 import breeze.linalg.DenseMatrix
 
 /**
@@ -12,7 +13,8 @@ import breeze.linalg.DenseMatrix
   *
   * Created by cd on 3/05/2016.
   */
-class PreProcessor(val file: File, val discreteColumns: List[Int], val continuousColumns: List[Int]) {
+class PreProcessor(val file: File, val discreteColumns: List[Int], val continuousColumns: List[Int],
+                   val processContinuousFn:ContinuousTransform ) {
 
 
   /**
@@ -81,7 +83,8 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
       case true => {
         val reader = new MatrixReader {}
         val mat = reader.convertToMatrix(continuous.length - 1, continuous.head.length, continuous)
-        Some(mat)
+        val processedMat = processContinuousFn.transform(mat)
+        Some(processedMat)
       }
       case false => None
     }
@@ -113,7 +116,7 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
       case _ => Map[String, Set[String]]()
     }
 
-    DataSet(dataSet, contCols, discreteCols, discreteMapping)
+    DataSet(dataSet, contCols, discreteCols, discreteMapping, processContinuousFn)
   }
 
 
@@ -121,7 +124,6 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
 
 object PreProcessor {
 
-  def apply(file: File, discreteColumns: List[Int], continuousColumns: List[Int]) =
-    new PreProcessor(file, discreteColumns, continuousColumns)
+  def apply(file: File, discreteColumns: List[Int], continuousColumns: List[Int], transform:ContinuousTransform) =
+    new PreProcessor(file, discreteColumns, continuousColumns, transform)
 }
-

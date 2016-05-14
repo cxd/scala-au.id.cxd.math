@@ -185,8 +185,26 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
 
   def createPolynomial(X1: DenseMatrix[Double], m: Int): DenseMatrix[Double] = {
     m match {
-      case 1 => X1
-      case _ => PolynomialExpansion(X1, m)
+      case 1 => {
+        // create matrix where first column is 1
+        val M = DenseMatrix.tabulate[Double](X1.rows, X1.cols+1) {
+          case (i, j) => j match {
+            case 0 => 1
+            case n => X1(i, n-1)
+          }
+        }
+        M
+      }
+      case _ => {
+        val M1 = PolynomialExpansion(X1, m)
+        val M2 = DenseMatrix.tabulate[Double](M1.rows, M1.cols+1) {
+          case (i, j) => j match {
+            case 0 => 1.0
+            case n => M1(i,n-1)
+          }
+        }
+        M2
+      }
     }
   }
 
@@ -280,7 +298,7 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     * @return
     */
   def predictSeq(x: DenseVector[Double]) = {
-    val M = DenseMatrix.tabulate[Double](x.length, 1) {
+    val M = DenseMatrix.tabulate[Double](x.length, 2) {
       case (i, j) => x(i)
     }
     val M1 = createPolynomial(M, m)
