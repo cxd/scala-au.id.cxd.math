@@ -230,10 +230,15 @@ class ModelCrossValidator(val dataFile: File, val dependentColumnName: String, v
     }
     val cols = results.length
     val rows = predictors.cols
-    val betaMatrix = results.foldLeft ( 0, DenseMatrix.zeros[Double](rows, cols) ) {
+    // the first column of the beta matrix is the bias, hence we need to add 1 to the rows
+    // the beta parameter is a vertical for each column (one class per column)
+    // note this also assumes there has been no transformation of the data
+    // within the logistic regression model itself.
+    val betaMatrix = results.foldLeft ( 0, DenseMatrix.zeros[Double](rows+1, cols) ) {
       (pair, result) => {
         val col = pair._1
         val M = pair._2
+        // the first column of the beta matrix will be the bias
         M(::, col) := result.beta(::,0)
         (pair._1 + 1, M)
       }

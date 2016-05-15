@@ -3,6 +3,7 @@ package au.id.cxd.math.probability.regression
 import java.io._
 
 import au.id.cxd.math.function.PolynomialExpansion
+import au.id.cxd.math.probability.continuous.Normal
 import breeze.linalg._
 import breeze.numerics.pow
 
@@ -55,6 +56,28 @@ import breeze.numerics.pow
   * \hat{\beta_j} \pm z^{(1-\alpha)} \sqrt{v} \hat{\sigma}
   * $$
   *
+  * We can test against the null hypothesis that $\beta_j = 0$ and therefore the corresponding $X_{ij}$ does
+  * not contribute to the target variable (given the coefficient is 0).
+  * A t-distribution of N - p - 1 degrees of freedom can be used forming the confidence interval
+  * however as the sample size increases the difference between the t-distribution and normal distribution
+  * becomes negligable (see Hastie), so the normal distribution is used defining the confidence interval
+  *
+  * $$
+  *   \left(\beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}, \beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}\right)
+  * $$
+  *
+  * at the critical $\alpha$ level for example 0.05 for a 95% confidence interval.
+  * Those values with a very small p-value would reject the null hypothesis or if (|Z| > z_{1-\alpha}).
+  *
+  *
+  * $$
+  *   H_0: \beta_j = 0
+  * $$
+  * $$
+  *   H_1: \beta_j != 0
+  * $$
+  *
+  *
   * As $\beta$ defines the coefficients of the $pth$ attribute in $X$ it is possible to test whether
   * the $kth$ coefficient can be set to $0$ (in which case the contribution of $X_k$ to estimating $Y$ is not significant)
   * by using an F-score.
@@ -78,7 +101,7 @@ import breeze.numerics.pow
   * and the input vector has features added for the degree of the polynomial during training and prediction.
   */
 @SerialVersionUID(100L)
-class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], val m: Int = 1) extends Serializable {
+class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], val m: Int = 1, val alpha:Double=0.05) extends Serializable {
 
   /**
     * The beta parameter is approximated by
@@ -121,6 +144,17 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     * This value is computed during the training cycle.
     */
   var betaVariance: DenseMatrix[Double] = DenseMatrix.zeros(X.cols, X.cols)
+
+  /**
+    * the beta z score
+    */
+  var betaZScore:DenseMatrix[Double] = DenseMatrix.zeros(m+1, 1)
+
+
+  /**
+    * the set of p-values for the corresponding betaZScore
+    */
+  var betaPValue:DenseMatrix[Double] = DenseMatrix.zeros(m+1,1)
 
 
   /**
@@ -269,6 +303,38 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     // form the estimate of the beta variance
     variance = 1.0 / (Y.size - X.cols - 1) * mse
     betaVariance = variance * pseudoInverse
+    val sigma = Math.sqrt(variance)
+    // take the diagonal of the pseudoInverse (X'X)^-1
+   // note that the pseudoinverse actually may be negative, the square root may infact be imaginary.
+    val vj = DenseVector.tabulate (pseudoInverse.cols) {
+      j => Math.abs(pseudoInverse(j,j))
+    }
+    /*
+    * $$
+      * z_j = \frac{\hat{\beta_j}}{\hat{\sigma}\sqrt{v_j}}
+    * $$
+    *
+    * Since we are predicting a 1 column Y vector the beta matrix is always a single column matrix
+    *
+    * The row in beta corresponds to the coefficient of the ith column in X.
+    *
+    */
+    betaZScore = DenseMatrix.tabulate[Double](Beta.rows, Beta.cols) {
+      case (i, j) => Beta(i,j) / sigma*Math.sqrt(vj(i))
+    }
+
+    /**
+      * the corresponding p-value for beta_j can be calculated
+      * from the T distribution with N - p - 1 degrees of freedom.
+      * The null hypothesis is that beta_j is equal to 0, and therefore the corresponding X value does not contribute
+      * to the prediction.
+      *
+      * Testing against the hypothesis we reject the hypothesis if { |Z| > 0 }
+      */
+    val stdNorm = Normal(0.0)(1.0)
+    betaPValue = DenseMatrix.tabulate[Double](betaZScore.rows, betaZScore.cols) {
+      case (i, j) => stdNorm.pdf(betaZScore(i, j))
+    }
 
 
     (yHat, mse)

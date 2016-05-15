@@ -6,12 +6,11 @@ import javax.swing.JFrame
 
 import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.probability.regression.OrdLeastSquares
+import breeze.linalg.DenseVector
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 
-
 import scalax.chart.module.ChartFactories.XYLineChart
-
 import scala.collection.JavaConversions._
 
 /**
@@ -117,6 +116,17 @@ object ExampleMtCarsConsumption {
     frame.setVisible(true)
 
 
+    println(s"Model 3: P-Values\n")
+    printValues(ols3.betaPValue.toDenseVector)
+    println("\n")
+    println("Model 3: Z-Values\n")
+    printValues(ols3.betaZScore.toDenseVector)
+  }
+
+  def printValues(vals:DenseVector[Double]) = {
+    vals.toArray foreach {
+      v => println(v)
+    }
   }
 }
 

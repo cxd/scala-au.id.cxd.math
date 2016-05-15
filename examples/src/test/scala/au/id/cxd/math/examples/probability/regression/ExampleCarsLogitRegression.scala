@@ -6,7 +6,7 @@ import javax.swing.JFrame
 
 import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.probability.regression.LogisticLeastSquares
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, DenseVector}
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 import org.jfree.util.ShapeUtilities
@@ -215,7 +215,18 @@ object ExampleCarsLogitRegression {
     frame.pack()
     frame.setVisible(true)
 
+    println(s"Model 3: P-Values\n")
+    printValues(ols3.betaPValue.toDenseVector)
+    println("\n")
+    println("Model 3: Z-Values\n")
+    printValues(ols3.betaZScore.toDenseVector)
 
+  }
+
+  def printValues(vals:DenseVector[Double]) = {
+    vals.toArray foreach {
+      v => println(v)
+    }
   }
 
 }
