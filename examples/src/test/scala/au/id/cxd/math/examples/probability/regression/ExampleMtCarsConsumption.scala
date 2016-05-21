@@ -7,6 +7,7 @@ import javax.swing.JFrame
 import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.probability.regression.OrdLeastSquares
 import breeze.linalg.DenseVector
+import breeze.linalg._
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 
@@ -65,17 +66,17 @@ object ExampleMtCarsConsumption {
     val index = for (i <- 0 until yVec.length) yield i
     val seriesA = new XYSeries("original")
     // just plot the original
-    index foreach { i => seriesA.add(i, yVec(i))}
+    index foreach { i => seriesA.add(i, yVec(i)) }
 
     val series1 = new XYSeries("predict df=1")
-    index foreach { i => series1.add(i, Y1(0,i))}
+    index foreach { i => series1.add(i, Y1(0, i)) }
 
     val series2 = new XYSeries("predict df=2")
-    index foreach { i => series2.add(i, Y2(0,i)) }
+    index foreach { i => series2.add(i, Y2(0, i)) }
 
 
     val series3 = new XYSeries("predict df=3")
-    index foreach { i => series3.add(i, Y3(0,i)) }
+    index foreach { i => series3.add(i, Y3(0, i)) }
 
 
     series.addSeries(seriesA)
@@ -101,12 +102,12 @@ object ExampleMtCarsConsumption {
     dataset.add(rSeries3, "df-3", "df-3")
 
 
-    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset, title="Residuals of 3 models")
+    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset, title = "Residuals of 3 models")
 
 
     val frame = new JFrame("Example mtcars data set and predicted miles per gallon")
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    frame.setLayout(new GridLayout(1,2))
+    frame.setLayout(new GridLayout(1, 2))
 
 
     frame.add(ChartHelper.makeChartPanel(plot1, 400, 300))
@@ -116,14 +117,36 @@ object ExampleMtCarsConsumption {
     frame.setVisible(true)
 
 
+    println(s"Model 1: P-Values\n")
+    printValues(ols1.betaPValue.toDenseVector)
+    println("\n")
+    println("Model 1: Z-Values\n")
+    printValues(ols1.betaZScore.toDenseVector)
+
+    println(s"Model 1: Critical Beta Value: ${ols1.criticalBetaZValue}")
+    println(s"Model 1: Critical PValue: ${ols1.criticalPValue}")
+
+    println(s"Model 2: P-Values\n")
+    printValues(ols2.betaPValue.toDenseVector)
+    println("\n")
+    println("Model 2: Z-Values\n")
+    printValues(ols2.betaZScore.toDenseVector)
+
+    println(s"Model 2: Critical Beta Value: ${ols2.criticalBetaZValue}")
+    println(s"Model 2: Critical PValue: ${ols2.criticalPValue}")
+
     println(s"Model 3: P-Values\n")
     printValues(ols3.betaPValue.toDenseVector)
     println("\n")
     println("Model 3: Z-Values\n")
     printValues(ols3.betaZScore.toDenseVector)
+
+    println(s"Model 3: Critical Beta Value: ${ols3.criticalBetaZValue}")
+    println(s"Model 3: Critical PValue: ${ols3.criticalPValue}")
+
   }
 
-  def printValues(vals:DenseVector[Double]) = {
+  def printValues(vals: DenseVector[Double]) = {
     vals.toArray foreach {
       v => println(v)
     }

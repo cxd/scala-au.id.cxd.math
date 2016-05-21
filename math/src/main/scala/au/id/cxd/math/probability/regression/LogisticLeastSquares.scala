@@ -30,8 +30,8 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   *
   * Created by cd on 1/05/2016.
   */
-class LogisticLeastSquares(override val X: DenseMatrix[Double], override val Y: DenseVector[Double], override val m: Int = 1)
-  extends OrdLeastSquares(X, Y, m) {
+class LogisticLeastSquares(@transient var inX: DenseMatrix[Double], @transient var inY: DenseVector[Double], override val m: Int = 1)
+  extends OrdLeastSquares(inX, inY, m) {
 
   /**
     * the conversion function can be used to transform

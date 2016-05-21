@@ -4,6 +4,7 @@ import au.id.cxd.math.probability.Distribution
 import au.id.cxd.math.probability.continuous.ContinuousDistribution
 
 import scala.annotation.tailrec
+import scala.collection.immutable.Stream
 import scalaz.Memo
 
 class Region {}
@@ -187,5 +188,19 @@ object CriticalValue {
   def apply(dist: Distribution, region: Region)(range: Seq[Double]) = dist match {
     case cdist:ContinuousDistribution =>  new ContinuousCriticalValue(cdist, region, range)
     case _ => new DiscreteCriticalValue(dist, region, range)
+  }
+
+  /**
+    * build the critical value with the upper limit
+    * @param start
+    * @param upperLimit
+    * @param dist
+    * @return
+    */
+  def upperCriticalValue(start:Double, upperLimit:Double, dist:Distribution) = {
+    def sequence(last: Double): Stream[Double] = {
+      last #:: sequence(last + 0.1)
+    }
+    CriticalValue(dist, UpperTail()) (sequence(start).takeWhile { p => p <= upperLimit } )
   }
 }

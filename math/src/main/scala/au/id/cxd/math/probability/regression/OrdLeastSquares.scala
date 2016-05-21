@@ -2,10 +2,13 @@ package au.id.cxd.math.probability.regression
 
 import java.io._
 
-import au.id.cxd.math.function.PolynomialExpansion
-import au.id.cxd.math.probability.continuous.Normal
+import au.id.cxd.math.function.{PolynomialExpansion, PseudoInverse}
+import au.id.cxd.math.probability.analysis.{CriticalValue, StatisticalTest, TestResult, UpperTail}
+import au.id.cxd.math.probability.continuous.{FDistribution, Normal}
 import breeze.linalg._
 import breeze.numerics.pow
+
+import scala.collection.immutable.Stream
 
 /**
   * ##import MathJax
@@ -63,7 +66,7 @@ import breeze.numerics.pow
   * becomes negligable (see Hastie), so the normal distribution is used defining the confidence interval
   *
   * $$
-  *   \left(\beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}, \beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}\right)
+  * \left(\beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}, \beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}\right)
   * $$
   *
   * at the critical $\alpha$ level for example 0.05 for a 95% confidence interval.
@@ -71,10 +74,10 @@ import breeze.numerics.pow
   *
   *
   * $$
-  *   H_0: \beta_j = 0
+  * H_0: \beta_j = 0
   * $$
   * $$
-  *   H_1: \beta_j != 0
+  * H_1: \beta_j != 0
   * $$
   *
   *
@@ -101,7 +104,8 @@ import breeze.numerics.pow
   * and the input vector has features added for the degree of the polynomial during training and prediction.
   */
 @SerialVersionUID(100L)
-class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], val m: Int = 1, val alpha:Double=0.05) extends Serializable {
+class OrdLeastSquares(var X: DenseMatrix[Double], var Y: DenseVector[Double], val m: Int = 1, val alpha: Double = 0.05)
+  extends Serializable {
 
   /**
     * The beta parameter is approximated by
@@ -148,13 +152,30 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
   /**
     * the beta z score
     */
-  var betaZScore:DenseMatrix[Double] = DenseMatrix.zeros(m+1, 1)
+  var betaZScore: DenseMatrix[Double] = DenseMatrix.zeros(m + 1, 1)
 
+  /**
+    * the critical value for beta to use when testing at the alpha level supplied
+    * this is the reject region
+    * { betaZ > criticalBetaZValue }
+    * meaning to reject that beta equals 0
+    */
+  var criticalBetaZValue: Double = 0.0
+
+  /**
+    * the p-value that corresponds to the critical beta z value
+    *
+    *
+    * in this case we reject the null hypothesis that $\Beta = 0$
+    * when the pvalue for $f(\Beta_z) < f(Z_\alpha)$
+    */
+  var criticalPValue: Double = 0.0
 
   /**
     * the set of p-values for the corresponding betaZScore
+    *
     */
-  var betaPValue:DenseMatrix[Double] = DenseMatrix.zeros(m+1,1)
+  var betaPValue: DenseMatrix[Double] = DenseMatrix.zeros(m + 1, 1)
 
 
   /**
@@ -166,7 +187,7 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     *
     * This value is computed during the training cycle.
     */
-  var variance:Double = 0.0
+  var variance: Double = 0.0
 
   /**
     * the pseudo inverse of  the covariance variance matrix
@@ -182,7 +203,7 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
   /**
     * the mse of the regression model
     */
-  var mse:Double = 0.0
+  var mse: Double = 0.0
 
   val powers = for {
     i <- 0 to m
@@ -221,20 +242,20 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     m match {
       case 1 => {
         // create matrix where first column is 1
-        val M = DenseMatrix.tabulate[Double](X1.rows, X1.cols+1) {
+        val M = DenseMatrix.tabulate[Double](X1.rows, X1.cols + 1) {
           case (i, j) => j match {
             case 0 => 1
-            case n => X1(i, n-1)
+            case n => X1(i, n - 1)
           }
         }
         M
       }
       case _ => {
         val M1 = PolynomialExpansion(X1, m)
-        val M2 = DenseMatrix.tabulate[Double](M1.rows, M1.cols+1) {
+        val M2 = DenseMatrix.tabulate[Double](M1.rows, M1.cols + 1) {
           case (i, j) => j match {
             case 0 => 1.0
-            case n => M1(i,n-1)
+            case n => M1(i, n - 1)
           }
         }
         M2
@@ -281,7 +302,7 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     **/
   def updateWeights(F: DenseMatrix[Double], Y: DenseMatrix[Double]): DenseMatrix[Double] = {
     val Cov = F.t * F
-    pseudoInverse = pinv(Cov)
+    pseudoInverse = PseudoInverse(Cov)
     val B = (pseudoInverse * F.t)
     println(s"B dim ${B.rows} x ${B.cols}")
     println(s"Y dim ${Y.rows} x ${Y.cols}")
@@ -305,9 +326,9 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     betaVariance = variance * pseudoInverse
     val sigma = Math.sqrt(variance)
     // take the diagonal of the pseudoInverse (X'X)^-1
-   // note that the pseudoinverse actually may be negative, the square root may infact be imaginary.
-    val vj = DenseVector.tabulate (pseudoInverse.cols) {
-      j => Math.abs(pseudoInverse(j,j))
+    // note that the pseudoinverse actually may be negative, the square root may infact be imaginary.
+    val vj = DenseVector.tabulate(pseudoInverse.cols) {
+      j => pseudoInverse(j, j)
     }
     /*
     * $$
@@ -320,7 +341,7 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     *
     */
     betaZScore = DenseMatrix.tabulate[Double](Beta.rows, Beta.cols) {
-      case (i, j) => Beta(i,j) / sigma*Math.sqrt(vj(i))
+      case (i, j) => Beta(i, j) / sigma * Math.sqrt(vj(i))
     }
 
     /**
@@ -336,6 +357,9 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
       case (i, j) => stdNorm.pdf(betaZScore(i, j))
     }
 
+    val criticalValue = CriticalValue.upperCriticalValue(0.0, 4 * 1.0, stdNorm)
+    criticalBetaZValue = criticalValue.value(alpha)
+    criticalPValue = stdNorm.pdf(criticalBetaZValue)
 
     (yHat, mse)
   }
@@ -375,14 +399,14 @@ class OrdLeastSquares(val X: DenseMatrix[Double], val Y: DenseVector[Double], va
     * predict the result of multiplying the beta estimater against a new vector X
     *
     * $$
-    *   \hat{Y} = \beta_0 + \sum X_i \beta_j
+    * \hat{Y} = \beta_0 + \sum X_i \beta_j
     * $$
     *
     * $$
-    *   \hat{Y} = X\beta
+    * \hat{Y} = X\beta
     * $$
     *
-    * @param x
+    * @param X1
     * @return
     */
   def predict(X1: DenseMatrix[Double]) = {
@@ -403,8 +427,8 @@ object OrdLeastSquares {
     * @param m
     * @return
     */
-  def apply(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int) = {
-    val ols = new OrdLeastSquares(X, Y, m)
+  def apply(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int, alpha:Double = 0.05) = {
+    val ols = new OrdLeastSquares(X, Y, m, 0.05)
     ols
   }
 

@@ -1,5 +1,9 @@
 package au.id.cxd.math.probability.analysis
 
+import au.id.cxd.math.probability.Distribution
+
+import scala.collection.immutable.Stream
+
 /**
  * A test result after performing a test on a hypothesis.
  *
@@ -38,4 +42,8 @@ object TestResult {
              pValue:Double,
              observedValue:Double,
              criticalValue:Double) = new TestResult(significance, reject, pValue, observedValue, criticalValue)
+
+
+
+
 }

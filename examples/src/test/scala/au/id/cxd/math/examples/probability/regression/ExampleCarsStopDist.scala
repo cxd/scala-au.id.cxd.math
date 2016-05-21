@@ -114,6 +114,14 @@ object ExampleCarsStopDist {
 
     frame.pack()
     frame.setVisible(true)
+
+
+
+    println(s"Model 3: P-Values\n")
+    //printValues(ols3.betaPValue.toDenseVector)
+    println("\n")
+    println("Model 3: Z-Values\n")
+    //printValues(ols3.betaZScore.toDenseVector)
   }
 
 
