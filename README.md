@@ -1,10 +1,10 @@
 scala-au.id.cxd.math
 ====================
 
-Libraries containing math related functions in scala. Provides probability distributions (similar to Breeze), for the purposes of my own studies.
+Libraries containing math related functions in scala. 
 
-Further details are available in the [pdf documentation](./docs/au.id.cxd.math.pdf).
+Provides probability distributions (similar to Breeze), and other utilities for analysis.
 
-Or instead try the "github pages" branch for the project located at:
+Further details are available at the "github pages" branch for the project located at:
 
 [au.id.cxd.math](http://cxd.github.io/scala-au.id.cxd.math/)

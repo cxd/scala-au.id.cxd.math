@@ -7,7 +7,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   * ordinary least squares as the regression method.
   *
   * The logistic regression provides the estimate of $P(y|X)$ which determines the probability
-  * that the data point is a member of either class $y \in \left{0,1\right}$ for the predictor variables.
+  * that the data point is a member of either class $$y \in 0,1$$ for the predictor variables.
   *
   * $$
   * P(y = 1|X) = \frac{1}{\left( 1 + e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k )} \right)}
@@ -16,7 +16,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   * conversely
   *
   * $$
-  * P(y = 0|X) = \frac{e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k )}{{\left( 1 + e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k )} \right)}
+  * P(y = 0|X) = \frac{ e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k ) }{ { ( 1 + e&#94;{ (-\beta_0 + \sum_{k} \beta_k x_k ) } ) }
   * $$
   *
   * The logit function for the odds ratio is the transformation of the above and is estimated as
