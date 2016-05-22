@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Scala-au.id.cxd.math by cxd</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="wrapper">
+    <p>
+        <a href="../index.html">Home</a>
+    </p>
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome" aria-hidden="true"><span
+                aria-hidden="true" class="octicon octicon-link"></span></a>
+        Notes on Linear Regression
+    </h3>
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+
+    </script>
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <div>
+        <p>
+            Least squares is a simpler form of regression approximating $Y$ as
+
+            $$
+            \hat{Y} = \beta_0 + \sum X_i \beta_j
+            $$
+
+            $$
+            \hat{Y} = X\beta
+            $$
+
+            The parameter $\beta$ is estimated using the sample instances and the sample outputs as shown
+
+            $$
+            \hat{\beta} = (X'X)^{-1}X'Y
+            $$
+
+            $\hat{\beta}$ is assumed to have a normal distribution with mean $\beta$
+
+            and variance $Q \sigma^2$
+
+            where $Q = (X'X)^{-1}$.
+
+            The residual squared error can be calculated as:
+
+            $$
+            RSS(\beta) = \sum (Y_i - \hat{Y_i})^2
+            $$
+
+            The residuals $\epsilon$ are assumed distributed as $N(0,\sigma^2)$
+
+            Inference on $\beta$ can be performed using the standardised coefficient z-score for $\beta$.
+
+            $$
+            z_j = \frac{\hat{\beta_j}}{\hat{\sigma}\sqrt{v_j}}
+            $$
+
+            The value for $v_j$ is derived from the $jth$ position on diagonal from the matrix $(X'X)^{-1}$.
+
+            The Z-score from the normal distribution at a corresponding alpha level can be used to form
+            the associated confidence interval for $\beta$ at $p-value = z$ at the $1 - \alpha$ level .
+
+
+            $$
+            \hat{\beta_j} \pm z^{(1-\alpha)} \sqrt{v} \hat{\sigma}
+            $$
+
+            We can test against the null hypothesis that $\beta_j = 0$ and therefore the corresponding $X_{ij}$ does
+            not contribute to the target variable (given the coefficient is 0).
+            A t-distribution of N - p - 1 degrees of freedom can be used forming the confidence interval
+            however as the sample size increases the difference between the t-distribution and normal distribution
+            becomes negligable (see Hastie), so the normal distribution is used defining the confidence interval
+
+            $$
+            \left(\beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}, \beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}\right)
+            $$
+
+            at the critical $\alpha$ level for example 0.05 for a 95% confidence interval.
+            Those values with a very small p-value would reject the null hypothesis or if $(|Z| > z_{1-\alpha})$.
+
+
+            $$
+            H_0: \beta_j = 0
+            $$
+            $$
+            H_1: \beta_j != 0
+            $$
+
+
+            As $\beta$ defines the coefficients of the $pth$ attribute in $X$ it is possible to test whether
+            the $kth$ coefficient can be set to $0$ (in which case the contribution of $X_k$ to estimating $Y$ is not
+            significant)
+            by using an F-score.
+            Let $k_1$ equal the $k$ parameters and $k_0$ be the a smaller model where $k_1 - k_0$ parameters are set to
+            $0$
+            the F-score can be calculated as
+
+            $$
+            F = \frac{(RSS_0 - RSS_1)/(k_1 - k_0)}{RSS_1/(N - k_1 - 1)}
+            $$
+
+            this statistic can be used to determine if the residual sum of squares error is changed significantly
+            by setting the $k_1 - k_0$ parameters to 0. If the RSS decreases, and the F-score can be tested
+            against a corresponding p-value for an associated $\alpha$ level to determine if the improvement
+            is significant change. If so, the corresponding attributes contribution in determining $Y$ is marginal.
+
+            For further details refer to
+        <ul>
+            <li>
+                Hastie, T. Tibshirani, R. Friedman, J. The Elements of Statistical Learning, Second Ed. Springer 2009.
+            </li>
+        </ul>
+
+        In this case the degree of the polynomial is supplied to the constructure
+        and the input vector has features added for the degree of the polynomial during training and prediction.
+
+        </p>
+
+
+    </div>
+
+</div>
+<script src="javascripts/scale.fix.js"></script>
+
+</body>
+</html>

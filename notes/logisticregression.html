@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Scala-au.id.cxd.math by cxd</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="wrapper">
+    <p>
+        <a href="../index.html">Home</a>
+    </p>
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome" aria-hidden="true"><span
+                aria-hidden="true" class="octicon octicon-link"></span></a>
+        Notes on Linear Regression
+    </h3>
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <div>
+        <p>
+            The logistic least squares implements the logistic regression using the
+            ordinary least squares as the regression method.
+            
+            The logistic regression provides the estimate of $P(y|X)$ which determines the probability
+            that the data point is a member of either class $y  \in \{ 0,1 \}$ for the predictor variables.
+            
+            $$
+            P(y = 1|X) = \frac{1}{\left( 1 + e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k )} \right)}
+            $$
+            
+            conversely
+            
+            $$
+            P(y = 0|X) = \frac{ e&#94;{(-\beta_0 + \sum_k \beta_k x_k )} }{ { ( 1 + e&#94;{ (-\beta_0 + \sum_{k} \beta_k x_k ) } ) } }
+            $$
+            
+            The logit function for the odds ratio is the transformation of the above and is estimated as
+            
+            $$
+            log \frac{P(y=0|X)}{P(y=1|X)} = \beta_0 + \beta&#94;T X
+            $$
+            
+            The logistic regression proceeds by estimating the logit function, once estimated the class probability
+            can be estimated using the logistic function.
+        </p>
+
+
+
+    </div>
+
+</div>
+<script src="javascripts/scale.fix.js"></script>
+
+</body>
+</html>
