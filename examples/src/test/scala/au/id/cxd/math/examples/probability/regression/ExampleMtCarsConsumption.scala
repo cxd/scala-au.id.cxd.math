@@ -21,17 +21,17 @@ import scala.collection.JavaConversions._
   * <pre>
   * mtcars - A data frame with 32 observations on 11 variables.
   * *
-  * [, 1]	mpg	Miles/(US) gallon
-  * [, 2]	cyl	Number of cylinders
-  * [, 3]	disp	Displacement (cu.in.)
-  * [, 4]	hp	Gross horsepower
-  * [, 5]	drat	Rear axle ratio
-  * [, 6]	wt	Weight (1000 lbs)
-  * [, 7]	qsec	1/4 mile time
-  * [, 8]	vs	V/S
-  * [, 9]	am	Transmission (0 = automatic, 1 = manual)
-  * [,10]	gear	Number of forward gears
-  * [,11]	carb	Number of carburetors
+  * [, 0]	mpg	Miles/(US) gallon
+  * [, 1]	cyl	Number of cylinders
+  * [, 2]	disp	Displacement (cu.in.)
+  * [, 3]	hp	Gross horsepower
+  * [, 4]	drat	Rear axle ratio
+  * [, 5]	wt	Weight (1000 lbs)
+  * [, 6]	qsec	1/4 mile time
+  * [, 7]	vs	V/S
+  * [, 8]	am	Transmission (0 = automatic, 1 = manual)
+  * [,9]	gear	Number of forward gears
+  * [,10]	carb	Number of carburetors
   * </pre>
   *
   * Created by cd on 1/05/2016.
@@ -43,9 +43,10 @@ object ExampleMtCarsConsumption {
   def readCars() = {
     val reader = new MatrixReader {}
     val M = reader.read(new File(inputFile))
-    val X = M(::, 1 until M.cols)
+    val continuous = Seq(1,2,3,4,5,6,7,9,10)
+    val X = M(::, continuous)
     val Y = M(::, 0)
-    (X, Y.toDenseVector)
+    (X.toDenseMatrix, Y.toDenseVector)
   }
 
   def main(args: Array[String]) = {

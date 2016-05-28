@@ -39,7 +39,7 @@ class PseudoInverse(val P: DenseMatrix[Double], val correction: Double = Math.E)
         containsNegative(diag) match {
           case true => {
             val C = adjust(P, diag, correction)
-            val (diag2, inverse2) = invert (C)
+            val (diag2, inverse2) = invert(C)
             inverse2
           }
           case _ => inverse
@@ -56,17 +56,30 @@ class PseudoInverse(val P: DenseMatrix[Double], val correction: Double = Math.E)
     *
     * This adjustment adds a small value to the variance
     *
+    * The value is taken from the minimum positive value of the eigenvalues.
+    *
     * @param P
     * @param c
     * @return
     */
-  def adjust(P:DenseMatrix[Double], diag:DenseVector[Double], c:Double) = DenseMatrix.tabulate[Double](P.rows, P.cols) {
-    case (i, j) => (i == j) match {
-      case true => diag(i) < 0 match {
-        case true => P(i, j) + c
+  def adjust(P: DenseMatrix[Double], diag: DenseVector[Double], c: Double) = {
+    val min = diag.foldLeft (c) {
+      (c, v) => v <= c && v > 0 match {
+        case true => v
+        case _ => c
+      }
+    }
+    DenseMatrix.tabulate[Double](P.rows, P.cols) {
+      case (i, j) => (i == j) match {
+        case true => diag(i) < 0 match {
+          case true => P(i, j) + min > 0 match {
+            case true => P(i,j) + min
+            case _ => c
+          }
+          case _ => P(i, j)
+        }
         case _ => P(i, j)
       }
-      case _ => P(i, j)
     }
   }
 
@@ -114,7 +127,7 @@ class PseudoInverse(val P: DenseMatrix[Double], val correction: Double = Math.E)
 }
 
 object PseudoInverse {
-  def apply(P:DenseMatrix[Double]) = new PseudoInverse(P).op()
+  def apply(P: DenseMatrix[Double]) = new PseudoInverse(P).op()
 
-  def apply(P:DenseMatrix[Double], correction:Double) = new PseudoInverse(P, correction).op()
+  def apply(P: DenseMatrix[Double], correction: Double) = new PseudoInverse(P, correction).op()
 }
