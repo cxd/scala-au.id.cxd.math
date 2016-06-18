@@ -36,10 +36,17 @@ object ExampleMtCarsBayesRegression {
     val (normal, xMat, yVec) = readCars
     val ols1 = BayesLinearRegression(xMat, yVec, 1)
     val (est1, error1) = ols1.train()
+    // prediction before update
+    val Y1 = ols1.predict(xMat)
+    // store the residuals from the first iteration
+    val rSeries1 = List.tabulate(ols1.residuals.length) { i => ols1.residuals(i) }
+
     // test update function
     val (est2, error2) = ols1.update(xMat, yVec)
+    // store the residuals from the second iteration
+    val rSeries2 = List.tabulate(ols1.residuals.length) { i => ols1.residuals(i) }
 
-    val Y1 = ols1.predict(xMat)
+    val Y2 = ols1.predict(xMat)
 
     val series = new XYSeriesCollection()
     val index = for (i <- 0 until yVec.length) yield i
@@ -50,21 +57,25 @@ object ExampleMtCarsBayesRegression {
     val series1 = new XYSeries("predict df=1")
     index foreach { i => series1.add(i, Y1(0, i)) }
 
+    val series2 = new XYSeries("predict updated df=1")
+    index foreach { i => series2.add(i, Y2(0,i)) }
 
     series.addSeries(seriesA)
     series.addSeries(series1)
+    series.addSeries(series2)
 
     val chart = XYLineChart(series)
-    chart.title = "mtcars data set and predicted miles per gallon"
+    chart.title = "mtcars data set and predicted miles per gallon\n(standardised)"
 
     val plot1 = chart.peer
 
     val dataset = new DefaultBoxAndWhiskerCategoryDataset()
 
-    val rSeries1 = List.tabulate(ols1.residuals.length) { i => ols1.residuals(i) }
     dataset.add(rSeries1, "df-1", "df-1")
+    dataset.add(rSeries2, "df-updated", "df-updated")
 
-    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset, title = "Residuals of 3 models")
+
+    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset, title = "Residuals of 2 models")
 
 
     val frame = new JFrame("Example mtcars data set and predicted miles per gallon")

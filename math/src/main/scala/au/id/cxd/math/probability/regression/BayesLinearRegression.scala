@@ -377,13 +377,13 @@ class BayesLinearRegression(@transient var inX: DenseMatrix[Double], @transient 
     val lastdf = P.rows - P.cols
     val nu = lastdf + (newP.rows - newP.cols)
 
-    val prevMu = 1.0 / Y.length * Y.foldLeft(0.0) { (accum, y) => accum + y }
+    val prevMu = (1.0 / Y.length) * Y.foldLeft(0.0) { (accum, y) => accum + y }
 
-    val mu = 1.0 / newY.length * newY.foldLeft(0.0) { (accum, y) => accum + y }
+    val mu = (1.0 / newY.length) * newY.foldLeft(0.0) { (accum, y) => accum + y }
 
-    val prevSd = 1.0 / (Y.length - 1) * Y.foldLeft(0.0) { (accum, y) => accum + Math.pow((y - prevMu), 2) }
+    val prevSd = (1.0 / (Y.length - 1)) * Y.foldLeft(0.0) { (accum, y) => accum + Math.pow((y - prevMu), 2) }
 
-    val sd = 1.0 / (newY.length - 1) * newY.foldLeft(0.0) { (accum, y) => accum + Math.pow((y - mu), 2) }
+    val sd = (1.0 / (newY.length - 1)) * newY.foldLeft(0.0) { (accum, y) => accum + Math.pow((y - mu), 2) }
 
     val muC = (prevMu + mu) / 2.0
 
@@ -398,13 +398,20 @@ class BayesLinearRegression(@transient var inX: DenseMatrix[Double], @transient 
       **/
     val newI = DenseMatrix.tabulate[Double](pseudoInverse.rows, pseudoInverse.cols) {
       case (i, j) => i == j match {
-        case true => pseudoInverse(j, j)
+        case true => {
+          // uniform variance
+          // sigma
+          // based on previous beta variance
+          pseudoInverse(j, j)
+        }
         case _ => 0.0
       }
     }
     val mu0 = Beta
     val lambda0 = pseudoInverse
-    val cov = newVariance * newI
+    val cov = DenseMatrix.tabulate(newI.rows, newI.cols) {
+      case (i,j) => newVariance * newI(i,j)
+    }
     val lambdaNew = lambda0 + cov
 
     /**
@@ -437,11 +444,18 @@ class BayesLinearRegression(@transient var inX: DenseMatrix[Double], @transient 
     val invCov = PseudoInverse(cov)
     val mat1 = invLambda1 + (invLambda2 * newP.rows.toDouble)
     val a = mu0 * invLambda1
-    val b = invCov * newP.rows.toDouble
-    val c = DenseMatrix.tabulate[Double](b.rows, b.cols) {
+    val b = meanVec.t * (invCov * newP.rows.toDouble)
+
+    val mat2 = DenseMatrix.tabulate[Double](b.rows, b.cols) {
       case (i, j) => b(i, j) + a(0,j)
     }
-    val mat2 = meanVec.t * c
+
+    /**
+      *  Mu2 <- ginv( ginv(Lambda0) + n2*ginv(Lambda2) ) %*%(ginv(Lambda0)%*%Mu0 + n2*ginv(Cov)%*%MeanVec)
+      * becomes
+      * ginv(mat1) * (a + b)
+      */
+
     val newBeta = mat2 * PseudoInverse(mat1)
     // update the parameters
     pseudoInverse = lambdaNew
