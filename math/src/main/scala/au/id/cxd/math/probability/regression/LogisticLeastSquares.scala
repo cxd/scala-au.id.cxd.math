@@ -3,6 +3,7 @@ package au.id.cxd.math.probability.regression
 import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
+  * ##import MathJax
   * The logistic least squares implements the logistic regression using the
   * ordinary least squares as the regression method.
   *

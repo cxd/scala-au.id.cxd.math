@@ -3,6 +3,8 @@ package au.id.cxd.math.probability.regression
 import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
+  * ##import MathJax
+  *
   * The logistic regressor is layered ontop of the family of least squares regressors
   * the output function is modified by means of the logistic function.
   *

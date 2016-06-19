@@ -357,8 +357,12 @@ class OrdLeastSquares(var X: DenseMatrix[Double], var Y: DenseVector[Double], va
       case (i, j) => stdNorm.pdf(betaZScore(i, j))
     }
 
-    val criticalValue = CriticalValue.upperCriticalValue(0.0, 4 * 1.0, stdNorm)
-    criticalBetaZValue = criticalValue.value(alpha)
+    // the critical value is taken from the normal distribution with mean 0 and sd 1
+    // we multiply sd * 5 to create the upper tail range of the normal distribution
+    // between 0 and 5
+    val criticalValue = CriticalValue.upperCriticalValue(0.0, 5.0, stdNorm)
+    // the critical value is a two tailed test.
+    criticalBetaZValue = criticalValue.value(alpha/2.0)
     criticalPValue = stdNorm.pdf(criticalBetaZValue)
 
     (yHat, mse)

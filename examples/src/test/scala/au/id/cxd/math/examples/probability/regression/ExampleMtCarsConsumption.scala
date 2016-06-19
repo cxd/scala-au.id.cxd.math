@@ -15,7 +15,7 @@ import scalax.chart.module.ChartFactories.XYLineChart
 import scala.collection.JavaConversions._
 
 /**
-  * An example multivariate regression over the feul consumption for a set of cars
+  * An example multivariate regression over the fuel consumption for a set of cars
   * given a set of attributes from the R dataset mtcars
   *
   * <pre>
