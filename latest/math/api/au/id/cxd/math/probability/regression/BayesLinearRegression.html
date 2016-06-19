@@ -1,0 +1,1250 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>BayesLinearRegression - au.id.cxd.math.probability.regression.BayesLinearRegression</title>
+          <meta name="description" content="BayesLinearRegression - au.id.cxd.math.probability.regression.BayesLinearRegression" />
+          <meta name="keywords" content="BayesLinearRegression au.id.cxd.math.probability.regression.BayesLinearRegression" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'au.id.cxd.math.probability.regression.BayesLinearRegression';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="BayesLinearRegression$.html" title="See companion object"><img alt="Class/Object" src="../../../../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.probability">probability</a>.<a href="package.html" class="extype" name="au.id.cxd.math.probability.regression">regression</a></p>
+        <h1><a href="BayesLinearRegression$.html" title="See companion object">BayesLinearRegression</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="BayesLinearRegression$.html" title="See companion object">object BayesLinearRegression</a>
+            | <a href="package.html" class="extype" name="au.id.cxd.math.probability.regression">package regression</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">BayesLinearRegression</span><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><h5> The Bayesian linear regression for assumed uniform variance. </h5><p>Bayesian Linear Regression extends the Ordinary Least Squares Regression by accounting for the uncertainty about the parameters within the model to generate a posterior distribution for the parameters and a posterior predictive distribution for the target variable. The bayesian regression model makes specific assumptions about the location and variance parameters and about the distributions of each and provides update rules for adjusting the model in light of new examples.</p><p>The method extends the standard linear regression where</p><p>$$
+p(Y|\beta,\sigma&#94;2) \sim N(\mu = X\beta, \Sigma&#94;{-1} = \sigma&#94;2 I)
+$$</p><p>Box and Tiao show the distribution to be</p><p>$$
+p(Y|\beta,\sigma&#94;2) = \left( \frac{1}{\sqrt{2\pi}} \right)&#94;n \sigma&#94;{-n} \exp{ \left[ -\frac{1}{2\sigma&#94;2} \left[ vs&#94;2 + (\beta - \hat{\beta})'X'X(\beta - \hat{\beta}) \right]  \right] }
+$$</p><p>with</p><p>$$
+v = n - k
+$$
+$$
+s&#94;2 = (1/v)(Y - \hat{Y})'(Y-\hat{Y})
+$$</p><p>$$
+\hat{\beta} = (X'X)&#94;{-1}X'Y
+$$</p><p>$$
+\hat{Y} = X\hat{\beta}
+$$</p><p>The uniform variance $\sigma&#94;2$ estimates the error such that</p><p>$$
+p(\epsilon|\sigma&#94;2) \sim N(0, \sigma&#94;2 I)
+$$</p><p>The conditional distribution for $Y$ is expressed as</p><p>$$
+p(Y|\beta, \sigma&#94;2, X) \sim N(X\beta, \sigma&#94;2I)
+$$</p><p>The joint uninformative prior distribution for the parameters $\beta$ and $\sigma&#94;2$ with uniform variance is given as</p><p>$$
+p(\beta, \sigma&#94;2 | X) \propto  \sigma&#94;{-2}
+$$</p><h5> Posterior distribution for parameters </h5><p>The posterior distribution of the parameters is defined as</p><p>$$
+p(\beta,\sigma&#94;2|Y) \propto f(Y|\beta,\sigma&#94;2) \times p(\beta,\sigma&#94;2)
+$$</p><p>under uniform variance this is</p><p>$$
+\propto \sigma&#94;{-(v+1)} \exp{ \left[ -\frac{1}{2\sigma&#94;2} \left[vs&#94;2 + (\beta - \hat{\beta})'(X'X)(\beta - \hat{\beta}) \right]  \right] }
+$$</p><p>Gelman demonstrates that the posterior factorises into</p><p>$$
+\propto   \exp{ \left[ (\beta - \hat{\beta})'(X'X)(\beta - \hat{\beta}) \right] } \times \sigma&#94;{-(v+1)} \exp{ \left[ \frac{vs&#94;2}{2\sigma&#94;2} \right]}
+$$</p><p>$$
+N \left(\hat{\beta}, \sigma&#94;2(X'X)&#94;{-1} \right) \times Inverse-\chi&#94;2 (v,s&#94;2)
+$$</p><p>Note that $X$ will have the constraint that the number of rows in $X$, $n$ will be greater than the number of columns $k$ and that the columns of $X$ should be linearly independent.</p><h5> Joint Posterior predictive distribution </h5><p>The joint posterior predictive distribution for new examples $\tilde{Y}$ and $\tilde{X}$ is dependent on the previous conditional distribution of the parameters and the
+previous data $Y$ and $X$.</p><p>$$
+p(\tilde{Y}|\beta,\sigma&#94;2,\tilde{X},Y,X) = f(\tilde{Y}|\beta,\sigma&#94;2,\tilde{X}) \times p(\beta,\sigma&#94;2|Y,X)
+$$</p><p>Consider that the conditional distribution of</p><p>$$
+p(\tilde{Y}|\beta,\sigma&#94;2,\tilde{X},Y,X) \sim N(\tilde{X}\beta,\sigma&#94;2 I)
+$$</p><p>Then the likelihood $\times$ the posterior distribution for the parameters is</p><p>$$
+\propto \sigma&#94;{-n} \exp{ \left[ - \frac{1}{2\sigma&#94;2}(\tilde{Y} - \tilde{X}\beta)'(\tilde{Y} - \tilde{X}\beta)  \right] } \times \sigma&#94;{-(n+1)}\exp{\left[ -\frac{1}{2\sigma&#94;2}(Y - X\beta)'(Y - X\beta) \right]  }
+$$</p><p>$$
+\propto \sigma&#94;{-(n + \tilde{n} + 1)} \exp{\left[ -\frac{1}{2\sigma&#94;2} \left( (\tilde{Y} - \tilde{X}\beta)'(\tilde{Y} - \tilde{X}\beta) + (Y-X\beta)'(Y-X\beta)  \right)  \right]}
+$$</p><p>In order to obtain the marginal distribution of $\tilde{Y}$, Gelman uses two steps firstly by marginalising $\beta$ and then by marginalising $\sigma$.</p><p>Using the conditional expectation $\beta$ the parameters for $\mu$ and $\sigma$ of the distribution for $\tilde{Y}$ are derived as</p><p>$$
+E\left[\tilde{Y}|\sigma,Y\right] = E\left[ E\left[ \tilde{Y}|\beta,\sigma,Y\right]\right]
+$$</p><p>$$
+E\left[\tilde{Y}|\sigma,Y\right] = E\left[ \tilde{X} \beta | \sigma, Y \right]
+$$</p><p>$$
+\mu = \tilde{X} \hat{\beta}
+$$</p><p>And for the variance</p><p>$$
+Var\left[\tilde{Y}|\sigma,Y\right] = E\left[ Var\left[\tilde{Y}|\beta,\sigma,Y\right] \right] + Var\left[ E\left[\tilde{Y}|\beta,\sigma,Y\right]  \right]
+$$
+$$
+Var\left[\tilde{Y}|\sigma,Y\right] = E[\sigma&#94;2I|\sigma,Y] + Var[\tilde{X}\beta|\sigma,Y]
+$$
+$$
+Var\left[\tilde{Y}|\sigma,Y\right] = (I + \tilde{X}V_\beta\tilde{X}')\sigma&#94;2
+$$
+where $V_\beta = (X'X)&#94;{-1}$</p><p>The posterior density conditioned on $\sigma$ is</p><p>$$
+p(\tilde{Y}|\sigma,Y\tilde{X},X) \sim N\left( \tilde{X}\hat{\beta},  (I + \tilde{X}V_\beta\tilde{X}')\sigma&#94;2 \right)
+$$</p><p>The next step is to marginalise over $\sigma$ to obtain the predictive density.</p><p>$$
+p(\tilde{Y}|\tilde{X},Y,X) \propto \int p(\tilde{Y}|\sigma,\tilde{X},Y,X) \times p(\sigma|Y,X) d\sigma
+$$
+*
+$$
+p(\tilde{Y}|\tilde{X},Y,X) \propto \int \sigma&#94;{-(n - k + 1)} \exp{\left[ \frac{\nu s&#94;2}{2\sigma&#94;2} \right]} \times
+$$
+*
+$$
+(\sigma&#94;2)&#94;{-n/2}\left|I + \tilde{X}V\tilde{X}'\right|&#94;{-n/2}\exp{\left[-\frac{1}{2\sigma&#94;2}(\tilde{X} - \tilde{X}\hat{\beta})'\left[I + \tilde{X}V\tilde{X}' \right]&#94;{-1}(\tilde{X} - \tilde{X}\hat{\beta}) \right]} d\sigma
+$$
+*
+$$
+\propto \int \sigma&#94;{-(n - k + 1)/2}\left|I + \tilde{X}V\tilde{X}'\right|&#94;{-n/2} \exp{\left[ -\frac{1}{2\sigma&#94;2}\left( \nu s&#94;2  + (\tilde{X} - \tilde{X}\hat{\beta})'\left[I + \tilde{X}V\tilde{X}' \right]&#94;{-1}(\tilde{X} - \tilde{X}\hat{\beta}) \right) \right]} d\sigma
+$$
+$$
+\propto \left|I + \tilde{X}V\tilde{X}'\right|&#94;{-n/2} \int \sigma&#94;{-(\nu + 1)/2} \exp{\left[-\frac{1}{2\sigma&#94;2}A \right]} d\sigma&#94;2
+$$
+Where $A = \left( \nu s&#94;2  + (\tilde{X} - \tilde{X}\hat{\beta})'\left[I + \tilde{X}V\tilde{X}' \right]&#94;{-1}(\tilde{X} - \tilde{X}\hat{\beta}) \right)$ and we substitute $z = \frac{A}{2\sigma&#94;2}$ as described in &quot;Quadratic form statistics&quot; on wikipedia (see below) to produce
+$$
+p(\tilde{Y}|Y,\tilde{X},X) \propto A&#94;{-\frac{\nu + 1}{2}}\int z&#94;{(\nu - 1)/2}\exp(-z)dz
+$$
+which evaluates to
+$$
+\left[ 1 + \frac{(\tilde{X} - \tilde{X}\hat{\beta})'\left[I + \tilde{X}V\tilde{X}' \right]&#94;{-1}(\tilde{X} - \tilde{X}\hat{\beta})}{\nu s&#94;2} \right]&#94;{-\frac{1}{2}(\nu + 1)}
+$$
+which is a multivariate t-distribution centered at $\tilde{X}\hat{\beta}$ and scaled by $[I+\tilde{X}V\tilde{X}'] s&#94;2$ with $\nu = n - k$ degrees of freedom.</p><p>The posterior predictive density can be used to draw samples in performing simulation of the distribution of $\tilde{Y}$.</p><h5> Credible Intervals and Highest Posterior Density </h5><p>Note that earlier the joint posterior distributions of the parameters were derived for $p(\beta|\sigma&#94;2,Y,X)$ and $p(\sigma&#94;2|Y,X)$.
+Note also that once $\sigma&#94;2$ is marginalised the posterior distribution for $p(\beta|Y,X)$ is</p><p>$$
+p(\beta|Y,X) \propto \left[ 1 + \frac{(\beta - \hat{\beta})'X'X(\beta-\hat{\beta})}{\nu s&#94;2} \right] &#94; {-\frac{1}{2}(\nu + k)}
+$$</p><p>which is a multivariate t-distribution centred at $\hat{\beta}$ and scaled by $X'Xs&#94;2$ with $\nu = n - k$ degrees of freedom.</p><p>Using the posterior distributions it is possible to obtain credible intervals for the parameters and for the distribution of the expected values of the target variable
+at a given critical level $\alpha$.</p><p>The intervals of interest include credible intervals for the mean coefficient parameters $\beta$ under the conditional distiribution $p(\beta|Y,X)$
+and the credible intervals for the uniform variance $\sigma&#94;2$ given $Y$, $p(\sigma&#94;2|Y)$.</p><p>When seeking credible intervals for $\beta$ using the posterior multivariate t-distribution $p(\beta|Y,X)$ when variance is assumed known we can make use of the
+t values for the $1-\alpha$ level at $\nu = n - k$ degrees of freedom scaled by $(X'X)s&#94;2$.</p><p>$$
+\hat{\beta} \pm t_{\nu,\alpha/2}\sqrt{(X'X)s&#94;2}
+$$</p><p>Since $\sigma&#94;2$ is takne to be of uniform variance it is taken as a univariate parameter. The credible interval is for the univeriate $Inverse-\chi&#94;2$ distribution with degree of freedom $\nu$ and scale $s&#94;2$.
+The distribution of $W = \frac{s&#94;2}{\sigma&#94;2}$ has the $\chi&#94;2$ distribution of $\nu$ degrees of freedom, the credible intervals are calculated by
+inverting this quantity such that</p><p>$$
+P\left(u &lt; \frac{s&#94;2}{\sigma&#94;2} &lt; l\right) = 1 - \alpha
+$$</p><p>$$
+P \left(\frac{s&#94;2}{l} &lt; \sigma&#94;2 &lt; \frac{s&#94;2}{u} \right) = 1 - \alpha
+$$
+with $u$ for the upper and $l$ for the lower tail areas.
+This can be expressed as</p><p>$$
+\sigma&#94;2 \pm \frac{s&#94;2}{\chi&#94;2_{\nu,\alpha2}}
+$$</p><h5> Highest Posterior Density </h5><p>The credible interval is extended by the &quot;Highest Posterior Density&quot; (Box and Tiao) which proides a representation of the contours of a multivariate distribution
+at a number of significant levels for $1 - \alpha$. The highest posterior density is a useful tool for the visualisation of credible regions of the parameter space and
+for visual comparison of parameter estimates. The parameter space may be partitioned such that</p><p>$$
+\beta = \begin{bmatrix}
+\beta_1 \\
+\beta_2
+\end{bmatrix} \begin{matrix}
+r \\
+k - r
+\end{matrix}
+$$
+$$
+\hat{\beta} = \begin{bmatrix}
+\hat{\beta}_1 \\
+\hat{\beta}_2
+\end{bmatrix} \begin{matrix}
+r \\
+k - r
+\end{matrix}
+$$
+*
+$$
+X'X = \begin{bmatrix}
+~ &amp; r &amp; k - r \\
+r &amp; X_1'X_1 &amp; X_1'X_2 \\
+k - r &amp; X_2'X_1 &amp; X_2'X_2
+\end{bmatrix}
+$$
+*
+$$
+(X'X)&#94;{-1} = C = \begin{bmatrix}
+~ &amp; r &amp; k - r \\
+r &amp; C_{11} &amp; C_{12} \\
+k - r &amp; C_{21} &amp; C_{22}
+\end{bmatrix}
+$$
+*
+where $r &lt; k$. The subset $\theta_i$ has the property of being normally distributed
+$$
+p(\theta_i|\sigma&#94;2,Y,X) \sim N\left(\hat{\theta_i}, \sigma&#94;2c_{ii}\right)
+$$
+where $c_ii$ is the $ith$ diagonal element of $C$, and the conditional distribution of $p(\theta_2|\theta_1,\sigma&#94;2,Y,X)$ is normally distributed such that
+$$
+p(\theta_2|\theta_1,\sigma&#94;2,Y,X) \sim N\left(\hat{\theta_{2,1}}, \sigma&#94;2(X_2'X)&#94;{-1}\right)
+$$
+where $\hat{\theta_{2,1}} = \hat{\theta_2} + (X_2'X_2)&#94;{-1}X_2X_1(\theta_1 - \hat{\theta_1})$.
+Once partitioned the regions of the highest posterior density can be computed for the parameters $\theta_1$ and $\theta_2$ and charted for comparison.</p><h5> Update Rules </h5><p>The bayesian method allows the model to be adjusted in light of new observations by using the posterior distribution as the prior distribution. This allows the parameters to be adjusted given new evidence. The posterior distribution for the parameters factors into
+$$
+p(\theta,\sigma&#94;2|Y,X) \propto p(\theta|\sigma&#94;2,Y,X) \times p(\sigma&#94;2|Y,X)
+$$
+$$
+p(\theta,\sigma&#94;2|Y,X) \propto N\left(\hat{\beta},\sigma&#94;2V_\beta\right) \times Inverse-\chi&#94;2(\nu,s&#94;2)
+$$
+For the uniform variance it is possible to update first the distribution of $\sigma&#94;2$ and then the distribution of $\beta|\sigma&#94;2$.
+Since in the posterior distribution of $\sigma&#94;2$ we have two parameters the degrees of freedom $\nu = n - k$ and
+the scale $s&#94;2 = \frac{1}{\nu}(Y - X\hat{\beta})'(Y-X\hat{\beta})$.
+When faced with a new set of evidence and observation variables $X_{new}$  with rank $k$ and $Y_{new}$ having variance $\sigma&#94;2$
+we consider the distribution of the variance in the new data to also be the $Inverse-\chi&#94;2$ distribution with $n_{new} - k$ degrees of freedom
+and scale $s'&#94;2 = \frac{1}{n_{new} - k}(Y_{new} - X_{new}\hat{\beta})'(Y_{new} - X_{new}\hat{\beta})$.
+As this is the conjugate prior the update rules (from Boltstad) are as follows.
+$$
+s_{n}&#94;2 = s&#94;2 + \frac{1}{n_{new} - k}(Y_{new} - X_{new}\hat{\beta})'(Y_{new} - X_{new}\hat{\beta})
+$$
+and the degree of freedom
+$$
+\nu_{n} = \nu + (n_{new} - k)
+$$
+This gives the updated distribution for $\sigma&#94;2$ as $Inverse-\chi&#94;2(\nu_{n}, s_{n}&#94;2)$.
+The normal distribution for $p(\theta|\sigma&#94;2,Y,X)$ has the initial parameters
+$$
+\mu_0 = \hat{\beta} = V_\beta X'y
+$$
+$$
+\Lambda_0 = V_\beta
+$$
+where $V_\beta = (X'X)&#94;{-1}$.
+When performing the update with the new data we consider the new data to be normally distributed with uniform variance such that $p(\mu|\Sigma,Y_{new},X_{new}) \sim N\left(\mu,\Sigma/n_{new}\right)$.
+The normal is the conjugate prior so that the update rules can be applied as follows
+$$
+\Lambda_n = \Lambda_0&#94;{-1} + \Sigma&#94;{-1}
+$$
+$$
+\mu_n = (\Lambda_0&#94;{-1} + \Sigma&#94;{-1})&#94;{-1}(\Lambda_0&#94;{-1}\mu_0 + \Sigma&#94;{-1}\bar{Y}_{new})
+$$
+where $\Sigma = (X_{new}'X_{new})$. The updated distribution for $\beta$ is
+$$
+p(\beta|\sigma&#94;2,Y_{new},Y,X_{new},X) \sim N\left(\mu_n, \sigma&#94;2\Lambda_n\right)
+$$
+The updated joint distribution becomes
+$$
+p(\beta,\sigma&#94;2|Y_{new},Y,X_{new},X) \propto  N\left(\mu_n, \sigma&#94;2\Lambda_n\right) \times Inverse-\chi&#94;2(\nu_n, s_n&#94;2)
+$$</p><h5> References </h5><p>For further details see:</p><p>Box George E P,Tiao George C, <i>Bayesian Inference in Statistical Analysis</i>. Wiley 1992.</p><p>Gelman Andrew, Carlin John B, Stern Hal S, Dunson David B, Vehtari Aki, Rubin Donald B, <i>Bayesian Data Analysis</i>. Chapman and Hall/CRC Press Taylor and Francis Group 3rd edition, 2013</p><p>Bishop Christopher M. <i>Pattern Recognition and Machine Learning</i>. Springer Science + Business Media LLC 2006</p><p>Bolstad William M, <i>Introduction to Bayesian Statistics</i>. Wiley 2nd edition, 2007.</p><p>&quot;Quadratic form (statistics)&quot;, <i>Wikipedia</i> 29th July 2015, 5 Nov 2015. <a href="https://en.wikipedia.org/wiki/Quadratic_form_(statistics)">https://en.wikipedia.org/wiki/Quadratic_form_(statistics)</a></p><h5> Implementation and Usage </h5><p>This class implements the bayes linear regression for uniform variance.
+It extends the OLS method and adds an Update method in order to update the generated model in light of new data
+using the update rules above.</p><p>This class</p><p>Created by cd on 17/04/2016.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="BayesLogisticLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.BayesLogisticLeastSquares">BayesLogisticLeastSquares</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="au.id.cxd.math.probability.regression.BayesLinearRegression"><span>BayesLinearRegression</span></li><li class="in" name="au.id.cxd.math.probability.regression.OrdLeastSquares"><span>OrdLeastSquares</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="au.id.cxd.math.probability.regression.BayesLinearRegression#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(inX:breeze.linalg.DenseMatrix[Double],inY:breeze.linalg.DenseVector[Double],m:Int):au.id.cxd.math.probability.regression.BayesLinearRegression"></a>
+      <a id="&lt;init&gt;:BayesLinearRegression"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">BayesLinearRegression</span><span class="params">(<span name="inX">inX: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="inY">inY: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@&lt;init&gt;(inX:breeze.linalg.DenseMatrix[Double],inY:breeze.linalg.DenseVector[Double],m:Int):au.id.cxd.math.probability.regression.BayesLinearRegression" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#Beta" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Beta:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="Beta:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Beta</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@Beta:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The beta parameter is approximated by
+$$
+\hat{\beta} = (X'X)^{-1}X'Y
+$$</p><div class="fullcomment"><div class="comment cmt"><p>The beta parameter is approximated by
+$$
+\hat{\beta} = (X'X)^{-1}X'Y
+$$</p><p>Note we assume that $\beta$ is normally distributed as</p><p>$$
+\hat{\beta} = N( \beta, Q \sigma^2 )
+$$</p><p>where $Q = (X'X)^{-1}$</p><p>$\hat{\beta}$ is the Maximum likelihood estimate of $\beta$.</p><p>Created by cd on 28/06/2014.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#P" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="P:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="P:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">P</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@P:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#X" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="X:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="X:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">X</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@X:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#Y" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Y:breeze.linalg.DenseVector[Double]"></a>
+      <a id="Y:DenseVector[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Y</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@Y:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#Y1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Y1:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="Y1:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Y1</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@Y1:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#alpha" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="alpha:Double"></a>
+      <a id="alpha:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">alpha</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@alpha:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#betaPValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="betaPValue:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="betaPValue:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">betaPValue</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@betaPValue:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the set of p-values for the corresponding betaZScore</p><div class="fullcomment"><div class="comment cmt"><p>the set of p-values for the corresponding betaZScore</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#betaVariance" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="betaVariance:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="betaVariance:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">betaVariance</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@betaVariance:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The variance of beta is given  by</p><div class="fullcomment"><div class="comment cmt"><p>The variance of beta is given  by</p><p>$$
+Var(\beta) = Q \sigma^2
+$$</p><p>with $Q = (X'X)^{-1}$</p><p>The variance parameter for $\sigma^2$ is approximated as</p><p>$$
+\frac{1}{N - p - 1} \sum (y_i - \hat{y_i})^2
+$$</p><p>This value is computed during the training cycle.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#betaZScore" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="betaZScore:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="betaZScore:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">betaZScore</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@betaZScore:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the beta z score
+</p><div class="fullcomment"><div class="comment cmt"><p>the beta z score
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#createPolynomial" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createPolynomial(X1:breeze.linalg.DenseMatrix[Double],m:Int):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="createPolynomial(DenseMatrix[Double],Int):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createPolynomial</span><span class="params">(<span name="X1">X1: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@createPolynomial(X1:breeze.linalg.DenseMatrix[Double],m:Int):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">first determine how many features will be generated
+for the number of columns.</p><div class="fullcomment"><div class="comment cmt"><p>first determine how many features will be generated
+for the number of columns.</p><p>For example if we have cols 2 and degree m = 2
+(a, b) will have (a, b, a&#94;2, 2ab, b&#94;2)  which is 3 extra features</p><p>$$
+(a, b, c)&#94;n = (a, b, b, a&#94;2, ab, b&#94;2, bc, c&#94;2, x&#94;3, x&#94;2b, x&#94;2c, ab&#94;2, abc, ac&#94;2, b&#94;3, c&#94;3, ..., )
+$$</p><p>We can use the multinomial theorem to do the expansion</p><p>the coefficients up to n can be determined using the rule</p><p>$$
+\left( n \choose {k_1, k_2, k_3, ..., k_m} \right)
+$$</p><p>where for any combination of $k$ $\sum_{i=1}&#94;m k$ must equal $n$.</p><p>$m$ represents the number of columns in matrix $X$ and has</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#criticalBetaZValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="criticalBetaZValue:Double"></a>
+      <a id="criticalBetaZValue:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">criticalBetaZValue</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@criticalBetaZValue:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the critical value for beta to use when testing at the alpha level supplied
+this is the reject region
+{ betaZ &gt; criticalBetaZValue }
+meaning to reject that beta equals 0
+</p><div class="fullcomment"><div class="comment cmt"><p>the critical value for beta to use when testing at the alpha level supplied
+this is the reject region
+{ betaZ &gt; criticalBetaZValue }
+meaning to reject that beta equals 0
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#criticalPValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="criticalPValue:Double"></a>
+      <a id="criticalPValue:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">criticalPValue</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@criticalPValue:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the p-value that corresponds to the critical beta z value</p><div class="fullcomment"><div class="comment cmt"><p>the p-value that corresponds to the critical beta z value</p><p>in this case we reject the null hypothesis that $\Beta = 0$
+when the pvalue for $f(\Beta_z) &lt; f(Z_\alpha)$
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.BayesLinearRegression#inX" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="inX:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="inX:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inX</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@inX:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.regression.BayesLinearRegression#inY" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="inY:breeze.linalg.DenseVector[Double]"></a>
+      <a id="inY:DenseVector[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inY</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@inY:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.BayesLinearRegression#m" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="m:Int"></a>
+      <a id="m:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">m</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@m:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.regression.BayesLinearRegression">BayesLinearRegression</a> → <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#mse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mse:Double"></a>
+      <a id="mse:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mse</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@mse:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the mse of the regression model
+</p><div class="fullcomment"><div class="comment cmt"><p>the mse of the regression model
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#multWeights" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="multWeights(B:breeze.linalg.DenseMatrix[Double],X1:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="multWeights(DenseMatrix[Double],DenseMatrix[Double]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">multWeights</span><span class="params">(<span name="B">B: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="X1">X1: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@multWeights(B:breeze.linalg.DenseMatrix[Double],X1:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">http://brisbanepowerhouse.org/events/2016/06/30/daas-near-death-experience/
+multiply the factor vector by the
+</p><div class="fullcomment"><div class="comment cmt"><p>http://brisbanepowerhouse.org/events/2016/06/30/daas-near-death-experience/
+multiply the factor vector by the
+</p></div><dl class="paramcmts block"><dt class="param">B</dt><dd class="cmt"><p>beta matrix.</p></dd><dt class="param">X1</dt><dd class="cmt"><p>matrix of factors</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#powers" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="powers:scala.collection.immutable.IndexedSeq[Double]"></a>
+      <a id="powers:IndexedSeq[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">powers</span><span class="result">: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@powers:scala.collection.immutable.IndexedSeq[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(X1:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="predict(DenseMatrix[Double]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="X1">X1: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@predict(X1:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">predict the result of multiplying the beta estimater against a new vector X</p><div class="fullcomment"><div class="comment cmt"><p>predict the result of multiplying the beta estimater against a new vector X</p><p>$$
+\hat{Y} = \beta_0 + \sum X_i \beta_j
+$$</p><p>$$
+\hat{Y} = X\beta
+$$
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(x:Double):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="predict(Double):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@predict(x:Double):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">having trained the model predict a value for the new x input.</p><div class="fullcomment"><div class="comment cmt"><p>having trained the model predict a value for the new x input.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#predictSeq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predictSeq(x:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="predictSeq(DenseVector[Double]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predictSeq</span><span class="params">(<span name="x">x: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@predictSeq(x:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">predicts a single column sequence for X
+the length of X represents the rows of each sample
+</p><div class="fullcomment"><div class="comment cmt"><p>predicts a single column sequence for X
+the length of X represents the rows of each sample
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#pseudoInverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pseudoInverse:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="pseudoInverse:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pseudoInverse</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@pseudoInverse:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the pseudo inverse of  the covariance variance matrix
+</p><div class="fullcomment"><div class="comment cmt"><p>the pseudo inverse of  the covariance variance matrix
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#residuals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="residuals:breeze.linalg.DenseVector[Double]"></a>
+      <a id="residuals:DenseVector[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">residuals</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@residuals:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the residuals resulting from the training process.</p><div class="fullcomment"><div class="comment cmt"><p>the residuals resulting from the training process.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#squaredError" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="squaredError(T:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):Double"></a>
+      <a id="squaredError(DenseMatrix[Double],DenseMatrix[Double]):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">squaredError</span><span class="params">(<span name="T">T: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="Y">Y: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@squaredError(T:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">calculate the squared error between the target column vector and the function column vector
+vectors must have same dimension
+</p><div class="fullcomment"><div class="comment cmt"><p>calculate the squared error between the target column vector and the function column vector
+vectors must have same dimension
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#train" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="train():(breeze.linalg.DenseMatrix[Double],Double)"></a>
+      <a id="train():(DenseMatrix[Double],Double)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">train</span><span class="params">()</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@train():(breeze.linalg.DenseMatrix[Double],Double)" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">train the least squares model.</p><div class="fullcomment"><div class="comment cmt"><p>train the least squares model.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.BayesLinearRegression#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update(newX:breeze.linalg.DenseMatrix[Double],newY:breeze.linalg.DenseVector[Double]):(breeze.linalg.DenseMatrix[Double],Double)"></a>
+      <a id="update(DenseMatrix[Double],DenseVector[Double]):(DenseMatrix[Double],Double)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="params">(<span name="newX">newX: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="newY">newY: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@update(newX:breeze.linalg.DenseMatrix[Double],newY:breeze.linalg.DenseVector[Double]):(breeze.linalg.DenseMatrix[Double],Double)" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">implement the update rules for the linear regression model after already having trained the model.</p><div class="fullcomment"><div class="comment cmt"><p>implement the update rules for the linear regression model after already having trained the model.</p><p>This will update the parameter matrix Beta and the variance.</p><p>it will not predict against the data, after updating use the predict methods to get a prediction and calculate residuals.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#updateWeights" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="updateWeights(F:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="updateWeights(DenseMatrix[Double],DenseMatrix[Double]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateWeights</span><span class="params">(<span name="F">F: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="Y">Y: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@updateWeights(F:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">update the beta parameter using the inverse of the covariance matrix and the residuals</p><div class="fullcomment"><div class="comment cmt"><p>update the beta parameter using the inverse of the covariance matrix and the residuals</p><p>The beta parameter is approximated by
+$$
+\hat{\beta} = (X'X)^{-1}X'Y
+$$
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#variance" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="variance:Double"></a>
+      <a id="variance:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">variance</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@variance:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The variance parameter for $\sigma^2$ is approximated as</p><div class="fullcomment"><div class="comment cmt"><p>The variance parameter for $\sigma^2$ is approximated as</p><p>$$
+\frac{1}{N - p - 1} \sum (y_i - \hat{y_i})^2
+$$</p><p>This value is computed during the training cycle.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="au.id.cxd.math.probability.regression.OrdLeastSquares">
+              <h3>Inherited from <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

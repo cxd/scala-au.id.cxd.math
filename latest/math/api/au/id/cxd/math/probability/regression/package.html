@@ -1,0 +1,614 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>regression - au.id.cxd.math.probability.regression</title>
+          <meta name="description" content="regression - au.id.cxd.math.probability.regression" />
+          <meta name="keywords" content="regression au.id.cxd.math.probability.regression" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'au.id.cxd.math.probability.regression.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.probability">probability</a></p>
+        <h1>regression</h1><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">regression</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="au.id.cxd.math.probability.regression.BayesLinearRegression" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BayesLinearRegressionextendsOrdLeastSquares"></a>
+      <a id="BayesLinearRegression:BayesLinearRegression"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BayesLinearRegression.html"><span class="name">BayesLinearRegression</span></a><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@BayesLinearRegressionextendsOrdLeastSquares" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><h5> The Bayesian linear regression for assumed uniform variance. </h5><p>Bayesian Linear Regression extends the Ordinary Least Squares Regression by accounting for the uncertainty about the parameters within the model to generate a posterior distribution for the parameters and a posterior predictive distribution for the target variable. The bayesian regression model makes specific assumptions about the location and variance parameters and about the distributions of each and provides update rules for adjusting the model in light of new examples.</p><p>The method extends the standard linear regression where</p><p>$$
+p(Y|\beta,\sigma&#94;2) \sim N(\mu = X\beta, \Sigma&#94;{-1} = \sigma&#94;2 I)
+$$</p><p>Box and Tiao show the distribution to be</p><p>$$
+p(Y|\beta,\sigma&#94;2) = \left( \frac{1}{\sqrt{2\pi}} \right)&#94;n \sigma&#94;{-n} \exp{ \left[ -\frac{1}{2\sigma&#94;2} \left[ vs&#94;2 + (\beta - \hat{\beta})'X'X(\beta - \hat{\beta}) \right]  \right] }
+$$</p><p>with</p><p>$$
+v = n - k
+$$
+$$
+s&#94;2 = (1/v)(Y - \hat{Y})'(Y-\hat{Y})
+$$</p><p>$$
+\hat{\beta} = (X'X)&#94;{-1}X'Y
+$$</p><p>$$
+\hat{Y} = X\hat{\beta}
+$$</p><p>The uniform variance $\sigma&#94;2$ estimates the error such that</p><p>$$
+p(\epsilon|\sigma&#94;2) \sim N(0, \sigma&#94;2 I)
+$$</p><p>The conditional distribution for $Y$ is expressed as</p><p>$$
+p(Y|\beta, \sigma&#94;2, X) \sim N(X\beta, \sigma&#94;2I)
+$$</p><p>The joint uninformative prior distribution for the parameters $\beta$ and $\sigma&#94;2$ with uniform variance is given as</p><p>$$
+p(\beta, \sigma&#94;2 | X) \propto  \sigma&#94;{-2}
+$$</p><h5> Posterior distribution for parameters </h5><p>The posterior distribution of the parameters is defined as</p><p>$$
+p(\beta,\sigma&#94;2|Y) \propto f(Y|\beta,\sigma&#94;2) \times p(\beta,\sigma&#94;2)
+$$</p><p>under uniform variance this is</p><p>$$
+\propto \sigma&#94;{-(v+1)} \exp{ \left[ -\frac{1}{2\sigma&#94;2} \left[vs&#94;2 + (\beta - \hat{\beta})'(X'X)(\beta - \hat{\beta}) \right]  \right] }
+$$</p><p>Gelman demonstrates that the posterior factorises into</p><p>$$
+\propto   \exp{ \left[ (\beta - \hat{\beta})'(X'X)(\beta - \hat{\beta}) \right] } \times \sigma&#94;{-(v+1)} \exp{ \left[ \frac{vs&#94;2}{2\sigma&#94;2} \right]}
+$$</p><p>$$
+N \left(\hat{\beta}, \sigma&#94;2(X'X)&#94;{-1} \right) \times Inverse-\chi&#94;2 (v,s&#94;2)
+$$</p><p>Note that $X$ will have the constraint that the number of rows in $X$, $n$ will be greater than the number of columns $k$ and that the columns of $X$ should be linearly independent.</p><h5> Joint Posterior predictive distribution </h5><p>The joint posterior predictive distribution for new examples $\tilde{Y}$ and $\tilde{X}$ is dependent on the previous conditional distribution of the parameters and the
+previous data $Y$ and $X$.</p><p>$$
+p(\tilde{Y}|\beta,\sigma&#94;2,\tilde{X},Y,X) = f(\tilde{Y}|\beta,\sigma&#94;2,\tilde{X}) \times p(\beta,\sigma&#94;2|Y,X)
+$$</p><p>Consider that the conditional distribution of</p><p>$$
+p(\tilde{Y}|\beta,\sigma&#94;2,\tilde{X},Y,X) \sim N(\tilde{X}\beta,\sigma&#94;2 I)
+$$</p><p>Then the likelihood $\times$ the posterior distribution for the parameters is</p><p>$$
+\propto \sigma&#94;{-n} \exp{ \left[ - \frac{1}{2\sigma&#94;2}(\tilde{Y} - \tilde{X}\beta)'(\tilde{Y} - \tilde{X}\beta)  \right] } \times \sigma&#94;{-(n+1)}\exp{\left[ -\frac{1}{2\sigma&#94;2}(Y - X\beta)'(Y - X\beta) \right]  }
+$$</p><p>$$
+\propto \sigma&#94;{-(n + \tilde{n} + 1)} \exp{\left[ -\frac{1}{2\sigma&#94;2} \left( (\tilde{Y} - \tilde{X}\beta)'(\tilde{Y} - \tilde{X}\beta) + (Y-X\beta)'(Y-X\beta)  \right)  \right]}
+$$</p><p>In order to obtain the marginal distribution of $\tilde{Y}$, Gelman uses two steps firstly by marginalising $\beta$ and then by marginalising $\sigma$.</p><p>Using the conditional expectation $\beta$ the parameters for $\mu$ and $\sigma$ of the distribution for $\tilde{Y}$ are derived as</p><p>$$
+E\left[\tilde{Y}|\sigma,Y\right] = E\left[ E\left[ \tilde{Y}|\beta,\sigma,Y\right]\right]
+$$</p><p>$$
+E\left[\tilde{Y}|\sigma,Y\right] = E\left[ \tilde{X} \beta | \sigma, Y \right]
+$$</p><p>$$
+\mu = \tilde{X} \hat{\beta}
+$$</p><p>And for the variance</p><p>$$
+Var\left[\tilde{Y}|\sigma,Y\right] = E\left[ Var\left[\tilde{Y}|\beta,\sigma,Y\right] \right] + Var\left[ E\left[\tilde{Y}|\beta,\sigma,Y\right]  \right]
+$$
+$$
+Var\left[\tilde{Y}|\sigma,Y\right] = E[\sigma&#94;2I|\sigma,Y] + Var[\tilde{X}\beta|\sigma,Y]
+$$
+$$
+Var\left[\tilde{Y}|\sigma,Y\right] = (I + \tilde{X}V_\beta\tilde{X}')\sigma&#94;2
+$$
+where $V_\beta = (X'X)&#94;{-1}$</p><p>The posterior density conditioned on $\sigma$ is</p><p>$$
+p(\tilde{Y}|\sigma,Y\tilde{X},X) \sim N\left( \tilde{X}\hat{\beta},  (I + \tilde{X}V_\beta\tilde{X}')\sigma&#94;2 \right)
+$$</p><p>The next step is to marginalise over $\sigma$ to obtain the predictive density.</p><p>$$
+p(\tilde{Y}|\tilde{X},Y,X) \propto \int p(\tilde{Y}|\sigma,\tilde{X},Y,X) \times p(\sigma|Y,X) d\sigma
+$$
+*
+$$
+p(\tilde{Y}|\tilde{X},Y,X) \propto \int \sigma&#94;{-(n - k + 1)} \exp{\left[ \frac{\nu s&#94;2}{2\sigma&#94;2} \right]} \times
+$$
+*
+$$
+(\sigma&#94;2)&#94;{-n/2}\left|I + \tilde{X}V\tilde{X}'\right|&#94;{-n/2}\exp{\left[-\frac{1}{2\sigma&#94;2}(\tilde{X} - \tilde{X}\hat{\beta})'\left[I + \tilde{X}V\tilde{X}' \right]&#94;{-1}(\tilde{X} - \tilde{X}\hat{\beta}) \right]} d\sigma
+$$
+*
+$$
+\propto \int \sigma&#94;{-(n - k + 1)/2}\left|I + \tilde{X}V\tilde{X}'\right|&#94;{-n/2} \exp{\left[ -\frac{1}{2\sigma&#94;2}\left( \nu s&#94;2  + (\tilde{X} - \tilde{X}\hat{\beta})'\left[I + \tilde{X}V\tilde{X}' \right]&#94;{-1}(\tilde{X} - \tilde{X}\hat{\beta}) \right) \right]} d\sigma
+$$
+$$
+\propto \left|I + \tilde{X}V\tilde{X}'\right|&#94;{-n/2} \int \sigma&#94;{-(\nu + 1)/2} \exp{\left[-\frac{1}{2\sigma&#94;2}A \right]} d\sigma&#94;2
+$$
+Where $A = \left( \nu s&#94;2  + (\tilde{X} - \tilde{X}\hat{\beta})'\left[I + \tilde{X}V\tilde{X}' \right]&#94;{-1}(\tilde{X} - \tilde{X}\hat{\beta}) \right)$ and we substitute $z = \frac{A}{2\sigma&#94;2}$ as described in &quot;Quadratic form statistics&quot; on wikipedia (see below) to produce
+$$
+p(\tilde{Y}|Y,\tilde{X},X) \propto A&#94;{-\frac{\nu + 1}{2}}\int z&#94;{(\nu - 1)/2}\exp(-z)dz
+$$
+which evaluates to
+$$
+\left[ 1 + \frac{(\tilde{X} - \tilde{X}\hat{\beta})'\left[I + \tilde{X}V\tilde{X}' \right]&#94;{-1}(\tilde{X} - \tilde{X}\hat{\beta})}{\nu s&#94;2} \right]&#94;{-\frac{1}{2}(\nu + 1)}
+$$
+which is a multivariate t-distribution centered at $\tilde{X}\hat{\beta}$ and scaled by $[I+\tilde{X}V\tilde{X}'] s&#94;2$ with $\nu = n - k$ degrees of freedom.</p><p>The posterior predictive density can be used to draw samples in performing simulation of the distribution of $\tilde{Y}$.</p><h5> Credible Intervals and Highest Posterior Density </h5><p>Note that earlier the joint posterior distributions of the parameters were derived for $p(\beta|\sigma&#94;2,Y,X)$ and $p(\sigma&#94;2|Y,X)$.
+Note also that once $\sigma&#94;2$ is marginalised the posterior distribution for $p(\beta|Y,X)$ is</p><p>$$
+p(\beta|Y,X) \propto \left[ 1 + \frac{(\beta - \hat{\beta})'X'X(\beta-\hat{\beta})}{\nu s&#94;2} \right] &#94; {-\frac{1}{2}(\nu + k)}
+$$</p><p>which is a multivariate t-distribution centred at $\hat{\beta}$ and scaled by $X'Xs&#94;2$ with $\nu = n - k$ degrees of freedom.</p><p>Using the posterior distributions it is possible to obtain credible intervals for the parameters and for the distribution of the expected values of the target variable
+at a given critical level $\alpha$.</p><p>The intervals of interest include credible intervals for the mean coefficient parameters $\beta$ under the conditional distiribution $p(\beta|Y,X)$
+and the credible intervals for the uniform variance $\sigma&#94;2$ given $Y$, $p(\sigma&#94;2|Y)$.</p><p>When seeking credible intervals for $\beta$ using the posterior multivariate t-distribution $p(\beta|Y,X)$ when variance is assumed known we can make use of the
+t values for the $1-\alpha$ level at $\nu = n - k$ degrees of freedom scaled by $(X'X)s&#94;2$.</p><p>$$
+\hat{\beta} \pm t_{\nu,\alpha/2}\sqrt{(X'X)s&#94;2}
+$$</p><p>Since $\sigma&#94;2$ is takne to be of uniform variance it is taken as a univariate parameter. The credible interval is for the univeriate $Inverse-\chi&#94;2$ distribution with degree of freedom $\nu$ and scale $s&#94;2$.
+The distribution of $W = \frac{s&#94;2}{\sigma&#94;2}$ has the $\chi&#94;2$ distribution of $\nu$ degrees of freedom, the credible intervals are calculated by
+inverting this quantity such that</p><p>$$
+P\left(u &lt; \frac{s&#94;2}{\sigma&#94;2} &lt; l\right) = 1 - \alpha
+$$</p><p>$$
+P \left(\frac{s&#94;2}{l} &lt; \sigma&#94;2 &lt; \frac{s&#94;2}{u} \right) = 1 - \alpha
+$$
+with $u$ for the upper and $l$ for the lower tail areas.
+This can be expressed as</p><p>$$
+\sigma&#94;2 \pm \frac{s&#94;2}{\chi&#94;2_{\nu,\alpha2}}
+$$</p><h5> Highest Posterior Density </h5><p>The credible interval is extended by the &quot;Highest Posterior Density&quot; (Box and Tiao) which proides a representation of the contours of a multivariate distribution
+at a number of significant levels for $1 - \alpha$. The highest posterior density is a useful tool for the visualisation of credible regions of the parameter space and
+for visual comparison of parameter estimates. The parameter space may be partitioned such that</p><p>$$
+\beta = \begin{bmatrix}
+\beta_1 \\
+\beta_2
+\end{bmatrix} \begin{matrix}
+r \\
+k - r
+\end{matrix}
+$$
+$$
+\hat{\beta} = \begin{bmatrix}
+\hat{\beta}_1 \\
+\hat{\beta}_2
+\end{bmatrix} \begin{matrix}
+r \\
+k - r
+\end{matrix}
+$$
+*
+$$
+X'X = \begin{bmatrix}
+~ &amp; r &amp; k - r \\
+r &amp; X_1'X_1 &amp; X_1'X_2 \\
+k - r &amp; X_2'X_1 &amp; X_2'X_2
+\end{bmatrix}
+$$
+*
+$$
+(X'X)&#94;{-1} = C = \begin{bmatrix}
+~ &amp; r &amp; k - r \\
+r &amp; C_{11} &amp; C_{12} \\
+k - r &amp; C_{21} &amp; C_{22}
+\end{bmatrix}
+$$
+*
+where $r &lt; k$. The subset $\theta_i$ has the property of being normally distributed
+$$
+p(\theta_i|\sigma&#94;2,Y,X) \sim N\left(\hat{\theta_i}, \sigma&#94;2c_{ii}\right)
+$$
+where $c_ii$ is the $ith$ diagonal element of $C$, and the conditional distribution of $p(\theta_2|\theta_1,\sigma&#94;2,Y,X)$ is normally distributed such that
+$$
+p(\theta_2|\theta_1,\sigma&#94;2,Y,X) \sim N\left(\hat{\theta_{2,1}}, \sigma&#94;2(X_2'X)&#94;{-1}\right)
+$$
+where $\hat{\theta_{2,1}} = \hat{\theta_2} + (X_2'X_2)&#94;{-1}X_2X_1(\theta_1 - \hat{\theta_1})$.
+Once partitioned the regions of the highest posterior density can be computed for the parameters $\theta_1$ and $\theta_2$ and charted for comparison.</p><h5> Update Rules </h5><p>The bayesian method allows the model to be adjusted in light of new observations by using the posterior distribution as the prior distribution. This allows the parameters to be adjusted given new evidence. The posterior distribution for the parameters factors into
+$$
+p(\theta,\sigma&#94;2|Y,X) \propto p(\theta|\sigma&#94;2,Y,X) \times p(\sigma&#94;2|Y,X)
+$$
+$$
+p(\theta,\sigma&#94;2|Y,X) \propto N\left(\hat{\beta},\sigma&#94;2V_\beta\right) \times Inverse-\chi&#94;2(\nu,s&#94;2)
+$$
+For the uniform variance it is possible to update first the distribution of $\sigma&#94;2$ and then the distribution of $\beta|\sigma&#94;2$.
+Since in the posterior distribution of $\sigma&#94;2$ we have two parameters the degrees of freedom $\nu = n - k$ and
+the scale $s&#94;2 = \frac{1}{\nu}(Y - X\hat{\beta})'(Y-X\hat{\beta})$.
+When faced with a new set of evidence and observation variables $X_{new}$  with rank $k$ and $Y_{new}$ having variance $\sigma&#94;2$
+we consider the distribution of the variance in the new data to also be the $Inverse-\chi&#94;2$ distribution with $n_{new} - k$ degrees of freedom
+and scale $s'&#94;2 = \frac{1}{n_{new} - k}(Y_{new} - X_{new}\hat{\beta})'(Y_{new} - X_{new}\hat{\beta})$.
+As this is the conjugate prior the update rules (from Boltstad) are as follows.
+$$
+s_{n}&#94;2 = s&#94;2 + \frac{1}{n_{new} - k}(Y_{new} - X_{new}\hat{\beta})'(Y_{new} - X_{new}\hat{\beta})
+$$
+and the degree of freedom
+$$
+\nu_{n} = \nu + (n_{new} - k)
+$$
+This gives the updated distribution for $\sigma&#94;2$ as $Inverse-\chi&#94;2(\nu_{n}, s_{n}&#94;2)$.
+The normal distribution for $p(\theta|\sigma&#94;2,Y,X)$ has the initial parameters
+$$
+\mu_0 = \hat{\beta} = V_\beta X'y
+$$
+$$
+\Lambda_0 = V_\beta
+$$
+where $V_\beta = (X'X)&#94;{-1}$.
+When performing the update with the new data we consider the new data to be normally distributed with uniform variance such that $p(\mu|\Sigma,Y_{new},X_{new}) \sim N\left(\mu,\Sigma/n_{new}\right)$.
+The normal is the conjugate prior so that the update rules can be applied as follows
+$$
+\Lambda_n = \Lambda_0&#94;{-1} + \Sigma&#94;{-1}
+$$
+$$
+\mu_n = (\Lambda_0&#94;{-1} + \Sigma&#94;{-1})&#94;{-1}(\Lambda_0&#94;{-1}\mu_0 + \Sigma&#94;{-1}\bar{Y}_{new})
+$$
+where $\Sigma = (X_{new}'X_{new})$. The updated distribution for $\beta$ is
+$$
+p(\beta|\sigma&#94;2,Y_{new},Y,X_{new},X) \sim N\left(\mu_n, \sigma&#94;2\Lambda_n\right)
+$$
+The updated joint distribution becomes
+$$
+p(\beta,\sigma&#94;2|Y_{new},Y,X_{new},X) \propto  N\left(\mu_n, \sigma&#94;2\Lambda_n\right) \times Inverse-\chi&#94;2(\nu_n, s_n&#94;2)
+$$</p><h5> References </h5><p>For further details see:</p><p>Box George E P,Tiao George C, <i>Bayesian Inference in Statistical Analysis</i>. Wiley 1992.</p><p>Gelman Andrew, Carlin John B, Stern Hal S, Dunson David B, Vehtari Aki, Rubin Donald B, <i>Bayesian Data Analysis</i>. Chapman and Hall/CRC Press Taylor and Francis Group 3rd edition, 2013</p><p>Bishop Christopher M. <i>Pattern Recognition and Machine Learning</i>. Springer Science + Business Media LLC 2006</p><p>Bolstad William M, <i>Introduction to Bayesian Statistics</i>. Wiley 2nd edition, 2007.</p><p>&quot;Quadratic form (statistics)&quot;, <i>Wikipedia</i> 29th July 2015, 5 Nov 2015. <a href="https://en.wikipedia.org/wiki/Quadratic_form_(statistics)">https://en.wikipedia.org/wiki/Quadratic_form_(statistics)</a></p><h5> Implementation and Usage </h5><p>This class implements the bayes linear regression for uniform variance.
+It extends the OLS method and adds an Update method in order to update the generated model in light of new data
+using the update rules above.</p><p>This class</p><p>Created by cd on 17/04/2016.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.regression.BayesLogisticLeastSquares" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BayesLogisticLeastSquaresextendsBayesLinearRegressionwithLogisticRegressor"></a>
+      <a id="BayesLogisticLeastSquares:BayesLogisticLeastSquares"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BayesLogisticLeastSquares.html"><span class="name">BayesLogisticLeastSquares</span></a><span class="result"> extends <a href="BayesLinearRegression.html" class="extype" name="au.id.cxd.math.probability.regression.BayesLinearRegression">BayesLinearRegression</a> with <a href="LogisticRegressor.html" class="extype" name="au.id.cxd.math.probability.regression.LogisticRegressor">LogisticRegressor</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@BayesLogisticLeastSquaresextendsBayesLinearRegressionwithLogisticRegressor" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The bayes logistic least squares mixes in the
+logistic transform and estimation functions with the
+underlying regression method provided by the bayesian linear regressor.</p><div class="fullcomment"><div class="comment cmt"><p>The bayes logistic least squares mixes in the
+logistic transform and estimation functions with the
+underlying regression method provided by the bayesian linear regressor.</p><p>This enables the addition of the &quot;update&quot; method to generate the posterior distributions.</p><p>Created by cd on 18/06/2016.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.regression.LeastSquares" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LeastSquaresextendsAnyRef"></a>
+      <a id="LeastSquares:LeastSquares"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LeastSquares.html"><span class="name">LeastSquares</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@LeastSquaresextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Least squares is a simpler form of regression approximating $Y$ as</p><p>$$
+  \hat{Y} = \beta_0 + \sum X_i \beta_j
+$$</p><p>$$
+  \hat{Y} = X\beta
+$$</p><p>The parameter $\beta$ is estimated using the sample instances and the sample outputs as shown</p><p>$$
+\hat{\beta} = (X'X)^{-1}X'Y
+$$</p><p>$\hat{\beta}$ is assumed to have a normal distribution with mean $\beta$</p><p>and variance $Q \sigma^2$</p><p>where $Q = (X'X)^{-1}$.</p><p>The residual squared error can be calculated as:</p><p>$$
+RSS(\beta) = \sum (Y_i - \hat{Y_i})^2
+$$</p><p>The residuals $\epsilon$ are assumed distributed as $N(0,\sigma^2)$</p><p>Inference on $\beta$ can be performed using the standardised coefficient z-score for $\beta$.</p><p>$$
+z_j = \frac{\hat{\beta_j}}{\hat{\sigma}\sqrt{v_j}}
+$$</p><p>The value for $v_j$ is derived from the $jth$ position on diagonal from the matrix $(X'X)^{-1}$.</p><p>The Z-score from the normal distribution at a corresponding alpha level can be used to form
+the associated confidence interval for $\beta$ at $p-value = z$ at the $1 - \alpha$ level .</p><p>$$
+\hat{\beta_j} \pm z^{(1-\alpha)} \sqrt{v} \hat{\sigma}
+$$</p><p>As $\beta$ defines the coefficients of the $pth$ attribute in $X$ it is possible to test whether
+the $kth$ coefficient can be set to $0$ (in which case the contribution of $X_k$ to estimating $Y$ is not significant)
+by using an F-score.
+Let $k_1$ equal the $k$ parameters and $k_0$ be the a smaller model where $k_1 - k_0$ parameters are set to $0$
+the F-score can be calculated as</p><p>$$
+  F = \frac{(RSS_0 - RSS_1)/(k_1 - k_0)}{RSS_1/(N - k_1 - 1)}
+$$</p><p>this statistic can be used to determine if the residual sum of squares error is changed significantly
+by setting the $k_1 - k_0$ parameters to 0. If the RSS decreases, and the F-score can be tested
+against a corresponding p-value for an associated $\alpha$ level to determine if the improvement
+is significant change. If so, the corresponding attributes contribution in determining $Y$ is marginal.</p><p>For further details refer to</p><p>Hastie, T. Tibshirani, R. Friedman, J. The Elements of Statistical Learning, Second Ed. Springer 2009.</p><p>Created by cd on 18/10/14.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.regression.LogisticLeastSquares" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LogisticLeastSquaresextendsOrdLeastSquareswithLogisticRegressor"></a>
+      <a id="LogisticLeastSquares:LogisticLeastSquares"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LogisticLeastSquares.html"><span class="name">LogisticLeastSquares</span></a><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a> with <a href="LogisticRegressor.html" class="extype" name="au.id.cxd.math.probability.regression.LogisticRegressor">LogisticRegressor</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@LogisticLeastSquaresextendsOrdLeastSquareswithLogisticRegressor" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The logistic least squares implements the logistic regression using the
+ordinary least squares as the regression method.</p><div class="fullcomment"><div class="comment cmt"><p>The logistic least squares implements the logistic regression using the
+ordinary least squares as the regression method.</p><p>The logistic regression provides the estimate of $P(y|X)$ which determines the probability
+that the data point is a member of either class $$y \in 0,1$$ for the predictor variables.</p><p>$$
+P(y = 1|X) = \frac{1}{\left( 1 + e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k )} \right)}
+$$</p><p>conversely</p><p>$$
+P(y = 0|X) = \frac{ e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k ) }{ { ( 1 + e&#94;{ (-\beta_0 + \sum_{k} \beta_k x_k ) } ) }
+$$</p><p>The logit function for the odds ratio is the transformation of the above and is estimated as</p><p>$$
+log \frac{P(y=0|X)}{P(y=1|X)} = \beta_0 + \beta&#94;T X
+$$</p><p>The logistic regression proceeds by estimating the logit function, once estimated the class probability
+can be estimated using the logistic function.</p><p>This implementation mixes in the LogisticRegressor trait with the OrdLeastSquares implementation.</p><p>Created by cd on 1/05/2016.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.regression.LogisticRegressor" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LogisticRegressorextendsAnyRef"></a>
+      <a id="LogisticRegressor:LogisticRegressor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LogisticRegressor.html"><span class="name">LogisticRegressor</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@LogisticRegressorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The logistic regressor is layered ontop of the family of least squares regressors
+the output function is modified by means of the logistic function.</p><div class="fullcomment"><div class="comment cmt"><p>The logistic regressor is layered ontop of the family of least squares regressors
+the output function is modified by means of the logistic function.</p><p>The logistic least squares implements the logistic regression using the
+ordinary least squares as the regression method.</p><p>The logistic regression provides the estimate of $P(y|X)$ which determines the probability
+that the data point is a member of either class $$y \in 0,1$$ for the predictor variables.</p><p>$$
+P(y = 1|X) = \frac{1}{\left( 1 + e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k )} \right)}
+$$</p><p>conversely</p><p>$$
+P(y = 0|X) = \frac{ e&#94;{(-\beta_0 + \sum_{k} \beta_k x_k ) }{ { ( 1 + e&#94;{ (-\beta_0 + \sum_{k} \beta_k x_k ) } ) }
+$$</p><p>The logit function for the odds ratio is the transformation of the above and is estimated as</p><p>$$
+log \frac{P(y=0|X)}{P(y=1|X)} = \beta_0 + \beta&#94;T X
+$$</p><p>The logistic regression proceeds by estimating the logit function, once estimated the class probability
+can be estimated using the logistic function.</p><p>Created by cd on 18/06/2016.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OrdLeastSquaresextendsSerializable"></a>
+      <a id="OrdLeastSquares:OrdLeastSquares"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="OrdLeastSquares.html"><span class="name">OrdLeastSquares</span></a><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@OrdLeastSquaresextendsSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Least squares is a simpler form of regression approximating $Y$ as</p><p>$$
+\hat{Y} = \beta_0 + \sum X_i \beta_j
+$$</p><p>$$
+\hat{Y} = X\beta
+$$</p><p>The parameter $\beta$ is estimated using the sample instances and the sample outputs as shown</p><p>$$
+\hat{\beta} = (X'X)^{-1}X'Y
+$$</p><p>$\hat{\beta}$ is assumed to have a normal distribution with mean $\beta$</p><p>and variance $Q \sigma^2$</p><p>where $Q = (X'X)^{-1}$.</p><p>The residual squared error can be calculated as:</p><p>$$
+RSS(\beta) = \sum (Y_i - \hat{Y_i})^2
+$$</p><p>The residuals $\epsilon$ are assumed distributed as $N(0,\sigma^2)$</p><p>Inference on $\beta$ can be performed using the standardised coefficient z-score for $\beta$.</p><p>$$
+z_j = \frac{\hat{\beta_j}}{\hat{\sigma}\sqrt{v_j}}
+$$</p><p>The value for $v_j$ is derived from the $jth$ position on diagonal from the matrix $(X'X)^{-1}$.</p><p>The Z-score from the normal distribution at a corresponding alpha level can be used to form
+the associated confidence interval for $\beta$ at $p-value = z$ at the $1 - \alpha$ level .</p><p>$$
+\hat{\beta_j} \pm z^{(1-\alpha)} \sqrt{v} \hat{\sigma}
+$$</p><p>We can test against the null hypothesis that $\beta_j = 0$ and therefore the corresponding $X_{ij}$ does
+not contribute to the target variable (given the coefficient is 0).
+A t-distribution of N - p - 1 degrees of freedom can be used forming the confidence interval
+however as the sample size increases the difference between the t-distribution and normal distribution
+becomes negligable (see Hastie), so the normal distribution is used defining the confidence interval</p><p>$$
+\left(\beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}, \beta_j - z_{1-\alpha}v&#94;{1/2}\hat{\sigma}\right)
+$$</p><p>at the critical $\alpha$ level for example 0.05 for a 95% confidence interval.
+Those values with a very small p-value would reject the null hypothesis or if (|Z| &gt; z_{1-\alpha}).</p><p>$$
+H_0: \beta_j = 0
+$$
+$$
+H_1: \beta_j != 0
+$$</p><p>As $\beta$ defines the coefficients of the $pth$ attribute in $X$ it is possible to test whether
+the $kth$ coefficient can be set to $0$ (in which case the contribution of $X_k$ to estimating $Y$ is not significant)
+by using an F-score.
+Let $k_1$ equal the $k$ parameters and $k_0$ be the a smaller model where $k_1 - k_0$ parameters are set to $0$
+the F-score can be calculated as</p><p>$$
+F = \frac{(RSS_0 - RSS_1)/(k_1 - k_0)}{RSS_1/(N - k_1 - 1)}
+$$</p><p>this statistic can be used to determine if the residual sum of squares error is changed significantly
+by setting the $k_1 - k_0$ parameters to 0. If the RSS decreases, and the F-score can be tested
+against a corresponding p-value for an associated $\alpha$ level to determine if the improvement
+is significant change. If so, the corresponding attributes contribution in determining $Y$ is marginal.</p><p>For further details refer to</p><p>Hastie, T. Tibshirani, R. Friedman, J. The Elements of Statistical Learning, Second Ed. Springer 2009.</p><p>In this case the degree of the polynomial is supplied to the constructure
+and the input vector has features added for the degree of the polynomial during training and prediction.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@SerialVersionUID</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="au.id.cxd.math.probability.regression.BayesLinearRegression" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BayesLinearRegression"></a>
+      <a id="BayesLinearRegression:BayesLinearRegression"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BayesLinearRegression$.html"><span class="name">BayesLinearRegression</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@BayesLinearRegression" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.regression.BayesLogisticLeastSquares" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BayesLogisticLeastSquares"></a>
+      <a id="BayesLogisticLeastSquares:BayesLogisticLeastSquares"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BayesLogisticLeastSquares$.html"><span class="name">BayesLogisticLeastSquares</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@BayesLogisticLeastSquares" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.regression.LeastSquares" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LeastSquares"></a>
+      <a id="LeastSquares:LeastSquares"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LeastSquares$.html"><span class="name">LeastSquares</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@LeastSquares" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.regression.LogisticLeastSquares" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LogisticLeastSquares"></a>
+      <a id="LogisticLeastSquares:LogisticLeastSquares"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LogisticLeastSquares$.html"><span class="name">LogisticLeastSquares</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@LogisticLeastSquares" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OrdLeastSquares"></a>
+      <a id="OrdLeastSquares:OrdLeastSquares"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OrdLeastSquares$.html"><span class="name">OrdLeastSquares</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@OrdLeastSquares" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
