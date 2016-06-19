@@ -3,7 +3,7 @@ package data
 import java.io.File
 
 import au.id.cxd.math.data.SequenceReader
-import org.scalatest._
+import org.scalatest.{FlatSpec, _}
 
 /**
  *

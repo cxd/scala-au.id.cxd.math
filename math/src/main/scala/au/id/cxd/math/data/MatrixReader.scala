@@ -26,9 +26,9 @@ trait MatrixReader {
     * @param data
     * @return
     */
-  def convertToMatrix(rows:Int, cols:Int, data:List[mutable.Buffer[String]]) = {
+  def convertToMatrix(rows:Int, cols:Int, data:Seq[mutable.Buffer[String]]) = {
     val M = DenseMatrix.zeros[Double](rows, cols)
-    CsvReader().mapi[List[mutable.Buffer[String]], mutable.Buffer[String], String, DenseMatrix[Double]](data, M) {
+    CsvReader().mapi[Seq[mutable.Buffer[String]], mutable.Buffer[String], String, DenseMatrix[Double]](data, M) {
       (pair, line) => {
         val rowIdx:Int = pair._1
         rowIdx == 0 && skipHeader match {

@@ -52,7 +52,7 @@ class SequenceReader extends TextReader {
     * @return
     */
   def readSequences(file: File): List[List[String]] = {
-    val lines = readLines(file)
+    val lines = readLines(file).toList
     removeComments(lines) map {
       line => {
         line.split(",").toList

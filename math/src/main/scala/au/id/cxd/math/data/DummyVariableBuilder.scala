@@ -3,6 +3,7 @@ package au.id.cxd.math.data
 import breeze.linalg.DenseMatrix
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 /**
   * Created by cd on 3/05/2016.
@@ -63,14 +64,14 @@ object DummyVariableBuilder {
     * dummy variable builder that has the column name
     * and the set of corresponding unique values for each column
     */
-  def extractColumns(headers: mutable.Buffer[String], rows: List[mutable.Buffer[String]]): List[DummyVariableBuilder] = {
-    val results = headers.foldLeft((0, Map[String, List[String]]())) {
+  def extractColumns(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]): List[DummyVariableBuilder] = {
+    val results = headers.foldLeft((0, Map[String, ListBuffer[String]]())) {
       (pair, header) => {
         val idx = pair._1
         val accum = pair._2
         // the set operation will extract the unique values from each of the columns.
         // duplicates are automatically discarded.
-        val columns = rows.foldLeft(List[String]()) {
+        val columns = rows.foldLeft(ListBuffer[String]()) {
           (cols, row) => {
             cols :+ row(idx)
           }
@@ -94,7 +95,7 @@ object DummyVariableBuilder {
     * @param rows
     * @return
     */
-  def buildIndicatorMatrix(headers:mutable.Buffer[String], rows:List[mutable.Buffer[String]]) = {
+  def buildIndicatorMatrix(headers:mutable.Buffer[String], rows:Seq[mutable.Buffer[String]]) = {
     val builders = extractColumns(headers, rows)
     val matrices = builders map { builder => builder.createDummyColumns() }
     val result = matrices.reduce {

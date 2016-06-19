@@ -26,7 +26,7 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     * @param data
     * @return
     */
-  def splitColumns(data: List[mutable.Buffer[String]]):(List[mutable.Buffer[String]], List[mutable.Buffer[String]]) =
+  def splitColumns(data: mutable.Buffer[mutable.Buffer[String]]):(List[mutable.Buffer[String]], List[mutable.Buffer[String]]) =
     data.foldLeft(List[mutable.Buffer[String]](), List[mutable.Buffer[String]]()) {
       (accum, row) => {
         val idx = accum._1

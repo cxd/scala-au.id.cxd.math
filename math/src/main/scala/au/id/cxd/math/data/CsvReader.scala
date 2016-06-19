@@ -3,6 +3,7 @@ package au.id.cxd.math.data
 import java.io.{File, FileInputStream}
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.io.BufferedSource
 
 /**
@@ -16,17 +17,17 @@ class CsvReader(separators: Array[Char] = Array[Char]('\t', ',')) extends TextRe
     * @param file
     * @return
     */
-  def readCsv(file: File):List[mutable.Buffer[String]] = {
+  def readCsv(file: File):ListBuffer[mutable.Buffer[String]] = {
     val inputStream = new FileInputStream(file)
     val buffer = new BufferedSource(inputStream)
-    val result = List[mutable.Buffer[String]]()
+    val result = ListBuffer[mutable.Buffer[String]]()
     val lines = buffer.getLines().foldLeft(result) {
-      (accum: List[mutable.Buffer[String]], item: String) => {
+      (accum: ListBuffer[mutable.Buffer[String]], item: String) => {
         isComment (item.trim) match {
           case true => accum
           case _ => {
             val cols = item.trim.split(separators).toBuffer
-             accum :+ cols
+            accum :+ cols
           }
         }
       }

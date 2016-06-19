@@ -1,7 +1,8 @@
 package au.id.cxd.math.data
 
-import java.io.{FileInputStream, InputStream, File}
+import java.io.{File, FileInputStream, InputStream}
 
+import scala.collection.mutable.ListBuffer
 import scala.io.BufferedSource
 
 /**
@@ -17,25 +18,22 @@ class TextReader {
     * @param file
     * @return
     */
-  def readLines(file: File): List[String] = {
+  def readLines(file: File): ListBuffer[String] = {
     val inputStream = new FileInputStream(file)
     val buffer = new BufferedSource(inputStream)
-    val result = List[String]()
-    val lines = buffer.getLines().foldLeft(result) {
-      (accum: List[String], item: String) => {
-        accum ::: List(item)
-      }
-    }
+    val result = ListBuffer[String]()
+    result.appendAll(buffer.getLines())
     buffer.close()
-    lines
+    result
   }
 
   /**
     * match comments prefixed with #
+    *
     * @param line
     * @return
     */
-  def isComment(line:String) : Boolean =
+  def isComment(line: String): Boolean =
     line.isEmpty || line.startsWith("#")
 
 
@@ -46,7 +44,7 @@ class TextReader {
     * @return
     */
   def removeComments(lines: List[String]): List[String] =
-    lines.filter { line => ! isComment(line) }
+    lines.filter { line => !isComment(line) }
 
 
 }
