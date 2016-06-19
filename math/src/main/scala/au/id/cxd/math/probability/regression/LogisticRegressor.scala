@@ -35,8 +35,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   *
   * Created by cd on 18/06/2016.
   */
-trait LogisticRegressor {
-  this : OrdLeastSquares =>
+trait LogisticRegressor extends OrdLeastSquares {
 
   /**
     * the conversion function can be used to transform

@@ -353,7 +353,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   * Created by cd on 17/04/2016.
   */
 class BayesLinearRegression(@transient var inX: DenseMatrix[Double], @transient var inY: DenseVector[Double], override val m: Int = 1)
-  extends OrdLeastSquares(inX, inY, m) {
+  extends OrdLeastSquares(inX, inY, m) with UpdatableRegressor {
 
 
   /**
@@ -366,15 +366,15 @@ class BayesLinearRegression(@transient var inX: DenseMatrix[Double], @transient 
     * @param newX
     * @param newY
     */
-  def update(newX: DenseMatrix[Double], newY: DenseVector[Double]) = {
+  override def update(newX: DenseMatrix[Double], newY: DenseVector[Double])  : (DenseMatrix[Double], Double) = {
     val newP = createPolynomial(newX, m)
 
     val newY1 = DenseMatrix.tabulate[Double](newY.length, 1) { case (i, j) => newY(i) }
 
     val prevB = Beta
     val prevSigma = variance
-
-    val lastdf = P.rows - P.cols
+    // the df has been stored from the last iteration.
+    val lastdf = this.df
     val nu = lastdf + (newP.rows - newP.cols)
 
     val prevMu = (1.0 / Y.length) * Y.foldLeft(0.0) { (accum, y) => accum + y }

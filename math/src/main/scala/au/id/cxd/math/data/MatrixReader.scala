@@ -4,6 +4,8 @@ import java.io.File
 
 import breeze.linalg.DenseMatrix
 
+import scala.collection.mutable
+
 /**
   * A simple convenience trait to read a matrix of doubles
   * from the csv data file.
@@ -24,16 +26,17 @@ trait MatrixReader {
     * @param data
     * @return
     */
-  def convertToMatrix(rows:Int, cols:Int, data:List[Array[String]]) = {
+  def convertToMatrix(rows:Int, cols:Int, data:List[mutable.Buffer[String]]) = {
     val M = DenseMatrix.zeros[Double](rows, cols)
-    CsvReader().mapi (data, M) {
+    CsvReader().mapi[List[mutable.Buffer[String]], mutable.Buffer[String], String, DenseMatrix[Double]](data, M) {
       (pair, line) => {
         val rowIdx:Int = pair._1
         rowIdx == 0 && skipHeader match {
           case true => pair._2
           case _ => {
             val mat:DenseMatrix[Double] = pair._2
-            val temp:DenseMatrix[Double] = DenseMatrix.tabulate[Double](1,line.length) { case (i,j) => line(j).toDouble }
+            val buffer = line.toBuffer
+            val temp:DenseMatrix[Double] = DenseMatrix.tabulate[Double](1,buffer.length) { case (i,j) => buffer(j).toDouble }
             val index = rowIdx - 1
             // matrix assignment requires range
             mat(index to index, ::) := temp

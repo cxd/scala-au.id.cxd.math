@@ -213,6 +213,13 @@ class OrdLeastSquares(var X: DenseMatrix[Double], var Y: DenseVector[Double], va
 
   var Y1 = DenseMatrix.tabulate(Y.length, 1) { case (i, j) => Y(i) }
 
+
+  /**
+    * the degrees of freedom based on the input data.
+    * this is used during the update function
+    */
+  var df:Int = P.rows - P.cols
+
   /**
     * first determine how many features will be generated
     * for the number of columns.
@@ -313,7 +320,7 @@ class OrdLeastSquares(var X: DenseMatrix[Double], var Y: DenseVector[Double], va
   /**
     * train the least squares model.
     */
-  def train(): Tuple2[DenseMatrix[Double], Double] = {
+  def train(): (DenseMatrix[Double], Double) = {
     Beta = updateWeights(P, Y1)
     val yHat = multWeights(Beta, P)
 

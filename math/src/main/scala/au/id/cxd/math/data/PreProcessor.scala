@@ -6,6 +6,8 @@ import au.id.cxd.math.data.{CsvReader, MatrixReader}
 import au.id.cxd.math.function.ContinuousTransform
 import breeze.linalg.DenseMatrix
 
+import scala.collection.mutable
+
 /**
   * The preprocessor in this case will combine
   * continuous columns of data togethor with discrete columns of data.
@@ -24,17 +26,17 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     * @param data
     * @return
     */
-  def splitColumns(data: List[Array[String]]) =
-    data.foldLeft(List[Array[String]](), List[Array[String]]()) {
+  def splitColumns(data: List[mutable.Buffer[String]]):(List[mutable.Buffer[String]], List[mutable.Buffer[String]]) =
+    data.foldLeft(List[mutable.Buffer[String]](), List[mutable.Buffer[String]]()) {
       (accum, row) => {
         val idx = accum._1
-        val discrete = discreteColumns.foldLeft(Array[String]()) {
+        val discrete = discreteColumns.foldLeft(mutable.Buffer[String]()) {
           (collect, col) => {
             val item = row(col)
             collect :+ item
           }
         }
-        val continuous = continuousColumns.foldLeft(Array[String]()) {
+        val continuous = continuousColumns.foldLeft(mutable.Buffer[String]()) {
           (collect, col) => {
             val item = row(col)
             collect :+ item
@@ -59,9 +61,9 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     val (discrete, continuous) = continuousColumns.length > 0 && discreteColumns.length > 0 match {
       case true => splitColumns(data)
       case false => if (continuousColumns.length == 0) {
-        (data, List[Array[String]]())
+        (data, List[mutable.Buffer[String]]())
       } else {
-        (List[Array[String]](), data)
+        (List[mutable.Buffer[String]](), data)
       }
     }
 

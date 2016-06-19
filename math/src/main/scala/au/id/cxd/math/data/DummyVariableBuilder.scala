@@ -2,6 +2,8 @@ package au.id.cxd.math.data
 
 import breeze.linalg.DenseMatrix
 
+import scala.collection.mutable
+
 /**
   * Created by cd on 3/05/2016.
   */
@@ -61,7 +63,7 @@ object DummyVariableBuilder {
     * dummy variable builder that has the column name
     * and the set of corresponding unique values for each column
     */
-  def extractColumns(headers: Array[String], rows: List[Array[String]]): List[DummyVariableBuilder] = {
+  def extractColumns(headers: mutable.Buffer[String], rows: List[mutable.Buffer[String]]): List[DummyVariableBuilder] = {
     val results = headers.foldLeft((0, Map[String, List[String]]())) {
       (pair, header) => {
         val idx = pair._1
@@ -92,7 +94,7 @@ object DummyVariableBuilder {
     * @param rows
     * @return
     */
-  def buildIndicatorMatrix(headers:Array[String], rows:List[Array[String]]) = {
+  def buildIndicatorMatrix(headers:mutable.Buffer[String], rows:List[mutable.Buffer[String]]) = {
     val builders = extractColumns(headers, rows)
     val matrices = builders map { builder => builder.createDummyColumns() }
     val result = matrices.reduce {
