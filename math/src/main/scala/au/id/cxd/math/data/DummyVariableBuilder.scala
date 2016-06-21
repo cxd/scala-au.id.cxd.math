@@ -2,6 +2,7 @@ package au.id.cxd.math.data
 
 import breeze.linalg.DenseMatrix
 
+import scala.collection.immutable.TreeMap
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
@@ -65,6 +66,28 @@ object DummyVariableBuilder {
     * and the set of corresponding unique values for each column
     */
   def extractColumns(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]): List[DummyVariableBuilder] = {
+    // TODO: change this approach to use iteration instead.
+    // this is a bottleneck when loading large volumes of data.
+    val results = rows.par.foldLeft (TreeMap[String,ListBuffer[String]]()) {
+      (accum, row) => {
+        val accum1 = headers.foldLeft((0, accum)) {
+          (pair, col) => {
+            val idx = pair._1
+            val accum = pair._2
+            accum.contains (col) match {
+              case true => {
+                val items = accum.get(col).get :+ row(idx)
+                val update = accum - col
+                (idx + 1, update + (col -> items))
+              }
+              case _ => (idx + 1, accum + (col -> ListBuffer[String](row(idx))))
+            }
+          }
+        }
+        accum1._2
+      }
+    }
+    /*
     val results = headers.foldLeft((0, Map[String, ListBuffer[String]]())) {
       (pair, header) => {
         val idx = pair._1
@@ -79,9 +102,18 @@ object DummyVariableBuilder {
         (idx + 1, accum + (header -> columns))
       }
     }
-    val vars = results._2.keys map {
+    */
+
+    // potentially use iteration instead of fold
+
+
+
+    val vars = results.keys map {
       key => {
-        val values = results._2.getOrElse(key, { List[String]() })
+        val values = results.getOrElse(key, { List[String]() })
+        // the toSet assigns the unique values to the variable builder.
+        // potentially a more optimised method of finding unique values could be used.
+        // such as a trie.
         apply(key, values.toSet, values)
       }
     }
