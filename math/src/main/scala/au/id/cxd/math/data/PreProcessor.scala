@@ -67,15 +67,14 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
         continuousColumns.length > 0 && discreteColumns.length > 0 match {
           case true => splitRow(accum, line)
           case false => if (continuousColumns.length == 0) {
-            (accum._1, List[mutable.Buffer[String]]())
+            (accum._1 :+ line, List[mutable.Buffer[String]]())
           } else {
-            (List[mutable.Buffer[String]](), accum._2)
+            (List[mutable.Buffer[String]](), accum._2 :+ line)
           }
         }
         // TODO: work out how to include discreteMatrixAndKey and continuousMatrix internally
         // in this method to incrementally build the result.
 
-        accum
       }
     }
 
