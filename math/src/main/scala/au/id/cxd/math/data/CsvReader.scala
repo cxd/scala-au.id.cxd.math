@@ -12,29 +12,64 @@ import scala.io.BufferedSource
   */
 class CsvReader(separators: Array[Char] = Array[Char]('\t', ',')) extends TextReader {
 
+  private def openFile(file:File) = {
+    val inputStream = new FileInputStream(file)
+    val buffer = new BufferedSource(inputStream)
+    buffer
+  }
+
+
+  /**
+    * read the file and pass each line into the supplied block
+    * @param file
+    * @param blockFn
+    * @tparam T
+    * @return
+    */
+  private def read[T](file:File, seed:T)(blockFn: (T, String) => T):T = {
+    val buffer = openFile(file)
+    val reader = buffer.bufferedReader()
+    val result = buffer.getLines().foldLeft(seed) (blockFn)
+    buffer.close
+    result
+  }
+
   /**
     * read data as CSV return a row based table with columns in each row.
     * @param file
     * @return
     */
   def readCsv(file: File):ListBuffer[mutable.Buffer[String]] = {
-    val inputStream = new FileInputStream(file)
-    val buffer = new BufferedSource(inputStream)
     val result = ListBuffer[mutable.Buffer[String]]()
-    val lines = buffer.getLines().foldLeft(result) {
-      (accum: ListBuffer[mutable.Buffer[String]], item: String) => {
-        isComment (item.trim) match {
-          case true => accum
-          case _ => {
-            val cols = item.trim.split(separators).toBuffer
-            accum :+ cols
-          }
+    read (file, result) {
+      (accum, item) => isComment (item.trim) match {
+        case true => accum
+        case _ => {
+          val cols = item.trim.split(separators).toBuffer
+          accum :+ cols
         }
       }
     }
-    buffer.close()
-    lines
   }
+
+
+  /**
+    * read data as CSV return a row based table with columns in each row.
+    * @param file
+    * @return
+    */
+  def readCsv[T](file: File, seed:T)(blockFn:(T,mutable.Buffer[String]) => T) = {
+    read (file, seed) {
+      (accum, item) => isComment (item.trim) match {
+        case true => accum
+        case _ => {
+          val cols = item.trim.split(separators).toBuffer
+          blockFn (accum, cols)
+        }
+      }
+    }
+  }
+
 
   /**
     * map from the data set to the type T returned by the block function

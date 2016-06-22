@@ -27,25 +27,31 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     * @return
     */
   def splitColumns(data: mutable.Buffer[mutable.Buffer[String]]):(List[mutable.Buffer[String]], List[mutable.Buffer[String]]) =
-    data.foldLeft(List[mutable.Buffer[String]](), List[mutable.Buffer[String]]()) {
-      (accum, row) => {
-        val idx = accum._1
-        val discrete = discreteColumns.foldLeft(mutable.Buffer[String]()) {
-          (collect, col) => {
-            val item = row(col)
-            collect :+ item
-          }
-        }
-        val continuous = continuousColumns.foldLeft(mutable.Buffer[String]()) {
-          (collect, col) => {
-            val item = row(col)
-            collect :+ item
-          }
-        }
+    data.foldLeft(List[mutable.Buffer[String]](), List[mutable.Buffer[String]]()) (splitRow)
 
-        (accum._1 :+ discrete, accum._2 :+ continuous)
+  /**
+    * split a single row
+    * @param accum
+    * @param row
+    * @return
+    */
+  def splitRow(accum:(List[mutable.Buffer[String]], List[mutable.Buffer[String]]), row:mutable.Buffer[String]) = {
+    val idx = accum._1
+    val discrete = discreteColumns.foldLeft(mutable.Buffer[String]()) {
+      (collect, col) => {
+        val item = row(col)
+        collect :+ item
       }
     }
+    val continuous = continuousColumns.foldLeft(mutable.Buffer[String]()) {
+      (collect, col) => {
+        val item = row(col)
+        collect :+ item
+      }
+    }
+
+    (accum._1 :+ discrete, accum._2 :+ continuous)
+  }
 
   /**
     * read the csv data and produce the data set containing the
@@ -56,14 +62,20 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     */
   def read(): DataSet = {
     val reader = CsvReader()
-    val data = reader.readCsv(file)
+    val (discrete, continuous)  = reader.readCsv(file, (List[mutable.Buffer[String]](), List[mutable.Buffer[String]]())) {
+      (accum, line) => {
+        continuousColumns.length > 0 && discreteColumns.length > 0 match {
+          case true => splitRow(accum, line)
+          case false => if (continuousColumns.length == 0) {
+            (accum._1, List[mutable.Buffer[String]]())
+          } else {
+            (List[mutable.Buffer[String]](), accum._2)
+          }
+        }
+        // TODO: work out how to include discreteMatrixAndKey and continuousMatrix internally
+        // in this method to incrementally build the result.
 
-    val (discrete, continuous) = continuousColumns.length > 0 && discreteColumns.length > 0 match {
-      case true => splitColumns(data)
-      case false => if (continuousColumns.length == 0) {
-        (data, List[mutable.Buffer[String]]())
-      } else {
-        (List[mutable.Buffer[String]](), data)
+        accum
       }
     }
 
