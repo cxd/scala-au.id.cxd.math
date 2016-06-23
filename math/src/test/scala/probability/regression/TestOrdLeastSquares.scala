@@ -34,20 +34,6 @@ class TestOrdLeastSquares extends FlatSpec with ShouldMatchers {
     val Y3 = ols.predictSeq(DenseVector.tabulate[Double](X1.length) { j => X1(j) })
     println(Y3)
 
-
-    val series = new XYSeriesCollection()
-    val series1 = new XYSeries("original")
-    val index = for (i <- 0 until Y.length) yield i
-    index foreach { i => series1.add(X1(i), Y(i))}
-    val series2 = new XYSeries("prediction")
-    index foreach { i => series2.add(X1(i), Y3(i,0))}
-    series.addSeries(series1)
-    series.addSeries(series2)
-
-    val chart = XYLineChart(series)
-    chart.show()
-
-    println(Y3)
   }
 
 }
