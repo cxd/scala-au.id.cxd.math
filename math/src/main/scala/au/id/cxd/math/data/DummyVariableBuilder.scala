@@ -11,6 +11,8 @@ import scala.collection.mutable.ListBuffer
   */
 class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String], val columnValues: Seq[String]) {
 
+  import au.id.cxd.math.data.DummyVariableBuilder._
+
   val uniqueList: List[String] = uniqueValues.toList
 
   /**
@@ -22,6 +24,7 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
   def indexOf(value: String) = {
     uniqueList.indexOf(value)
   }
+
 
   /**
     * given N unique values convert to dummy indicator variables
@@ -36,7 +39,7 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
     // number of columns corresponds to the number of indicator variables.
     DenseMatrix.tabulate[Double](columnValues.length, uniqueValues.toList.length) {
       case (i, j) => {
-        val datum = columnValues(i).replaceAll("\"", "")
+        val datum = dataFor(columnValues, i)
         indexOf(datum) match {
           case j => 1
           case _ => 0
@@ -44,6 +47,27 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
       }
     }
 
+  }
+
+
+  /**
+    * create a single row where the matching value of that row
+    * contains 1 and the other columns 0.
+    *
+    * @param row
+    * @return
+    */
+  def createDummyRow(row: Int): DenseMatrix[Double] = {
+    val datum = dataFor(columnValues, row)
+    val idx = indexOf(datum)
+    DenseMatrix.tabulate[Double](1, uniqueValues.toList.length) {
+      case (i, j) => {
+        idx == j match {
+          case true => 1
+          case _ => 0
+        }
+      }
+    }
   }
 
 }
@@ -61,14 +85,19 @@ object DummyVariableBuilder {
   def apply(columnName: String, uniqueValues: Set[String], columnValues: Seq[String]) =
     new DummyVariableBuilder(columnName.replaceAll("\"", ""), uniqueValues, columnValues)
 
+
+  def dataFor(row: Seq[String], idx: Int) = row(idx).trim.replaceAll("\"", "").replaceAll(" ", "") match {
+    case "" => "NONE"
+    case other => other
+  }
+
   /**
     * for each column in the file create a
     * dummy variable builder that has the column name
     * and the set of corresponding unique values for each column
     */
   def extractColumns(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]): List[DummyVariableBuilder] = {
-    // TODO: change this approach to use iteration instead.
-    // this is a bottleneck when loading large volumes of data.
+
     val results = rows.par.foldLeft(TreeMap[String, ListBuffer[String]]()) {
       (accum, row) => {
         val accum1 = headers.foldLeft((0, accum)) {
@@ -78,35 +107,17 @@ object DummyVariableBuilder {
             accum.contains(col) match {
               case true => {
                 // mutable update
-                accum.get(col).get.append(row(idx))
+                val datum = dataFor(row, idx)
+                accum.get(col).get.append(datum)
                 (idx + 1, accum)
               }
-              case _ => (idx + 1, accum + (col -> ListBuffer[String](row(idx))))
+              case _ => (idx + 1, accum + (col -> ListBuffer[String](dataFor(row, idx))))
             }
           }
         }
         accum1._2
       }
     }
-    /*
-    val results = headers.foldLeft((0, Map[String, ListBuffer[String]]())) {
-      (pair, header) => {
-        val idx = pair._1
-        val accum = pair._2
-        // the set operation will extract the unique values from each of the columns.
-        // duplicates are automatically discarded.
-        val columns = rows.foldLeft(ListBuffer[String]()) {
-          (cols, row) => {
-            cols :+ row(idx)
-          }
-        }
-        (idx + 1, accum + (header -> columns))
-      }
-    }
-    */
-
-    // potentially use iteration instead of fold
-
 
     val vars = results.keys map {
       key => {
@@ -132,10 +143,30 @@ object DummyVariableBuilder {
     */
   def buildIndicatorMatrix(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]) = {
     val builders = extractColumns(headers, rows)
+    // TODO: the order needs to be swapped
+    // each builder represents an set of dummy columns k
+    // within the builder it iterates rows,
+    // instead we need to iterate rows first, and then iterate the builders
+    // then construct a matrix out of the each row provided by the builders
+
+    val totalColumns = builders.foldLeft(0) { (n, builder) => n + builder.uniqueValues.size }
+    val totalRows = rows.size
+
+    val matrices = (for (i <- 0 to totalRows) yield i).map {
+      n =>
+        val cols = builders map { builder => builder.createDummyRow(n) }
+        cols.reduce { (a, b) => DenseMatrix.horzcat(a, b) }
+    }
+    // convert the rows into a single matrix
+    // the order of traversal is reversed
+    val result = matrices.reduce { (a, b) => DenseMatrix.vertcat(a, b) }
+
+    /*
     val matrices = builders map { builder => builder.createDummyColumns() }
     val result = matrices.reduce {
       (a, b) => DenseMatrix.horzcat(a, b)
     }
+    */
     val keyedMappings = builders.foldLeft(Map[String, Set[String]]()) {
       (accum, builder) => accum + (builder.columnName -> builder.uniqueValues)
     }
