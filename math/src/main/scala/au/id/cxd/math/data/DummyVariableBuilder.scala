@@ -11,14 +11,15 @@ import scala.collection.mutable.ListBuffer
   */
 class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String], val columnValues: Seq[String]) {
 
-  val uniqueList:List[String] = uniqueValues.toList
+  val uniqueList: List[String] = uniqueValues.toList
 
   /**
     * locate the index of the value from the set of unique values
+    *
     * @param value
     * @return
     */
-  def indexOf(value:String) = {
+  def indexOf(value: String) = {
     uniqueList.indexOf(value)
   }
 
@@ -30,7 +31,7 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
     * This will result in a indicator matrix
     * where the ijth value represents the presence of column value i from the ordered set of unique values
     */
-  def createDummyColumns():DenseMatrix[Double] = {
+  def createDummyColumns(): DenseMatrix[Double] = {
     // number of rows corresponds to the column values
     // number of columns corresponds to the number of indicator variables.
     DenseMatrix.tabulate[Double](columnValues.length, uniqueValues.toList.length) {
@@ -58,7 +59,7 @@ object DummyVariableBuilder {
     * @return
     */
   def apply(columnName: String, uniqueValues: Set[String], columnValues: Seq[String]) =
-    new DummyVariableBuilder(columnName.replaceAll("\"",""), uniqueValues, columnValues)
+    new DummyVariableBuilder(columnName.replaceAll("\"", ""), uniqueValues, columnValues)
 
   /**
     * for each column in the file create a
@@ -68,17 +69,17 @@ object DummyVariableBuilder {
   def extractColumns(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]): List[DummyVariableBuilder] = {
     // TODO: change this approach to use iteration instead.
     // this is a bottleneck when loading large volumes of data.
-    val results = rows.par.foldLeft (TreeMap[String,ListBuffer[String]]()) {
+    val results = rows.par.foldLeft(TreeMap[String, ListBuffer[String]]()) {
       (accum, row) => {
         val accum1 = headers.foldLeft((0, accum)) {
           (pair, col) => {
             val idx = pair._1
             val accum = pair._2
-            accum.contains (col) match {
+            accum.contains(col) match {
               case true => {
-                val items = accum.get(col).get :+ row(idx)
-                val update = accum - col
-                (idx + 1, update + (col -> items))
+                // mutable update
+                accum.get(col).get.append(row(idx))
+                (idx + 1, accum)
               }
               case _ => (idx + 1, accum + (col -> ListBuffer[String](row(idx))))
             }
@@ -107,10 +108,11 @@ object DummyVariableBuilder {
     // potentially use iteration instead of fold
 
 
-
     val vars = results.keys map {
       key => {
-        val values = results.getOrElse(key, { List[String]() })
+        val values = results.getOrElse(key, {
+          List[String]()
+        })
         // the toSet assigns the unique values to the variable builder.
         // potentially a more optimised method of finding unique values could be used.
         // such as a trie.
@@ -123,17 +125,18 @@ object DummyVariableBuilder {
 
   /**
     * given the set of input data concatenate the matrices togethor.
+    *
     * @param headers
     * @param rows
     * @return
     */
-  def buildIndicatorMatrix(headers:mutable.Buffer[String], rows:Seq[mutable.Buffer[String]]) = {
+  def buildIndicatorMatrix(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]) = {
     val builders = extractColumns(headers, rows)
     val matrices = builders map { builder => builder.createDummyColumns() }
     val result = matrices.reduce {
       (a, b) => DenseMatrix.horzcat(a, b)
     }
-    val keyedMappings = builders.foldLeft(Map[String,Set[String]]()) {
+    val keyedMappings = builders.foldLeft(Map[String, Set[String]]()) {
       (accum, builder) => accum + (builder.columnName -> builder.uniqueValues)
     }
     (result, keyedMappings)

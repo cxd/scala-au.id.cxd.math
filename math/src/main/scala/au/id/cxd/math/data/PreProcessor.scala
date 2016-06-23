@@ -31,6 +31,7 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
 
   /**
     * split a single row
+    * prepend the result into the accumulator
     * @param accum
     * @param row
     * @return
@@ -40,17 +41,19 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     val discrete = discreteColumns.foldLeft(mutable.Buffer[String]()) {
       (collect, col) => {
         val item = row(col)
-        collect :+ item
+        collect.append(item)
+        collect
       }
     }
     val continuous = continuousColumns.foldLeft(mutable.Buffer[String]()) {
       (collect, col) => {
         val item = row(col)
-        collect :+ item
+        collect.append(item)
+        collect
       }
     }
 
-    (accum._1 :+ discrete, accum._2 :+ continuous)
+    (discrete :: accum._1, continuous :: accum._2)
   }
 
   /**
@@ -62,14 +65,15 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     */
   def read(): DataSet = {
     val reader = CsvReader()
-    val (discrete, continuous)  = reader.readCsv(file, (List[mutable.Buffer[String]](), List[mutable.Buffer[String]]())) {
+    // the read will reverse the lines
+    val (discreteA, continuousA)  = reader.readCsv(file, (List[mutable.Buffer[String]](), List[mutable.Buffer[String]]())) {
       (accum, line) => {
         continuousColumns.length > 0 && discreteColumns.length > 0 match {
           case true => splitRow(accum, line)
           case false => if (continuousColumns.length == 0) {
-            (accum._1 :+ line, List[mutable.Buffer[String]]())
+            (line :: accum._1, List[mutable.Buffer[String]]())
           } else {
-            (List[mutable.Buffer[String]](), accum._2 :+ line)
+            (List[mutable.Buffer[String]](), line :: accum._2)
           }
         }
         // TODO: work out how to include discreteMatrixAndKey and continuousMatrix internally
@@ -77,6 +81,8 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
 
       }
     }
+    // reverse order O(n)
+    val (discrete, continuous) = (discreteA.reverse, continuousA.reverse)
 
 
 

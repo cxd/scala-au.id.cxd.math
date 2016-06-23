@@ -22,6 +22,17 @@ trait MatrixReader {
   def skipHeader:Boolean = true
 
   /**
+    * convert the supplied data to a single row matrix with n cols
+    * @param cols
+    * @param data
+    * @return
+    */
+  def convertToRow(cols:Int, data:mutable.Buffer[String]):DenseMatrix[Double] =
+    DenseMatrix.tabulate[Double](1,cols) {
+      case (i, j) => data(j) toDouble
+    }
+
+  /**
     * convert to a matrix
     * @param data
     * @return
