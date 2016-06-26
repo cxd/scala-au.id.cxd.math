@@ -7,6 +7,7 @@ import au.id.cxd.math.function.ContinuousTransform
 import breeze.linalg.DenseMatrix
 
 import scala.collection.mutable
+import scala.concurrent.Future
 
 /**
   * The preprocessor in this case will combine
@@ -16,8 +17,9 @@ import scala.collection.mutable
   * Created by cd on 3/05/2016.
   */
 class PreProcessor(val file: File, val discreteColumns: List[Int], val continuousColumns: List[Int],
-                   val processContinuousFn:ContinuousTransform ) {
+                   val processContinuousFn: ContinuousTransform) {
 
+  import scala.concurrent.ExecutionContext.Implicits.global
 
   /**
     * split the data into continuous and discrete partitions
@@ -26,17 +28,18 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     * @param data
     * @return
     */
-  def splitColumns(data: mutable.Buffer[mutable.Buffer[String]]):(List[mutable.Buffer[String]], List[mutable.Buffer[String]]) =
-    data.foldLeft(List[mutable.Buffer[String]](), List[mutable.Buffer[String]]()) (splitRow)
+  def splitColumns(data: mutable.Buffer[mutable.Buffer[String]]): (List[mutable.Buffer[String]], List[mutable.Buffer[String]]) =
+    data.foldLeft(List[mutable.Buffer[String]](), List[mutable.Buffer[String]]())(splitRow)
 
   /**
     * split a single row
     * prepend the result into the accumulator
+    *
     * @param accum
     * @param row
     * @return
     */
-  def splitRow(accum:(List[mutable.Buffer[String]], List[mutable.Buffer[String]]), row:mutable.Buffer[String]) = {
+  def splitRow(accum: (List[mutable.Buffer[String]], List[mutable.Buffer[String]]), row: mutable.Buffer[String]) = {
     val idx = accum._1
     val discrete = discreteColumns.foldLeft(mutable.Buffer[String]()) {
       (collect, col) => {
@@ -63,10 +66,10 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     *
     * @return
     */
-  def read(): DataSet = {
+  def read():Future[DataSet] = {
     val reader = CsvReader()
     // the read will reverse the lines
-    val (discreteA, continuousA)  = reader.readCsv(file, (List[mutable.Buffer[String]](), List[mutable.Buffer[String]]())) {
+    val (discreteA, continuousA) = reader.readCsv(file, (List[mutable.Buffer[String]](), List[mutable.Buffer[String]]())) {
       (accum, line) => {
         continuousColumns.length > 0 && discreteColumns.length > 0 match {
           case true => splitRow(accum, line)
@@ -91,51 +94,58 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
       case true => {
         val discreteHeaders = discrete.head
         val discreteRows = discrete.tail
-        val (mat, keyedMapping) = DummyVariableBuilder.buildIndicatorMatrix(discreteHeaders, discreteRows)
-        Some(mat, keyedMapping)
+        DummyVariableBuilder.buildIndicatorMatrix(discreteHeaders, discreteRows)
       }
-      case _ => None
+      case _ => Future {
+        None
+      }
     }
 
     // the continuous matrix is not processed.
-    val continuousMatrix = (continuous.length > 0) match {
-      case true => {
-        val reader = new MatrixReader {}
-        val mat = reader.convertToMatrix(continuous.length - 1, continuous.head.length, continuous)
-        val processedMat = processContinuousFn.transform(mat)
-        Some(processedMat)
+    val continuousMatrix = Future {
+      (continuous.length > 0) match {
+        case true => {
+          val reader = new MatrixReader {}
+          val mat = reader.convertToMatrix(continuous.length - 1, continuous.head.length, continuous)
+          val processedMat = processContinuousFn.transform(mat)
+          Some(processedMat)
+        }
+        case false =>
+          None
       }
-      case false => None
     }
 
-
-    // combine the matrices if present with the continuous matrix first
-    val contCols = continuousMatrix match {
-      case Some(mat) => mat.cols
-      case _ => 0
-    }
-
-    val discreteCols = discreteMatrixAndKey match {
-      case Some(pair) => pair._1.cols
-      case None => 0
-    }
-
-    // the continuous data will always be first
-    val dataSet = (continuousMatrix, discreteMatrixAndKey) match {
-      case (Some(mat), Some(pair)) => {
-        DenseMatrix.horzcat(mat, pair._1)
+    for {
+      continuousResult <- continuousMatrix
+      discreteResult <- discreteMatrixAndKey
+      // combine the matrices if present with the continuous matrix first
+      contCols = continuousResult match {
+        case Some(mat) => mat.cols
+        case _ => 0
       }
-      case (Some(mat), None) => mat
-      case (None, Some(pair)) => pair._1
-      case _ => DenseMatrix.zeros[Double](1, 1)
-    }
 
-    val discreteMapping = discreteMatrixAndKey match {
-      case Some(pair) => pair._2
-      case _ => Map[String, Set[String]]()
-    }
+      discreteCols = discreteResult match {
+        case Some(pair) => pair._1.cols
+        case None => 0
+      }
 
-    DataSet(dataSet, contCols, discreteCols, discreteMapping, processContinuousFn)
+      // the continuous data will always be first
+      dataSet = (continuousResult, discreteResult) match {
+        case (Some(mat), Some(pair)) => {
+          DenseMatrix.horzcat(mat, pair._1)
+        }
+        case (Some(mat), None) => mat
+        case (None, Some(pair)) => pair._1
+        case _ => DenseMatrix.zeros[Double](1, 1)
+      }
+
+      discreteMapping = discreteResult match {
+        case Some(pair) => pair._2
+        case _ => Map[String, Set[String]]()
+      }
+    } yield DataSet(dataSet, contCols, discreteCols, discreteMapping, processContinuousFn)
+
+
   }
 
 
@@ -143,6 +153,6 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
 
 object PreProcessor {
 
-  def apply(file: File, discreteColumns: List[Int], continuousColumns: List[Int], transform:ContinuousTransform) =
+  def apply(file: File, discreteColumns: List[Int], continuousColumns: List[Int], transform: ContinuousTransform) =
     new PreProcessor(file, discreteColumns, continuousColumns, transform)
 }

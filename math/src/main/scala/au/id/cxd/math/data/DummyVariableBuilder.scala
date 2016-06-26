@@ -1,10 +1,13 @@
 package au.id.cxd.math.data
 
+import java.util.concurrent.Executors
+
 import breeze.linalg.DenseMatrix
 
 import scala.collection.immutable.TreeMap
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by cd on 3/05/2016.
@@ -40,10 +43,7 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
     DenseMatrix.tabulate[Double](columnValues.length, uniqueValues.toList.length) {
       case (i, j) => {
         val datum = dataFor(columnValues, i)
-        indexOf(datum) match {
-          case j => 1
-          case _ => 0
-        }
+        indicator(j, datum)
       }
     }
 
@@ -54,6 +54,9 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
     * create a single row where the matching value of that row
     * contains 1 and the other columns 0.
     *
+    * the value of the row will determine which of the unique values
+    * arranged in column order will be 1 or 0
+    *
     * @param row
     * @return
     */
@@ -61,18 +64,33 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
     val datum = dataFor(columnValues, row)
     val idx = indexOf(datum)
     DenseMatrix.tabulate[Double](1, uniqueValues.toList.length) {
-      case (i, j) => {
-        idx == j match {
-          case true => 1
-          case _ => 0
-        }
-      }
+      case (i, j) => indicator(j, datum)
+    }
+  }
+
+  /**
+    * the indicator value for the datum defined at the position
+    * for the column
+    * if the datum corresponds to the unique value at the index defined by the column
+    * return 1
+    * otherwise return 0
+    *
+    * @param column
+    * @param datum
+    * @return
+    */
+  def indicator(column: Int, datum: String): Double = {
+    val idx = indexOf(datum)
+    idx == column match {
+      case true => 1
+      case _ => 0
     }
   }
 
 }
 
 object DummyVariableBuilder {
+
 
   /**
     * convert to dummy variables.
@@ -141,9 +159,8 @@ object DummyVariableBuilder {
     * @param rows
     * @return
     */
-  def buildIndicatorMatrix(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]) = {
+  def buildIndicatorMatrix(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]):Future[Option[(DenseMatrix[Double], Map[String, Set[String]])]] = {
     val builders = extractColumns(headers, rows)
-    // TODO: the order needs to be swapped
     // each builder represents an set of dummy columns k
     // within the builder it iterates rows,
     // instead we need to iterate rows first, and then iterate the builders
@@ -151,26 +168,74 @@ object DummyVariableBuilder {
 
     val totalColumns = builders.foldLeft(0) { (n, builder) => n + builder.uniqueValues.size }
     val totalRows = rows.size
+    // we need to create a sequence of column indices which are mapped to each builder for that column
+    // when combined with the other builders
+    val (totalCols, mappings) = builders.foldLeft((0, Seq[(Int, DummyVariableBuilder)]())) {
+      (accum, builder) => {
+        val n = accum._1
+        val pairs = accum._2
+        val subset = (for (i <- 0 until builder.uniqueValues.size) yield (n + i, builder))
+        (n + builder.uniqueValues.size, pairs ++ subset)
+      }
+    }
 
-    val matrices = (for (i <- 0 to totalRows) yield i).map {
-      n =>
-        val cols = builders map { builder => builder.createDummyRow(n) }
-        cols.reduce { (a, b) => DenseMatrix.horzcat(a, b) }
+    val cache = mutable.HashMap[Int, DummyVariableBuilder]()
+    def findMapping(column: Int, mappings: Seq[(Int, DummyVariableBuilder)]) = {
+      cache.contains(column) match {
+        case true => cache.get(column).get
+        case _ => {
+          val builder = mappings.filter { pair => pair._1 == column }.head._2
+          cache.put(column, builder)
+          builder
+        }
+      }
     }
-    // convert the rows into a single matrix
-    // the order of traversal is reversed
-    val result = matrices.reduce { (a, b) => DenseMatrix.vertcat(a, b) }
 
-    /*
-    val matrices = builders map { builder => builder.createDummyColumns() }
-    val result = matrices.reduce {
-      (a, b) => DenseMatrix.horzcat(a, b)
+    def valueFor(i: Int, j: Int): Double = {
+      val builder = findMapping(j, mappings)
+      val datum = dataFor(builder.columnValues, i)
+      builder.indicator(j, datum)
     }
-    */
-    val keyedMappings = builders.foldLeft(Map[String, Set[String]]()) {
-      (accum, builder) => accum + (builder.columnName -> builder.uniqueValues)
+
+    // the process each row we will do this in parallel
+    // however we want the maximum number of threads to be bounded
+    //
+    implicit val ec = new ExecutionContext {
+      // we'll limit the number of threads to 2 * the physical number of processors
+      val numProcessors = Runtime.getRuntime.availableProcessors * 2
+
+      val threadPool = Executors.newFixedThreadPool(numProcessors);
+
+      def execute(runnable: Runnable) {
+        threadPool.submit(runnable)
+      }
+
+      def reportFailure(t: Throwable) {}
     }
-    (result, keyedMappings)
+
+
+    // cannot obviously execute all futures in parallel
+    // but can we build the sequence in parallel and wait for the result.
+    // maybe it would be better to do this for each row
+    // then combine the results into a single sequence?
+    // unfortunately at some point it needs to be converted into a matrix
+    val mat = Future.sequence {
+      for (i <- 0 until totalRows) yield Future {
+          for (j <- 0 until totalCols) yield valueFor(i, j)
+        }
+    }.map {
+      subsequences => subsequences.flatten
+    }.map {
+      values => new DenseMatrix(totalRows, totalCols, values.toArray)
+    }.map {
+      result => {
+        val keyedMappings = builders.foldLeft(Map[String, Set[String]]()) {
+          (accum, builder) => accum + (builder.columnName -> builder.uniqueValues)
+        }
+        Some(result, keyedMappings)
+      }
+    }
+    mat
   }
 
 
