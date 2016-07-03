@@ -2,6 +2,7 @@ package au.id.cxd.math.data
 
 import java.util.concurrent.Executors
 
+import au.id.cxd.math.parallel.LinearScaleExecutionContext
 import breeze.linalg.DenseMatrix
 
 import scala.collection.immutable.TreeMap
@@ -10,9 +11,18 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
+  * The dummy variable builder class is used to extract the create the columns of
+  * 0 or 1 corresponding to the row associated with the value
+  * the order of unique values determine the sequence of 0 or 1 indicators.
+  *
+  * The column values are converted into vectors before being used to lookup the data.
+  * The vector has an almost constant apply() method as opposed to other sequences which are Linear.
+  * http://docs.scala-lang.org/overviews/collections/performance-characteristics
+  *
+  *
   * Created by cd on 3/05/2016.
   */
-class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String], val columnValues: Seq[String]) {
+class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String], val columnValues: Vector[String]) {
 
   import au.id.cxd.math.data.DummyVariableBuilder._
 
@@ -101,7 +111,7 @@ object DummyVariableBuilder {
     * @return
     */
   def apply(columnName: String, uniqueValues: Set[String], columnValues: Seq[String]) =
-    new DummyVariableBuilder(columnName.replaceAll("\"", ""), uniqueValues, columnValues)
+    new DummyVariableBuilder(columnName.replaceAll("\"", ""), uniqueValues, columnValues.toVector)
 
 
   def dataFor(row: Seq[String], idx: Int) = row(idx).trim.replaceAll("\"", "").replaceAll(" ", "") match {
@@ -191,6 +201,12 @@ object DummyVariableBuilder {
       }
     }
 
+    /***
+      * use the vector contained within the builder to retrieve the value at the supplied index
+      * @param i
+      * @param j
+      * @return
+      */
     def valueFor(i: Int, j: Int): Double = {
       val builder = findMapping(j, mappings)
       val datum = dataFor(builder.columnValues, i)
@@ -200,18 +216,7 @@ object DummyVariableBuilder {
     // the process each row we will do this in parallel
     // however we want the maximum number of threads to be bounded
     //
-    implicit val ec = new ExecutionContext {
-      // we'll limit the number of threads to 2 * the physical number of processors
-      val numProcessors = Runtime.getRuntime.availableProcessors * 2
-
-      val threadPool = Executors.newFixedThreadPool(numProcessors);
-
-      def execute(runnable: Runnable) {
-        threadPool.submit(runnable)
-      }
-
-      def reportFailure(t: Throwable) {}
-    }
+    implicit val ec = LinearScaleExecutionContext(4)
 
 
     // cannot obviously execute all futures in parallel
