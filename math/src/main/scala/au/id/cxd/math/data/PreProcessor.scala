@@ -90,14 +90,14 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
 
 
     // the discrete data needs to be transformed into an indicator matrix
-    val discreteMatrixAndKey = (discrete.length > 0) match {
-      case true => {
-        val discreteHeaders = discrete.head
-        val discreteRows = discrete.tail
-        DummyVariableBuilder.buildIndicatorMatrix(discreteHeaders, discreteRows)
-      }
-      case _ => Future {
-        None
+    val discreteMatrixAndKey = Future {
+      (discrete.length > 0) match {
+        case true => {
+          val discreteHeaders = discrete.head
+          val discreteRows = discrete.tail
+          DummyVariableBuilder.buildIndicatorMatrix(discreteHeaders, discreteRows)
+        }
+        case _ => None
       }
     }
 
@@ -116,8 +116,9 @@ class PreProcessor(val file: File, val discreteColumns: List[Int], val continuou
     }
 
     for {
-      continuousResult <- continuousMatrix
+      // calculate the discrete matrix and continuous matrix in parallel
       discreteResult <- discreteMatrixAndKey
+      continuousResult <- continuousMatrix
       // combine the matrices if present with the continuous matrix first
       contCols = continuousResult match {
         case Some(mat) => mat.cols

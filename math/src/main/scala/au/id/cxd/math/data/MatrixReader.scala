@@ -47,7 +47,12 @@ trait MatrixReader {
           case _ => {
             val mat:DenseMatrix[Double] = pair._2
             val buffer = line.toBuffer
-            val temp:DenseMatrix[Double] = DenseMatrix.tabulate[Double](1,buffer.length) { case (i,j) => buffer(j).toDouble }
+            val temp:DenseMatrix[Double] = DenseMatrix.tabulate[Double](1,buffer.length) { case (i,j) => {
+              buffer(j) match {
+                case "" => 0.0
+                case a => a.toDouble
+              }
+            } }
             val index = rowIdx - 1
             // matrix assignment requires range
             mat(index to index, ::) := temp

@@ -29,6 +29,11 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
   val uniqueList: List[String] = uniqueValues.toList
 
   /**
+    * the set of matching indices of the matching column for each row of values.
+    */
+  val indices = createIndices(columnValues, uniqueList)
+
+  /**
     * locate the index of the value from the set of unique values
     *
     * @param value
@@ -38,6 +43,18 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
     uniqueList.indexOf(value)
   }
 
+
+  /**
+    * generate indices of the column values
+    * @param columns
+    * @return
+    */
+  def createIndices(columns:Vector[String], unique:List[String]):Vector[Int] = columns map {
+    col => col.trim.replaceAll("\"", "").replaceAll(" ", "") match {
+      case v => unique.indexOf(v)
+      case _ => -1
+    }
+  }
 
   /**
     * given N unique values convert to dummy indicator variables
@@ -126,7 +143,7 @@ object DummyVariableBuilder {
     */
   def extractColumns(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]): List[DummyVariableBuilder] = {
 
-    val results = rows.par.foldLeft(TreeMap[String, ListBuffer[String]]()) {
+    val results = rows.foldLeft(TreeMap[String, ListBuffer[String]]()) {
       (accum, row) => {
         val accum1 = headers.foldLeft((0, accum)) {
           (pair, col) => {
@@ -169,7 +186,7 @@ object DummyVariableBuilder {
     * @param rows
     * @return
     */
-  def buildIndicatorMatrix(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]):Future[Option[(DenseMatrix[Double], Map[String, Set[String]])]] = {
+  def buildIndicatorMatrix(headers: mutable.Buffer[String], rows: Seq[mutable.Buffer[String]]):Option[(DenseMatrix[Double], Map[String, Set[String]])] = {
     val builders = extractColumns(headers, rows)
     // each builder represents an set of dummy columns k
     // within the builder it iterates rows,
@@ -213,34 +230,34 @@ object DummyVariableBuilder {
       builder.indicator(j, datum)
     }
 
-    // the process each row we will do this in parallel
-    // however we want the maximum number of threads to be bounded
-    //
-    implicit val ec = LinearScaleExecutionContext(4)
-
-
     // cannot obviously execute all futures in parallel
     // but can we build the sequence in parallel and wait for the result.
     // maybe it would be better to do this for each row
     // then combine the results into a single sequence?
     // unfortunately at some point it needs to be converted into a matrix
-    val mat = Future.sequence {
-      for (i <- 0 until totalRows) yield Future {
-          for (j <- 0 until totalCols) yield valueFor(i, j)
+    val mat = DenseMatrix.zeros[Double](totalRows, totalCols)
+
+    for(i <- 0 until totalRows) {
+      builders.foldLeft(mat) {
+        (accum, builder) => {
+          val idx = builder.indices(i)
+          idx >= 0 && idx <= totalCols match {
+            case true => {
+              mat(i, idx) = 1
+              mat
+            }
+            case _ => mat
+          }
+
         }
-    }.map {
-      subsequences => subsequences.flatten
-    }.map {
-      values => new DenseMatrix(totalRows, totalCols, values.toArray)
-    }.map {
-      result => {
-        val keyedMappings = builders.foldLeft(Map[String, Set[String]]()) {
-          (accum, builder) => accum + (builder.columnName -> builder.uniqueValues)
-        }
-        Some(result, keyedMappings)
       }
     }
-    mat
+
+    val keyedMappings = builders.foldLeft(Map[String, Set[String]]()) {
+      (accum1, builder) => accum1 + (builder.columnName -> builder.uniqueValues)
+    }
+    Some(mat, keyedMappings)
+
   }
 
 
