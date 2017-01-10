@@ -52,7 +52,6 @@ class DummyVariableBuilder(val columnName: String, val uniqueValues: Set[String]
   def createIndices(columns:Vector[String], unique:List[String]):Vector[Int] = columns map {
     col => col.trim.replaceAll("\"", "").replaceAll(" ", "") match {
       case v => unique.indexOf(v)
-      case _ => -1
     }
   }
 

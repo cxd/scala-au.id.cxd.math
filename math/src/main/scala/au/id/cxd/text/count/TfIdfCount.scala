@@ -37,7 +37,7 @@ import scala.collection.mutable
   *
   * Created by cd on 7/1/17.
   */
-class TfIdfCount {
+case class TfIdfCount() {
 
   /**
     * term -> document x count
