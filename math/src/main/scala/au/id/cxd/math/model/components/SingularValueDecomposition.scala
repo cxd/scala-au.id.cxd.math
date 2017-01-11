@@ -60,7 +60,7 @@ import breeze.linalg.{DenseMatrix, DenseVector, svd}
   *
   * Created by cd on 10/07/2016.
   */
-class SingularValueDecomposition(P: DenseMatrix[Double]) {
+class SingularValueDecomposition(val P: DenseMatrix[Double]) {
 
   /**
     * perform the svd operation.
@@ -73,11 +73,41 @@ class SingularValueDecomposition(P: DenseMatrix[Double]) {
   }
 
 
+}
+object SingularValueDecomposition {
+  def apply(P: DenseMatrix[Double]) = {
+    val decomp = new SingularValueDecomposition(P)
+    val svD = decomp.op()
+    svD
+  }
+
+
+
+  /**
+    * convert the singular values into a matrix
+    * @param svD
+    * @return
+    */
   def singularDiagonal(svD: SVD[DenseMatrix[Double], DenseVector[Double]]) =
     DenseMatrix.tabulate[Double](svD.S.length, svD.S.length) {
       (i, j) =>
         i == j match {
           case true => svD.S(i)
+          case _ => 0.0
+        }
+    }
+
+  /**
+    * convert the singular values into a diagonal matrix where
+    * the values are the square root of the diagonal.
+    * @param svD
+    * @return
+    */
+  def singularRootDiagonal(svD:SVD[DenseMatrix[Double], DenseVector[Double]]) =
+    DenseMatrix.tabulate[Double](svD.S.length, svD.S.length) {
+      (i,j) =>
+        i == j match {
+          case true => Math.sqrt(svD.S(i))
           case _ => 0.0
         }
     }
@@ -162,6 +192,5 @@ class SingularValueDecomposition(P: DenseMatrix[Double]) {
     val C = svD.Vt.t * sMat.t* sMat * svD.Vt
     C
   }
-
 }
 

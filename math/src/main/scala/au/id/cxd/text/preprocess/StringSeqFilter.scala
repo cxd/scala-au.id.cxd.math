@@ -7,6 +7,14 @@ trait StringSeqFilter {
 
 
   /**
+    * tokenise a single query instance
+    * @param query
+    * @return
+    */
+  def tokeniseQuery(query:Array[String]):Array[String]
+
+
+  /**
     * the main tokenisation block
     * @param line
     * @return

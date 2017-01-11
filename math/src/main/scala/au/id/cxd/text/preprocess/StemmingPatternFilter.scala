@@ -8,6 +8,16 @@ class StemmingPatternFilter(override val stopWords: Seq[String],
                             override val pattern: String = """[,\.\!\?\s]""") extends StopwordPatternFilter(stopWords, pattern) {
   val regex = """\d""".r
 
+
+  override def tokeniseQuery(query: Array[String]): Array[String] =
+    super.tokeniseQuery(query).map {
+      p: String => regex.replaceAllIn(p, "")
+    }.filter(!_.isEmpty)
+      .filter(!_.contains("_"))
+      .map {
+        p => PorterStemmer(p)
+      }
+
   override def tokenise(line: String): Array[String] =
     super.tokenise(line).map {
       p: String => regex.replaceAllIn(p, "")
