@@ -1,6 +1,7 @@
 package au.id.cxd.text.count
 
-import breeze.linalg.DenseMatrix
+import au.id.cxd.text.model.LatentSemanticIndex
+import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.numerics.log
 
 import scala.collection.mutable
@@ -37,7 +38,7 @@ import scala.collection.mutable
   *
   * Created by cd on 7/1/17.
   */
-case class TfIdfCount() {
+case class TfIdfCount() extends DocumentTermVectoriser {
 
   /**
     * term -> document x count
@@ -164,6 +165,85 @@ case class TfIdfCount() {
     (terms1, termDocs1, docCounts1)
   }
 
+  /**
+    * find the matching index for the supplied term.
+    *
+    * @param colTermMap
+    * @param term
+    * @return
+    */
+  def findIndex(colTermMap: mutable.Map[Int, (String, Int, Int)], term: String): Option[(Int, (String, Int, Int))] = {
+    val matches = colTermMap.filter {
+      pair => pair._2._1.equalsIgnoreCase(term)
+    }
+    // there should only be 1 match
+    matches.size > 0 match {
+      case true => {
+        val item = matches.head
+        Some(item)
+      }
+      case _ => None
+    }
+  }
+
+  /**
+    * count the single query array and create a vector
+    * that assigns the tfidf term weights for the query into the indices of the term matrix
+    * that was constructed form the lsi model.
+    * @param query
+    * @param lsi
+    * @return
+    */
+  def countQuery(query:Array[String], lsi:LatentSemanticIndex):DenseVector[Double] = {
+    val docIdMap = lsi.docIdMap
+    val colTermMap = lsi.colTermMap
+
+    // now we need to map the query to term indexes and create a single vector that can be projected into the search space.
+    // only include the indices for known terms, if the indices are empty this means we do not have an SVD that
+    // includes the terms in the query.
+    val indices = query.foldLeft(List[(Int, Int)]()) {
+      (accum, term) => {
+        findIndex(colTermMap, term) match {
+          case Some(matchItem) => {
+            accum :+ (matchItem._1, matchItem._2._3)
+          }
+          case _ => accum
+        }
+      }
+    }
+    // build the query term vector we need to compute the tfidf for the query.
+    // this preprocessing should be done by an external counter such as the TFIDF counter implementation
+    val totalDocs = docIdMap.size
+    // since there are different methods of constructing term counts.
+    val groups = indices.groupBy(_._1)
+    val maxTermCnt = indices.length > 0 match {
+      case true => groups.map {
+        groupItem => groupItem._2.length
+      }.max
+      case _ => 1.0
+    }
+
+    DenseVector.tabulate[Double](colTermMap.size) {
+      i => {
+        val matchIndices = indices.filter { pair => pair._1 == i }
+        val localCnt = matchIndices.length.toDouble
+        val docCnt = matchIndices.length > 0 match {
+          case true => {
+            matchIndices.head._2
+          }
+          case _ => 0.0
+        }
+        val tf = localCnt > 0 match {
+          case true => 0.5 + 0.5 * (localCnt / maxTermCnt)
+          case _ => 0.5
+        }
+        val idf = Math.log(docCnt / totalDocs)
+        val tfidf = tf * idf
+        tfidf
+      }
+    }
+  }
+
 
   /**
     * Compute the count for the sequence of tokens found in each document.
@@ -184,7 +264,7 @@ case class TfIdfCount() {
     * corresponding term within the document.
     *
     */
-  def count(data: Seq[Array[String]]): (mutable.Map[Int, (String, Int)], DenseMatrix[Double]) = {
+  def count(data: Seq[Array[String]]): (mutable.Map[Int, (String, Int, Int)], DenseMatrix[Double]) = {
 
     val counts = data.foldLeft((0, termCount, termDocumentCount, docMaxCount)) {
       (accum, row) => {
@@ -205,9 +285,12 @@ case class TfIdfCount() {
     val keys = terms.keys.zip(hashes).toSeq
     // we have a map of hashes now we need to sort the keys by hash
     val keySorted = keys.sortBy(pair => pair._2)
-    val keyMap = mutable.Map[Int, (String, Int)]()
+    // the last value in the tuple is the count of documents in our data set that contains the term.
+    val keyMap = mutable.Map[Int, (String, Int, Int)]()
     for (i <- 0 until keys.length) {
-      keyMap.put(i, keySorted(i))
+      val pair = keySorted(i)
+      val ndocs = termDocs.get(pair._1).get.keys.size
+      keyMap.put(i, (pair._1, pair._2, ndocs))
     }
     // now there is a key map which we use to index the columns of each document when calculating the tf-idf
     val tfIdfMat = DenseMatrix.tabulate[Double](data.length, keys.length) {

@@ -2,6 +2,7 @@ package au.id.cxd.math.model.components
 
 import breeze.linalg.svd.SVD
 import breeze.linalg.{DenseMatrix, DenseVector, svd}
+import breeze.linalg.functions.svdr
 
 /**
   * ##import MathJax
@@ -52,6 +53,7 @@ import breeze.linalg.{DenseMatrix, DenseVector, svd}
   *
   * The $S$ matrix in the components interpretation provides a measure of the amount of variation each component c
   *
+  * Note that in the Breeze implementation if the P.cols > P.rows the SVD will calculate the number of components equal to the min(P.rows, P.cols)
   *
   * References:
   *
@@ -68,7 +70,14 @@ class SingularValueDecomposition(val P: DenseMatrix[Double]) {
     * @return
     */
   def op() = {
-    val svD = svd(P)
+    // generate a complete SVD with k = number of columns in P.
+    // note if the P.cols > P.rows the SVD will calculate the number of components equal to the min(P.rows, P.cols)
+    // we need to adjust this so that the dimensions of the components conform
+    val k = P.rows < P.cols match {
+      case true => P.rows
+      case _ => P.cols
+    }
+    val svD = svdr(P, k)
     svD
   }
 

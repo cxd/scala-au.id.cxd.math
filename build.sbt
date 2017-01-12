@@ -4,6 +4,8 @@ import scala.io.Source
 import com.typesafe.sbt.SbtGit.GitKeys._
 import sbt.Keys._
 
+val breezeVersion = "0.12"
+
 lazy val commonSettings = Seq(
   scalaVersion := "2.11.7",
   version := "1.0",
@@ -13,12 +15,12 @@ lazy val commonSettings = Seq(
   libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   libraryDependencies ++= Seq(
     // other dependencies here
-    "org.scalanlp" %% "breeze" % "0.11.2",
+    "org.scalanlp" %% "breeze" % breezeVersion,
     // native libraries are not included by default. add this if you want them (as of 0.7)
     // native libraries greatly improve performance, but increase jar sizes.
-    "org.scalanlp" %% "breeze-natives" % "0.11.2",
+    "org.scalanlp" %% "breeze-natives" % breezeVersion,
     // add breeze visualization
-    "org.scalanlp" %% "breeze-viz" % "0.11.2",
+    "org.scalanlp" %% "breeze-viz" % breezeVersion,
     // add the scalaz library
     "org.scalaz" %% "scalaz-core" % "7.1.0",
     // wrapper around jfreechart

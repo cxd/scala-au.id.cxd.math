@@ -8,8 +8,9 @@ import java.io.File
 import breeze.linalg._
 import au.id.cxd.math.data.{CsvReader, CsvWriter}
 import au.id.cxd.math.data.archive.{ZipArchiveInput, ZipArchiveOutput}
+import au.id.cxd.math.function.CosineDistance
 import au.id.cxd.math.model.components.SingularValueDecomposition
-import au.id.cxd.text.count.TfIdfCount
+import au.id.cxd.text.count.{DocumentTermVectoriser, TfIdfCount}
 import au.id.cxd.text.helpers.{EmbeddedStopwordsLoader, IndexedTextCsvReader}
 import au.id.cxd.text.preprocess.{LinePatternFilter, StemmingPatternFilter, StopwordPatternFilter}
 
@@ -30,7 +31,7 @@ import scala.util.Try
   * Created by cd on 10/1/17.
   */
 class LatentSemanticIndex(val docIdMap: mutable.Map[Int, Seq[String]],
-                          val colTermMap: mutable.Map[Int, (String, Int)],
+                          val colTermMap: mutable.Map[Int, (String, Int, Int)],
                           val tfIdf: DenseMatrix[Double],
                           val svD: SVD[DenseMatrix[Double], DenseVector[Double]]) {
 
@@ -41,10 +42,11 @@ class LatentSemanticIndex(val docIdMap: mutable.Map[Int, Seq[String]],
 object LatentSemanticIndex
   extends LatentSemanticIndexWriter
     with LatentSemanticIndexReader
-    with LatentSemanticIndexBuilder {
+    with LatentSemanticIndexBuilder
+    with LsiDocumentSearch {
 
   def apply(docIdMap: mutable.Map[Int, Seq[String]],
-            colTermMap: mutable.Map[Int, (String, Int)],
+            colTermMap: mutable.Map[Int, (String, Int, Int)],
             tfIdf: DenseMatrix[Double],
             svD: SVD[DenseMatrix[Double], DenseVector[Double]]) = new LatentSemanticIndex(docIdMap, colTermMap, tfIdf, svD)
 
@@ -73,10 +75,10 @@ trait LatentSemanticIndexWriter {
 
   val termMapWriter = new CsvWriter(writeHeaders = true) {
 
-    val headers = Seq("Index", "Term", "Hashcode")
+    val headers = Seq("Index", "Term", "Hashcode", "DocCount")
 
-    def writeBlock(pair: (Int, (String, Int))): Array[String] = {
-      Array(pair._1.toString, pair._2._1, pair._2._2.toString)
+    def writeBlock(pair: (Int, (String, Int, Int))): Array[String] = {
+      Array(pair._1.toString, pair._2._1, pair._2._2.toString, pair._2._3.toString)
     }
   }
 
@@ -93,7 +95,7 @@ trait LatentSemanticIndexWriter {
   }
 
 
-  def writeTermMap(path: String, termMap: mutable.Map[Int, (String, Int)]) = {
+  def writeTermMap(path: String, termMap: mutable.Map[Int, (String, Int, Int)]) = {
     termMapWriter.write(path, termMapWriter.headers.toArray, termMap.toSeq)(termMapWriter.writeBlock)
   }
 
@@ -197,9 +199,9 @@ trait LatentSemanticIndexReader {
     * @param path
     * @return
     */
-  def readColTermMap(path: String): mutable.Map[Int, (String, Int)] = {
+  def readColTermMap(path: String): mutable.Map[Int, (String, Int, Int)] = {
     val (idx, terms) =
-      CsvReader().readCsv(new File(path), (-1, mutable.Map[Int, (String, Int)]())) {
+      CsvReader().readCsv(new File(path), (-1, mutable.Map[Int, (String, Int, Int)]())) {
         (accum, line) => {
           val idx = accum._1
           idx < 0 match {
@@ -208,11 +210,11 @@ trait LatentSemanticIndexReader {
               val colIdx = line(0).toInt
               val term = line(1)
               val hashCode = line(2).toInt
-              accum._2.put(colIdx, (term, hashCode))
+              val docCnt = line(3).toInt
+              accum._2.put(colIdx, (term, hashCode, docCnt))
               (idx + 1, accum._2)
             }
           }
-          accum
         }
       }
     terms
@@ -376,7 +378,7 @@ trait LatentSemanticIndexBuilder {
   def buildFromCsv(inputCsv: String, docIdCols: Seq[Int], skipHeader: Boolean = true, stemTerms: Boolean = true) = {
     val (docMap, lines) = readIndexedCsv(inputCsv, docIdCols, skipHeader)
     val stopwords = loadStopWords()
-    val (termMap, terms) = stemTerms match {
+    val terms = stemTerms match {
       case true => extractStemmedTerms(stopwords, lines)
       case _ => extractTerms(stopwords, lines)
     }
@@ -402,16 +404,31 @@ trait LatentSemanticIndexBuilder {
   */
 trait LsiDocumentSearch {
 
-  def preprocessQuery(query:Array[String], stopwords:Seq[String], colTermMap:mutable.Map[Int, (String, Int)], stemQuery:Boolean = true) = {
+
+  /**
+    * convert the query into a term vector.
+    *
+    * @param query
+    * @param stopwords
+    * @param lsi : LatentSemanticIndex
+    * @param stemQuery
+    * @return
+    * the query term vector.
+    * currently the term vector is a tfidf vector for the query based on the lsi model.
+    * However there are other methods of weighting terms so it will be changed
+    * to supply a counting trait to calculate the term weights
+    */
+  def preprocessQuery(vectoriser: DocumentTermVectoriser)(query: Array[String], stopwords: Seq[String], lsi: LatentSemanticIndex, stemQuery: Boolean = true) = {
+
     val query1 = stemQuery match {
       case true =>
         new StemmingPatternFilter(stopwords).tokeniseQuery(query)
       case _ =>
         new StopwordPatternFilter(stopwords).tokeniseQuery(query)
     }
-    // now we need to map the query to term indexes and create a single vector that can be projected into the search space.
-
+    vectoriser.countQuery(query1, lsi)
   }
+
 
   /**
     * generate the search space for the U and V components by multiplying them against the
@@ -424,10 +441,45 @@ trait LsiDocumentSearch {
   def makeSearchSpace(lsi: LatentSemanticIndex) = {
     val searchSI = SingularValueDecomposition.singularRootDiagonal(lsi.svD)
     val searchU = lsi.svD.U * searchSI
-    val searchVt = lsi.svD.Vt * searchSI
+    val searchVt = lsi.svD.Vt.t * searchSI
     (searchU, searchSI, searchVt)
   }
 
-
+  /**
+    * search in the lsi model with an array query.
+    * @param searchSpace
+    * @param vectoriser
+    * @param query
+    * @param stopWords
+    * @param lsi
+    * @param stemQuery
+    * @return
+    */
+  def performSearch(searchSpace:(DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double]),
+                    vectoriser: DocumentTermVectoriser,
+                    query:Array[String],
+                    stopWords:Seq[String],
+                    lsi:LatentSemanticIndex,
+                    stemQuery:Boolean = true):mutable.Buffer[(Int, Double, Seq[String])] = {
+    val ssU = searchSpace._1
+    val ssVt = searchSpace._3
+    val queryVect = preprocessQuery(vectoriser)(query, stopWords, lsi, stemQuery)
+    val queryProj = queryVect.toDenseMatrix * ssVt
+    // the query projection should be a 1 x k matrix depending on the k components that have been kept for the svd.
+    val distances = CosineDistance(ssU, queryProj.toDenseVector)
+    // we now have distances that correspond to document indexes, zip the distances and the document index
+    // sort by reverse order, since distances closer to 1 are more closely aligned in vector space, distances close to 0 are close to perpendicular.
+    lsi.docIdMap.map {
+      entry => {
+        val idx = entry._1
+        // note the same number of rows exist in the distances vector
+        // we use the index of the document map to look it up.
+        // we cannot assume the document map indexes are ordered at all.
+        val dist = distances(idx)
+        (idx, dist, entry._2)
+      }
+    }.toBuffer
+      .sortBy { pair => -pair._2 }
+  }
 
 }
