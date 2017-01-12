@@ -231,13 +231,15 @@ case class TfIdfCount() extends DocumentTermVectoriser {
           case true => {
             matchIndices.head._2
           }
-          case _ => 0.0
+          case _ => 1.0
         }
         val tf = localCnt > 0 match {
           case true => 0.5 + 0.5 * (localCnt / maxTermCnt)
-          case _ => 0.5
+          case _ => 0.0
         }
-        val idf = Math.log(docCnt / totalDocs)
+        // TODO: we actually need the total number of documents containing the term.
+        val idf = log(totalDocs / docCnt)
+        //val idf = 1.0
         val tfidf = tf * idf
         tfidf
       }
@@ -253,12 +255,12 @@ case class TfIdfCount() extends DocumentTermVectoriser {
     * @param data
     * @return (termIndexMap, TF-IDF Matrix)
     *
-    * (mutable.Map[Int, (String, Int)], DenseMatrix[Double])
+    * (mutable.Map[Int, (String, Int, Int)], DenseMatrix[Double])
     *
     * The return is term index map that indicates which column each term is mapped to.
     * The map key contains the index of the column and the value corresponds to the term and its hashcode
     *
-    * (columnIndex x (Term x Hashcode))
+    * (columnIndex x (Term x Hashcode x Number of Documents containing term))
     *
     * The second item in the tuple is the TF-IDF matrix. Each row represents a document, each column contains the TF-IDF for the
     * corresponding term within the document.
