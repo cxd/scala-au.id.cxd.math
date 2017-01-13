@@ -152,7 +152,9 @@ trait LatentSemanticIndexWriter {
     tmp.toFile.deleteOnExit()
     val tmpPath = tmp.toString
     // now we can create a set of separate files.
-    write(index)(tmpPath)(path)
+    val result = write(index)(tmpPath)(path)
+    tmp.toFile.delete()
+    result
   }
 
 
@@ -227,7 +229,7 @@ trait LatentSemanticIndexReader {
     * @param path
     * @return
     */
-  def extractAndReadFromPath(zipFile: String)(path: String) = {
+  def extractAndReadFromPath(zipFile: String)(path: String) = Try {
 
     val zis = ZipArchiveInput.openArchive(zipFile).flatMap {
       zis => ZipArchiveInput.extractToPath(zis)(path)
@@ -259,7 +261,9 @@ trait LatentSemanticIndexReader {
     // read the zip file into a temporary directory and convert it into a data set.
     val tmpPath = Files.createTempDirectory("lsizip")
     tmpPath.toFile.deleteOnExit()
-    extractAndReadFromPath(zipFile)(tmpPath.toString)
+    val result = extractAndReadFromPath(zipFile)(tmpPath.toString)
+    tmpPath.toFile.delete()
+    result
   }
 
 }

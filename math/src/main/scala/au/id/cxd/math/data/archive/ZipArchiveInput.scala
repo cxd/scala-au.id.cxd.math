@@ -3,6 +3,7 @@ package au.id.cxd.math.data.archive
 import java.io.{File, FileInputStream, FileOutputStream}
 import java.util.zip.ZipInputStream
 
+import scala.collection.mutable
 import scala.util.Try
 
 /**
@@ -45,12 +46,15 @@ object ZipArchiveInput {
     * @return
     */
   def extractInMemory(zis:ZipInputStream) = Try {
-    zis.reset()
-    val data = for {
-      entry <- Iterator.iterate(zis.getNextEntry()) { entry => entry }
-      name = entry.getName
-      data = Iterator.continually(zis.read()).takeWhile(-1 !=).map(_.toByte).toArray
-    } yield (name, data)
+    // note very idiomatic either, however due to the iterator for zis entries
+    val data = mutable.ListBuffer[(String, Array[Byte])]()
+    var entry = zis.getNextEntry
+    while(entry != null) {
+      val name = entry.getName
+      val bytes = Iterator.continually(zis.read()).takeWhile(-1 !=).map(_.toByte).toArray
+      data :+ (name, bytes)
+      entry = zis.getNextEntry
+    }
     (zis, data)
   } toOption
 
@@ -60,25 +64,27 @@ object ZipArchiveInput {
     * @return
     */
   def extractToPath(zis:ZipInputStream)(path:String) = Try {
-    zis.reset()
     // ensure the output path exists, create it otherwise.
     val outFile = new File(path)
     outFile.exists() match {
       case false => outFile.mkdir()
       case _ => ()
     }
-    val results = Iterator.iterate(zis.getNextEntry) {
-      entry => {
-        val subpath = path.stripSuffix(File.separator)
-        val name = entry.getName
-        val targetFile = s"${path}${File.separator}$name"
-        val fos = new FileOutputStream(targetFile)
-        val data:Array[Byte] = Iterator.continually(zis.read()).takeWhile(-1 != ).map(_.toByte).toArray
-        fos.write(data)
-        fos.flush()
-        fos.close()
-        entry
-      }
+
+    // unfortunately this is imperative couldn't work out how to make this operate with Iterator.
+    var entry = zis.getNextEntry
+    while(entry != null) {
+      val subpath = path.stripSuffix(File.separator)
+      val name = entry.getName
+      val targetFile = s"${path}${File.separator}$name"
+      val fos = new FileOutputStream(targetFile)
+      val bytes = zis.available()
+
+      val data:Array[Byte] = Iterator.continually(zis.read()).takeWhile(-1 != ).map(_.toByte).toArray
+      fos.write(data)
+      fos.flush()
+      fos.close()
+      entry = zis.getNextEntry
     }
     zis
   } toOption
