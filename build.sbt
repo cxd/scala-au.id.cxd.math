@@ -25,6 +25,8 @@ lazy val commonSettings = Seq(
 
   libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   libraryDependencies ++= Seq(
+    //// scalax io
+    //"com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
     // other dependencies here
     "org.scalanlp" %% "breeze" % breezeVersion,
     // native libraries are not included by default. add this if you want them (as of 0.7)

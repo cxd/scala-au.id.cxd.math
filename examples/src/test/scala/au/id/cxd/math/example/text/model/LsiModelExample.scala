@@ -15,6 +15,7 @@ import au.id.cxd.text.model.LatentSemanticIndex
   * The process to build the SVD may take up to over 3gb of RAM once completed it will then free memory back around 1gb.
   * This is due to the moderate data size. Obviously depending on the volume of data, RAM and CPU will affect performance.
   * The algorithm is not a distributed algorithm and computes in process.
+  * For this example make sure to add java arguments for -Xmx4g -Xms1g
   *
   * This program takes an optional query as the first argument or instead uses the default query:
   *
@@ -42,8 +43,11 @@ import au.id.cxd.text.model.LatentSemanticIndex
 Entropy: 9.894113652385852E-4
 Contributions: DenseVector(0.9994790785406367, 1.835121819616125E-6, 1.7322777058828093E-6, 1.6448122003800841E-6, 1.6114471046601103E-6, 1.5503555534535887E-6, ... , )
 Dimensions: U (5118 x 5079) S: 5079 Vt: (5079 x 5079)
-Search Space U dimension: 5118 x 5079
-Search Space V dimension: 5079 x 5079
+
+Reduced Dimensions: U (5118 x 1001) S: 1001 Vt: (1001 x 5079)
+Search Space U dimension: 5118 x 1001
+Search Space V dimension: 5079 x 1001
+
 First 10 Search Results
 ArrayBuffer((522,0.00857476395210225,List(Apache httpd-2, 55452)), (779,0.008411627826394047,List(Apache httpd-2, 48499)), (3029,0.00769331654015826,List(Apache httpd-2, 56028)), (2198,0.00766045509643702,List(Ant, 50379)), (1624,0.007532632780709755,List(Apache httpd-2, 52465)), (1698,0.007404865348059863,List(Apache httpd-2, 41000)), (1092,0.007404865348059654,List(Apache httpd-2, 46762)), (452,0.007404865348059145,List(Apache httpd-2, 47814)), (4292,0.007273857873182794,List(Fop - Now in Jira, 49842)), (3063,0.007225493338190402,List(Apache httpd-2, 51814)))
 First 10 Search Results
@@ -71,10 +75,17 @@ object LsiModelExample {
 
     println(s"Dimensions: U (${lsi.svD.U.rows} x ${lsi.svD.U.cols}) S: ${lsi.svD.S.length} Vt: (${lsi.svD.Vt.rows} x ${lsi.svD.Vt.cols})")
 
+
+    // Now given that the entropy is very close to 0 this means the variation is explained largely in the first dimension.
+    // however the first component explains the 99% or so of the variation.
+    // we will reduce the LSI to roughly 1000 dimensions which is less than the 5000 or so dimensions from the original tfidf.
+    val lsi2 = LatentSemanticIndex.reduceToDimensons(lsi, 1000)
+    println(s"Reduced Dimensions: U (${lsi2.svD.U.rows} x ${lsi2.svD.U.cols}) S: ${lsi2.svD.S.length} Vt: (${lsi2.svD.Vt.rows} x ${lsi2.svD.Vt.cols})")
+
     // Note: prior to performing the search we can make use of the entropy and contributions to select k dimensions from the search space.
     // at this stage we have not done that.
 
-    val (ssU, ssS, ssVt) = LatentSemanticIndex.makeSearchSpace(lsi)
+    val (ssU, ssS, ssVt) = LatentSemanticIndex.makeSearchSpace(lsi2)
 
     // Note from inspection, we can see that the entropy is close to 0, and that the model has
 
@@ -86,7 +97,7 @@ object LsiModelExample {
 
 
     // TODO: debug the search process and the search projection
-    val searchResults = LatentSemanticIndex.performSearch((ssU, ssS, ssVt), TfIdfCount(), query, stopwords, lsi)
+    val searchResults = LatentSemanticIndex.performSearch((ssU, ssS, ssVt), TfIdfCount(), query, stopwords, lsi2)
 
 
     println(s"First 10 Search Results")

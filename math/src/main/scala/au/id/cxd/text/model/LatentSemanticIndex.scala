@@ -33,9 +33,7 @@ import scala.util.Try
 class LatentSemanticIndex(val docIdMap: mutable.Map[Int, Seq[String]],
                           val colTermMap: mutable.Map[Int, (String, Int, Int)],
                           val tfIdf: DenseMatrix[Double],
-                          val svD: SVD[DenseMatrix[Double], DenseVector[Double]]) {
-
-
+                          val svD: SVD[DenseMatrix[Double], DenseVector[Double]]) extends Serializable {
 }
 
 
@@ -44,6 +42,9 @@ object LatentSemanticIndex
     with LatentSemanticIndexReader
     with LatentSemanticIndexBuilder
     with LsiDocumentSearch {
+
+
+  type LsiSearchSpace = (DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double])
 
   def apply(docIdMap: mutable.Map[Int, Seq[String]],
             colTermMap: mutable.Map[Int, (String, Int, Int)],
@@ -433,6 +434,46 @@ trait LsiDocumentSearch {
     vectoriser.countQuery(query1, lsi)
   }
 
+
+  /**
+    * The singular values can dictate how many dimensions we should retain.
+    * After manual analysis it may be decided that we only want to retain a certain fixed number of dimensions
+    *
+    * Hence this will result in an SVD of reduced dimensionality where k is the number of principle components.
+    *
+    * The original SVD
+    *
+    * $$
+    *   \hat{X} = U S V'
+    * $$
+    *
+    * where $U$ has dimension $(m x n)$
+    * and $S$ has size $n$
+    * and $Vt$ has dimension $(n x n)$
+    *
+    * If we choose dimension $k < n$ then we have
+    *
+    * $U$ dimension $(m x k)$
+    * $S$ dimension $k$
+    * $V'$ dimension $(k x n)$
+    *
+    * Note that this does not reduce the original tfidf matrix, but will reduce the dimensions that the projects of the tfidf into the search space will have.
+    *
+    * Note that $k < n$
+    *
+    * @param k
+    */
+  def reduceToDimensons(lsi:LatentSemanticIndex, k:Int):LatentSemanticIndex = {
+    val U = lsi.svD.U
+    val S = lsi.svD.S
+    val Vt = lsi.svD.Vt
+
+    val rU = U(::, 0 until k).toDenseMatrix
+    val rS = S(0 until k).toDenseVector
+    val rVt = Vt(0 until k, ::).toDenseMatrix
+
+    LatentSemanticIndex(lsi.docIdMap, lsi.colTermMap, lsi.tfIdf, SVD(rU, rS, rVt))
+  }
 
   /**
     * generate the search space for the U and V components by multiplying them against the

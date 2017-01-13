@@ -4,6 +4,7 @@ import java.io.{File, FileInputStream, FileOutputStream}
 import java.util.zip.ZipInputStream
 
 import scala.collection.mutable
+import scala.io.Source
 import scala.util.Try
 
 /**
@@ -15,14 +16,15 @@ object ZipArchiveInput {
 
   /**
     * extract the input zip file to the output path.
+    *
     * @param file
     * @param outputPath
     * @return
     */
-  def extract(file:String, outputPath:String) = {
-    openArchive (file).flatMap{
+  def extract(file: String, outputPath: String) = {
+    openArchive(file).flatMap {
       zis => extractToPath(zis)(outputPath)
-    }.flatMap (closeArchive) match {
+    }.flatMap(closeArchive) match {
       case Some(flag) => flag
       case _ => false
     }
@@ -30,10 +32,11 @@ object ZipArchiveInput {
 
   /**
     * open an archive
+    *
     * @param file
     * @return
     */
-  def openArchive(file:String) = Try {
+  def openArchive(file: String) = Try {
     val is = new FileInputStream(file)
     val zis = new ZipInputStream(is)
     zis
@@ -42,15 +45,17 @@ object ZipArchiveInput {
   /**
     * extract the array in memory into a sequence of
     * name, byte array pairs.
+    *
     * @param zis
     * @return
     */
-  def extractInMemory(zis:ZipInputStream) = Try {
+  def extractInMemory(zis: ZipInputStream) = Try {
     // note very idiomatic either, however due to the iterator for zis entries
     val data = mutable.ListBuffer[(String, Array[Byte])]()
     var entry = zis.getNextEntry
-    while(entry != null) {
+    while (entry != null) {
       val name = entry.getName
+      // note this reads only 1 byte at a time
       val bytes = Iterator.continually(zis.read()).takeWhile(-1 !=).map(_.toByte).toArray
       data :+ (name, bytes)
       entry = zis.getNextEntry
@@ -60,10 +65,11 @@ object ZipArchiveInput {
 
   /**
     * extract the files to the base path supplied
+    *
     * @param path
     * @return
     */
-  def extractToPath(zis:ZipInputStream)(path:String) = Try {
+  def extractToPath(zis: ZipInputStream)(path: String) = Try {
     // ensure the output path exists, create it otherwise.
     val outFile = new File(path)
     outFile.exists() match {
@@ -73,13 +79,12 @@ object ZipArchiveInput {
 
     // unfortunately this is imperative couldn't work out how to make this operate with Iterator.
     var entry = zis.getNextEntry
-    while(entry != null) {
+    while (entry != null) {
       val subpath = path.stripSuffix(File.separator)
       val name = entry.getName
       val targetFile = s"${path}${File.separator}$name"
       val fos = new FileOutputStream(targetFile)
-      val bytes = zis.available()
-
+      // note this reads only 1 byte at a time
       val data:Array[Byte] = Iterator.continually(zis.read()).takeWhile(-1 != ).map(_.toByte).toArray
       fos.write(data)
       fos.flush()
@@ -91,10 +96,11 @@ object ZipArchiveInput {
 
   /**
     * close the archive.
+    *
     * @param zis
     * @return
     */
-  def closeArchive(zis:ZipInputStream) = Try {
+  def closeArchive(zis: ZipInputStream) = Try {
     zis.close()
     true
   } toOption
