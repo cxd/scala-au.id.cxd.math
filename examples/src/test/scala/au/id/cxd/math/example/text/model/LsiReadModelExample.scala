@@ -40,6 +40,9 @@ object LsiReadModelExample {
 
   val targetZip = "lsiexample.zip"
 
+  // binary serialization file
+  val targetSer = "lsiexample.ser"
+
   val textData = "example_text_corpus_data.csv"
 
   val defaultQuery = Array("http", "redirect", "error")
@@ -53,14 +56,14 @@ object LsiReadModelExample {
   }
 
   def readModel() = {
-    val readResult = LatentSemanticIndex.readZip(targetZip)
+    val readResult = LatentSemanticIndex.readBinary(targetSer)
     readResult match {
-      case Success(lsi2) => {
+      case Some(lsi2) => {
         println(s"Dimensions: U (${lsi2.svD.U.rows} x ${lsi2.svD.U.cols}) S: ${lsi2.svD.S.length} Vt: (${lsi2.svD.Vt.rows} x ${lsi2.svD.Vt.cols})")
         Some(lsi2)
       }
-      case Failure(error) => {
-        println(s"Failed to read $targetZip due to ${error}")
+      case _ => {
+        println(s"Failed to read $targetSer")
         None
       }
     }

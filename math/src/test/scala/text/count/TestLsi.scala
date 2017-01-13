@@ -70,7 +70,7 @@ class TestLsi extends FlatSpec with ShouldMatchers {
   /**
     * test writing and then reading the model.
     */
-  "LSI" should "write and read model" in {
+  "LSI" should "write and read model as csv" in {
     val input = "subset_text_input.csv"
     val url = getClass.getClassLoader().getResource(input)
     val inputCsv = url.getFile
@@ -84,7 +84,7 @@ class TestLsi extends FlatSpec with ShouldMatchers {
     println(s"Dimensions: U (${lsi.svD.U.rows} x ${lsi.svD.U.cols}) S: ${lsi.svD.S.length} Vt: (${lsi.svD.Vt.rows} x ${lsi.svD.Vt.cols})")
 
     // now test writing the model.
-    val writeResult = LatentSemanticIndex.writeTemp(lsi)("testlsi.zip")
+    val writeResult = LatentSemanticIndex.writeZipTemp(lsi)("testlsi.zip")
 
     writeResult match {
       case Success(flag) => flag should be(true)
@@ -94,6 +94,64 @@ class TestLsi extends FlatSpec with ShouldMatchers {
     val readResult = LatentSemanticIndex.readZip("testlsi.zip")
     readResult match {
       case Success(lsi2) => {
+        lsi2.docIdMap.size should equal(lsi.docIdMap.size)
+        lsi2.colTermMap.size should equal(lsi.colTermMap.size)
+
+
+        println(s"Dimensions: U (${lsi2.svD.U.rows} x ${lsi2.svD.U.cols}) S: ${lsi2.svD.S.length} Vt: (${lsi2.svD.Vt.rows} x ${lsi2.svD.Vt.cols})")
+
+        // test searching against the loaded model
+
+        val (ssU, ssS, ssVt) = LatentSemanticIndex.makeSearchSpace(lsi2)
+
+        println(s"Search Space U dimension: ${ssU.rows} x ${ssU.cols}")
+        println(s"Search Space V dimension: ${ssVt.rows} x ${ssVt.cols}")
+
+        val loader = EmbeddedStopwordsLoader()
+        val stopwords = loader.load()
+        val query = Array("http", "redirect", "error")
+
+
+        // TODO: debug the search process and the search projection
+        val searchResults = LatentSemanticIndex.performSearch((ssU, ssS, ssVt), TfIdfCount(), query, stopwords, lsi2)
+
+        searchResults.length should not be (0)
+        println(s"First 10 Search Results")
+        println(searchResults.take(10))
+
+
+      }
+    }
+
+  }
+
+  /**
+    * test writing and then reading the model.
+    */
+  "LSI" should "write and read model as binary" in {
+    val input = "subset_text_input.csv"
+    val url = getClass.getClassLoader().getResource(input)
+    val inputCsv = url.getFile
+    val idCols = Seq(0, 1)
+    val (entropy, contributions, lsi) = LatentSemanticIndex.buildFromCsv(inputCsv, idCols)
+    entropy should not be (0.0)
+    println(s"Entropy: $entropy")
+    contributions.length should not be (0)
+    println(s"Contributions: $contributions")
+
+    println(s"Dimensions: U (${lsi.svD.U.rows} x ${lsi.svD.U.cols}) S: ${lsi.svD.S.length} Vt: (${lsi.svD.Vt.rows} x ${lsi.svD.Vt.cols})")
+
+    // now test writing the model.
+    val writeResult = LatentSemanticIndex.writeBinary(lsi)("testlsi.ser")
+
+    writeResult match {
+      case Some(flag) => flag should be(true)
+      case _ => fail("Failed to write testlsi.zip")
+    }
+
+    val readResult = LatentSemanticIndex.readBinary("testlsi.ser")
+    readResult match {
+      case Some(lsi2) => {
         lsi2.docIdMap.size should equal(lsi.docIdMap.size)
         lsi2.colTermMap.size should equal(lsi.colTermMap.size)
 

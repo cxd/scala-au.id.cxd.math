@@ -40,6 +40,9 @@ object LsiModelWriteExample {
 
   val textData = "example_text_corpus_data.csv"
 
+  // binary serialization file
+  val targetSer = "lsiexample.ser"
+  // zip archives with CSV for use in other tools for visualisation
   val targetZip = "lsiexample.zip"
 
   def buildModel() = {
@@ -64,7 +67,8 @@ object LsiModelWriteExample {
 
 
     // write the model to the zip file
-    val writeResult = LatentSemanticIndex.writeTemp(lsi2)(targetZip)
+    // the contents of the zip file contains csv data for use in visualisation tools such as R.
+    val writeResult = LatentSemanticIndex.writeZipTemp(lsi2)(targetZip)
 
     writeResult match {
       case Success(flag) => flag match {
@@ -74,6 +78,19 @@ object LsiModelWriteExample {
         case _ => println(s"Failed to write model to $targetZip")
       }
       case _ => println(s"Failed to write $targetZip")
+    }
+
+
+    // write to binary format
+    // this is useful for working in scala/java without the need for using external tools
+    // it is also alot faster to read.
+    val writeResult2 = LatentSemanticIndex.writeBinary(lsi2)(targetSer)
+    writeResult2 match {
+      case Some(flag) => flag match {
+        case true => println(s"wrote model to $targetSer")
+        case _ => println(s"failed to write model to $targetSer")
+      }
+      case _ => println(s"failed to write model to $targetSer")
     }
   }
 

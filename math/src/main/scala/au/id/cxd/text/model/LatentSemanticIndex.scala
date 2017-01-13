@@ -6,7 +6,7 @@ import java.nio.file.{Files, Path}
 import java.io.File
 
 import breeze.linalg._
-import au.id.cxd.math.data.{CsvReader, CsvWriter}
+import au.id.cxd.math.data.{CsvReader, CsvWriter, Writable, Readable}
 import au.id.cxd.math.data.archive.{ZipArchiveInput, ZipArchiveOutput}
 import au.id.cxd.math.function.CosineDistance
 import au.id.cxd.math.model.components.SingularValueDecomposition
@@ -100,7 +100,7 @@ trait LatentSemanticIndexWriter {
     termMapWriter.write(path, termMapWriter.headers.toArray, termMap.toSeq)(termMapWriter.writeBlock)
   }
 
-  def write(index: LatentSemanticIndex)(workingPath: String)(targetPath: String) = Try {
+  def writeZip(index: LatentSemanticIndex)(workingPath: String)(targetPath: String) = Try {
     val parent = workingPath.stripSuffix(File.separator)
     val docPath = s"$parent${File.separator}docidmap.csv"
     val termPath = s"$parent${File.separator}termmap.csv"
@@ -147,15 +147,26 @@ trait LatentSemanticIndexWriter {
     * @param index
     * @param path
     */
-  def writeTemp(index: LatentSemanticIndex)(path: String) = {
+  def writeZipTemp(index: LatentSemanticIndex)(path: String) = {
     val tmpFile = path.stripSuffix(".zip")
     val tmp = Files.createTempDirectory(tmpFile)
     tmp.toFile.deleteOnExit()
     val tmpPath = tmp.toString
     // now we can create a set of separate files.
-    val result = write(index)(tmpPath)(path)
+    val result = writeZip(index)(tmpPath)(path)
     tmp.toFile.delete()
     result
+  }
+
+  /**
+    * write the model in binary format instead of a zip archive.
+    *
+    * @param lsi
+    * @param path
+    */
+  def writeBinary(lsi: LatentSemanticIndex)(path: String) = {
+    val writer = new Writable[LatentSemanticIndex] {}
+    writer.write(path)(lsi)
   }
 
 
@@ -258,6 +269,11 @@ trait LatentSemanticIndexReader {
 
   }
 
+  /**
+    * read from the zip archive.
+    * @param zipFile
+    * @return
+    */
   def readZip(zipFile: String) = {
     // read the zip file into a temporary directory and convert it into a data set.
     val tmpPath = Files.createTempDirectory("lsizip")
@@ -267,6 +283,15 @@ trait LatentSemanticIndexReader {
     result
   }
 
+  /**
+    * read from binary
+    * @param filePath
+    * @return
+    */
+  def readBinary(filePath:String) = {
+    val reader = new Readable[LatentSemanticIndex] {}
+    reader.read(filePath)
+  }
 }
 
 /**
@@ -444,7 +469,7 @@ trait LsiDocumentSearch {
     * The original SVD
     *
     * $$
-    *   \hat{X} = U S V'
+    * \hat{X} = U S V'
     * $$
     *
     * where $U$ has dimension $(m x n)$
@@ -463,7 +488,7 @@ trait LsiDocumentSearch {
     *
     * @param k
     */
-  def reduceToDimensons(lsi:LatentSemanticIndex, k:Int):LatentSemanticIndex = {
+  def reduceToDimensons(lsi: LatentSemanticIndex, k: Int): LatentSemanticIndex = {
     val U = lsi.svD.U
     val S = lsi.svD.S
     val Vt = lsi.svD.Vt
@@ -492,6 +517,7 @@ trait LsiDocumentSearch {
 
   /**
     * search in the lsi model with an array query.
+    *
     * @param searchSpace
     * @param vectoriser
     * @param query
@@ -500,12 +526,12 @@ trait LsiDocumentSearch {
     * @param stemQuery
     * @return
     */
-  def performSearch(searchSpace:(DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double]),
+  def performSearch(searchSpace: (DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double]),
                     vectoriser: DocumentTermVectoriser,
-                    query:Array[String],
-                    stopWords:Seq[String],
-                    lsi:LatentSemanticIndex,
-                    stemQuery:Boolean = true):mutable.Buffer[(Int, Double, Seq[String])] = {
+                    query: Array[String],
+                    stopWords: Seq[String],
+                    lsi: LatentSemanticIndex,
+                    stemQuery: Boolean = true): mutable.Buffer[(Int, Double, Seq[String])] = {
     val ssU = searchSpace._1
     val ssVt = searchSpace._3
     val queryVect = preprocessQuery(vectoriser)(query, stopWords, lsi, stemQuery)
