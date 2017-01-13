@@ -3,7 +3,7 @@ package data
 import java.io.File
 
 import au.id.cxd.math.data.SequenceReader
-import org.scalatest.{FlatSpec, _}
+import org.scalatest.{FlatSpec, ShouldMatchers}
 
 /**
  *
@@ -13,10 +13,11 @@ import org.scalatest.{FlatSpec, _}
  */
 class TestSequenceReader extends FlatSpec with ShouldMatchers {
 
-  val fileName = "src/test/data/example_train_data.csv"
+  val fileName = "example_train_data.csv"
 
   "reader" should "read sequences" in {
-    val file = new File(fileName)
+    val url = getClass.getClassLoader.getResource(fileName)
+    val file = new File(url.getFile)
     println("File Path: " + file.getAbsolutePath)
     val reader = SequenceReader()
     val data = reader.readSequences(file)

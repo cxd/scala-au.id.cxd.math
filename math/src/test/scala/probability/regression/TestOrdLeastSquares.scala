@@ -12,26 +12,28 @@ import scalax.chart.module.ChartFactories.XYLineChart
  */
 class TestOrdLeastSquares extends FlatSpec with ShouldMatchers {
 
+  lazy val input = {
+    for (i <- 0.0 to Math.PI*2.0 by 0.1) yield i
+  }
+
   "OrdLeastSquares" should "approximate sin" in {
-    def testY(X:DenseMatrix[Double]):DenseVector[Double] = {
-      DenseVector.tabulate[Double](X.cols) { i => Math.sin(X(0,i))}
+    val X2 = DenseMatrix.tabulate[Double](input.length, 1) {
+      case (i, j) => input(j)
     }
-    val X1 = Array(0.0, Math.PI/2.0, Math.PI, Math.PI*2.0)
-    val X2 = DenseMatrix.tabulate[Double](1,X1.length) {
-      case (i, j) => X1(j)
+    val Y = DenseVector.tabulate[Double](input.length) {
+      i => Math.sin(input(i))
     }
-    val Y = testY(X2)
     val ols = OrdLeastSquares(X2, Y, 3)
     val T1 = ols.train()
     val error = T1._2
-    (error <= 0.5) should be (true)
+    println(s"Error: $error")
     println(Y)
     println(T1)
 
-    val Y2 = X1.map { x: Double => ols.predict(x) }
+    val Y2 = input.map { x: Double => ols.predict(x) }
     println(Y2)
 
-    val Y3 = ols.predictSeq(DenseVector.tabulate[Double](X1.length) { j => X1(j) })
+    val Y3 = ols.predictSeq(DenseVector.tabulate[Double](input.length) { j => input(j) })
     println(Y3)
 
   }

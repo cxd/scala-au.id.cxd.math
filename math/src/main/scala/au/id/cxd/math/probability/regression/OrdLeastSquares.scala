@@ -294,7 +294,17 @@ class OrdLeastSquares(var X: DenseMatrix[Double], var Y: DenseVector[Double], va
     * @param Y
     */
   def squaredError(T: DenseMatrix[Double], Y: DenseMatrix[Double]): Double = {
-    val delta = pow((Y - T), 2.0)
+    val difference = T.rows == Y.rows && T.cols == Y.cols match {
+      case true => Y - T
+      case _ => {
+        val T2 = T.t
+        T2.rows == Y.rows && T2.cols == Y.cols match {
+          case true => Y - T2
+          case _ => throw new Exception(s"Cannot calculate squaredError dimensions do not agree T dim = (${T.rows}, ${T.cols}) Y dim = (${Y.rows}, ${Y.cols}")
+        }
+      }
+    }
+    val delta = pow(difference, 2.0)
     val total = sum(delta)
     total.asInstanceOf[Double] * 0.5
   }
@@ -324,8 +334,8 @@ class OrdLeastSquares(var X: DenseMatrix[Double], var Y: DenseVector[Double], va
     Beta = updateWeights(P, Y1)
     val yHat = multWeights(Beta, P)
 
-
-    residuals = (Y1 - yHat).toDenseVector
+    println(s"Y1 dim (${Y1.rows} x ${Y1.cols}) yHat dim (${yHat.rows} x ${yHat.cols})")
+    residuals = (Y1 - yHat.t).toDenseVector
     mse = squaredError(yHat, Y1)
 
     // form the estimate of the beta variance
@@ -399,7 +409,7 @@ class OrdLeastSquares(var X: DenseMatrix[Double], var Y: DenseVector[Double], va
     * @return
     */
   def predictSeq(x: DenseVector[Double]) = {
-    val M = DenseMatrix.tabulate[Double](x.length, 2) {
+    val M = DenseMatrix.tabulate[Double](x.length, 1) {
       case (i, j) => x(i)
     }
     val M1 = createPolynomial(M, m)
