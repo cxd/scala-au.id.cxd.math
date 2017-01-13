@@ -6,6 +6,17 @@ import sbt.Keys._
 
 val breezeVersion = "0.12"
 
+
+javaOptions += "-Xmx2G -Xms1G -XX:MaxPermSize=512M"
+
+
+javaOptions ++= Seq(
+  // -J params will be added as jvm paramete
+  "-J-Xmx2g",
+  "-J-Xms1g",
+  "-J-XX:MaxPermSize=512m"
+)
+
 lazy val commonSettings = Seq(
   scalaVersion := "2.11.7",
   version := "1.0",

@@ -14,7 +14,6 @@ import org.scalatest.{FlatSpec, ShouldMatchers}
 class TestLsi extends FlatSpec with ShouldMatchers {
 
   "LSI" should "build model" in {
-    //val input = "example_input_data.csv"
     val input = "subset_text_input.csv"
     val url = getClass.getClassLoader().getResource(input)
     val inputCsv = url.getFile
@@ -27,6 +26,9 @@ class TestLsi extends FlatSpec with ShouldMatchers {
 
     println(s"Dimensions: U (${lsi.svD.U.rows} x ${lsi.svD.U.cols}) S: ${lsi.svD.S.length} Vt: (${lsi.svD.Vt.rows} x ${lsi.svD.Vt.cols})")
 
+    // Note: prior to performing the search we can make use of the entropy and contributions to select k dimensions from the search space.
+    // at this stage we have not done that.
+
     val (ssU, ssS, ssVt) = LatentSemanticIndex.makeSearchSpace(lsi)
 
     println(s"Search Space U dimension: ${ssU.rows} x ${ssU.cols}")
@@ -35,6 +37,7 @@ class TestLsi extends FlatSpec with ShouldMatchers {
     val loader = EmbeddedStopwordsLoader()
     val stopwords = loader.load()
     val query = Array("http", "redirect", "error")
+
 
     // TODO: debug the search process and the search projection
     val searchResults = LatentSemanticIndex.performSearch((ssU, ssS, ssVt), TfIdfCount(), query, stopwords, lsi)
