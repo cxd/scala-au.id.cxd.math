@@ -1,4 +1,4 @@
-package au.id.cxd.math.examples.probability.regression
+package au.id.cxd.math.example.charting
 
 import org.jfree.chart.{ChartPanel, JFreeChart}
 

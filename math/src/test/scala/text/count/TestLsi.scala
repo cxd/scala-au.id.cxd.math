@@ -5,7 +5,7 @@ import java.io.File
 import au.id.cxd.math.data.CsvReader
 import au.id.cxd.text.count.TfIdfCount
 import au.id.cxd.text.helpers.EmbeddedStopwordsLoader
-import au.id.cxd.text.model.{LatentSemanticIndex, LsiDocumentCluster}
+import au.id.cxd.text.model.{LatentSemanticIndex, LsiComponentCluster}
 import org.scalatest.{FlatSpec, ShouldMatchers}
 
 import scala.util.Success
@@ -196,7 +196,7 @@ class TestLsi extends FlatSpec with ShouldMatchers {
 
     // lets use maximum of 50 clusters for this example
     val k = 20
-    val clusterLsi = new LsiDocumentCluster {}
+    val clusterLsi = new LsiComponentCluster {}
 
     val docClust = clusterLsi.clusterDocuments(lsi, k)
 
@@ -247,7 +247,7 @@ class TestLsi extends FlatSpec with ShouldMatchers {
 
         println("----------------------------------")
         println(s"Cluster: ${termPair._1} Size: $cnt")
-        debug.foreach(item => println(item._2._1))
+        debug.foreach(item => println(item._3._1))
         println("----------------------------------")
       }
     }

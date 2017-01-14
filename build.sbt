@@ -37,7 +37,9 @@ lazy val commonSettings = Seq(
     // add the scalaz library
     "org.scalaz" %% "scalaz-core" % "7.1.0",
     // wrapper around jfreechart
-    "com.github.wookietreiber" %% "scala-chart" % "0.5.0"
+    "com.github.wookietreiber" %% "scala-chart" % "0.5.0",
+    // include kumo for tag cloud generation
+    "com.kennycason" % "kumo" % "1.8"
   )
 )
 

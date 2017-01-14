@@ -1,10 +1,11 @@
-package au.id.cxd.math.examples.probability.regression
+package au.id.cxd.math.example.probability.regression
 
 import java.awt.GridLayout
 import java.io.File
 import javax.swing.JFrame
 
 import au.id.cxd.math.data.{CsvReader, MatrixReader}
+import au.id.cxd.math.example.charting.ChartHelper
 import au.id.cxd.math.probability.regression.OrdLeastSquares
 import breeze.linalg.DenseMatrix
 import org.jfree.chart.ChartPanel

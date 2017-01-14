@@ -23,7 +23,7 @@ import breeze.linalg.DenseMatrix
   *
   * Created by cd on 13/1/17.
   */
-trait LsiDocumentCluster {
+trait LsiComponentCluster {
 
   /**
     * subtract the minimum value of the matrix
@@ -45,7 +45,7 @@ trait LsiDocumentCluster {
     * This will return a set of documents each grouped by the cluster to which they correspond.
     * (ClusterId, Seq[(Int, Seq[String], Int)])
     */
-  def clusterDocuments(lsi: LatentSemanticIndex, kClusters: Int) = {
+  def clusterDocuments(lsi: LatentSemanticIndex, kClusters: Int):Map[Int, Array[(Int, Seq[String], Int, Double)]] = {
     // we select the first kClusters from U
     val U = lsi.svD.U(::, 0 until kClusters).toDenseMatrix
     // subtract the minimum value
@@ -81,8 +81,13 @@ trait LsiDocumentCluster {
     * @param lsi
     * @param kClusters
     * @return
+    *
+    * The output of the map has the key for the corresponding cluster.
+    *
+    * Whereas each entry in the group for the cluster is a tuple consisting of
+    * (Cluster x TermColumnIndex x Term x Weight)
     */
-  def clusterAttributes(lsi: LatentSemanticIndex, kClusters: Int) = {
+  def clusterAttributes(lsi: LatentSemanticIndex, kClusters: Int):Map[Int, Array[(Int, Int,(String, Int, Int), Double)]] = {
     // we select the first kClusters from Vt and transpose it
     // so that the dimensions are (n, k) - n attributes x k columns
     val V = lsi.svD.Vt(0 until kClusters, ::).toDenseMatrix.t
@@ -105,11 +110,19 @@ trait LsiDocumentCluster {
         // if the value in the original matrix is negative then we mark the component as negative
         // otherwise we mark it as positive.
         val clustId = maxIdx._2
-        (termPair._1, termPair._2, clustId, maxIdx._1)
+        // (Cluster x TermColumnIndex x Term x Weight)
+        (clustId, termPair._1, termPair._2, maxIdx._1)
       }
     }.toArray
-      .sortBy(_._1)
-      .groupBy(_._3)
+      .sortBy(_._2)
+      .groupBy(_._1)
   }
 
+}
+
+object LsiComponentCluster extends LsiComponentCluster {
+
+  type LsiDocumentCluster = Map[Int, Array[(Int, Seq[String], Int, Double)]]
+
+  type LsiAttributeCluster = Map[Int, Array[(Int, Int,(String, Int, Int), Double)]]
 }
