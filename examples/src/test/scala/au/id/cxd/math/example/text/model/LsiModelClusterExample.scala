@@ -21,6 +21,7 @@ import com.kennycason.kumo.font.scale.SqrtFontScalar
 import com.kennycason.kumo.palette.ColorPalette
 import com.kennycason.kumo.{CollisionMode, WordCloud, WordFrequency}
 import org.jfree.chart.plot.PlotOrientation
+import org.jfree.data.xy.{DefaultXYDataset, XYSeries}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -292,6 +293,7 @@ object LsiModelClusterExample {
 
   /**
     * redraw the term cloud.
+    *
     * @param panel
     * @param k
     * @param terms
@@ -310,6 +312,7 @@ object LsiModelClusterExample {
 
   /**
     * ceate the frame containing the term cloud.
+    *
     * @param terms
     */
   def createTermFrame(terms: Map[Int, Array[(Int, String, Double)]]) = {
@@ -353,11 +356,106 @@ object LsiModelClusterExample {
   }
 
   /**
+    * generate a scatter plot for the dimensions
+    * of the term matrix specified in dim1 and dim2.
+    *
+    * @param lsi
+    * @param dimX
+    * @param dimY
+    * @param clusters
+    */
+  def createTermScatterPlot(lsi: LatentSemanticIndex, dimX: Int, dimY: Int, clusters: Map[Int, Array[(Int, String, Double)]]) = {
+    // k x n attribute relations
+    val Vt = lsi.svD.Vt
+    val dataA = Vt(dimX, ::).inner.toArray
+    val dataB = Vt(dimY, ::).inner.toArray
+    val xyData = dataA.zip(dataB)
+    // we construct a data set for the scatter plot
+    val dataSet = new DefaultXYDataset()
+    // there are k possible clusters
+    // data from two components contains n columns for each term
+    // we now need to create k XY series each containing values from X and Y dataA,dataB for the cluster.
+    clusters.keys.toArray.sorted.foreach {
+      key => {
+        val cluster = (key, clusters.get(key).get)
+        val clusterName = cluster._1.toString
+        val series = new XYSeries(clusterName)
+        val (xdata, ydata) = cluster._2.foldLeft(List[(Double, Double)]()) {
+          (accum, pair) => {
+            val data = xyData(pair._1)
+            accum :+ data
+          }
+        }.unzip
+        val term = cluster._2.sortBy(-_._3).head
+        // TODO: use the term as the shape for the cluster.
+        dataSet.addSeries(clusterName, Array(xdata.toArray, ydata.toArray))
+      }
+    }
+    val chart = ChartFactory.createScatterPlot(s"Attribute components $dimX $dimY",
+      s"Component $dimX",
+      s"Component $dimY",
+      dataSet,
+      PlotOrientation.HORIZONTAL,
+      true, true, false)
+
+    val frame = new JFrame(s"Attribute Components for Clusters")
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setLayout(new GridLayout(1, 1))
+
+    frame.add(ChartHelper.makeChartPanel(chart, 800, 600))
+
+    frame.pack()
+    frame.setVisible(true)
+
+  }
+
+  def createDocumentScatterPlot(lsi:LatentSemanticIndex, dimX:Int, dimY:Int, docs: LsiDocumentCluster) = {
+    val U = lsi.svD.U
+    val dataX = U(::,dimX).toArray
+    val dataY = U(::, dimY).toArray
+    val xyData = dataX.zip(dataY)
+    // we construct a data set for the scatter plot
+    val dataSet = new DefaultXYDataset()
+
+    docs.keys.toArray.sorted.foreach {
+      key => {
+        val cluster = (key, docs.get(key).get)
+        val (xdata, ydata) = cluster._2.foldLeft(List[(Double,Double)]()) {
+          (accum, row) => {
+            val data = xyData(row._1)
+            accum :+ data
+          }
+        }.unzip
+        dataSet.addSeries(key.toString, Array(xdata.toArray, ydata.toArray))
+      }
+    }
+
+    val chart = ChartFactory.createScatterPlot(s"Document components $dimX $dimY",
+      s"Component $dimX",
+      s"Component $dimY",
+      dataSet,
+      PlotOrientation.HORIZONTAL,
+      true, true, false)
+
+    val frame = new JFrame(s"Document Components for Clusters")
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setLayout(new GridLayout(1, 1))
+
+    frame.add(ChartHelper.makeChartPanel(chart, 800, 600))
+
+    frame.pack()
+    frame.setVisible(true)
+
+  }
+
+
+  /**
     * create the table model for the supplied cluster
+    *
     * @param k
     * @param docs
     */
-  def createTableModel(k:Int, docs:Map[Int, Array[(String, String, String)]]) = {
+  def createTableModel(k: Int, docs: Map[Int, Array[(String, String, String)]]) = {
     docs.get(k).map {
       doc => {
         val documents = doc
@@ -368,7 +466,7 @@ object LsiModelClusterExample {
 
           def getColumnCount: Int = columnNames.length
 
-          override def getColumnName(col:Int) = columnNames(col)
+          override def getColumnName(col: Int) = columnNames(col)
 
           def getValueAt(rowIndex: Int, columnIndex: Int): AnyRef = {
             val record = documents(rowIndex)
@@ -381,7 +479,7 @@ object LsiModelClusterExample {
   }
 
 
-  def createTable(model:TableModel) = {
+  def createTable(model: TableModel) = {
     val table = new JTable(model)
     val scrollPane = new JScrollPane(table)
     (scrollPane, table)
@@ -390,9 +488,10 @@ object LsiModelClusterExample {
   /**
     * use a similar method to the term frame,
     * select a cluster at a time to update the document table contents
+    *
     * @param docs
     */
-  def createDocumentFrame(docs:Map[Int, Array[(String, String, String)]]) = {
+  def createDocumentFrame(docs: Map[Int, Array[(String, String, String)]]) = {
     val docFrame = new JFrame("Document Clusters")
     docFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     docFrame.setPreferredSize(new Dimension(800, 800))
@@ -466,6 +565,12 @@ object LsiModelClusterExample {
         val mappedDocs = mapDocumentsToCluster(data, docClusters)
         println("Plotting Document Table")
         createDocumentFrame(mappedDocs)
+
+        println("Plotting Attribute Components")
+        createTermScatterPlot(model, 0, 1, mappedTerms)
+
+        println("Plotting Document Components")
+        createDocumentScatterPlot(model, 0, 1, docClusters)
 
       }
     }
