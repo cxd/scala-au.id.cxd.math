@@ -310,7 +310,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
     val rVt = Vt(0 until k, ::).toDenseMatrix
     </pre>
         </p>
-        <h4>Search Query Projections</h4>
+        <h4>Search Query Projections, the Information Retrieval Use Case</h4>
         <p>
             Once the reduced space has been determined, the search space can be computed for new incoming queries.
             The query must be preprocessed in the same manner as the document corpus is preprocessed, hence tokenisation
@@ -361,9 +361,9 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             $$
             search(q_p, sU) = ordering\ \left[ dist (q_p, sU) \right]
             $$
-            for the implementation cosine distance is used.
+            the implementation makes use of the distance metric defined by the cosine distance between vectors $X$ and $Y$
             $$
-            cosdist(X,Y) = \frac{X'Y}{X'X Y'Y}
+            cosdist(X,Y) = \frac{X'Y}{\sqrt{X'X} \sqrt{Y'Y}}
             $$
 
             Hence the cosine distance values close to $1$ are closely aligned, those values close to $0$ are
@@ -399,11 +399,91 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             (58044,"Error sintax 'lua_dump'"))
     </pre>
         </p>
+        <h3>Correlation between Objects, and Correlation between Attributes</h3>
+        <p>
+            The SVD can also be used to approximate the correlation between objects and the correlation between attributes.
+            This can be useful when applying other algorithms that can take advantage of the correlation. It can also be used for
+            purposes of visualisation.
+        </p>
+        <p>
+            The correlation between objects is approximated as the following
+            $$
+                AA' \sim U\Sigma&#94;2U'
+            $$
+            Where $\Sigma$ is the diagonal matrix $I S$ and $I$ the $k \times k$ identity matrix.
+        </p>
+        <p>
+            The correlation between attributes (in the case of LSI, terms) is approximated as
+            $$
+              A'A \sim V\Sigma&#94;V'
+            $$
+        </p>
 
         <h3>Clustering</h3>
         <p>
-
+        There are a number of methods to perform clustering on the reduced SVD, these can include applying a heuristic choice of $k$ clusters
+            based on the number of significant components and applying k-means clustering to the document matrix $U$ and labelling each mapped document
+            for the row in $U$ with the corresponding cluster.
         </p>
+        <p>
+            The implementation provides an alternate method derived from Skillikorn's treatment of non-negative matrix factorisation [1].
+            $U$ can be converted to a non-negative matrix by subtracting the minimum value.
+            $$
+              U_pos = U - min U
+            $$
+            The term matrix can also be processed in a similar manner.
+            While not true non-negative matrix normalisation, Skillikorn does suggest that processing the resulting SVD in this way does give some similarity
+            between NNMF and SVD and indicates that both have similar structure, however the difference is that the SVD factors are global descriptions whereas
+            the factors of the NNMF are local.
+        </p>
+        <p>
+            The clustering technique then scans each row in the $U$ matrix and labels the corresponding document index
+            with the component $k$ that has the maximum column value.
+        </p>
+        <p>
+            The term matrix $Vt$ can also be treated in a similar manner, in this case the columns of $V'$ are scanned and the index of the maximum value of each row
+            is then used to assign a cluster label to the corresponding term index.
+        </p>
+        <p>
+           The following diagram illustrates the results of document clustering from the example program "LsiModelClusterExample", note that the number
+            of clusters are also determined in an exploratory manner, by comparing the contributions of components to the total entropy.
+        </p>
+        <p>
+            The technique serves as a suitable approach for exploration of the corpus, and may be used in visualising the document corpus in
+            the dimensions provided by the components. The image below provides an example of such a visualisation, the axis is defined by
+            the first two components of the $U$ matrix, and demonstrates some visual patterning where there are some vertical bands of colouration visible
+            in the scatter plot where points are coloured based on their cluster label.
+            <br/>
+            <img src="images/document_cluster_projection_example.png"/>
+            <br/>
+            The technique is noted to perform well where the document clusters have relatively uniform populations and suffers where there are strongly uneven populations [1].
+            The following image illustrates the the first cluster is favoured over the other clusters, however the remaining clusters have a similar scale of population.
+            <br/>
+            <img src="images/example_cluster_populations.png"/>
+            <br/>
+            Reviewing the contents of the first cluster the commonality between documents is less obvious, whereas inspecting the contents of smaller clusters such
+            as in the example below for cluster 56 allows by inspection some intuition as to the commonality between documents.<br/>
+            <img src="images/document_cluster_56_example.png"/>
+            <br/>
+            Where the common keywords such as "line", "newline", "path", "escape", "sequence", "parser" appear in the text as repeated features.<br/>
+            The plotting of the terms selected for the corresponding cluster also gives further intuition to the correspondence.<br/>
+            <img src="images/term_cluster_56_example.png"/>
+            <br/>
+            Hence the method of clustering can serve as a means of exploring the content of a larger document corpus where reviewing large volumes of material
+            may be inconvenient in the short term, such a technique can serve as a method of reviewing content and direct further exploration of such content.
+            Additionally clustering leads into the domain of automated topic extraction and automatic document classification, which is partially automated by this method.
+            However a separate process would be required to assign sensible meaning to the extracted key terms for each cluster, as such a manual labelling
+            process could be applied.</p>
+        <p>
+            Once suitable labels are applied, one potential implementation of the classification solution would be to treat new examples as a query and to then
+            retrieve the closest matching documents for that query, and apply a k-nearest neighbour selection approach in assigning the label, this is very similar
+            to the use cases in the biometrics domain where new samples are preprocessed and mapped into the SVD space and the search query is essentially used
+            to determine if the identity being asserted resides closely enough within the search space using a distance metric. The simplicity of the
+            geometric mapping that results from the SVD is an appealing quality of the technique and provides a great deal of flexibility.<br/>
+            This discussion has not really discussed the concept of noise, and denoising, and neither has it delved into the application of the SVD to correlation
+            analysis, however these areas are also suitable for the application of the SVD, and further investigation is also warranted.
+        </p>
+
 
         <h5>References:</h5>
 
