@@ -21,11 +21,11 @@
     <p>
         <a href="../index.html">Home</a>
     </p>
-    <h3>
+    <h2>
         <a id="welcome-to-github-pages" class="anchor" href="#welcome" aria-hidden="true"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>
         Notes Singular Value Decomposition and Latent Semantic Indexing
-    </h3>
+    </h2>
     <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
@@ -72,9 +72,32 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             </li>
         </ul>
 
+
         </p>
         <p>
-            The implementation provides a starting point for exploring these methods, and further experimentation.
+            Note that the technique of matrix decomposition is useful not only as a preprocessing step, the ability to project the original feature vectors of
+            the data set into the principle components (as derived from either the left or right hand components) as a geometric
+            space permits a convenient method of searching which may rely on distance measures between two vectors, the query vector, and each vector in the
+            resulting search space. Similar techniques have been used in both early methods of search within signal processing such as for versions of facial recognition
+            (as in eigenfaces) and also as the search step in voice biometrics, and the geometric projection remains in use during the search stage of current algorithms.
+            </p>
+        <p>
+            The application to Latent Semantic Indexing gives an example of how
+            the decomposition can be applied for such search methods, however when applied to different domains the initial treatment of the data will differ.
+            For example, in the case of text processing, feature vectors may be constructed out of different techniques for mapping documents into
+            weighted term vectors. Whereas for applications in voice biometrics for example, the feature space will be derived from the key features identified
+            in processing the voice signal, which is necessarily a frequency based domain. For the early examples of facial biometrics, such as eigenfaces, the
+            features are derived from a normalised collection of voice images. Once the model is constructed it may be referred to as a background model for example,
+            new records may be added by projecting the feature vector into the reduced component space, and the resulting record may be added as a row in the U matrix.
+            Note however the number of components in the reduced space does not change, only the number of objects is increased.</p>
+        <p> In the case of latent semantic indexing there is a limitation where the model is limited by the vocabularly that is learnt from the original training set.
+            Adding new documents can be achieved by encoding the document into the term document vector that contains the same number of terms
+            as the original corpus. The resulting vector can then be projected into the search space and added as an object to the U matrix.
+            However, if new terms are desired, then it would in general be necessary to recompute the entire term document matrix, and in turn recompute the SVD
+            and reduce the dimensions of the SVD accordingly.
+        </p>
+        <p>
+            The implementation provides a starting point for exploring those areas listed, and further experimentation.
         </p>
         <h3>Singular Value Decomposition</h3>
         <p>
@@ -149,11 +172,43 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
         <p>
             There are some exceptions to this rule as in the case of matrices of dummy variables for example.
 
-            The $S$ matrix in the components interpretation provides a measure of the amount of variation each component
-            c
+            The $S$ matrix in the components interpretation provides a measure of the amount of variation in each component.
 
-            Note that in the Breeze implementation if the P.cols > P.rows the SVD will calculate the number of
-            components equal to the min(P.rows, P.cols)
+            Note that in the Breeze implementation if the <pre>P.cols > P.rows</pre> the SVD will calculate the number of
+            components equal to the <pre>min(P.rows, P.cols)</pre>
+        </p>
+
+        <h3>Latent Semantic Indexing</h3>
+        <p>
+            Latent Semantic Indexing is an example of the application of the SVD to a corpus of natural language documents where the
+            components collapse the similar term features from the document corpus into a single component [2]. The technique starts by
+            first encoding each document as a feature vector, which results first from tokenising, preprocessing and finally weighting terms.
+        </p>
+        <p>
+            There are a number of issues to consider in preprocessing natural text. This implementation applies a simplistic approach where each document
+            is tokenised using spaces or punctuation marks via a regular expression, and the resulting tokens are passed through a porter stemmer
+            (<a href="https://en.wikipedia.org/wiki/Stemming">https://en.wikipedia.org/wiki/Stemming</a>).
+            Different term weighting schemes available, however the approach to term weighting in the implementation uses the TFIDF term weighting scheme (
+            <a href="https://en.wikipedia.org/wiki/Tf–idf">https://en.wikipedia.org/wiki/Tf–idf</a>).
+        </p>
+        <p>
+          The TFIDF weighting is applied once all documents have been tokenised and stemmed and the entire vocabulary of terms has been identified. The terms
+            are then hashed using the built-in hashcode of java, and ordered based on the hashcode. This then defines the order of the columns for the feature vectors
+            of each document. Once this order is determined, the TF-IDF is then computed for each document as follows.
+            <br/>
+            For each term, the term frequency for a given document is calculated using the augmented frequency to prevent bias towards longer documents
+            $$
+            tf(t, d) = 0.5 + 0.5 \times \frac{f_{t,d}}{max\left(f_{t',d} : t' \in d\right)}
+            $$
+            where $f_{t,d}$ is the frequency of the term for the given document $d$.<br/>
+            The inversse document frequency it is calculated by retaining of total count of documents that contain each term, and uses the logarithm of
+            $$
+            idf(t, D) = \log{\left[ \frac{N}{\left| d \in D : t \in d \right|} \right]}
+            $$
+            Once the $idf$ is calculated then the final weight is defined as:
+            $$
+              tf-idf(t,d) = tf(t,d) \times idf(t,D)
+            $$
         </p>
 
         <h5>References:</h5>
@@ -162,6 +217,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             <li>Skillicorn, D. Understanding Complex Datasets: Data Mining with Matrix Decompositions. Chapman and
                 Hall/CRC 2007
             </li>
+            <li>Manning, Christopher D. Schutze, Hinrich. Foundations of Statistical Natural Language Processing. Massachusetts Institute of Technology 1999</li>
         </ol>
 
 
