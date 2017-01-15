@@ -24,7 +24,7 @@
     <h2>
         <a id="welcome-to-github-pages" class="anchor" href="#welcome" aria-hidden="true"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>
-        Notes Singular Value Decomposition and Latent Semantic Indexing
+        Notes on Singular Value Decomposition and Latent Semantic Indexing
     </h2>
     <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -87,7 +87,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             For example, in the case of text processing, feature vectors may be constructed out of different techniques for mapping documents into
             weighted term vectors. Whereas for applications in voice biometrics for example, the feature space will be derived from the key features identified
             in processing the voice signal, which is necessarily a frequency based domain. For the early examples of facial biometrics, such as eigenfaces, the
-            features are derived from a normalised collection of voice images. Once the model is constructed it may be referred to as a background model for example,
+            features are derived from a normalised collection of face images. Once the model is constructed it may be referred to as a background model for example,
             new records may be added by projecting the feature vector into the reduced component space, and the resulting record may be added as a row in the U matrix.
             Note however the number of components in the reduced space does not change, only the number of objects is increased.</p>
         <p> In the case of latent semantic indexing there is a limitation where the model is limited by the vocabularly that is learnt from the original training set.
@@ -111,7 +111,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             The decomposition is described in Skillicorn 2007, as one which indicates the amount of variation in the
             latent features of the data set.
 
-            If $A$ is a $m x n$ matrix, the number of components $k \leq n$ and where practical $k \leq m$.
+            If $A$ is a $m \times n$ matrix, the number of components $k \leq n$ and where practical $k \leq m$.
         <ul>
             <li> $U$ will be a matrix of the dimension $m \times k$ representing the eigenvalues for the rows of the
                 matrix $A$.
@@ -210,6 +210,32 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
               tf-idf(t,d) = tf(t,d) \times idf(t,D)
             $$
         </p>
+        <p>
+            Once the TF-IDF matrix $A$ is computed the SVD is then calculated
+            $$
+              \hat{A} = U S V'
+            $$
+            and can be used for both exploration of the corpus and analysis of the components. In the example implementation the text corpus is
+            taken from the Apache projects bug database, where the documents correspond to the titles of the bugs, the corpus has over 5000 examples of issues raised.
+
+        </p>
+        <h4>Entropy and Variation explained by Components</h4>
+        <p>
+            Initially after performing the SVD, it is possible to calculate the entropy of the data set which indicates how much noise exists in the data
+            and provides a heuristic measure that can be used to determine how the components explain the amount of variation.
+        In order to calculate the entropy, the percent of the contribution $f_k$ of each singular value in $S$ is calculated
+            $$
+            f_k = s_k&#94;2/\sum_{i=1}&#94;r s_i&#94;2
+            $$
+            These values can be plotted as a scree plot, which provides an indication as to the importance of each component. Note that the original
+            set of singular values $S$ are listed in descending order, so too the percentage of variation explained.
+            The total entropy for $r$ components is then calculated
+            $$
+               \entropy = \frac{\sum_{k=1}&#94;r f_k \log{f_k}}{\log{r}}
+            $$
+        </p>
+
+
 
         <h5>References:</h5>
 
