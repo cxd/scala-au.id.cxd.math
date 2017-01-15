@@ -34,6 +34,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 
 
 
+
     </script>
     <script type="text/javascript" async
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -271,13 +272,29 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             entropy = \frac{\sum_{k=1}&#94;r f_k \log{f_k}}{\log{r}}
             $$
             The resulting value for entropy is a value such that $0 \leq entropy \leq 1$.
-            The following heuristics can be applied
+            The following heuristics can be applied [1]
         <ul>
             <li>If the entropy is close to 0 the spread of variation is explained by the first singular component</li>
             <li>If the entropy is close to 1 the spread of variation is almost uniform between all singular
                 components.
             </li>
         </ul>
+        </p>
+        <p>
+            Skillicorn provides details on methods of selection for the number of components, often the process is
+            heuristic, however
+            the amount of variation explained by each component may be used to select the number of components required
+            for a given threshold.
+            The implementation provides the option to choose the number of components through providing a threshold for
+            the total contribution and a
+            desired minimum number of components. Once the desired number of components $k < r$ are determined, it is
+            possible to use the subset
+            of the decomposition to form the reduced SVD. In the breeze implementation the subset is sliced for example
+    <pre>
+    val rU = U(::, 0 until k).toDenseMatrix
+    val rS = S(0 until k).toDenseVector
+    val rVt = Vt(0 until k, ::).toDenseMatrix
+    </pre>
         </p>
 
 
