@@ -18,8 +18,8 @@ class CosineDistance {
 
   def op(x:DenseVector[Double], y:DenseVector[Double]) : Double = {
     val a = x.dot(y)
-    val b = x.dot(x)
-    val c = y.dot(y)
+    val b = Math.sqrt(x.dot(x))
+    val c = Math.sqrt(y.dot(y))
     a  / (b*c)
   }
 

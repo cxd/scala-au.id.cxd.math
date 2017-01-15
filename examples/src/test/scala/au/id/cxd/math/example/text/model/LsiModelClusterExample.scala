@@ -548,7 +548,7 @@ object LsiModelClusterExample {
     readModel() foreach {
       model => {
         println("Plotting Entropy")
-        val (k, variation) = plotEntropy(model, 0.9997, 100)
+        val (k, variation) = plotEntropy(model, 0.9997, 50)
         println(s"selected $k clusters")
 
         val cluster = new LsiComponentCluster {}
