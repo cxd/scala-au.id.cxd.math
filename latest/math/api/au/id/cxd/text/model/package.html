@@ -1,0 +1,258 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>model - au.id.cxd.text.model</title>
+          <meta name="description" content="model - au.id.cxd.text.model" />
+          <meta name="keywords" content="model au.id.cxd.text.model" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'au.id.cxd.text.model.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="au">au</a>.<a href="../../../package.html" class="extype" name="au.id">id</a>.<a href="../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../package.html" class="extype" name="au.id.cxd.text">text</a></p>
+        <h1>model</h1><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">model</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="au.id.cxd.text.model.LatentSemanticIndex" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LatentSemanticIndexextendsSerializable"></a>
+      <a id="LatentSemanticIndex:LatentSemanticIndex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LatentSemanticIndex.html"><span class="name">LatentSemanticIndex</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package@LatentSemanticIndexextendsSerializable" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The latent semantic index is a class that contains the data associated with
+the latent semantic index that is constructed from an indexing pipeline.</p><div class="fullcomment"><div class="comment cmt"><p>The latent semantic index is a class that contains the data associated with
+the latent semantic index that is constructed from an indexing pipeline.</p><p>This type will have a companion object that can read and write the associated data to and from a zip archive.</p><p>a TF-IDF document term matrix
+a term column mapping
+a document id x row mapping
+and the SVD decomposition of the document.</p><p>Created by cd on 10/1/17.
+</p></div></div>
+    </li><li name="au.id.cxd.text.model.LatentSemanticIndexBuilder" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LatentSemanticIndexBuilderextendsAnyRef"></a>
+      <a id="LatentSemanticIndexBuilder:LatentSemanticIndexBuilder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LatentSemanticIndexBuilder.html"><span class="name">LatentSemanticIndexBuilder</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package@LatentSemanticIndexBuilderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the pipeline that is used to build the index.</p><div class="fullcomment"><div class="comment cmt"><p>the pipeline that is used to build the index.</p><p>- build the tfidf matrix
+- perform the SVD
+- capture the entropy in the data set and the component contribution for each singular component.
+-
+</p></div></div>
+    </li><li name="au.id.cxd.text.model.LatentSemanticIndexReader" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LatentSemanticIndexReaderextendsAnyRef"></a>
+      <a id="LatentSemanticIndexReader:LatentSemanticIndexReader"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LatentSemanticIndexReader.html"><span class="name">LatentSemanticIndexReader</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package@LatentSemanticIndexReaderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">a reader trait for the latent semantic index.</p>
+    </li><li name="au.id.cxd.text.model.LatentSemanticIndexWriter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LatentSemanticIndexWriterextendsAnyRef"></a>
+      <a id="LatentSemanticIndexWriter:LatentSemanticIndexWriter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LatentSemanticIndexWriter.html"><span class="name">LatentSemanticIndexWriter</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package@LatentSemanticIndexWriterextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">a writer trait for the latent semantic index data set.</p>
+    </li><li name="au.id.cxd.text.model.LsiComponentCluster" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LsiComponentClusterextendsAnyRef"></a>
+      <a id="LsiComponentCluster:LsiComponentCluster"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LsiComponentCluster.html"><span class="name">LsiComponentCluster</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package@LsiComponentClusterextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The LsiDocumentCluster approach uses the selected set of k components
+in order to generate k clusters.</p><div class="fullcomment"><div class="comment cmt"><p>The LsiDocumentCluster approach uses the selected set of k components
+in order to generate k clusters.</p><p>Documents are associated with clusters by the use of the U matrix.</p><p>Terms are associated with clusters by the use of the Vt matrix</p><p>If there are k components, the U matrix has dimension (m x k)</p><p>where m is the number of documents.</p><p>And Vt matrix has the dimension (k x n) where n is the number of attributes.</p><p>Additionally the correlation matrices for attributes can be used to select
+highly correlated attributes once they have been clusered.</p><p>This produces a cluster labelling for documents and terms based on the components defined in S.</p><p>Created by cd on 13/1/17.
+</p></div></div>
+    </li><li name="au.id.cxd.text.model.LsiDocumentSearch" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LsiDocumentSearchextendsAnyRef"></a>
+      <a id="LsiDocumentSearch:LsiDocumentSearch"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LsiDocumentSearch.html"><span class="name">LsiDocumentSearch</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package@LsiDocumentSearchextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">implementation of document search for supplied input query array.</p><div class="fullcomment"><div class="comment cmt"><p>implementation of document search for supplied input query array.
+Note that the input query should contain terms that have previously existed within the LSI model.
+The LSI model contains a term map, the set of terms not found in the vocabulary are also returned with the result.
+The cosine distance is returned unnormalised.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="au.id.cxd.text.model.LatentSemanticIndex" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LatentSemanticIndex"></a>
+      <a id="LatentSemanticIndex:LatentSemanticIndex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LatentSemanticIndex$.html"><span class="name">LatentSemanticIndex</span></a><span class="result"> extends <a href="LatentSemanticIndexWriter.html" class="extype" name="au.id.cxd.text.model.LatentSemanticIndexWriter">LatentSemanticIndexWriter</a> with <a href="LatentSemanticIndexReader.html" class="extype" name="au.id.cxd.text.model.LatentSemanticIndexReader">LatentSemanticIndexReader</a> with <a href="LatentSemanticIndexBuilder.html" class="extype" name="au.id.cxd.text.model.LatentSemanticIndexBuilder">LatentSemanticIndexBuilder</a> with <a href="LsiDocumentSearch.html" class="extype" name="au.id.cxd.text.model.LsiDocumentSearch">LsiDocumentSearch</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package@LatentSemanticIndex" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.text.model.LsiComponentCluster" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LsiComponentCluster"></a>
+      <a id="LsiComponentCluster:LsiComponentCluster"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LsiComponentCluster$.html"><span class="name">LsiComponentCluster</span></a><span class="result"> extends <a href="LsiComponentCluster.html" class="extype" name="au.id.cxd.text.model.LsiComponentCluster">LsiComponentCluster</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.text.model.package@LsiComponentCluster" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

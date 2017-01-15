@@ -47,7 +47,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">BayesLinearRegression</span><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></span>
+        <span class="name">BayesLinearRegression</span><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a> with <a href="UpdatableRegressor.html" class="extype" name="au.id.cxd.math.probability.regression.UpdatableRegressor">UpdatableRegressor</a></span>
       </span>
       </h4>
       
@@ -251,7 +251,7 @@ It extends the OLS method and adds an Update method in order to update the gener
 using the update rules above.</p><p>This class</p><p>Created by cd on 17/04/2016.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="UpdatableRegressor.html" class="extype" name="au.id.cxd.math.probability.regression.UpdatableRegressor">UpdatableRegressor</a>, <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="BayesLogisticLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.BayesLogisticLeastSquares">BayesLogisticLeastSquares</a></div>
@@ -272,7 +272,7 @@ using the update rules above.</p><p>This class</p><p>Created by cd on 17/04/2016
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="au.id.cxd.math.probability.regression.BayesLinearRegression"><span>BayesLinearRegression</span></li><li class="in" name="au.id.cxd.math.probability.regression.OrdLeastSquares"><span>OrdLeastSquares</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="au.id.cxd.math.probability.regression.BayesLinearRegression"><span>BayesLinearRegression</span></li><li class="in" name="au.id.cxd.math.probability.regression.UpdatableRegressor"><span>UpdatableRegressor</span></li><li class="in" name="au.id.cxd.math.probability.regression.OrdLeastSquares"><span>OrdLeastSquares</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -644,6 +644,25 @@ meaning to reject that beta equals 0
     </span>
       <p class="shortcomment cmt">the p-value that corresponds to the critical beta z value</p><div class="fullcomment"><div class="comment cmt"><p>the p-value that corresponds to the critical beta z value</p><p>in this case we reject the null hypothesis that $\Beta = 0$
 when the pvalue for $f(\Beta_z) &lt; f(Z_\alpha)$
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#df" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="df:Int"></a>
+      <a id="df:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">df</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.BayesLinearRegression@df:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the degrees of freedom based on the input data.</p><div class="fullcomment"><div class="comment cmt"><p>the degrees of freedom based on the input data.
+this is used during the update function
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
@@ -1100,7 +1119,7 @@ vectors must have same dimension
       </a>
     </span>
       <p class="shortcomment cmt">implement the update rules for the linear regression model after already having trained the model.</p><div class="fullcomment"><div class="comment cmt"><p>implement the update rules for the linear regression model after already having trained the model.</p><p>This will update the parameter matrix Beta and the variance.</p><p>it will not predict against the data, after updating use the predict methods to get a prediction and calculate residuals.
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.regression.BayesLinearRegression">BayesLinearRegression</a> → <a href="UpdatableRegressor.html" class="extype" name="au.id.cxd.math.probability.regression.UpdatableRegressor">UpdatableRegressor</a></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#updateWeights" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateWeights(F:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
       <a id="updateWeights(DenseMatrix[Double],DenseMatrix[Double]):DenseMatrix[Double]"></a>
@@ -1220,7 +1239,9 @@ $$</p><p>This value is computed during the training cycle.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="au.id.cxd.math.probability.regression.OrdLeastSquares">
+        <div class="parent" name="au.id.cxd.math.probability.regression.UpdatableRegressor">
+              <h3>Inherited from <a href="UpdatableRegressor.html" class="extype" name="au.id.cxd.math.probability.regression.UpdatableRegressor">UpdatableRegressor</a></h3>
+            </div><div class="parent" name="au.id.cxd.math.probability.regression.OrdLeastSquares">
               <h3>Inherited from <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>

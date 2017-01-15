@@ -45,7 +45,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">LogisticRegressor</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">LogisticRegressor</span><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></span>
       </span>
       </h4>
       
@@ -67,9 +67,9 @@ $$</p><p>The logit function for the odds ratio is the transformation of the abov
 log \frac{P(y=0|X)}{P(y=1|X)} = \beta_0 + \beta&#94;T X
 $$</p><p>The logistic regression proceeds by estimating the logit function, once estimated the class probability
 can be estimated using the logistic function.</p><p>Created by cd on 18/06/2016.
-</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.regression.LogisticRegressor">LogisticRegressor</a> with <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl><div class="toggleContainer block">
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="BayesLogisticLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.BayesLogisticLeastSquares">BayesLogisticLeastSquares</a>, <a href="LogisticLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.LogisticLeastSquares">LogisticLeastSquares</a></div>
@@ -90,7 +90,7 @@ can be estimated using the logistic function.</p><p>Created by cd on 18/06/2016.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="au.id.cxd.math.probability.regression.LogisticRegressor"><span>LogisticRegressor</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="au.id.cxd.math.probability.regression.LogisticRegressor"><span>LogisticRegressor</span></li><li class="in" name="au.id.cxd.math.probability.regression.OrdLeastSquares"><span>OrdLeastSquares</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -166,6 +166,117 @@ can be estimated using the logistic function.</p><p>Created by cd on 18/06/2016.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#Beta" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Beta:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="Beta:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Beta</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@Beta:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The beta parameter is approximated by
+$$
+\hat{\beta} = (X'X)^{-1}X'Y
+$$</p><div class="fullcomment"><div class="comment cmt"><p>The beta parameter is approximated by
+$$
+\hat{\beta} = (X'X)^{-1}X'Y
+$$</p><p>Note we assume that $\beta$ is normally distributed as</p><p>$$
+\hat{\beta} = N( \beta, Q \sigma^2 )
+$$</p><p>where $Q = (X'X)^{-1}$</p><p>$\hat{\beta}$ is the Maximum likelihood estimate of $\beta$.</p><p>Created by cd on 28/06/2014.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#P" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="P:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="P:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">P</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@P:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#X" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="X:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="X:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">X</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@X:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#Y" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Y:breeze.linalg.DenseVector[Double]"></a>
+      <a id="Y:DenseVector[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Y</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@Y:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#Y1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Y1:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="Y1:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Y1</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@Y1:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#alpha" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="alpha:Double"></a>
+      <a id="alpha:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">alpha</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@alpha:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -183,6 +294,64 @@ can be estimated using the logistic function.</p><p>Created by cd on 18/06/2016.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#betaPValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="betaPValue:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="betaPValue:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">betaPValue</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@betaPValue:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the set of p-values for the corresponding betaZScore</p><div class="fullcomment"><div class="comment cmt"><p>the set of p-values for the corresponding betaZScore</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#betaVariance" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="betaVariance:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="betaVariance:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">betaVariance</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@betaVariance:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The variance of beta is given  by</p><div class="fullcomment"><div class="comment cmt"><p>The variance of beta is given  by</p><p>$$
+Var(\beta) = Q \sigma^2
+$$</p><p>with $Q = (X'X)^{-1}$</p><p>The variance parameter for $\sigma^2$ is approximated as</p><p>$$
+\frac{1}{N - p - 1} \sum (y_i - \hat{y_i})^2
+$$</p><p>This value is computed during the training cycle.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#betaZScore" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="betaZScore:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="betaZScore:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">betaZScore</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@betaZScore:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the beta z score
+</p><div class="fullcomment"><div class="comment cmt"><p>the beta z score
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -206,6 +375,93 @@ can be estimated using the logistic function.</p><p>Created by cd on 18/06/2016.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#createPolynomial" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createPolynomial(X1:breeze.linalg.DenseMatrix[Double],m:Int):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="createPolynomial(DenseMatrix[Double],Int):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createPolynomial</span><span class="params">(<span name="X1">X1: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@createPolynomial(X1:breeze.linalg.DenseMatrix[Double],m:Int):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">first determine how many features will be generated
+for the number of columns.</p><div class="fullcomment"><div class="comment cmt"><p>first determine how many features will be generated
+for the number of columns.</p><p>For example if we have cols 2 and degree m = 2
+(a, b) will have (a, b, a&#94;2, 2ab, b&#94;2)  which is 3 extra features</p><p>$$
+(a, b, c)&#94;n = (a, b, b, a&#94;2, ab, b&#94;2, bc, c&#94;2, x&#94;3, x&#94;2b, x&#94;2c, ab&#94;2, abc, ac&#94;2, b&#94;3, c&#94;3, ..., )
+$$</p><p>We can use the multinomial theorem to do the expansion</p><p>the coefficients up to n can be determined using the rule</p><p>$$
+\left( n \choose {k_1, k_2, k_3, ..., k_m} \right)
+$$</p><p>where for any combination of $k$ $\sum_{i=1}&#94;m k$ must equal $n$.</p><p>$m$ represents the number of columns in matrix $X$ and has</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#criticalBetaZValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="criticalBetaZValue:Double"></a>
+      <a id="criticalBetaZValue:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">criticalBetaZValue</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@criticalBetaZValue:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the critical value for beta to use when testing at the alpha level supplied
+this is the reject region
+{ betaZ &gt; criticalBetaZValue }
+meaning to reject that beta equals 0
+</p><div class="fullcomment"><div class="comment cmt"><p>the critical value for beta to use when testing at the alpha level supplied
+this is the reject region
+{ betaZ &gt; criticalBetaZValue }
+meaning to reject that beta equals 0
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#criticalPValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="criticalPValue:Double"></a>
+      <a id="criticalPValue:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">criticalPValue</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@criticalPValue:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the p-value that corresponds to the critical beta z value</p><div class="fullcomment"><div class="comment cmt"><p>the p-value that corresponds to the critical beta z value</p><p>in this case we reject the null hypothesis that $\Beta = 0$
+when the pvalue for $f(\Beta_z) &lt; f(Z_\alpha)$
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#df" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="df:Int"></a>
+      <a id="df:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">df</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@df:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the degrees of freedom based on the input data.</p><div class="fullcomment"><div class="comment cmt"><p>the degrees of freedom based on the input data.
+this is used during the update function
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -338,6 +594,63 @@ in the third column.</p></dd></dl></div>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#m" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="m:Int"></a>
+      <a id="m:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">m</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@m:Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#mse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mse:Double"></a>
+      <a id="mse:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mse</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@mse:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the mse of the regression model
+</p><div class="fullcomment"><div class="comment cmt"><p>the mse of the regression model
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#multWeights" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="multWeights(B:breeze.linalg.DenseMatrix[Double],X1:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="multWeights(DenseMatrix[Double],DenseMatrix[Double]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">multWeights</span><span class="params">(<span name="B">B: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="X1">X1: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@multWeights(B:breeze.linalg.DenseMatrix[Double],X1:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">http://brisbanepowerhouse.org/events/2016/06/30/daas-near-death-experience/
+multiply the factor vector by the
+</p><div class="fullcomment"><div class="comment cmt"><p>http://brisbanepowerhouse.org/events/2016/06/30/daas-near-death-experience/
+multiply the factor vector by the
+</p></div><dl class="paramcmts block"><dt class="param">B</dt><dd class="cmt"><p>beta matrix.</p></dd><dt class="param">X1</dt><dd class="cmt"><p>matrix of factors</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -389,6 +702,142 @@ in the third column.</p></dd></dl></div>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#powers" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="powers:scala.collection.immutable.IndexedSeq[Double]"></a>
+      <a id="powers:IndexedSeq[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">powers</span><span class="result">: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@powers:scala.collection.immutable.IndexedSeq[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(X1:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="predict(DenseMatrix[Double]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="X1">X1: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@predict(X1:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">predict the result of multiplying the beta estimater against a new vector X</p><div class="fullcomment"><div class="comment cmt"><p>predict the result of multiplying the beta estimater against a new vector X</p><p>$$
+\hat{Y} = \beta_0 + \sum X_i \beta_j
+$$</p><p>$$
+\hat{Y} = X\beta
+$$
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(x:Double):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="predict(Double):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@predict(x:Double):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">having trained the model predict a value for the new x input.</p><div class="fullcomment"><div class="comment cmt"><p>having trained the model predict a value for the new x input.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#predictSeq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predictSeq(x:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="predictSeq(DenseVector[Double]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predictSeq</span><span class="params">(<span name="x">x: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@predictSeq(x:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">predicts a single column sequence for X
+the length of X represents the rows of each sample
+</p><div class="fullcomment"><div class="comment cmt"><p>predicts a single column sequence for X
+the length of X represents the rows of each sample
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#pseudoInverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pseudoInverse:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="pseudoInverse:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pseudoInverse</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@pseudoInverse:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the pseudo inverse of  the covariance variance matrix
+</p><div class="fullcomment"><div class="comment cmt"><p>the pseudo inverse of  the covariance variance matrix
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#residuals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="residuals:breeze.linalg.DenseVector[Double]"></a>
+      <a id="residuals:DenseVector[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">residuals</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@residuals:breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the residuals resulting from the training process.</p><div class="fullcomment"><div class="comment cmt"><p>the residuals resulting from the training process.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#squaredError" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="squaredError(T:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):Double"></a>
+      <a id="squaredError(DenseMatrix[Double],DenseMatrix[Double]):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">squaredError</span><span class="params">(<span name="T">T: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="Y">Y: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@squaredError(T:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">calculate the squared error between the target column vector and the function column vector
+vectors must have same dimension
+</p><div class="fullcomment"><div class="comment cmt"><p>calculate the squared error between the target column vector and the function column vector
+vectors must have same dimension
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -423,6 +872,24 @@ in the third column.</p></dd></dl></div>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#train" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="train():(breeze.linalg.DenseMatrix[Double],Double)"></a>
+      <a id="train():(DenseMatrix[Double],Double)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">train</span><span class="params">()</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@train():(breeze.linalg.DenseMatrix[Double],Double)" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">train the least squares model.</p><div class="fullcomment"><div class="comment cmt"><p>train the least squares model.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.regression.LogisticRegressor#transform" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="transform(logitY:breeze.linalg.DenseVector[Double]):breeze.linalg.DenseMatrix[Double]"></a>
       <a id="transform(DenseVector[Double]):DenseMatrix[Double]"></a>
@@ -442,6 +909,47 @@ in the third column.</p></dd></dl></div>
       <p class="shortcomment cmt">the conversion function can be used to transform
 the logit function into the probabilities and class assignments
 for the 2 class problem.</p>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#updateWeights" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="updateWeights(F:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="updateWeights(DenseMatrix[Double],DenseMatrix[Double]):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateWeights</span><span class="params">(<span name="F">F: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="Y">Y: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@updateWeights(F:breeze.linalg.DenseMatrix[Double],Y:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">update the beta parameter using the inverse of the covariance matrix and the residuals</p><div class="fullcomment"><div class="comment cmt"><p>update the beta parameter using the inverse of the covariance matrix and the residuals</p><p>The beta parameter is approximated by
+$$
+\hat{\beta} = (X'X)^{-1}X'Y
+$$
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.OrdLeastSquares#variance" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="variance:Double"></a>
+      <a id="variance:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">variance</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.LogisticRegressor@variance:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The variance parameter for $\sigma^2$ is approximated as</p><div class="fullcomment"><div class="comment cmt"><p>The variance parameter for $\sigma^2$ is approximated as</p><p>$$
+\frac{1}{N - p - 1} \sum (y_i - \hat{y_i})^2
+$$</p><p>This value is computed during the training cycle.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -520,7 +1028,11 @@ for the 2 class problem.</p>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="au.id.cxd.math.probability.regression.OrdLeastSquares">
+              <h3>Inherited from <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

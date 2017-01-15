@@ -182,18 +182,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="au.id.cxd.math.data.DummyVariableBuilder#buildIndicatorMatrix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="buildIndicatorMatrix(headers:Array[String],rows:List[Array[String]]):(breeze.linalg.DenseMatrix[Double],scala.collection.immutable.Map[String,Set[String]])"></a>
-      <a id="buildIndicatorMatrix(Array[String],List[Array[String]]):(DenseMatrix[Double],Map[String,Set[String]])"></a>
+      <a id="buildIndicatorMatrix(headers:scala.collection.mutable.Buffer[String],rows:Seq[scala.collection.mutable.Buffer[String]]):Option[(breeze.linalg.DenseMatrix[Double],Map[String,Set[String]])]"></a>
+      <a id="buildIndicatorMatrix(Buffer[String],Seq[Buffer[String]]):Option[(DenseMatrix[Double],Map[String,Set[String]])]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">buildIndicatorMatrix</span><span class="params">(<span name="headers">headers: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="rows">rows: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]])</span>
+        <span class="name">buildIndicatorMatrix</span><span class="params">(<span name="headers">headers: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="rows">rows: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder$@buildIndicatorMatrix(headers:Array[String],rows:List[Array[String]]):(breeze.linalg.DenseMatrix[Double],scala.collection.immutable.Map[String,Set[String]])" title="Permalink" target="_top">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder$@buildIndicatorMatrix(headers:scala.collection.mutable.Buffer[String],rows:Seq[scala.collection.mutable.Buffer[String]]):Option[(breeze.linalg.DenseMatrix[Double],Map[String,Set[String]])]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -221,6 +221,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="au.id.cxd.math.data.DummyVariableBuilder#dataFor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="dataFor(row:Seq[String],idx:Int):String"></a>
+      <a id="dataFor(Seq[String],Int):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dataFor</span><span class="params">(<span name="row">row: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="idx">idx: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder$@dataFor(row:Seq[String],idx:Int):String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -256,18 +273,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="au.id.cxd.math.data.DummyVariableBuilder#extractColumns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="extractColumns(headers:Array[String],rows:List[Array[String]]):List[au.id.cxd.math.data.DummyVariableBuilder]"></a>
-      <a id="extractColumns(Array[String],List[Array[String]]):List[DummyVariableBuilder]"></a>
+      <a id="extractColumns(headers:scala.collection.mutable.Buffer[String],rows:Seq[scala.collection.mutable.Buffer[String]]):List[au.id.cxd.math.data.DummyVariableBuilder]"></a>
+      <a id="extractColumns(Buffer[String],Seq[Buffer[String]]):List[DummyVariableBuilder]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">extractColumns</span><span class="params">(<span name="headers">headers: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="rows">rows: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="DummyVariableBuilder.html" class="extype" name="au.id.cxd.math.data.DummyVariableBuilder">DummyVariableBuilder</a>]</span>
+        <span class="name">extractColumns</span><span class="params">(<span name="headers">headers: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="rows">rows: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="DummyVariableBuilder.html" class="extype" name="au.id.cxd.math.data.DummyVariableBuilder">DummyVariableBuilder</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder$@extractColumns(headers:Array[String],rows:List[Array[String]]):List[au.id.cxd.math.data.DummyVariableBuilder]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder$@extractColumns(headers:scala.collection.mutable.Buffer[String],rows:Seq[scala.collection.mutable.Buffer[String]]):List[au.id.cxd.math.data.DummyVariableBuilder]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -67,7 +67,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="au.id.cxd.math.probability.regression.BayesLinearRegression" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="BayesLinearRegressionextendsOrdLeastSquares"></a>
+      <a id="BayesLinearRegressionextendsOrdLeastSquareswithUpdatableRegressor"></a>
       <a id="BayesLinearRegression:BayesLinearRegression"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -75,10 +75,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="BayesLinearRegression.html"><span class="name">BayesLinearRegression</span></a><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></span>
+        <a href="BayesLinearRegression.html"><span class="name">BayesLinearRegression</span></a><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a> with <a href="UpdatableRegressor.html" class="extype" name="au.id.cxd.math.probability.regression.UpdatableRegressor">UpdatableRegressor</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@BayesLinearRegressionextendsOrdLeastSquares" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@BayesLinearRegressionextendsOrdLeastSquareswithUpdatableRegressor" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -409,7 +409,7 @@ $$</p><p>The logistic regression proceeds by estimating the logit function, once
 can be estimated using the logistic function.</p><p>This implementation mixes in the LogisticRegressor trait with the OrdLeastSquares implementation.</p><p>Created by cd on 1/05/2016.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.regression.LogisticRegressor" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="LogisticRegressorextendsAnyRef"></a>
+      <a id="LogisticRegressorextendsOrdLeastSquares"></a>
       <a id="LogisticRegressor:LogisticRegressor"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -417,10 +417,10 @@ can be estimated using the logistic function.</p><p>This implementation mixes in
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="LogisticRegressor.html"><span class="name">LogisticRegressor</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="LogisticRegressor.html"><span class="name">LogisticRegressor</span></a><span class="result"> extends <a href="OrdLeastSquares.html" class="extype" name="au.id.cxd.math.probability.regression.OrdLeastSquares">OrdLeastSquares</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@LogisticRegressorextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@LogisticRegressorextendsOrdLeastSquares" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -520,6 +520,24 @@ and the input vector has features added for the degree of the polynomial during 
                 <span class="name">@SerialVersionUID</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.regression.UpdatableRegressor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UpdatableRegressorextendsAnyRef"></a>
+      <a id="UpdatableRegressor:UpdatableRegressor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="UpdatableRegressor.html"><span class="name">UpdatableRegressor</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.regression.package@UpdatableRegressorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An updateable regressor can be updated after the initial training
+Created by cd on 19/06/2016.</p>
     </li></ol>
             </div>
 

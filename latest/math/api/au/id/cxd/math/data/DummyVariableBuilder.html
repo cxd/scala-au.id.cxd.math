@@ -51,7 +51,11 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Created by cd on 3/05/2016.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The dummy variable builder class is used to extract the create the columns of
+0 or 1 corresponding to the row associated with the value
+the order of unique values determine the sequence of 0 or 1 indicators.</p><p>The column values are converted into vectors before being used to lookup the data.
+The vector has an almost constant apply() method as opposed to other sequences which are Linear.
+http://docs.scala-lang.org/overviews/collections/performance-characteristics</p><p>Created by cd on 3/05/2016.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -92,7 +96,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="au.id.cxd.math.data.DummyVariableBuilder#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(columnName:String,uniqueValues:Set[String],columnValues:Seq[String]):au.id.cxd.math.data.DummyVariableBuilder"></a>
+      <a id="&lt;init&gt;(columnName:String,uniqueValues:Set[String],columnValues:Vector[String]):au.id.cxd.math.data.DummyVariableBuilder"></a>
       <a id="&lt;init&gt;:DummyVariableBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,10 +104,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DummyVariableBuilder</span><span class="params">(<span name="columnName">columnName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="uniqueValues">uniqueValues: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="columnValues">columnValues: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
+        <span class="name">DummyVariableBuilder</span><span class="params">(<span name="columnName">columnName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="uniqueValues">uniqueValues: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="columnValues">columnValues: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder@&lt;init&gt;(columnName:String,uniqueValues:Set[String],columnValues:Seq[String]):au.id.cxd.math.data.DummyVariableBuilder" title="Permalink" target="_top">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder@&lt;init&gt;(columnName:String,uniqueValues:Set[String],columnValues:Vector[String]):au.id.cxd.math.data.DummyVariableBuilder" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -226,18 +230,18 @@
     </span>
       
     </li><li name="au.id.cxd.math.data.DummyVariableBuilder#columnValues" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="columnValues:Seq[String]"></a>
-      <a id="columnValues:Seq[String]"></a>
+      <a id="columnValues:Vector[String]"></a>
+      <a id="columnValues:Vector[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">columnValues</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">columnValues</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder@columnValues:Seq[String]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder@columnValues:Vector[String]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -267,6 +271,44 @@ This results in $N$ columns.
 This will result in a indicator matrix
 where the ijth value represents the presence of column value i from the ordered set of unique values
 </p></div></div>
+    </li><li name="au.id.cxd.math.data.DummyVariableBuilder#createDummyRow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createDummyRow(row:Int):breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="createDummyRow(Int):DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createDummyRow</span><span class="params">(<span name="row">row: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder@createDummyRow(row:Int):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">create a single row where the matching value of that row
+contains 1 and the other columns 0.</p><div class="fullcomment"><div class="comment cmt"><p>create a single row where the matching value of that row
+contains 1 and the other columns 0.</p><p>the value of the row will determine which of the unique values
+arranged in column order will be 1 or 0
+</p></div></div>
+    </li><li name="au.id.cxd.math.data.DummyVariableBuilder#createIndices" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="createIndices(columns:Vector[String],unique:List[String]):Vector[Int]"></a>
+      <a id="createIndices(Vector[String],List[String]):Vector[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createIndices</span><span class="params">(<span name="columns">columns: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="unique">unique: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder@createIndices(columns:Vector[String],unique:List[String]):Vector[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">generate indices of the column values</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -374,7 +416,47 @@ where the ijth value represents the presence of column value i from the ordered 
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">locate the index of the value from the set of unique values</p>
+      <p class="shortcomment cmt">locate the index of the value from the set of unique values
+</p>
+    </li><li name="au.id.cxd.math.data.DummyVariableBuilder#indicator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="indicator(column:Int,datum:String):Double"></a>
+      <a id="indicator(Int,String):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">indicator</span><span class="params">(<span name="column">column: <span class="extype" name="scala.Int">Int</span></span>, <span name="datum">datum: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder@indicator(column:Int,datum:String):Double" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the indicator value for the datum defined at the position
+for the column
+if the datum corresponds to the unique value at the index defined by the column
+return 1
+otherwise return 0
+</p>
+    </li><li name="au.id.cxd.math.data.DummyVariableBuilder#indices" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="indices:Vector[Int]"></a>
+      <a id="indices:Vector[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">indices</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.DummyVariableBuilder@indices:Vector[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the set of matching indices of the matching column for each row of values.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
