@@ -35,6 +35,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 
 
 
+
     </script>
     <script type="text/javascript" async
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -265,7 +266,17 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             f_k = \frac{s_k&#94;2}{\sum_{i=1}&#94;r s_i&#94;2}
             $$
             These values can be plotted as a scree plot, which provides an indication as to the importance of each
-            component. Note that the original
+            component.
+            <br/>
+            <img src="../images/svd_scree_plot_example.png" alt="scree plot example"/>
+            <br/>
+            The above image is an example of such a scree plot, note however the first component from the svd derived
+            form this
+            example contributes close to 99% of the variation, whereas the other components contribut much less to the
+            variation.
+            <br/>
+
+            Note that the original
             set of singular values $S$ are listed in descending order, so too the percentage of variation explained.
             The total entropy for $r$ components is then calculated
             $$
@@ -279,9 +290,12 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
                 components.
             </li>
         </ul>
+        As demonstrated in the example image, the entropy is very close to 0, which indicates the first component
+        explains most of the variation for
+        that particular example data set.
         </p>
         <p>
-            Skillicorn provides details on methods of selection for the number of components, often the process is
+            Skillicorn provides details on methods of selection for the number of components [1], often the process is
             heuristic, however
             the amount of variation explained by each component may be used to select the number of components required
             for a given threshold.
@@ -289,14 +303,113 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             the total contribution and a
             desired minimum number of components. Once the desired number of components $k < r$ are determined, it is
             possible to use the subset
-            of the decomposition to form the reduced SVD. In the breeze implementation the subset is sliced for example
-    <pre>
+            of the decomposition to form the reduced SVD. In the implementation the subset is sliced for example
+        <pre>
     val rU = U(::, 0 until k).toDenseMatrix
     val rS = S(0 until k).toDenseVector
     val rVt = Vt(0 until k, ::).toDenseMatrix
     </pre>
         </p>
+        <h4>Search Query Projections</h4>
+        <p>
+            Once the reduced space has been determined, the search space can be computed for new incoming queries.
+            The query must be preprocessed in the same manner as the document corpus is preprocessed, hence tokenisation
+            and stemming are applied to the incoming query.
+            Any terms in the query that are not in the vocabulary of the model will be excluded, however in a production
+            application
+            it would be useful to store any out of vocabulary terms that can then be later inspected.
+            The query terms must also be ordered in the same position as the document terms when forming the query
+            vector, if the $idf$ from the
+            original model is known it is possible to multiply the local term freqency $tf$ for the query to create the
+            $tf-idf$ of the query in defining
+            the query vector. The resulting query vector will be a sparse vector, with only those terms appearing in the
+            query having a non-zero value.
+            If the document term matrix has $n$ term columns the resulting query vector will also have $n$ columns.
 
+        </p>
+        <p>
+            In order to convert into the search space, the query vector $q$ is projected against the term components for
+            $V'$ resulting in the projection
+            $$
+            q_p = q \cdot V
+            $$
+
+            However prior to performing the projection the search term component matrix is created by multiplying the
+            term components by the square root of the singular vectors
+            $$
+            sS = I S&#94;{\frac{1}{2}}
+            $$
+            where $I$ is the $k \times k$ identity matrix, hence $sS$ is the diagonal matrix where the diagonal is the
+            square root of each singular value in $S$.
+            $$
+            sV = V sS
+            $$
+            The query projection is then calculated as
+            $$
+            q_p = q \cdot sV
+            $$
+            Note also the search space for the $U$ matrix $sU$ is also formed as
+            $$
+            sU = U sS
+            $$
+        </p>
+        <h5>Search</h5>
+        <p>
+            Once the query has been projected into the reduced search space, a distance metric can be used to match
+            against the corpus in $sU$.
+            Hence the search becomes a matter of mapping from the rows of $sU$ with the smallest distance to $q_p$.
+            $$
+            search(q_p, sU) = ordering\ \left[ dist (q_p, sU) \right]
+            $$
+            for the implementation cosine distance is used.
+            $$
+            cosdist(X,Y) = \frac{
+            <X
+            ,Y>}{
+            <X
+            ,X>
+            <Y
+            ,Y>}
+            $$
+
+            Hence the cosine distance values close to $1$ are closely aligned, those values close to $0$ are
+            perpendicular and those values close to
+            $-1$ are diametrically opposed. Hence documents most closely aligned are those whose cosine distances are
+            close to $1$ and greater than $0$
+            Documents are ranked in descending order in the range of distances $[1,0]$.<br/>
+            When searching in the implementation the index of each row in $sU$ is paired with the cosine distance, and
+            the same index is used to map to
+            the original document identifier from the data set, and in turn mapped back to the excerpt of the original
+            text.<br/>
+            In this way there is a mapping from the geometric space of the SVD back into the original text data that can
+            be used to present results.
+            The test case example uses the query "http redirect error" and retrieves the results containing the document
+            id and text title of the original document.
+        <pre>
+    val query = Array("http", "redirect", "error")
+    // debug the search process and the search projection
+    val searchResults = LatentSemanticIndex.performSearch((ssU, ssS, ssVt), TfIdfCount(), query, stopwords, lsi)
+</pre>
+        The value search results that is output in the test example is:
+        <pre>
+        List(
+            (59749,"apache http 2.2.29: Segmentation fault"),
+            (50011,"error running apache),
+            (53233,"Internal error: proxy: error reading status line from remote server"),
+            (29755,"mod_usertrack should use err_headers_out"),
+            (41114,"ACL HTTP method is rejected by mod_proxy_ajp"),
+            (59090,"Issue with WebDav - org.apache.http.NoHttpResponseException"),
+            (52510,"Segmentation Fault 11"),
+            (48440,"Segmentation Fault"),
+            (56918,"error: 'ap_copy_scoreboard_worker' undeclared here"),
+            (58044,"Error sintax 'lua_dump'"))
+    </pre>
+        </p>
+
+        <h3>Clustering</h3>
+        <p>
+
+        </p>
 
         <h5>References:</h5>
 
