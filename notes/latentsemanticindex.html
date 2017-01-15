@@ -225,13 +225,13 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             and provides a heuristic measure that can be used to determine how the components explain the amount of variation.
         In order to calculate the entropy, the percent of the contribution $f_k$ of each singular value in $S$ is calculated
             $$
-            f_k = s_k&#94;2/\sum_{i=1}&#94;r s_i&#94;2
+            f_k = \frac{s_k&#94;2}{\sum_{i=1}&#94;r s_i&#94;2}
             $$
             These values can be plotted as a scree plot, which provides an indication as to the importance of each component. Note that the original
             set of singular values $S$ are listed in descending order, so too the percentage of variation explained.
             The total entropy for $r$ components is then calculated
             $$
-               \entropy = \frac{\sum_{k=1}&#94;r f_k \log{f_k}}{\log{r}}
+               entropy = \frac{\sum_{k=1}&#94;r f_k \log{f_k}}{\log{r}}
             $$
         </p>
 
