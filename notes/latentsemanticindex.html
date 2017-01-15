@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Scala-au.id.cxd.math by cxd</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/github-light.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/idea.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+
+    <meta name="viewport" content="width=device-width">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="wrapper">
+    <p>
+        <a href="../index.html">Home</a>
+    </p>
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome" aria-hidden="true"><span
+                aria-hidden="true" class="octicon octicon-link"></span></a>
+        Notes Singular Value Decomposition and Latent Semantic Indexing
+    </h3>
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+
+    </script>
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <div>
+        <p>
+            The implementation of Latent Semantic Indexing in this package is motivated primarily as an application of
+            singular value decomposition
+            to term document vectors built out each entry in a corpus of short documents. The resulting vectors form the
+            row of a term weight matrix where
+            the rows represent a document and the columns represent the terms extracted from the entire corpus. Once the
+            matrix is formed the singular value decomposition
+            is applied to obtain the left hand eigenvectors the singular values and the right hand eigenvectors.
+        </p>
+        <p>
+            It is intended as an exploration of the application of the SVD to
+        <ul>
+            <li>Provide an understanding of the amount of entropy within a data set.</li>
+            <li>Review the contribution of each component to the total variation within the data set.</li>
+            <li>Reduce the number of dimensions in the data set using the matrices resulting from the decomposition. The
+                reduced form can be used as an input to other processes.
+            </li>
+            <li>Provide a mapping into a geographic representation which can be used for projections of search queries
+                in order to retrieve objects (documents) that are close in proximity to the search query via a distance
+                metric.
+            </li>
+            <li>Provide a means of automatically categorising documents (objects) through assigning each document to the
+                maximally weighted component.
+            </li>
+            <li>Provide a means of automatically categorising terms (attributes) through assigning each attribute to the
+                maximally weighted component.
+            </li>
+            <li>Provide smoothed estimates for the original data, and provide estimates for the correlation matrix of
+                documents (objects) and the correlation matrix of terms (attributes).
+            </li>
+            <li>Provide a method of visualising high dimensional multivariate-data through the use of the resulting
+                component vectors.
+            </li>
+        </ul>
+
+        </p>
+        <p>
+            The implementation provides a starting point for exploring these methods, and further experimentation.
+        </p>
+        <h3>Singular Value Decomposition</h3>
+        <p>
+
+            The singular value decomposition provides a decomposition of a matrix such that
+        </p>
+        $$
+        A = USV'
+        $$
+        <p>
+            The decomposition is described in Skillicorn 2007, as one which indicates the amount of variation in the
+            latent features of the data set.
+
+            Several interpretations are explained in the book giving the following views
+        </p>
+        <h5>Factor interpretation</h5>
+        <p>
+            The rows of $V'$ are interpreted as underlying factors. The transformed basis provides a set of new factors
+            a correlation between the original attributes of A and the rows of V can be constructed in order to
+            determine
+            the relationship between the original attributes and the factors in V. This relationship may include
+            positive and
+            negative relationships for multiple attributes with a single factor in $V'$.
+        </p>
+
+        <h5>Geometric interpretation</h5>
+        <p>
+            The interpretation of the components is similar to the interpretation of PCA in this approach.
+            When reviewing the relationship of of objects to attributes the $V'$ matrix can be seen as an orthonormal
+            basis for the matrix $U$
+            Alternately, $U$ also represents an orthonormal basis for the matrix $V'$.
+        </p>
+        <p>
+            This is especially useful for visualisation. For example, coordinates from $U$ can be plotted,
+            these are separated by the directions of the corresponding components in $V'$.
+        </p>
+
+        <h5>Graphical interpretation</h5>
+        <p>
+            The resulting matrices describe the following
+            The matrix $U$ describes the relationship between objects or rows of A, the transpose matrix $V'$ describes
+            the
+            relationship between attributes or columns in $A$ with the rows of $V'$ or columns of $V$ its transpose.
+            The diagonal (or vector) $S$ describes the amount of variation in the respective components which are the
+            columns of $U$
+            and the columns of $V'$.
+        </p>
+        <p>
+            A useful difference between PCA and SVD is that whilst PCA is capable of measuring either the relationship
+            between objects $(A'A)$
+            or the relationship between attributes $AA'$ it can only do so distinctly, and not both at the same time in
+            the single operation.
+            Whilst the SVD can provide the measurements of components for objects and attributes in one operation.
+        </p>
+        <p>
+            Data is considered to be standardised and spherically distributed prior to executing the procedure, due to
+            this
+            an appropriate method of normalisation or standardisation should be performed on the input data set prior to
+            performing the procedure.
+        </p>
+        <p>
+            There are some exceptions to this rule as in the case of matrices of dummy variables for example.
+
+            The $S$ matrix in the components interpretation provides a measure of the amount of variation each component
+            c
+
+            Note that in the Breeze implementation if the P.cols > P.rows the SVD will calculate the number of
+            components equal to the min(P.rows, P.cols)
+        </p>
+
+        <h5>References:</h5>
+
+        <ol>
+            <li>Skillicorn, D. Understanding Complex Datasets: Data Mining with Matrix Decompositions. Chapman and
+                Hall/CRC 2007
+            </li>
+        </ol>
+
+
+    </div>
+
+</div>
+<script src="javascripts/scale.fix.js"></script>
+
+</body>
+</html>
