@@ -33,6 +33,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 });
 
 
+
     </script>
     <script type="text/javascript" async
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -75,25 +76,41 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 
         </p>
         <p>
-            Note that the technique of matrix decomposition is useful not only as a preprocessing step, the ability to project the original feature vectors of
-            the data set into the principle components (as derived from either the left or right hand components) as a geometric
-            space permits a convenient method of searching which may rely on distance measures between two vectors, the query vector, and each vector in the
-            resulting search space. Similar techniques have been used in both early methods of search within signal processing such as for versions of facial recognition
-            (as in eigenfaces) and also as the search step in voice biometrics, and the geometric projection remains in use during the search stage of current algorithms.
-            </p>
+            Note that the technique of matrix decomposition is useful not only as a preprocessing step, the ability to
+            project the original feature vectors of
+            the data set into the principle components (as derived from either the left or right hand components) as a
+            geometric
+            space permits a convenient method of searching which may rely on distance measures between two vectors, the
+            query vector, and each vector in the
+            resulting search space. Similar techniques have been used in both early methods of search within signal
+            processing such as for versions of facial recognition
+            (as in eigenfaces) and also as the search step in voice biometrics, and the geometric projection remains in
+            use during the search stage of current algorithms.
+        </p>
         <p>
             The application to Latent Semantic Indexing gives an example of how
-            the decomposition can be applied for such search methods, however when applied to different domains the initial treatment of the data will differ.
-            For example, in the case of text processing, feature vectors may be constructed out of different techniques for mapping documents into
-            weighted term vectors. Whereas for applications in voice biometrics for example, the feature space will be derived from the key features identified
-            in processing the voice signal, which is necessarily a frequency based domain. For the early examples of facial biometrics, such as eigenfaces, the
-            features are derived from a normalised collection of face images. Once the model is constructed it may be referred to as a background model for example,
-            new records may be added by projecting the feature vector into the reduced component space, and the resulting record may be added as a row in the U matrix.
-            Note however the number of components in the reduced space does not change, only the number of objects is increased.</p>
-        <p> In the case of latent semantic indexing there is a limitation where the model is limited by the vocabularly that is learnt from the original training set.
-            Adding new documents can be achieved by encoding the document into the term document vector that contains the same number of terms
-            as the original corpus. The resulting vector can then be projected into the search space and added as an object to the U matrix.
-            However, if new terms are desired, then it would in general be necessary to recompute the entire term document matrix, and in turn recompute the SVD
+            the decomposition can be applied for such search methods, however when applied to different domains the
+            initial treatment of the data will differ.
+            For example, in the case of text processing, feature vectors may be constructed out of different techniques
+            for mapping documents into
+            weighted term vectors. Whereas for applications in voice biometrics for example, the feature space will be
+            derived from the key features identified
+            in processing the voice signal, which is necessarily a frequency based domain. For the early examples of
+            facial biometrics, such as eigenfaces, the
+            features are derived from a normalised collection of face images. Once the model is constructed it may be
+            referred to as a background model for example,
+            new records may be added by projecting the feature vector into the reduced component space, and the
+            resulting record may be added as a row in the U matrix.
+            Note however the number of components in the reduced space does not change, only the number of objects is
+            increased.</p>
+        <p> In the case of latent semantic indexing there is a limitation where the model is limited by the vocabularly
+            that is learnt from the original training set.
+            Adding new documents can be achieved by encoding the document into the term document vector that contains
+            the same number of terms
+            as the original corpus. The resulting vector can then be projected into the search space and added as an
+            object to the U matrix.
+            However, if new terms are desired, then it would in general be necessary to recompute the entire term
+            document matrix, and in turn recompute the SVD
             and reduce the dimensions of the SVD accordingly.
         </p>
         <p>
@@ -172,69 +189,96 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
         <p>
             There are some exceptions to this rule as in the case of matrices of dummy variables for example.
 
-            The $S$ matrix in the components interpretation provides a measure of the amount of variation in each component.
+            The $S$ matrix in the components interpretation provides a measure of the amount of variation in each
+            component.
 
-            Note that in the Breeze implementation if the <pre>P.cols > P.rows</pre> the SVD will calculate the number of
-            components equal to the <pre>min(P.rows, P.cols)</pre>
+            Note that in the Breeze implementation if the
+        <pre>P.cols > P.rows</pre>
+        the SVD will calculate the number of
+        components equal to the
+        <pre>min(P.rows, P.cols)</pre>
         </p>
 
         <h3>Latent Semantic Indexing</h3>
         <p>
-            Latent Semantic Indexing is an example of the application of the SVD to a corpus of natural language documents where the
-            components collapse the similar term features from the document corpus into a single component [2]. The technique starts by
-            first encoding each document as a feature vector, which results first from tokenising, preprocessing and finally weighting terms.
+            Latent Semantic Indexing is an example of the application of the SVD to a corpus of natural language
+            documents where the
+            components collapse the similar term features from the document corpus into a single component [2]. The
+            technique starts by
+            first encoding each document as a feature vector, which results first from tokenising, preprocessing and
+            finally weighting terms.
         </p>
         <p>
-            There are a number of issues to consider in preprocessing natural text. This implementation applies a simplistic approach where each document
-            is tokenised using spaces or punctuation marks via a regular expression, and the resulting tokens are passed through a porter stemmer
+            There are a number of issues to consider in preprocessing natural text. This implementation applies a
+            simplistic approach where each document
+            is tokenised using spaces or punctuation marks via a regular expression, and the resulting tokens are passed
+            through a porter stemmer
             (<a href="https://en.wikipedia.org/wiki/Stemming">https://en.wikipedia.org/wiki/Stemming</a>).
-            Different term weighting schemes available, however the approach to term weighting in the implementation uses the TFIDF term weighting scheme (
+            Different term weighting schemes available, however the approach to term weighting in the implementation
+            uses the TFIDF term weighting scheme (
             <a href="https://en.wikipedia.org/wiki/Tf–idf">https://en.wikipedia.org/wiki/Tf–idf</a>).
         </p>
         <p>
-          The TFIDF weighting is applied once all documents have been tokenised and stemmed and the entire vocabulary of terms has been identified. The terms
-            are then hashed using the built-in hashcode of java, and ordered based on the hashcode. This then defines the order of the columns for the feature vectors
+            The TFIDF weighting is applied once all documents have been tokenised and stemmed and the entire vocabulary
+            of terms has been identified. The terms
+            are then hashed using the built-in hashcode of java, and ordered based on the hashcode. This then defines
+            the order of the columns for the feature vectors
             of each document. Once this order is determined, the TF-IDF is then computed for each document as follows.
             <br/>
-            For each term, the term frequency for a given document is calculated using the augmented frequency to prevent bias towards longer documents
+            For each term, the term frequency for a given document is calculated using the augmented frequency to
+            prevent bias towards longer documents
             $$
             tf(t, d) = 0.5 + 0.5 \times \frac{f_{t,d}}{max\left(f_{t',d} : t' \in d\right)}
             $$
             where $f_{t,d}$ is the frequency of the term for the given document $d$.<br/>
-            The inversse document frequency it is calculated by retaining of total count of documents that contain each term, and uses the logarithm of
+            The inversse document frequency it is calculated by retaining of total count of documents that contain each
+            term, and uses the logarithm of
             $$
             idf(t, D) = \log{\left[ \frac{N}{\left| d \in D : t \in d \right|} \right]}
             $$
             Once the $idf$ is calculated then the final weight is defined as:
             $$
-              tf-idf(t,d) = tf(t,d) \times idf(t,D)
+            tf-idf(t,d) = tf(t,d) \times idf(t,D)
             $$
         </p>
         <p>
             Once the TF-IDF matrix $A$ is computed the SVD is then calculated
             $$
-              \hat{A} = U S V'
+            \hat{A} = U S V'
             $$
-            and can be used for both exploration of the corpus and analysis of the components. In the example implementation the text corpus is
-            taken from the Apache projects bug database, where the documents correspond to the titles of the bugs, the corpus has over 5000 examples of issues raised.
+            and can be used for both exploration of the corpus and analysis of the components. In the example
+            implementation the text corpus is
+            taken from the Apache projects bug database, where the documents correspond to the titles of the bugs, the
+            corpus has over 5000 examples of issues raised.
 
         </p>
         <h4>Entropy and Variation explained by Components</h4>
         <p>
-            Initially after performing the SVD, it is possible to calculate the entropy of the data set which indicates how much noise exists in the data
-            and provides a heuristic measure that can be used to determine how the components explain the amount of variation.
-        In order to calculate the entropy, the percent of the contribution $f_k$ of each singular value in $S$ is calculated
+            Initially after performing the SVD, it is possible to calculate the entropy of the data set which indicates
+            how much noise exists in the data
+            and provides a heuristic measure that can be used to determine how the components explain the amount of
+            variation.
+            In order to calculate the entropy, the percent of the contribution $f_k$ of each singular value in $S$ is
+            calculated
             $$
             f_k = \frac{s_k&#94;2}{\sum_{i=1}&#94;r s_i&#94;2}
             $$
-            These values can be plotted as a scree plot, which provides an indication as to the importance of each component. Note that the original
+            These values can be plotted as a scree plot, which provides an indication as to the importance of each
+            component. Note that the original
             set of singular values $S$ are listed in descending order, so too the percentage of variation explained.
             The total entropy for $r$ components is then calculated
             $$
-               entropy = \frac{\sum_{k=1}&#94;r f_k \log{f_k}}{\log{r}}
+            entropy = \frac{\sum_{k=1}&#94;r f_k \log{f_k}}{\log{r}}
             $$
+            The resulting value for entropy is a value such that $0 \leq entropy \leq 1$.
+            The following heuristics can be applied
+        <ul>
+            <li>If the entropy is close to 0 the spread of variation is explained by the first singular component</li>
+            <li>If the entropy is close to 1 the spread of variation is almost uniform between all singular
+                components.
+            </li>
+        </ul>
         </p>
-
 
 
         <h5>References:</h5>
@@ -243,7 +287,9 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             <li>Skillicorn, D. Understanding Complex Datasets: Data Mining with Matrix Decompositions. Chapman and
                 Hall/CRC 2007
             </li>
-            <li>Manning, Christopher D. Schutze, Hinrich. Foundations of Statistical Natural Language Processing. Massachusetts Institute of Technology 1999</li>
+            <li>Manning, Christopher D. Schutze, Hinrich. Foundations of Statistical Natural Language Processing.
+                Massachusetts Institute of Technology 1999
+            </li>
         </ol>
 
 
