@@ -32,6 +32,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 
+
     </script>
     <script type="text/javascript" async
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -87,7 +88,18 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             The decomposition is described in Skillicorn 2007, as one which indicates the amount of variation in the
             latent features of the data set.
 
-            Several interpretations are explained in the book giving the following views
+            If $A$ is a $m x n$ matrix, the number of components $k \leq n$ and where practical $k \leq m$.
+        <ul>
+            <li> $U$ will be a matrix of the dimension $m \times k$ representing the eigenvalues for the rows of the
+                matrix $A$.
+            </li>
+            <li>$S$ will be a vector of dimension $k$ representing the eigenvalues for the matrix $A$</li>
+            <li>$V'$ will be a matrix of dimension $k \times n$ representing the eigenvalues of the columns of the
+                matrix $A$.
+            </li>
+        </ul>
+
+        Several interpretations are explained in the book giving the following views
         </p>
         <h5>Factor interpretation</h5>
         <p>
