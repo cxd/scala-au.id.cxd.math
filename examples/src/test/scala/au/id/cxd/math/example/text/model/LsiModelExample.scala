@@ -105,13 +105,13 @@ object LsiModelExample {
 
     val data = new CsvReader().readCsv(new File(inputCsv))
     // find the data that matches the search results.
-    val results = searchResults.take(10).foldLeft(Seq[(String,String)]()) {
+    val results = searchResults.take(10).foldLeft(Seq[Tuple2[String, String]]()) {
       (accum, result) => {
         val ids = result._3
         val id = ids(1)
         val matchRecord = data.find { row => row(1).equalsIgnoreCase(id) }
         matchRecord match {
-          case Some(row) => accum :+ (row(1), row(2))
+          case Some(row: _root_.scala.collection.mutable.Buffer[_root_.scala.Predef.String]) => accum :+() ((row(1), row(2)))
           case _ => accum
         }
       }

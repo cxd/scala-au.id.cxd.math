@@ -30,5 +30,11 @@ http://knowm.org/open-source/xchart/xchart-example-code/
 
 https://github.com/timmolter/XChart
 
+## TODO 8. #
+
+If requiring 3d visualisation consider the jzy3d library:
+http://www.jzy3d.org
+
+
 
 

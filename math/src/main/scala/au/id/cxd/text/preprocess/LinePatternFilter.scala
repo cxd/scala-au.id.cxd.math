@@ -31,3 +31,7 @@ class LinePatternFilter(val pattern: String = """[,\.\!\?\s]""") extends StringS
   }.filter(!_.isEmpty)
     .filter(!_.contains("_"))
 }
+
+object LinePatternFilter {
+  def apply(pattern: String = """[,\.\!\?\s]""") = new LinePatternFilter(pattern)
+}
