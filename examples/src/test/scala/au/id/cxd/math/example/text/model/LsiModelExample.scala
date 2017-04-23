@@ -111,7 +111,7 @@ object LsiModelExample {
         val id = ids(1)
         val matchRecord = data.find { row => row(1).equalsIgnoreCase(id) }
         matchRecord match {
-          case Some(row: _root_.scala.collection.mutable.Buffer[_root_.scala.Predef.String]) => accum :+() ((row(1), row(2)))
+          case Some(row: _root_.scala.collection.mutable.Buffer[_root_.scala.Predef.String]) => accum :+ ((row(1), row(2)))
           case _ => accum
         }
       }

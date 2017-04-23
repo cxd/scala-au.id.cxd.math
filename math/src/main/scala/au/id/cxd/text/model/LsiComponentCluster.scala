@@ -47,6 +47,7 @@ trait LsiComponentCluster {
     */
   def clusterDocuments(lsi: LatentSemanticIndex, kClusters: Int):Map[Int, Array[(Int, Seq[String], Int, Double)]] = {
     // we select the first kClusters from U
+    // there are two clusters for each component, negative and positive.
     val U = lsi.svD.U(::, 0 until kClusters).toDenseMatrix
     // subtract the minimum value
     val U2 = subtractMinimum(U)
@@ -56,7 +57,7 @@ trait LsiComponentCluster {
         val idx = docPair._1
         val row = U2(idx, ::).inner
         // which column in the row has the maximum value
-        val maxIdx = row.toArray.foldLeft((-1.0, 0, 0)) {
+        val maxIdx = row.toArray.foldLeft((Double.MinValue, 0, 0)) {
           (pair, item) => {
             item > pair._1 match {
               case true => (item, pair._3, pair._3 + 1)
@@ -67,7 +68,10 @@ trait LsiComponentCluster {
         // if the value in the original matrix is negative then we mark the component as negative
         // otherwise we mark it as positive.
         val clustId = maxIdx._2
-        (docPair._1, docPair._2, clustId, maxIdx._1)
+        maxIdx._1 < 0 match {
+          case true => (docPair._1, docPair._2, -clustId, maxIdx._1)
+          case _ => (docPair._1, docPair._2, clustId, maxIdx._1)
+        }
       }
     }.toArray
       .sortBy(_._1)
@@ -99,7 +103,7 @@ trait LsiComponentCluster {
         val idx = termPair._1
         val row = V2(idx, ::).inner
         // which column in the row has the maximum value
-        val maxIdx = row.toArray.foldLeft((-1.0, 0, 0)) {
+        val maxIdx = row.toArray.foldLeft((Double.MinValue, 0, 0)) {
           (pair, item) => {
             item > pair._1 match {
               case true => (item, pair._3, pair._3 + 1)
@@ -111,7 +115,10 @@ trait LsiComponentCluster {
         // otherwise we mark it as positive.
         val clustId = maxIdx._2
         // (Cluster x TermColumnIndex x Term x Weight)
-        (clustId, termPair._1, termPair._2, maxIdx._1)
+        maxIdx._1 < 0 match {
+          case true => (-clustId, termPair._1, termPair._2, maxIdx._1)
+          case _ => (clustId, termPair._1, termPair._2, maxIdx._1)
+        }
       }
     }.toArray
       .sortBy(_._2)

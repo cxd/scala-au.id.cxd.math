@@ -553,6 +553,7 @@ object LsiModelClusterExample {
 
         val cluster = new LsiComponentCluster {}
         val docClusters = makeDocumentClusters(model, cluster, k)
+
         val termClusters = makeTermClusters(model, cluster, k)
 
         println("Plotting cluster populations")
