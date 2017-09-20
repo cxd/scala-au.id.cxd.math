@@ -2,7 +2,10 @@ package au.id.cxd.math.probability.analysis
 
 import au.id.cxd.math.function.Cov
 import au.id.cxd.math.function.column.ColMeans
+import au.id.cxd.math.probability.continuous.FDistribution
 import breeze.linalg.{DenseMatrix, DenseVector, det, eigSym, inv}
+
+import scala.collection.immutable.Stream
 
 /** ##import MathJax
   *
@@ -75,21 +78,11 @@ import breeze.linalg.{DenseMatrix, DenseVector, det, eigSym, inv}
   *
   * U = \sum_{i=1}^k \lambda+i
   * */
-class Manova(groupNames: List[String], m: DenseMatrix[Double]) {
-
-  /**
-    * a class to hold the statistic/
-    * @param name
-    * @param stat
-    * @param df1
-    * @param df2
-    * @param Fstatistic
-    */
-  case class ManovaStat(val name:String, val stat: Double, val df1: Int, val df2: Int, val Fstatistic:Double) {}
+class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Double], val alpha:Double = 0.05) {
 
   lazy val groups = groupIndexes(groupNames)
 
-  lazy val partitions: List[(String, DenseMatrix[Double])] = partitionGroups(m)(groups)
+  lazy val partitions: List[(String, DenseMatrix[Double])] = partitionGroups(data)(groups)
 
   /**
     * identify the group indexes.
@@ -138,7 +131,7 @@ class Manova(groupNames: List[String], m: DenseMatrix[Double]) {
   def computeT(m: DenseMatrix[Double]): DenseMatrix[Double] = {
     val C = Cov(m)
     val n = m.rows
-    val T = C * (n - 1)
+    val T = C.map(_ * (n - 1))
     T
   }
 
@@ -223,16 +216,131 @@ class Manova(groupNames: List[String], m: DenseMatrix[Double]) {
     ManovaStat("Lawes Hotelling Trace", U, df1, df2, F)
   }
 
+  def selectMethod() = method match {
+    case WilksLambda() => wilksLambda(_,_,_,_)
+    case RoysLargestRoot() => roysLargestRoot(_,_,_,_)
+    case PillaisTrace() => pillaisTrace(_,_,_,_)
+    case LawesHotellingTrace() => lawesHotellingTrace(_,_,_,_)
+  }
+
   def op() = {
-    val T = computeT(m)
-    val B = computeB(m)
+    val n = data.rows
+    val m = groups.size
+    val p = data.cols
+    val T = computeT(data)
+    val B = computeB(data)
     val W = T + (-1.0 * B)
     val WinvB = inv(W) * B
     val eigenDecomp = eig(WinvB)
     val lambda = eigenDecomp.eigenvalues
-    // TODO: call appropriate manova method. parameterise type of manova in use
-    // TODO: perform inferential test of F statistic.
+    // call appropriate manova method. parameterise type of manova in use
+    val inferenceFn = selectMethod()
+    val manovaStat = inferenceFn(lambda, n, m, p)
+
+    // perform inferential test of F statistic.
+    def sequence(last: Double): Stream[Double] = {
+      last #:: sequence(last + 0.1)
+    }
+
+    val fdist = FDistribution(manovaStat.df1, manovaStat.df2)
+    val criticalVal = CriticalValue(fdist, UpperTail()) _
+
+    // calculate the critical value F statistic for (k-1), (n-k) df at alpha level
+    val critical = criticalVal(sequence(0.0).take(100))
+    val test = critical.value(alpha)
+    val reject = manovaStat.stat > test
+    // upper tail
+    // get the probability of the observed F value
+    val prob = fdist.pdf(manovaStat.stat)
+    // calculating the minimum alpha-value for the p Value see Wackerly section 10.6
+    // the pvalue in the case of the F-Distribution is equal to P(w_0 >= observedStat)
+    // P(w_0 >= W) = 1 - P(w_0 < W)
+    val pValue = 1 - fdist.integral(0.0, manovaStat.stat)
+
+    // TODO: we should format the outputs of manova in the anova table format, although this will differ based on
+    // the selected method.
+    // generally all methods will be used for comparison.
+
+    ManovaTest(reject= reject,
+      criticalVal = test,
+      alpha = alpha,
+      manovaStat = manovaStat)
+
   }
 
 
+}
+
+
+object Manova {
+
+  /**
+    * perform inference on the supply groups and data.
+    * @param groupNames
+    * @param data
+    * @param alpha
+    * @param method
+    *               the default manova method is set to wilks lambda
+    * @return
+    */
+  def apply(groupNames: List[String], data: DenseMatrix[Double], alpha:Double = 0.05, method:ManovaMethod = WilksLambda()) =
+    new Manova(method,groupNames,data,alpha).op
+
+  /**
+    * apply the four available tests for differences in group variation
+    * The methods applied are
+    * - wilks lambda
+    * - roys largest root
+    * - pillais trace
+    * - lawes hotelling trace
+    * @param groupNames
+    * @param data
+    * @param alpha
+    * @return
+    */
+  def applyAll(groupNames:List[String], data:DenseMatrix[Double], alpha:Double=0.05) =
+    List(WilksLambda(),
+      RoysLargestRoot(),
+      PillaisTrace(),
+      LawesHotellingTrace()).map (method => Manova(groupNames, data, alpha, method))
+
+}
+
+abstract class ManovaMethod() {}
+case class WilksLambda() extends ManovaMethod() {}
+case class RoysLargestRoot() extends ManovaMethod() {}
+case class PillaisTrace() extends ManovaMethod() {}
+case class LawesHotellingTrace() extends ManovaMethod() {}
+
+/**
+  * a class to hold the statistic/
+  * @param name
+  * @param stat
+  * @param df1
+  * @param df2
+  * @param Fstatistic
+  */
+case class ManovaStat(val name:String, val stat: Double, val df1: Int, val df2: Int, val Fstatistic:Double) {
+
+  override def toString () =
+    s"""
+       |Manova  method $name
+       |Statistic: $stat
+       |Df1: $df1
+       |Df2: $df2
+       |F-Statistic: $Fstatistic
+     """.stripMargin
+
+}
+
+case class ManovaTest(val reject:Boolean, val alpha:Double, val criticalVal:Double, manovaStat:ManovaStat) {
+  override def toString() =
+    s"""
+       |Manova Test at alpha = $alpha
+       |
+       |Reject null hypothesis? $reject
+       |Critical Value: $criticalVal
+       |
+       |${manovaStat.toString}
+     """.stripMargin
 }

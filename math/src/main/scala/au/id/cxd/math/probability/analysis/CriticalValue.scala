@@ -195,11 +195,14 @@ object CriticalValue {
     * @param start
     * @param upperLimit
     * @param dist
+    * @param stepsize
+    *  optional size to increment each step in the series, defaults to 0.1
+    *  adjusting the step size to lower increments of course increases the size of the series
     * @return
     */
-  def upperCriticalValue(start:Double, upperLimit:Double, dist:Distribution) = {
+  def upperCriticalValue(start:Double, upperLimit:Double, dist:Distribution, stepsize:Double = 0.1) = {
     def sequence(last: Double): Stream[Double] = {
-      last #:: sequence(last + 0.1)
+      last #:: sequence(last + stepsize)
     }
     CriticalValue(dist, UpperTail()) (sequence(start).takeWhile { p => p <= upperLimit } )
   }
