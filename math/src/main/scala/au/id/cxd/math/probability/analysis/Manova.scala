@@ -155,7 +155,9 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     val counts = DenseMatrix.tabulate[Double](partitions.length, 1) {
       case (i, j) => partitions(i)._2.rows
     }
-    val B = (mu._2.t * counts) * mu._2
+    // TODO: debug the dimensions for group sizes and overall counts for each group.
+    val temp = (mu._2.t * counts)
+    val B = temp * mu._2
     B
   }
 

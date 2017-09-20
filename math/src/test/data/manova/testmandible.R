@@ -3,7 +3,7 @@ require(MVN)
 data <- read.table("mandible.dat", header=TRUE)
 
 # write the data to csv for use by unit tests in scala.
-write.csv(data, "test_mandible_data.csv", row.names=NA)
+write.csv(data, "test_mandible_data.csv", row.names=FALSE)
 
 # test manova
 attach(data)

@@ -3,7 +3,7 @@ package data
 import java.io.File
 
 import au.id.cxd.math.data.SequenceReader
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
  *
@@ -11,7 +11,7 @@ import org.scalatest.{FlatSpec, ShouldMatchers}
  *
  * Created by cd on 12/01/15.
  */
-class TestSequenceReader extends FlatSpec with ShouldMatchers {
+class TestSequenceReader extends FlatSpec with Matchers {
 
   val fileName = "example_train_data.csv"
 
