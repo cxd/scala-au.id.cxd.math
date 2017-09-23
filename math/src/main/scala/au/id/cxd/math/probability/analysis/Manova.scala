@@ -125,6 +125,13 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
   /**
     * compute the total variation
     *
+    * # Total Variation
+    * $$
+    * T = Cov(X)*(n-1)
+    * $$
+    * The matrix $T$ is $k \times k$ in size where $k$ is the number of attributes in $X$.
+    * $n$ is the total number of rows in the data set.
+    *
     * @param m
     * @return
     */
@@ -137,6 +144,25 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
 
   /**
     * compute the between group variation
+    *
+    * # Between Group Variation
+    *
+    * In order to compute between group variation we need a column or vector in the data
+    * that is a group categorical variable.
+    *
+    * From this value we then determine the set of group means $G_{\mu}$
+    * which for m groups are m group means vectors. We then compute
+    *
+    * $$
+    * B = n G_{\mu}' G_{\mu}
+    * $$
+    *
+    * $n$ here is the column vector with the number of observations for each group.
+    *
+    * Note that $G_{\mu}$ is a matrix of $m \times k$ where $k$ is the number of attributes
+    * and $m$ the number of groups.
+    *
+    * The matrix $B$ is $k \times k$.
     *
     * @param m
     */
@@ -152,12 +178,13 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
         (accum._1 + 1, mat)
       }
     }
-    val counts = DenseMatrix.tabulate[Double](partitions.length, 1) {
-      case (i, j) => partitions(i)._2.rows
+    // TODO: replace this with a fold.
+    val counts = DenseMatrix.tabulate[Double](partitions.length, m.cols) {
+      case (i, j) => mu._2(i,j)*partitions(i)._2.rows
     }
-    // TODO: debug the dimensions for group sizes and overall counts for each group.
-    val temp = (mu._2.t * counts)
-    val B = temp * mu._2
+
+    val B = counts.t * mu._2
+
     B
   }
 
@@ -275,6 +302,18 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
 
 
 object Manova {
+
+
+  /**
+    * create an instance of manova but do not perform the operation.
+    * @param groupNames
+    * @param data
+    * @param alpha
+    * @param method
+    * @return
+    */
+  def build(groupNames: List[String], data: DenseMatrix[Double], alpha:Double = 0.05, method:ManovaMethod = WilksLambda()) =
+    new Manova(method, groupNames, data, alpha)
 
   /**
     * perform inference on the supply groups and data.

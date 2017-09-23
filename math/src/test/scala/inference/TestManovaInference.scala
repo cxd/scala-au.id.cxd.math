@@ -8,7 +8,50 @@ import breeze.linalg.DenseMatrix
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 
 class TestManovaInference extends FlatSpec
-  with Matchers{
+  with Matchers {
+
+  "Manova" should "partition groups" in new TestManovaData {
+    val (groups, data) = read()
+
+    val m = Manova.build(groups, data)
+
+    val p = m.partitions
+
+    println(s"Partitions: ${p.length}")
+
+    p.length should not be (0)
+  }
+
+  "Manova" should "compute total variation" in new TestManovaData {
+
+    val (groups, data) = read()
+
+    val m = Manova.build(groups, data)
+
+    val T = m.computeT(data)
+
+    val groupCount = groups.length
+
+    println(s"T: (${T.rows} x ${T.cols})")
+
+    T.rows should be (data.cols)
+    T.cols should be (data.cols)
+  }
+
+  "Manova" should "compute between group variation" in new TestManovaData {
+    val (groups, data) = read()
+
+    val m = Manova.build(groups, data)
+    val B = m.computeB(data)
+
+    // we should have 20 groups in the data, hence 20 rows.
+
+
+    println(s"B: (${B.rows} x ${B.cols})")
+
+    B.rows should be (data.cols)
+    B.cols should be (data.cols)
+  }
 
   /**
     * The expected output should correspond with the R method.
