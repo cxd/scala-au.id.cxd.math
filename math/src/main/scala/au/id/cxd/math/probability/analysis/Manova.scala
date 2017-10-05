@@ -3,7 +3,7 @@ package au.id.cxd.math.probability.analysis
 import au.id.cxd.math.function.Cov
 import au.id.cxd.math.function.column.ColMeans
 import au.id.cxd.math.probability.continuous.FDistribution
-import breeze.linalg.{DenseMatrix, DenseVector, det, eigSym, inv}
+import breeze.linalg.{DenseMatrix, DenseVector, det, eigSym, inv, svd}
 
 import scala.collection.immutable.Stream
 
@@ -112,10 +112,10 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     * @return
     */
   def partitionGroups(m: DenseMatrix[Double])(groups: Map[String, Vector[Int]]): List[(String, DenseMatrix[Double])] = {
-    groups.foldLeft(List[(String, DenseMatrix[Double])]()) {
-      (accum, group) => {
-        val key = group._1
-        val idx = group._2
+    val keys = groups.keys.toIndexedSeq.sorted
+    keys.foldLeft(List[(String, DenseMatrix[Double])]()) {
+      (accum, key) => {
+        val idx = groups(key)
         val submat = m(idx, ::).toDenseMatrix
         accum :+ (key, submat)
       }
@@ -178,18 +178,18 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
         (accum._1 + 1, mat)
       }
     }
-    // TODO: replace this with a fold.
     val counts = DenseMatrix.tabulate[Double](partitions.length, m.cols) {
       case (i, j) => mu._2(i,j)*partitions(i)._2.rows
     }
 
     val B = counts.t * mu._2
-
     B
   }
 
-  def eig(m: DenseMatrix[Double]) =
-    eigSym(m)
+  def eig(m: DenseMatrix[Double]): DenseVector[Double] =  {
+    val svd.SVD(u, sigma, vt) = svd(m)
+    sigma
+  }
 
 
   /**
@@ -209,7 +209,7 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     val w = n - 1 - (p + m) / 2
     val df1 = p * (m - 1)
     val t = (Math.pow(df1,2) - 4) / Math.sqrt(Math.pow(p,2) + Math.pow(m-1,2) - 5)
-    val df2 = (w*t * -df1 / 2 + 1).toInt
+    val df2 = (w*t * df1 / 2 + 1).toInt
     val F = Math.pow(1-wilks, 1/t)/Math.pow(wilks, 1/t) * (df2/df1)
     ManovaStat("Wilk's Lambda", wilks, df1, df2, F)
   }
@@ -260,8 +260,7 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     val B = computeB(data)
     val W = T + (-1.0 * B)
     val WinvB = inv(W) * B
-    val eigenDecomp = eig(WinvB)
-    val lambda = eigenDecomp.eigenvalues
+    val lambda = eig(WinvB)
     // call appropriate manova method. parameterise type of manova in use
     val inferenceFn = selectMethod()
     val manovaStat = inferenceFn(lambda, n, m, p)
@@ -270,6 +269,10 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     def sequence(last: Double): Stream[Double] = {
       last #:: sequence(last + 0.1)
     }
+
+    // TODO: debug the calculation of the critical value with high degree of freedom
+    // in F-distribution.
+    //println(s"DF1 ${manovaStat.df1} DF2 ${manovaStat.df2}")
 
     val fdist = FDistribution(manovaStat.df1, manovaStat.df2)
     val criticalVal = CriticalValue(fdist, UpperTail()) _

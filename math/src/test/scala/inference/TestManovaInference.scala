@@ -4,7 +4,7 @@ import java.io.File
 
 import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.probability.analysis.{Manova, WilksLambda}
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, eigSym, inv, svd}
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 
 class TestManovaInference extends FlatSpec
@@ -15,9 +15,15 @@ class TestManovaInference extends FlatSpec
 
     val m = Manova.build(groups, data)
 
+    val idx = m.groupIndexes(groups)
+
     val p = m.partitions
 
+    // there are 5 groups in the test data.
+    println(s"Group Length: ${idx.size}")
     println(s"Partitions: ${p.length}")
+
+    p.length should be(expectedGroups)
 
     p.length should not be (0)
   }
@@ -49,8 +55,35 @@ class TestManovaInference extends FlatSpec
 
     println(s"B: (${B.rows} x ${B.cols})")
 
+    println(B)
+
     B.rows should be (data.cols)
     B.cols should be (data.cols)
+  }
+
+  "Manova" should "compute inverse" in new TestManovaData {
+    val (groups, data) = read()
+
+    val m = Manova.build(groups, data)
+    val B = m.computeB(data)
+
+    val T = m.computeT(data)
+
+    val W = T + (-1.0 * B)
+    val Winv = inv(W)
+    val WinvB = inv(W) * B
+
+    println("Inverse W")
+    println(s"Dim (${Winv.rows} x ${Winv.cols})")
+    println(Winv)
+
+    val svd.SVD(u, sigma, vt) = svd(Winv)
+
+
+    println("WINV B")
+    println(sigma)
+
+    //val eigenDecomp = eig(WinvB)
   }
 
   /**
@@ -88,6 +121,8 @@ trait TestManovaData extends MatrixReader {
 
   val fileName="test_mandible_data.csv"
 
+  val expectedGroups :Int = 5
+
   override val skipHeader = true
 
   def read():(List[String], DenseMatrix[Double]) = {
@@ -98,9 +133,9 @@ trait TestManovaData extends MatrixReader {
     // they are:
     // "Case","Group","X1","X2","X3","X4","X5","X6","X7","X8","X9","Sex"
     // we want to keep columns 1 .. 10 and discard the other two.
-    val m2 = mat(::, 1 to 10).toDenseMatrix
+    val m2 = mat(::, 2 to 11).toDenseMatrix
     // we also know ahead of time that there are 5 groups in the data.
-    val groups = mat(::,0).toArray.map(_.toString).toList
+    val groups = mat(::,1).toArray.map(_.toString).toList
     (groups, m2)
   }
 }
