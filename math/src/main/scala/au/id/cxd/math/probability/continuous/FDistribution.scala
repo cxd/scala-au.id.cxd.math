@@ -69,17 +69,17 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
     if (y <= 0.0) 0.0
     else {
 
-      val a = Math.sqrt(Math.pow(denominatorDf, denominatorDf)) * Math.sqrt(Math.pow(numeratorDf, numeratorDf)) * Math.sqrt(Math.pow(y, numeratorDf - 2.0))
-      val b = Math.sqrt(Math.pow(denominatorDf + numeratorDf * y, numeratorDf + denominatorDf)) * beta
-      a / b
+      /**
+        *
+        * f(y) = \frac{\sqrt{ (d_1 y)^{d_1} d_2^{d_2}} {\sqrt{(d_1 x + d_2)^{d_1 + d_2}} \frac{1}{y Beta(\frac{d_1}{2}, \frac{d_2}{2})
+        *
+        */
 
-      /** is equivalent to
-        * val a = Math.pow(numeratorDf*y, numeratorDf)*Math.pow(denominatorDf, denominatorDf)
-        * val b = Math.pow(numeratorDf*y + denominatorDf, numeratorDf+denominatorDf)
-        * val c = Math.sqrt(a / b)
-        * val d = y * beta
-        * c / d
-        * */
+       val a = Math.pow(numeratorDf*y, numeratorDf)*Math.pow(denominatorDf, denominatorDf)
+       val b = Math.pow(numeratorDf*y + denominatorDf, numeratorDf+denominatorDf)
+       val c = Math.sqrt(a / b)
+       val d = y * beta
+       c / d
     }
   }
 }
