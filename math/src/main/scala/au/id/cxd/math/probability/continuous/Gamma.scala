@@ -2,6 +2,7 @@ package au.id.cxd.math.probability.continuous
 
 import au.id.cxd.math.count.Factorial
 import au.id.cxd.math.function.GammaFn
+import breeze.numerics.{gammp, gammq}
 
 import scala.math._
 
@@ -25,6 +26,16 @@ import scala.math._
   *
   * $0 \leq y < \infty$
   *
+  *
+  * CDF:
+  *
+  * $$
+  * P( < y) = \frac{1}{\Gamma(\alpha)}\gamma(\alpha, \beta y)
+  * $$
+  *
+  * Where $Gamma(\alpha)$ is the upper complete gamma function and $\gamma(\alpha, \beta y)$ is the lower incomplete gamma function.``
+  *
+  *
   * Created by cd on 11/09/2014.
   */
 class Gamma(alpha: Double, beta: Double) extends ContinuousDistribution {
@@ -44,13 +55,27 @@ class Gamma(alpha: Double, beta: Double) extends ContinuousDistribution {
     */
   def pdf(y: Double): Double = {
     val gamma = GammaFn(alpha)
-    (pow(y, a - 1.0) * exp(-y / b)) / (pow(b, a) * gamma)
+    ( pow(beta, alpha)/gamma ) * pow(y, alpha-1.0)*exp(-beta*y)
+    //(pow(y, a - 1.0) * exp(-y / b)) / (pow(b, a) * gamma)
   }
 
   def mean(): Double = a * b
 
 
   def variance(): Double = a * pow(b, 2.0)
+
+  /**
+    *  * $$
+    * P( < y) = \frac{1}{\Gamma(\alpha)}\gamma(\alpha, \beta y)
+    * $$
+    *
+    * Where $Gamma(\alpha)$ is the upper complete gamma function and $\gamma(\alpha, \beta y)$ is the lower incomplete gamma function.``
+    *
+    * @param y
+    */
+  override def cdf(y:Double) = {
+    ( 1.0 / GammaFn(y) ) * gammq (alpha, beta*y)
+  }
 
 }
 

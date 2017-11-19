@@ -14,6 +14,15 @@ import scala.math._
   * $f(y) = 1 / (max - min)$ if $min \leq y \leq max$
   * 0 otherwise
   *
+  * CDF of uniform(a,b)
+  * $$
+  * P(y) = \begin{cases}
+  *   0 & \text{if} y < a\\
+  *   \frac{y-a}{b-a} & \text{if} y \in [a,b)\\
+  *   1 & \text{y > b)
+  * \end{cases}
+  * $$
+  *
   */
 class Uniform(min: Double, max: Double) extends ContinuousDistribution {
 
@@ -29,24 +38,24 @@ class Uniform(min: Double, max: Double) extends ContinuousDistribution {
   def variance(): Double = pow((max - min), 2.0) / 12.0
 
   /**
-    * the integral of the distribution
-    *
-    * integral 1/(theta2 - theta1) dy
-    *
-    * = 1/(theta2-theta1)*y_upper - 1/(theta2-theta2)*ylower
-    * @param start
-    * @param end
+    * CDF of uniform(a,b)
+    * $$
+    * P(y) = \begin{cases}
+    *   0 & \text{if} y < a\\
+    *   \frac{y-a}{b-a} & \text{if} y \in [a,b)\\
+    *   1 & \text{y > b)
+    * \end{cases}
+    * $$
+    * @param y
     * @return
     */
-  override def integral(start: Double, end: Double) = {
-    val low = if (start >= min && start <= max) {
-      start
-    } else min
-    val high = if (end >= min && end <= max) {
-      end
-    } else max
-    NumericIntegral(low, high, pdf(_)).integrate()
+  override def cdf(y:Double) = {
+    if (y < min) 0.0
+    else if (min <= y && y <= max)
+      (y-min)/(max-min)
+    else 1.0
   }
+
 }
 
 object Uniform {

@@ -63,7 +63,7 @@ sequence(1, by = 1).take(10)
 [1] 0.0009994094
 
   */
-val cP = fdist.cdf(Seq(0.0, 0.001))
+val cP = fdist.cdf(0.001)
 
 /**
 > pf(0.05,2,11)
@@ -71,7 +71,7 @@ val cP = fdist.cdf(Seq(0.0, 0.001))
 
   *
   */
-val cP2 = fdist.cdf(Seq(0.0, 0.05))
+val cP2 = fdist.cdf(0.05)
 
 
 

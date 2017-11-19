@@ -16,18 +16,32 @@ trait ContinuousDistribution extends Distribution {
   /**
     * integral from start to end for the pdf
     *
-    * For those distributions that cannot be integrated the numeric integral is used.
+    * This is equivalent to cdf(end) - cdf(start)
     *
     * @param start
     * @param end
     * @return
     */
-  def integral(start: Double, end: Double): Double = NumericIntegral(start, end, pdf(_)).integrate()
-
-
-  def cdf(y:Seq[Double]):Double = {
-    val start = min(y.head, y.last)
-    val end = max(y.head, y.last)
-    integral(start, end)
+  def integral(start: Double, end: Double): Double = {
+    val a = cdf(start)
+    val b = cdf(end)
+    b - a
   }
+
+  /**
+    * cumulative density function
+    * @param y
+    * @return
+    */
+  def cdf(y: Seq[Double]): Double = integral(y.head, y.tail.head)
+
+  /**
+    * calculate the cdf $P( < y)$.
+    * @param y
+    * @return
+    */
+  def cdf(y:Double):Double
+
+
+
 }

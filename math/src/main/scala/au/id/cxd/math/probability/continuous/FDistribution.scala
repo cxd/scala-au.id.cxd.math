@@ -1,7 +1,7 @@
 package au.id.cxd.math.probability.continuous
 
 import au.id.cxd.math.count.Factorial
-import au.id.cxd.math.function.{NumericIntegral, GammaFn, BetaFn}
+import au.id.cxd.math.function.{BetaFn, GammaFn, IncompleteBetaFn, NumericIntegral}
 
 /**
   * ##import MathJax
@@ -39,6 +39,14 @@ import au.id.cxd.math.function.{NumericIntegral, GammaFn, BetaFn}
   * $$
   *
   * The f distribution is most often used in testing hypothesis about an unknown variance.
+  *
+  * CDF:
+  * $$
+  * F(x; d_1, d_2) = I_{\frac{d_1x}{d_1x + d_2x}} \left(\frac{d_1}{2},\frac{d_2}{2}\right)
+  * $$
+  *
+  * Where $I_{\frac{d_1x}{d_1x + d_2x}}$ is the regularized incomplete beta function.
+  *
   *
   * Created by cd on 5/11/14.
   */
@@ -81,6 +89,23 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
        val d = y * beta
        c / d
     }
+  }
+
+  /**
+    *  * CDF:
+    * $$
+    * F(x; d_1, d_2) = I_{\frac{d_1x}{d_1x + d_2x}} \left(\frac{d_1}{2},\frac{d_2}{2}\right)
+    * $$
+    *
+    * Where $I_{\frac{d_1x}{d_1x + d_2x}}$ is the regularized incomplete beta function.
+    *
+    * @param y
+    */
+  def cdf(y:Double) = {
+    val alpha = numeratorDf/2.0
+    val beta = denominatorDf/2.0
+    val x = numeratorDf*y / (numeratorDf*y + denominatorDf*y)
+    IncompleteBetaFn(x,alpha, beta)
   }
 }
 

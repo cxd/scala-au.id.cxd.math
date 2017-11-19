@@ -14,7 +14,7 @@ import au.id.cxd.math.count.Factorial
   */
 class BetaFn {
 
-  def op(a: Double, b: Double) = GammaFn(a) * GammaFn(b) / GammaFn(a + b)
+  def op(a: Double, b: Double) = (GammaFn(a) * GammaFn(b)) / GammaFn(a + b)
 
 }
 
