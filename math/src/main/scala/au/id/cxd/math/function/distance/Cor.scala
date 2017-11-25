@@ -1,5 +1,6 @@
-package au.id.cxd.math.function
+package au.id.cxd.math.function.distance
 
+import au.id.cxd.math.function.transform.StandardisedNormalisation
 import breeze.linalg.DenseMatrix
 
 /**

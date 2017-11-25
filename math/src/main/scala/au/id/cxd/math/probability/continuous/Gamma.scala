@@ -1,7 +1,7 @@
 package au.id.cxd.math.probability.continuous
 
 import au.id.cxd.math.count.Factorial
-import au.id.cxd.math.function.GammaFn
+import au.id.cxd.math.function.gamma.GammaFn
 import breeze.numerics.{gammp, gammq}
 
 import scala.math._

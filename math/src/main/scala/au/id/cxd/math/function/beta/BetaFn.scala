@@ -1,6 +1,6 @@
-package au.id.cxd.math.function
+package au.id.cxd.math.function.beta
 
-import au.id.cxd.math.count.Factorial
+import au.id.cxd.math.function.gamma.GammaFn
 
 /**
   * ##import MathJax
@@ -10,6 +10,15 @@ import au.id.cxd.math.count.Factorial
   * $$
   * B(a, b) = \frac{ (a - 1)!(b - 1)! }{ (a + b - 1)! }
   * $$
+  *
+  * alternately
+  *
+  * $$
+  * B(a,b) = \Gamma(a)\Gamma(b) / \Gamma(a + b)
+  * $$
+  *
+  * https://en.wikipedia.org/wiki/Beta_function#Properties
+  *
   * Created by cd on 5/11/14.
   */
 class BetaFn {

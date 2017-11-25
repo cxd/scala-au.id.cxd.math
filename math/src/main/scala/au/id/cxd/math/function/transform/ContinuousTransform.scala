@@ -1,5 +1,4 @@
-package au.id.cxd.math.function
-
+package au.id.cxd.math.function.transform
 
 import breeze.linalg.DenseMatrix
 

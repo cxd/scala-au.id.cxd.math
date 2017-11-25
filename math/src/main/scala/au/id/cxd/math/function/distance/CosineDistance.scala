@@ -1,4 +1,4 @@
-package au.id.cxd.math.function
+package au.id.cxd.math.function.distance
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 

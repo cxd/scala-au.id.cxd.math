@@ -1,6 +1,4 @@
-package au.id.cxd.math.function
-
-import au.id.cxd.math.count.Factorial
+package au.id.cxd.math.function.gamma
 
 import scalaz.Memo
 

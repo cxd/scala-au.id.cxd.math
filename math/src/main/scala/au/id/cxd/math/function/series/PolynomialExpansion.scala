@@ -1,4 +1,4 @@
-package au.id.cxd.math.function
+package au.id.cxd.math.function.series
 
 import au.id.cxd.math.collection.{Node, Trie}
 import au.id.cxd.math.count.{Choose, Permutation}

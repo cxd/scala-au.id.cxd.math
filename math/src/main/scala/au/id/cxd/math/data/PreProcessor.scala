@@ -3,7 +3,7 @@ package au.id.cxd.math.data
 import java.io.File
 
 import au.id.cxd.math.data.{CsvReader, MatrixReader}
-import au.id.cxd.math.function.ContinuousTransform
+import au.id.cxd.math.function.transform.ContinuousTransform
 import breeze.linalg.DenseMatrix
 
 import scala.collection.mutable

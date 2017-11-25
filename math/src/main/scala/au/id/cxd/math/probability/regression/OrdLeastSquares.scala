@@ -2,7 +2,7 @@ package au.id.cxd.math.probability.regression
 
 import java.io._
 
-import au.id.cxd.math.function.{PolynomialExpansion, PseudoInverse}
+import au.id.cxd.math.function.matrix.PseudoInverse
 import au.id.cxd.math.probability.analysis.{CriticalValue, StatisticalTest, TestResult, UpperTail}
 import au.id.cxd.math.probability.continuous.{FDistribution, Normal}
 import breeze.linalg._

@@ -1,6 +1,7 @@
 package au.id.cxd.math.probability.continuous
 
-import au.id.cxd.math.function.{BetaFn, IncompleteBetaFn, NumericIntegral}
+import au.id.cxd.math.function.beta.BetaFn
+import au.id.cxd.math.function.beta.BetaFn
 
 /**
   * ##import MathJax
@@ -12,7 +13,7 @@ import au.id.cxd.math.function.{BetaFn, IncompleteBetaFn, NumericIntegral}
   * f(y) = \frac{ y&#94;{\alpha - 1} (1-y)&#94;{\beta-1} } { Beta(\alpha, \beta) }
   * $$
   *
-  * Where the $Beta$ is the beta function [[au.id.cxd.math.function.BetaFn]]
+  * Where the $Beta$ is the beta function [[BetaFn]]
   *
   * Properties of the distribution:
   * Mean $\mu$:
@@ -44,6 +45,8 @@ import au.id.cxd.math.function.{BetaFn, IncompleteBetaFn, NumericIntegral}
   * $$
   *
   * The incomplete beta function can be written as above, the ratio of the beta distribution over the complete gamma function
+  *
+  * https://en.wikipedia.org/wiki/Beta_function#Properties
   *
   * Created by cd on 5/11/14.
   */

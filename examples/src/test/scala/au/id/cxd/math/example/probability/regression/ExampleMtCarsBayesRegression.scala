@@ -6,7 +6,7 @@ import javax.swing.JFrame
 
 import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.example.charting.ChartHelper
-import au.id.cxd.math.function.StandardisedNormalisation
+import au.id.cxd.math.function.transform.StandardisedNormalisation
 import au.id.cxd.math.probability.regression.{BayesLinearRegression, OrdLeastSquares}
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}

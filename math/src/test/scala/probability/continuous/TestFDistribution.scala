@@ -1,6 +1,6 @@
 package probability.continuous
 
-import au.id.cxd.math.function.{BetaFn, GammaFn}
+import au.id.cxd.math.function.gamma.GammaFn
 import au.id.cxd.math.probability.analysis.CriticalValue
 import au.id.cxd.math.probability.continuous.FDistribution
 import org.scalatest._

@@ -1,6 +1,6 @@
 package au.id.cxd.math.probability.continuous
 
-import au.id.cxd.math.function.NumericIntegral
+import au.id.cxd.math.function.approximate.NumericIntegral
 
 import scala.math._
 

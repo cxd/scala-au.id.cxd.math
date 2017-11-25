@@ -1,4 +1,4 @@
-package au.id.cxd.math.function
+package au.id.cxd.math.function.beta
 
 import au.id.cxd.math.probability.continuous.Beta
 
@@ -22,15 +22,18 @@ import au.id.cxd.math.probability.continuous.Beta
   * B(x,y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x + y)}
   * $$
   *
-  * The incomplete beta function can be written as above, the ratio of the beta distribution over the complete gamma function
+  * The incomplete beta function can be written the product of the beta distribution and the complete gamma function
+  *
+  * https://en.wikipedia.org/wiki/Beta_function#Properties
   */
 class IncompleteBetaFn {
 
   def op(x:Double, alpha:Double, beta:Double) = {
+  // TODO: alter implementation of incomplete beta function refer to numerical recipes.
     val f = BetaFn(alpha)(beta)
     val dist = Beta(alpha, beta)
     val p = dist.pdf(x)
-    p / f
+    p * f
   }
 
 }

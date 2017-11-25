@@ -1,5 +1,6 @@
 import Math._
-import au.id.cxd.math.function.NumericIntegral
+
+import au.id.cxd.math.function.approximate.NumericIntegral
 import au.id.cxd.math.probability.continuous.Normal
 val limit = (0.0, 1.0)
 def exampleNorm(mu:Double, sigma:Double)(y:Double):Double =

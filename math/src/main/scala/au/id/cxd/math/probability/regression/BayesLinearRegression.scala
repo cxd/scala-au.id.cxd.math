@@ -1,6 +1,6 @@
 package au.id.cxd.math.probability.regression
 
-import au.id.cxd.math.function.PseudoInverse
+import au.id.cxd.math.function.matrix.PseudoInverse
 import au.id.cxd.math.probability.analysis.CriticalValue
 import au.id.cxd.math.probability.continuous.Normal
 import breeze.linalg.{DenseMatrix, DenseVector}

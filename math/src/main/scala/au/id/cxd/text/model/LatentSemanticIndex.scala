@@ -6,9 +6,9 @@ import java.nio.file.{Files, Path}
 import java.io.File
 
 import breeze.linalg._
-import au.id.cxd.math.data.{CsvReader, CsvWriter, Writable, Readable}
+import au.id.cxd.math.data.{CsvReader, CsvWriter, Readable, Writable}
 import au.id.cxd.math.data.archive.{ZipArchiveInput, ZipArchiveOutput}
-import au.id.cxd.math.function.CosineDistance
+import au.id.cxd.math.function.distance.CosineDistance
 import au.id.cxd.math.model.components.SingularValueDecomposition
 import au.id.cxd.text.count.{DocumentTermVectoriser, TfIdfCount}
 import au.id.cxd.text.helpers.{EmbeddedStopwordsLoader, IndexedTextCsvReader}

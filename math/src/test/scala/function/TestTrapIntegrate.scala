@@ -1,8 +1,8 @@
 package function
 
-import au.id.cxd.math.function.NumericIntegral
+import au.id.cxd.math.function.approximate.NumericIntegral
 import au.id.cxd.math.probability.continuous.Normal
-import org.scalatest.{ShouldMatchers, FlatSpec}
+import org.scalatest.{FlatSpec, ShouldMatchers}
 
 /**
   * Created by cd on 13/03/2016.

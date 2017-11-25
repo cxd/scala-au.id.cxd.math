@@ -1,7 +1,7 @@
 package au.id.cxd.math.probability.analysis
 
-import au.id.cxd.math.function.Cov
 import au.id.cxd.math.function.column.ColMeans
+import au.id.cxd.math.function.distance.Cov
 import au.id.cxd.math.probability.continuous.FDistribution
 import breeze.linalg.{DenseMatrix, DenseVector, det, eigSym, inv, svd}
 

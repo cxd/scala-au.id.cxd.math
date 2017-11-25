@@ -35,6 +35,14 @@ class Factorial() {
 
 object Factorial {
 
+  /**
+    * the maximum value that can be used to calculate a factorial
+    * without overflow
+    * after which approximation needs to be used
+    */
+  val MAX_N:Double = 170.0
+
+
   def apply(num: Double) = {
     new Factorial().op(round(num))
   }

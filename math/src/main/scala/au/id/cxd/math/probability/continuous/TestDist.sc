@@ -1,5 +1,6 @@
-import au.id.cxd.math.function.GammaFn
+import au.id.cxd.math.function.approximate.NumericIntegral
 import au.id.cxd.math.probability.continuous.{Beta, Exponential, Gamma, Normal}
+import breeze.numerics.pow
 
 import scala.math.{exp, pow}
 
@@ -89,6 +90,14 @@ b2.pdf(0.2)
   */
 b2.cdf(0.2)
 
+/**
+  * Stirlings approximation of the
+  * beta function for comparison.
+  *
+  * @param a
+  * @param b
+  * @return
+  */
 def testBeta(a:Double,b:Double) = {
  val a1 = Math.sqrt(2.0*Math.PI)
  val a2 = Math.pow(a, a - 0.5)*Math.pow(b, b - 0.5)
@@ -101,3 +110,10 @@ val f = testBeta(0.5,0.3)
 val p = b2.pdf(0.2)
 
 p / f
+
+val alpha=0.5
+val beta=0.3
+val x=0.2
+def fn(t:Double) = Math.pow(t,alpha-1.0) * Math.pow(1.0 - t, beta-1.0)
+
+val integral = NumericIntegral(0.0, x, fn).approxIntegral()

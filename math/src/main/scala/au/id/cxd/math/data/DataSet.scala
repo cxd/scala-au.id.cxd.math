@@ -1,7 +1,6 @@
 package au.id.cxd.math.data
 
-
-import au.id.cxd.math.function.ContinuousTransform
+import au.id.cxd.math.function.transform.ContinuousTransform
 import breeze.linalg.DenseMatrix
 /**
   * The data set class contains the full dataset
