@@ -17,8 +17,8 @@ trait ContinuedSeries {
     * @return
     */
   def additiveProductFn(coef: List[Double], e: Double): Double = coef match {
-    case (c :: cs) => c + e * additiveProductFn(cs, e)
     case c :: Nil => c
+    case (c :: cs) => c + e * additiveProductFn(cs, e)
   }
 
 }

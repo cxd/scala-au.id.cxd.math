@@ -11,12 +11,12 @@ class Trigamma(val factorialFn: Double => (Double, Double)) extends Polygamma(ap
 
 
 
-  def op(x:Double) = {
+  def op(x:Double):(Double,Double)= {
     if (x == 0.0 || x == -1.0 || x == -2.0) {
       throw new IllegalArgumentException(s"x is invalid it cannot be 0, -1.0 or -2.0")
     }
     if (x > 0.0) psiX(1.0, x)
-    else if (x > -5,0) {
+    else if (x > -5.0) {
       // psi.c line 736
       val M = -Math.floor(x)
       val fx = x + M
@@ -35,7 +35,6 @@ class Trigamma(val factorialFn: Double => (Double, Double)) extends Polygamma(ap
       val err1 = err + 2.0*Constants.DBL_EPSILON*d
       (y1, err1)
     }
-
   }
 
 }

@@ -1,7 +1,6 @@
 package au.id.cxd.math.probability.continuous
 
-import au.id.cxd.math.function.beta.BetaFn
-import au.id.cxd.math.function.beta.BetaFn
+import au.id.cxd.math.function.beta.{BetaFn, IncompleteBetaFn}
 
 /**
   * ##import MathJax

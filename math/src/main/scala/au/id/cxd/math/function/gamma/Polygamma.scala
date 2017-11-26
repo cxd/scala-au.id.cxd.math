@@ -2,7 +2,6 @@ package au.id.cxd.math.function.gamma
 
 import au.id.cxd.math.function.exponential.ExpMult
 import au.id.cxd.math.function.zeta.HurwitzZeta
-import com.sun.javaws.exceptions.InvalidArgumentException
 
 /**
   * Compute the nth derivative for Psi or the Digamma function.
@@ -29,9 +28,9 @@ class Polygamma(approxFactorialFn: Double => (Double, Double)) {
     else (expY, err2)
   }
 
-  def op(n: Double, x: Double) = {
+  def op(n: Double, x: Double):(Double,Double) = {
     if (n < 0 || x <= 0.0) {
-      throw new InvalidArgumentException(Array(s"n = $n must be geq 0 x =$x must be geq 0"))
+      throw new IllegalArgumentException(s"n = $n must be geq 0 x =$x must be geq 0")
     }
     if (n == 0) Digamma(x)
     else if (n == 1) {
@@ -43,8 +42,8 @@ class Polygamma(approxFactorialFn: Double => (Double, Double)) {
 }
 
 object Polygamma {
-  def apply(approxFactorialFn: Double => (Double, Double), n: Double, x: Double) =
+  def apply(approxFactorialFn: Double => (Double, Double), n: Double, x: Double):(Double,Double) =
     new Polygamma(approxFactorialFn).op(n, x)
 
-  def apply(approxFactorialFn: Double => (Double, Double)) = new Polygamma(approxFactorialFn)
+  def build(approxFactorialFn: Double => (Double, Double)):Polygamma = new Polygamma(approxFactorialFn)
 }

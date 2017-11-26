@@ -25,7 +25,6 @@ class LogGammaFn extends ContinuedSeries {
     1.50563273514931155834e-7)
 
 
-
   /**
     * compute the pade approximation for ln gamma using supplied coefficients
     * There are two use cases where abs(x-1) < 0.01 and abs(x-2) < 0.02
@@ -37,7 +36,7 @@ class LogGammaFn extends ContinuedSeries {
     * @param eps
     * @return
     */
-  private def lnGammaPade(n: (Double, Double), d: (Double, Double), padeCoeff: Double, coeffs: List[Double])(eps: Double) = {
+  private def lnGammaPade(n: (Double, Double), d: (Double, Double), padeCoeff: Double, coeffs: List[Double])(eps: Double):(Double,Double) = {
     val num = (eps + n._1) * (eps + n._2)
     val den = (eps + d._1) * (eps + d._2)
     val pade = padeCoeff * num / den
@@ -53,7 +52,7 @@ class LogGammaFn extends ContinuedSeries {
     *
     * See GSL gamma.c line 897
     */
-  private def lnGammaPade1(eps: Double) = {
+  private def lnGammaPade1(eps: Double):(Double,Double) = {
     val n = (-1.0017419282349508699871138440, 1.7364839209922879823280541733)
     val d = (1.2433006018858751556055436011, 5.0456274100274010152489597514)
     val padeCoeff = 2.0816265188662692474880210318
@@ -70,7 +69,7 @@ class LogGammaFn extends ContinuedSeries {
     * plus a correction series.
     * See GSL gamma.c line 924
     */
-  private def lnGammaPade2(eps: Double) = {
+  private def lnGammaPade2(eps: Double):(Double,Double) = {
     val n = (1.000895834786669227164446568, 4.209376735287755081642901277)
     val d = (2.618851904903217274682578255, 10.85766559900983515322922936)
     val padeCoeff = 2.85337998765781918463568869
@@ -91,13 +90,14 @@ class LogGammaFn extends ContinuedSeries {
     *
     * Refer to GSL gamma.c line 697
     */
-  private def lnGammaLanczos(x: Double) = {
+  private def lnGammaLanczos(x: Double):(Double,Double) = {
+    val x1 = x - 1.0
     val kPairs = lanczcos7.zipWithIndex.tail
     val Ag = lanczcos7.head + kPairs.map {
-      pair => pair._1 / (x + pair._2)
+      pair => pair._1 / (x1 + pair._2)
     }.reduce(_ + _)
     val terms = (
-      (x + 0.5) * Math.log((x + 7.5) / Math.E),
+      (x1 + 0.5) * Math.log((x1 + 7.5) / Math.E),
       Constants.LOG_ROOT_TWO_PI + Math.log(Ag)
     )
     val y = terms._1 + (terms._2 - 7.0)
@@ -113,7 +113,7 @@ class LogGammaFn extends ContinuedSeries {
     *
     * See GSL gamma.c Line 731
     * */
-  private def sign0(eps: Double) = {
+  private def sign0(eps: Double):(Double,Double) = {
     val coeffs = List(
       -0.07721566490153286061,
       -0.01094400467202744461,
@@ -142,12 +142,12 @@ class LogGammaFn extends ContinuedSeries {
     *
     * See GSL gamma.c line 763
     */
-  private def sinGamma(N: Double, eps: Double) = {
+  private def sinGamma(N: Double, eps: Double):(Double,Double) = {
     if (N == 1) {
       /** calculate series for
         * g = eps gamma(-1+eps) + 1 + eps/2 (1+3eps)/(1-eps^2)
         * double-precision for |eps| < 0.02
-        **/
+        * */
       val coeffs = List(
         0.07721566490153286061,
         0.08815966957356030521,
@@ -183,25 +183,50 @@ class LogGammaFn extends ContinuedSeries {
       /** calculate series for ln(gamma(1+N-eps))
         * double-precision for |eps| < 0.02
         */
+      val logFn = (n: Double) => logGamma(n + 1)
       val aeps = Math.abs(eps)
-      val (c0, err0) = lnFact (N)
-      val (r1, err1) = Digamma(N+1)
-      val (r2, err2) = Trigamma(N+1)
-
+      val (c0, err0) = lnFact(N)
+      val (r1, err1) = Digamma(N + 1)
+      val (r2, err2) = Trigamma(logFn, N + 1)
+      val (r3:Double, err3) = if (aeps > 0.00001) Polygamma(logFn, 2, N+1)
+      else 0.0
+      val (r4:Double,err4) = if (aeps > 0.0002) Polygamma(logFn, 3, N+1)
+      else 0.0
+      val (r5:Double, err5) = if (aeps > 0.001) Polygamma(logFn, 4, N+1)
+      else 0.0
+      val (r6:Double, err6) = if (aeps > 0.005) Polygamma(logFn, 5, N+1)
+      else 0.0
+      val (r7:Double, err7) = if (aeps > 0.01) Polygamma(logFn, 6, N+1)
+      else 0.0
+      val coeffs2 = List(
+        r1,
+        r2/2.0,
+        r3/6.0,
+        r4/24.0,
+        r5/120.0,
+        r6/720.0,
+        r7/5040.0
+      )
+      val lng = c0 - eps * additiveProductFn(coeffs2, eps)
+      val g = lng - Math.log(sin_ser)
+      val y = g - Math.log(Math.abs(eps))
+      val err = c0 + 2.0*Constants.DBL_EPSILON*(Math.abs(g) + Math.abs(y))
+      (y,err)
     }
   }
 
   /**
     * compute the logarithm of the factorial.
+    *
     * @param n
     * @return
     */
-  private def lnFact (n:Double) = {
+  private def lnFact(n: Double):(Double,Double) = {
     if (n <= Factorial.MAX_N) {
-      val y = Math.log (Factorial (n))
+      val y = Math.log(Factorial(n))
       val err = 2.0 * Constants.DBL_EPSILON * Math.abs(y)
       (y, err)
-    } else logGamma (n + 1)
+    } else logGamma(n + 1)
   }
 
   /**
@@ -215,23 +240,23 @@ class LogGammaFn extends ContinuedSeries {
     * @param x
     * @return
     */
-  private def logGamma(x: Double) = if (Math.abs(x - 1.0) < 0.01) {
+  private def logGamma(x: Double):(Double, Double) = if (Math.abs(x - 1.0) < 0.01) {
     val (y, err) = lnGammaPade1(x - 1.0)
     val err1 = 1.0 / (Constants.DBL_EPSILON + Math.abs(x - 1.0))
-    Some(y, err1)
+    (y, err1)
   } else if (Math.abs(x - 2.0) < 0.01) {
     val (y, err) = lnGammaPade2(x - 2.0)
     val err1 = 1.0 / (Constants.DBL_EPSILON + Math.abs(x - 2.0))
-    Some(y, err1)
+    (y, err1)
   } else if (x >= 0.5) {
     val (y, err) = lnGammaLanczos(x)
-    Some(y, err)
+    (y, err)
   } else if (x == 0.0) {
     // error case
-    None
+    throw new IllegalArgumentException(s"x == 0.0 invalid argument for log gamma")
   } else if (Math.abs(x) < 0.02) {
     val (y, err) = sign0(x)
-    Some(y, err)
+    (y, err)
   } else if (x > -0.5 / (Constants.DBL_EPSILON * Math.PI)) {
     /**
       * extract a fractional part of x.
@@ -239,35 +264,38 @@ class LogGammaFn extends ContinuedSeries {
     val z = 1.0 - x
     val s = Math.sin(Math.PI * z)
     val as = Math.abs(s)
-    if (s == 0) None
+    if (s == 0) {
+      throw new IllegalArgumentException(s"x $x has no fractional part in log gamma")
+    }
     else if (as < Math.PI * 0.015) {
       /* x is near a negative integer, -N */
       if (x < Int.MinValue + 2.0) {
-        Some(0.0, 0.0)
+        (0.0, 0.0)
       } else {
         val N = -(x - 0.5).toInt.toDouble
         val eps = x + N
         if (eps == 0) {
-          Some(0.0, 0.0)
+          (0.0, 0.0)
         } else {
-
+          sinGamma(N, eps)
         }
       }
     } else {
-      val (y, err) = lnGammaLanczos(x)
+      val (y, err) = lnGammaLanczos(z)
       val y1 = Constants.LN_PI - (Math.log(as) + y)
-      val err1 = 2.8 * Constants.DBL_EPSILON + Math.abs(y) + err
-      Some(y1, err1)
+      val err1 = 2.0 * Constants.DBL_EPSILON + Math.abs(y) + err
+      (y1, err1)
     }
   } else {
     /* |x| was too large to extract any fractional part */
-    Some(0.0, 0.0)
+    (0.0, 0.0)
   }
 
 
-  def opt(x:Double) = logGamma(x)
+  def opt(x: Double) = logGamma(x)
 
 }
+
 object LogGammaFn {
-  def apply(x:Double) = new LogGammaFn().opt(x)
+  def apply(x: Double) = new LogGammaFn().opt(x)
 }
