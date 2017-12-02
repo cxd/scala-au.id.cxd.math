@@ -13,7 +13,7 @@ import au.id.cxd.math.function.series.ContinuedSeries
   */
 class LogGammaFn extends ContinuedSeries {
   /* coefficients for gamma=7, kmax=8  Lanczos method */
-  private val lanczcos7 = List(
+  protected val lanczcos7 = List(
     0.99999999999980993227684700473478,
     676.520368121885098567009190444019,
     -1259.13921672240287047156078755283,
@@ -26,6 +26,11 @@ class LogGammaFn extends ContinuedSeries {
 
 
   /**
+    * the sign of the gamma function is calculated during the operation and stored as a side effect
+    */
+  var sign:Double = 0.0
+
+  /**
     * compute the pade approximation for ln gamma using supplied coefficients
     * There are two use cases where abs(x-1) < 0.01 and abs(x-2) < 0.02
     *
@@ -36,7 +41,7 @@ class LogGammaFn extends ContinuedSeries {
     * @param eps
     * @return
     */
-  private def lnGammaPade(n: (Double, Double), d: (Double, Double), padeCoeff: Double, coeffs: List[Double])(eps: Double):(Double,Double) = {
+  protected def lnGammaPade(n: (Double, Double), d: (Double, Double), padeCoeff: Double, coeffs: List[Double])(eps: Double):(Double,Double) = {
     val num = (eps + n._1) * (eps + n._2)
     val den = (eps + d._1) * (eps + d._2)
     val pade = padeCoeff * num / den
@@ -52,7 +57,7 @@ class LogGammaFn extends ContinuedSeries {
     *
     * See GSL gamma.c line 897
     */
-  private def lnGammaPade1(eps: Double):(Double,Double) = {
+  protected def lnGammaPade1(eps: Double):(Double,Double) = {
     val n = (-1.0017419282349508699871138440, 1.7364839209922879823280541733)
     val d = (1.2433006018858751556055436011, 5.0456274100274010152489597514)
     val padeCoeff = 2.0816265188662692474880210318
@@ -69,7 +74,7 @@ class LogGammaFn extends ContinuedSeries {
     * plus a correction series.
     * See GSL gamma.c line 924
     */
-  private def lnGammaPade2(eps: Double):(Double,Double) = {
+  protected def lnGammaPade2(eps: Double):(Double,Double) = {
     val n = (1.000895834786669227164446568, 4.209376735287755081642901277)
     val d = (2.618851904903217274682578255, 10.85766559900983515322922936)
     val padeCoeff = 2.85337998765781918463568869
@@ -90,7 +95,7 @@ class LogGammaFn extends ContinuedSeries {
     *
     * Refer to GSL gamma.c line 697
     */
-  private def lnGammaLanczos(x: Double):(Double,Double) = {
+  protected def lnGammaLanczos(x: Double):(Double,Double) = {
     val x1 = x - 1.0
     val kPairs = lanczcos7.zipWithIndex.tail
     val Ag = lanczcos7.head + kPairs.map {
@@ -113,7 +118,7 @@ class LogGammaFn extends ContinuedSeries {
     *
     * See GSL gamma.c Line 731
     * */
-  private def sign0(eps: Double):(Double,Double) = {
+  protected def sign0(eps: Double):(Double,Double) = {
     val coeffs = List(
       -0.07721566490153286061,
       -0.01094400467202744461,
@@ -142,7 +147,7 @@ class LogGammaFn extends ContinuedSeries {
     *
     * See GSL gamma.c line 763
     */
-  private def sinGamma(N: Double, eps: Double):(Double,Double) = {
+  protected def sinGamma(N: Double, eps: Double):(Double,Double) = {
     if (N == 1) {
       /** calculate series for
         * g = eps gamma(-1+eps) + 1 + eps/2 (1+3eps)/(1-eps^2)
@@ -165,6 +170,7 @@ class LogGammaFn extends ContinuedSeries {
       val gam_e = g - 1.0 - 0.5 * eps * (1.0 + 3.0 * eps) / (1.0 - eps * eps)
       val y = Math.log(Math.abs(gam_e) / Math.abs(eps))
       val err = 2.0 * Constants.DBL_EPSILON * Math.abs(y)
+      sign = if (eps > 0) -1.0 else 1.0
       (y, err)
     } else {
       /** series for sin(Pi(N+1-eps))/(Pi eps) modulo the sign
@@ -211,6 +217,12 @@ class LogGammaFn extends ContinuedSeries {
       val g = lng - Math.log(sin_ser)
       val y = g - Math.log(Math.abs(eps))
       val err = c0 + 2.0*Constants.DBL_EPSILON*(Math.abs(g) + Math.abs(y))
+
+      sign = if (eps > 0) 1.0 else -1.0
+      if (N % 2.0 != 0.0) {
+        sign = -1.0 * sign
+      }
+
       (y,err)
     }
   }
@@ -221,7 +233,7 @@ class LogGammaFn extends ContinuedSeries {
     * @param n
     * @return
     */
-  private def lnFact(n: Double):(Double,Double) = {
+  protected def lnFact(n: Double):(Double,Double) = {
     if (n <= Factorial.MAX_N) {
       val y = Math.log(Factorial(n))
       val err = 2.0 * Constants.DBL_EPSILON * Math.abs(y)
@@ -240,22 +252,26 @@ class LogGammaFn extends ContinuedSeries {
     * @param x
     * @return
     */
-  private def logGamma(x: Double):(Double, Double) = if (Math.abs(x - 1.0) < 0.01) {
+  protected def logGamma(x: Double):(Double, Double) = if (Math.abs(x - 1.0) < 0.01) {
     val (y, err) = lnGammaPade1(x - 1.0)
     val err1 = 1.0 / (Constants.DBL_EPSILON + Math.abs(x - 1.0))
+    sign = 1.0
     (y, err1)
   } else if (Math.abs(x - 2.0) < 0.01) {
     val (y, err) = lnGammaPade2(x - 2.0)
     val err1 = 1.0 / (Constants.DBL_EPSILON + Math.abs(x - 2.0))
+    sign = 1.0
     (y, err1)
   } else if (x >= 0.5) {
     val (y, err) = lnGammaLanczos(x)
+    sign = 1.0
     (y, err)
   } else if (x == 0.0) {
     // error case
     throw new IllegalArgumentException(s"x == 0.0 invalid argument for log gamma")
   } else if (Math.abs(x) < 0.02) {
     val (y, err) = sign0(x)
+    sign = if (x >= 0) 1.0 else -1.0
     (y, err)
   } else if (x > -0.5 / (Constants.DBL_EPSILON * Math.PI)) {
     /**
@@ -270,13 +286,16 @@ class LogGammaFn extends ContinuedSeries {
     else if (as < Math.PI * 0.015) {
       /* x is near a negative integer, -N */
       if (x < Int.MinValue + 2.0) {
+        sign = 0.0
         (0.0, 0.0)
       } else {
         val N = -(x - 0.5).toInt.toDouble
         val eps = x + N
         if (eps == 0) {
+          sign = 0.0
           (0.0, 0.0)
         } else {
+          // the sign is computed internally
           sinGamma(N, eps)
         }
       }
@@ -284,11 +303,13 @@ class LogGammaFn extends ContinuedSeries {
       val (y, err) = lnGammaLanczos(z)
       val y1 = Constants.LN_PI - (Math.log(as) + y)
       val err1 = 2.0 * Constants.DBL_EPSILON + Math.abs(y) + err
+      sign = if (s > 0.0) { 1.0 } else -1.0
       (y1, err1)
     }
   } else {
     /* |x| was too large to extract any fractional part */
-    (0.0, 0.0)
+    sign = 0.0
+    throw new IllegalArgumentException(s"x $x is too large to extract fractional part in log gamma")
   }
 
 
@@ -298,4 +319,15 @@ class LogGammaFn extends ContinuedSeries {
 
 object LogGammaFn {
   def apply(x: Double) = new LogGammaFn().opt(x)
+
+  /**
+    * compute the log gamma function and return the sign of the operation.
+    * @param x
+    * @return
+    */
+  def withSign(x:Double):(Double,Double,Double) = {
+    val lng = new LogGammaFn()
+    val (y,err) = lng.opt(x)
+    (lng.sign, y, err)
+  }
 }
