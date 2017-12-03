@@ -10,6 +10,7 @@ object Constants {
     */
   val DBL_EPSILON:Double= 2.2204460492503131e-16
 
+  val DBL_MIN:Double=2.2250738585072014e-308
   /**
     * log epsilon
     */

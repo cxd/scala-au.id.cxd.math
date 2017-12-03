@@ -37,11 +37,11 @@ class GaussHypergeometric {
       } else {
         val del1 = del * (a + k) * (b + k) * x / ((c + k) * (k + 1.0))
         val (terminate, sum_pos1, sum_neg1, del_pos1, del_neg1) = if (del1 > 0.0) {
-          (false, sum_pos + del1, sum_neg, del, del_neg)
+          (false, sum_pos + del1, sum_neg, del1, del_neg)
         } else if (del1 == 0.0) {
           (true, sum_pos, sum_neg, 0.0, 0.0)
         } else {
-          (false, sum_pos, sum_neg - del, del_pos, del_neg - del)
+          (false, sum_pos, sum_neg - del1, del_pos, -del1)
         }
         if (terminate) {
           val result2 = result(k, sum_pos1, sum_neg1, del_pos1, del_neg1)

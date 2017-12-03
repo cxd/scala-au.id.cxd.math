@@ -1,7 +1,7 @@
-import breeze.linalg._
-import breeze.numerics.pow
 import au.id.cxd.math.count.Factorial
 import au.id.cxd.math.function._
+import au.id.cxd.math.function.beta.BetaFn
+import au.id.cxd.math.function.gamma.GammaFn
 import au.id.cxd.math.probability.analysis.{CriticalValue, LowerTail, UpperTail}
 import au.id.cxd.math.probability.continuous.FDistribution
 import au.id.cxd.math.probability.analysis.CriticalValue._

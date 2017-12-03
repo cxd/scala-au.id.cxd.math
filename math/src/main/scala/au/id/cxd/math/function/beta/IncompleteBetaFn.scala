@@ -41,7 +41,7 @@ class IncompleteBetaFn {
     */
   private def beta_cont_frac(a:Double, b:Double, x:Double) = {
     val max_iter = 512
-    val cutoff = 2.0* Double.MinValue
+    val cutoff = 2.0* Constants.DBL_MIN
     val num_term = 1.0
     val temp = 1.0 - (a+b)*x/(a+1.0)
     val den_term = if (Math.abs(temp) < cutoff) 1.0/cutoff
@@ -80,6 +80,7 @@ class IncompleteBetaFn {
       val cf3 = cf2 * delta_frac2
 
       if (Math.abs(delta_frac2) < 2.0 * Constants.DBL_EPSILON) cf3
+      else if (iter_count+1 >= max_iter) cf3
       else continue (iter_count+1, num_term3, den_term3, cf3)
     }
 
