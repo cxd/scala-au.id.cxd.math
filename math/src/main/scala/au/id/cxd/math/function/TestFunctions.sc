@@ -1,8 +1,8 @@
 import breeze.linalg._
 import breeze.numerics.pow
-
 import au.id.cxd.math.count.Factorial
 import au.id.cxd.math.function._
+import au.id.cxd.math.function.beta.BetaFn
 
 import scalaz.Memo
 

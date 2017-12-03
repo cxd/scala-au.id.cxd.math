@@ -93,7 +93,7 @@ class IncompleteBetaFn {
     * @param a
     * @param b
     */
-  private def incompleteBeta(x:Double, a:Double, b:Double) = {
+  private def incompleteBeta(x:Double, a:Double, b:Double):Double = {
     def isNeg(z:Double)= z < 0.0 && z == Math.floor(z)
 
     if (x < 0.0 || x > 1.0) {
@@ -106,9 +106,9 @@ class IncompleteBetaFn {
       throw new IllegalArgumentException(s"(alpha + beta) is a negative whole number")
     }
     if (x == 0.0) {
-      (0.0,0.0)
+      0.0
     } else if (x == 1.0) {
-      (1.0, 0.0)
+      1.0
     } else if (a <= 0 || b <= 0) {
       val beta = BetaFn(a)(b)
       val (f_val, f_err) = GaussHypergeometric(a, 1-b, a+1, x)
@@ -143,7 +143,7 @@ class IncompleteBetaFn {
   }
 
 
-  def op(x:Double, alpha:Double, beta:Double) = {
+  def op(x:Double, alpha:Double, beta:Double):Double = {
   // alter implementation of incomplete beta function refer to numerical recipes.
     incompleteBeta (x, alpha, beta)
   }
