@@ -48,7 +48,7 @@ class IncompleteBetaFn {
                    else 1.0/temp
 
     val cf = den_term
-
+    // note this recursion seems to tend towards 0 very rapidly
     @tailrec def continue (iter_count:Int, num_term1:Double, den_term1:Double, cf1:Double):Double = {
       val k = (iter_count+1).toDouble
       val coeff = k * (b-k)*x / ( ((a-1.0)+2.0*k)* (a+2.0*k))
@@ -79,7 +79,8 @@ class IncompleteBetaFn {
       val delta_frac2 = den_term3 * num_term3
       val cf3 = cf2 * delta_frac2
 
-      if (Math.abs(delta_frac2) < 2.0 * Constants.DBL_EPSILON) cf3
+
+      if (Math.abs(delta_frac2-1.0) < 2.0 * Constants.DBL_EPSILON) cf3
       else if (iter_count+1 >= max_iter) cf3
       else continue (iter_count+1, num_term3, den_term3, cf3)
     }

@@ -3,6 +3,8 @@ package au.id.cxd.math.probability.continuous
 import au.id.cxd.math.count.Factorial
 import au.id.cxd.math.function.approximate.NumericIntegral
 import au.id.cxd.math.function.beta.{BetaFn, IncompleteBetaFn}
+import au.id.cxd.math.function.gamma.LogGammaFn
+import au.id.cxd.math.function.hypergeometric.GaussHypergeometric
 
 /**
   * ##import MathJax
@@ -80,7 +82,7 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
 
       /**
         *
-        * f(y) = \frac{\sqrt{ (d_1 y)^{d_1} d_2^{d_2}} {\sqrt{(d_1 x + d_2)^{d_1 + d_2}} \frac{1}{y Beta(\frac{d_1}{2}, \frac{d_2}{2})
+        * f(y) = \frac{\sqrt{ (d_1 y)^{d_1} d_2^{d_2}} {\sqrt{(d_1 x + d_2)&#94;{d_1 + d_2}} \frac{1}{y Beta(\frac{d_1}{2}, \frac{d_2}{2})
         *
         */
 
@@ -105,8 +107,51 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
   def cdf(y:Double) = {
     val alpha = numeratorDf/2.0
     val beta = denominatorDf/2.0
-    val x = numeratorDf*y / (numeratorDf*y + denominatorDf*y)
-    IncompleteBetaFn(x,alpha, beta)
+    val x = numeratorDf*y / (numeratorDf*y + denominatorDf)
+
+    /**
+      * Method 1.
+      *
+      * http://mathworld.wolfram.com/F-Distribution.html
+       indicates the incomplete beta function ca be defined as
+      I(\frac{nx}{m+nx};n/2,m/2) =
+      2n&#94;{(n-2)/2}(x/m)&#94;{n/2}\times \frac{F_((m+n)/2,1/2n,1+1/2n,-nx/m) }{B(n/2,m/2}
+
+      Where B(a,b) is the beta function
+      F_1(a,b,c,z) is a hypergeometric function
+      */
+    /*
+    val c1 = 2*Math.pow(numeratorDf, (numeratorDf-2)/2.0) * Math.pow(y/denominatorDf, numeratorDf/2.0)
+    val a = 0.5 * (numeratorDf+denominatorDf)
+    val b = 0.5*numeratorDf
+    val c = 1.0 + 0.5*numeratorDf
+    val z = -numeratorDf*y / denominatorDf
+    val f1 = GaussHypergeometric(a,b,c,z)
+    val b1 = BetaFn(0.5*numeratorDf)(0.5*denominatorDf)
+    val result = f1._1 / b1
+    result
+    */
+
+
+
+    /** Method 2.
+      *
+      * note that wikipedia lists the definition of the non-regularized incomplete beta function as
+      * BetaDist(x,a,b) * Exp(GammaLn(a) + GammaLn(b) - GammaLn(a+b))
+      * https://en.wikipedia.org/wiki/Beta_function#Incomplete_beta_function
+      *
+      * Note this method gives the same result as method 1.
+      */
+    val incompleteBetaFn = Beta(alpha,beta).pdf(x) * Math.exp(LogGammaFn(alpha)._1 + LogGammaFn(beta)._1 - LogGammaFn(alpha+beta)._1)
+    incompleteBetaFn/BetaFn(alpha)(beta)
+
+    /**
+      * method 3.
+      * apply the incomplete beta function derived from the GSL.
+      * This is currently tending toward 0 too quickly need further debugging to test out the
+      * method.
+      */
+    //IncompleteBetaFn(x,alpha, beta)/BetaFn(alpha)(beta)
   }
 }
 

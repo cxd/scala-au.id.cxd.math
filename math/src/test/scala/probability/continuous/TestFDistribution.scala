@@ -37,6 +37,19 @@ class TestFDistribution extends FlatSpec with ShouldMatchers {
 
   }
 
+
+  "FDistribution" should "return non zero cdf" in {
+    /**
+    > pf(0.05,2,11)
+[1] 0.04855566
+
+      *
+      */
+    val fdist = FDistribution(2,11)
+    val cP2 = fdist.cdf(0.05)
+    cP2 should not be(0.0)
+  }
+
   val numeratorDf = 2.0
   val denominatorDf = 2.0
 

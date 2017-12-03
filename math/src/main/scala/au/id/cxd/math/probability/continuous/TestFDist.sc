@@ -54,9 +54,16 @@ df(1:10,2,11)
  [7] 0.004813294 0.002918690 0.001834279 0.001189054
 
   */
-sequence(1, by = 1).take(10)
-  .map(fdist.pdf)
-  .foreach(println)
+val temp = sequence(1, by = 1).take(10).toList
+
+ temp.map {
+   i => {
+     val f = fdist.pdf(3.0)
+     println(s"df($i) = $f")
+   }
+ }
+
+fdist.pdf(3.0)
 
 /**
 > pf(0.001,2,11)

@@ -192,7 +192,7 @@ object CriticalValue {
     * Default increment is 0.1.
     */
   def sequence(last: Double, by: Double = 0.1): Stream[Double] = {
-    last #:: sequence(last + by)
+    last #:: sequence(last + by, by)
   }
 
 
