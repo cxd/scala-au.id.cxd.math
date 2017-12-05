@@ -1,6 +1,7 @@
 package au.id.cxd.math.function.beta
 
 import au.id.cxd.math.function.Constants
+import au.id.cxd.math.function.gamma.LogGammaFn
 import au.id.cxd.math.probability.continuous.Beta
 import au.id.cxd.math.function.hypergeometric.GaussHypergeometric
 
@@ -54,7 +55,7 @@ class IncompleteBetaFn {
       val coeff = k * (b-k)*x / ( ((a-1.0)+2.0*k)* (a+2.0*k))
 
       val temp_den2 = 1.0 + coeff*den_term1
-      val temp_num2 = 1.0 * coeff/num_term1
+      val temp_num2 = 1.0 + coeff/num_term1
 
       val den_term2 = if (Math.abs(temp_den2) < cutoff) 1.0/cutoff
       else 1.0/temp_den2
@@ -122,8 +123,12 @@ class IncompleteBetaFn {
       // note the log beta function is used in the GSL, we may need to add a custom implementation of log beta.
       // for now am just using the log of the current beta implementation
       val ln_beta = Math.log(BetaFn(a)(b))
+
+      // log beta
+      //val ln_beta = LogGammaFn(a+b)._1 - LogGammaFn(a)._1 - LogGammaFn(b)._1 +a*Math.log(x)+b*Math.log(1.0-x)
+
       // In the method gsl_sf_log_1plusx_e is used instead of below.
-      val ln_1mx = Math.log(1.0+x)
+      val ln_1mx = Math.log(1.0-x)
       val ln_x = Math.log(x)
 
       val ln_pre_val = -ln_beta + a * ln_x + b * ln_1mx

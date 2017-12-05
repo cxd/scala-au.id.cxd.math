@@ -142,8 +142,8 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
       *
       * Note this method gives the same result as method 1.
       */
-    val incompleteBetaFn = Beta(alpha,beta).pdf(x) * Math.exp(LogGammaFn(alpha)._1 + LogGammaFn(beta)._1 - LogGammaFn(alpha+beta)._1)
-    incompleteBetaFn/BetaFn(alpha)(beta)
+    //val incompleteBetaFn = Beta(alpha,beta).pdf(x) * Math.exp(LogGammaFn(alpha)._1 + LogGammaFn(beta)._1 - LogGammaFn(alpha+beta)._1)
+    //incompleteBetaFn/BetaFn(alpha)(beta)
 
     /**
       * method 3.
@@ -151,7 +151,7 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
       * This is currently tending toward 0 too quickly need further debugging to test out the
       * method.
       */
-    //IncompleteBetaFn(x,alpha, beta)/BetaFn(alpha)(beta)
+    IncompleteBetaFn(x,alpha, beta)
   }
 }
 

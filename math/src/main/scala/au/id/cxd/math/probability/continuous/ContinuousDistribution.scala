@@ -23,9 +23,11 @@ trait ContinuousDistribution extends Distribution {
     * @return
     */
   def integral(start: Double, end: Double): Double = {
-    val a = cdf(start)
+    /*val a = cdf(start)
     val b = cdf(end)
     b - a
+    */
+    NumericIntegral(start, end, pdf(_)).integrate()
   }
 
   /**

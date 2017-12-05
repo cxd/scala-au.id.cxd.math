@@ -38,7 +38,7 @@ val a3 = GammaFn((numeratorDf + denominatorDf) / 2.0)
 // perform inferential test of F statistic.
 
 
-val fdist = FDistribution(2, 11)
+val fdist = FDistribution(2.0, 11.0)
 /*
 > df(1,2,11)
 [1] 0.3376142
@@ -87,14 +87,18 @@ val cP2 = fdist.cdf(0.05)
 [1] 0.9514443
 >
 
-  Npte: the lower tail integrals appear to be reasonable
-  the upper tail integrals do not appear to be computing correctly.
+  The above computes CDF for 0.05 at the upper tail of the distribution
 
-  TODO: the upper tail values are incorrect.
-  need to work on calculating area under the curve in the upper tail
+  however the F distribution does not terminate at 1.0 given the df1 and df2
+  hence we need to determine the 0.05 critical value at the upper
+  tail in order to provide the appropriate parameter for this method.
+
+  Hence we cannot use 1.0 - 0.05 to compute this value
+
+  Instead we need the quantile which as shown below is 3.982298
   *
   */
-val cP3 = fdist.cdf(Seq(1.0-0.05, 1.0))
+val cP3 = fdist.cdf(3.982298)
 
 
 /*
@@ -110,6 +114,6 @@ Note the current approximation gets close but it is not quite correct.
  */
 
 val crit = CriticalValue(FDistribution(2, 11), UpperTail())(_)
-val i = crit(sequence(0.0, by = 0.001).take(110))
+val i = crit(sequence(0.0, by = 0.01).take(1500))
   .value(0.05)
 
