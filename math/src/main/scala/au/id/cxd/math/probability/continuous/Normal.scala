@@ -47,6 +47,8 @@ class Normal(mu: Double, varianceVal: Double) extends ContinuousDistribution {
   }
 
 
+
+
 }
 
 object Normal {

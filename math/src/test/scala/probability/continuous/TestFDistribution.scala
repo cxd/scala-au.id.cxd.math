@@ -61,6 +61,25 @@ class TestFDistribution extends FlatSpec with ShouldMatchers {
     Math.abs(cP2 - 0.04855566) <= 0.1 should be (true)
   }
 
+  "FDistribution Quantiles" should "agree with R" in {
+    val fdist = FDistribution(2,11)
+    val results = List(3.982298, 5.255889, 13.8115)
+    val tests = List(
+      fdist.invcdf(1.0 - 0.05),
+      fdist.invcdf(1.0 - 0.025),
+      fdist.invcdf(1.0 - 0.001)
+    )
+    val pairs = results.zip(tests)
+    pairs.foreach(p => {
+      println(s"${p._1} ~ ${p._2}")
+    })
+    pairs.forall(
+      p => {
+        Math.abs(p._1 - p._2) < 0.1
+      }
+    ) should be(true)
+  }
+
   val numeratorDf = 2.0
   val denominatorDf = 2.0
 

@@ -114,6 +114,16 @@ Note the current approximation gets close but it is not quite correct.
  */
 
 val crit = CriticalValue(FDistribution(2, 11), UpperTail())(_)
-val i = crit(sequence(0.0, by = 0.01).take(1500))
+
+// note both sequence and array take a
+// comparable time to compute the quantile, hence it
+// will be more efficient to compute the inverse CDF via direct approximation
+// instead of via the integration method.
+
+//val r = (0.0 to 5.0 by 0.01).toArray
+
+val r = sequence(0.0, by = 0.01).take(1500)
+
+val i = crit(r)
   .value(0.05)
 

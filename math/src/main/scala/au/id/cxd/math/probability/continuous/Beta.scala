@@ -1,6 +1,6 @@
 package au.id.cxd.math.probability.continuous
 
-import au.id.cxd.math.function.beta.{BetaFn, IncompleteBetaFn}
+import au.id.cxd.math.function.beta.{BetaFn, IncompleteBetaFn, InverseBeta}
 
 /**
   * ##import MathJax
@@ -58,15 +58,23 @@ class Beta(val alpha: Double, val beta: Double) extends ContinuousDistribution {
     *
     * @return
     */
-  def mean(): Double = alpha / (alpha + beta)
+  override def mean(): Double = alpha / (alpha + beta)
 
-  def variance(): Double = alpha * beta / (Math.pow(alpha + beta, 2.0) * (alpha + beta + 1))
+  override def variance(): Double = alpha * beta / (Math.pow(alpha + beta, 2.0) * (alpha + beta + 1))
 
-  def pdf(y: Double): Double = Math.pow(y, alpha - 1) * Math.pow(1 - y, beta - 1) / betaVal
+  override def pdf(y: Double): Double = Math.pow(y, alpha - 1) * Math.pow(1 - y, beta - 1) / betaVal
 
-  def cdf(y:Double) :Double = {
+  override def cdf(y:Double) :Double = {
     IncompleteBetaFn(y, alpha, beta)
   }
+
+  /**
+    * estimate the inverse beta function for the supplied probability
+    * @param p
+    * @return
+    */
+  override def invcdf(p: Double): Double =
+    InverseBeta(p, alpha, beta)
 
 }
 

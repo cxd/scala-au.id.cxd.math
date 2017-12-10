@@ -45,5 +45,14 @@ trait ContinuousDistribution extends Distribution {
   def cdf(y:Double):Double
 
 
+  /**
+    * estimate the quartile y for the distribution given the
+    * percentage of the distribution
+    * @param p
+    * @return
+    */
+  def invcdf(p:Double):Double = throw new NotImplementedError("method is not implemented for this distribution")
+
+
 
 }
