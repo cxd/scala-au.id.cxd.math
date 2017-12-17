@@ -303,7 +303,7 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
     // calculating the minimum alpha-value for the p Value see Wackerly section 10.6
     // the pvalue in the case of the F-Distribution is equal to P(w_0 >= observedStat)
     // P(w_0 >= W) = 1 - P(w_0 < W)
-    val pValue = 1 - fdist.cdf(manovaStat.stat)
+    val pValue = fdist.cdf(manovaStat.stat)
 
     // TODO: we should format the outputs of manova in the anova table format, although this will differ based on
     // the selected method.
@@ -312,7 +312,8 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
     ManovaTest(reject = reject,
       criticalVal = test,
       alpha = alpha,
-      manovaStat = manovaStat)
+      manovaStat = manovaStat,
+      pValue = pValue)
 
   }
 
@@ -397,17 +398,19 @@ case class ManovaStat(val name: String, val stat: Double, val df1: Int, val df2:
        |Df1: $df1
        |Df2: $df2
        |F-Statistic: $Fstatistic
+       |
      """.stripMargin
 
 }
 
-case class ManovaTest(val reject: Boolean, val alpha: Double, val criticalVal: Double, manovaStat: ManovaStat) {
+case class ManovaTest(val reject: Boolean, val alpha: Double, val criticalVal: Double, val pValue:Double, val manovaStat: ManovaStat) {
   override def toString() =
     s"""
        |Manova Test at alpha = $alpha
        |
        |Reject null hypothesis? $reject
        |Critical Value: $criticalVal
+       |Pr(>F): $pValue
        |
        |${manovaStat.toString}
      """.stripMargin

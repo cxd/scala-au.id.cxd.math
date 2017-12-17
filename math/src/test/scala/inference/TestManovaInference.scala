@@ -121,7 +121,7 @@ as.factor(Group) -1.626989e-15 -5.293898e-16 2.084505e-17
     println ("Eigenvalues")
     println(result.manovaStat.eigenValues)
 
-    Math.abs(result.manovaStat.stat - 0.0021936) < 0.1 should be (true)
+    Math.abs(result.manovaStat.stat - 0.0021936) < 0.001 should be (true)
     result.manovaStat.df1 should equal(36)
     result.manovaStat.df2 should equal(241)
 
@@ -131,6 +131,13 @@ as.factor(Group) -1.626989e-15 -5.293898e-16 2.084505e-17
 
   }
 
+  /**
+    *                  Df    Roy approx F num Df den Df    Pr(>F)
+as.factor(Group)  4 16.348    121.7      9     67 < 2.2e-16 ***
+Residuals        72
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    */
   "Manova" should "test Roys Largest Root" in new TestManovaData {
     val (groups, data) = read()
 
@@ -141,6 +148,13 @@ as.factor(Group) -1.626989e-15 -5.293898e-16 2.084505e-17
     // TODO: evaluate result
   }
 
+  /**
+    *                Df Pillai approx F num Df den Df    Pr(>F)
+as.factor(Group)  4 2.5892   13.662     36    268 < 2.2e-16 ***
+Residuals        72
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    */
   "Manova" should "test Pillais trace" in new TestManovaData {
     val (groups, data) = read()
 
@@ -149,6 +163,13 @@ as.factor(Group) -1.626989e-15 -5.293898e-16 2.084505e-17
     // TODO: evaluate result
   }
 
+  /**
+    *                  Df Hotelling-Lawley approx F num Df den Df    Pr(>F)
+as.factor(Group)  4           25.129   43.627     36    250 < 2.2e-16 ***
+Residuals        72
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    */
   "Manova" should "test LawesHotelling trace" in new TestManovaData {
     val (groups, data) = read()
 

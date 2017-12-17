@@ -1,0 +1,238 @@
+---
+title: "Test Manova"
+output: html_notebook
+---
+
+When you have several dependent variables and several samples/groups the four statistics that may be used to identify differences between group means are Pillai’s trace, Wilk’s Lambda, Roy’s largest root, and Lawes-Hotelling trace. Briefly, describe and compare.
+
+The four statistics are derived from the
+
+    Total Sum of Squares
+
+$$ T = \sum_{j=1}^m \sum_{i=1}^{n_j} \left (X_{ij} - \bar{X} \right)^2 $$ Where $\bar{X}$ is the mean of all samples.
+
+With degree of freedom $df = n - 1$
+
+    Within Sample Sum of Squares
+
+$$ W = \sum_{j=1}^m \sum_{i=1}^{n_j} \left (X_{ij} - \bar{X_j} \right)^2 $$
+
+where $\bar{X_j}$ is the mean of sample $j$.
+
+With degree of freedom $df = n - m$.
+
+and Mean Square
+
+$$ M_W = \frac{W}{(n-m)} $$
+
+    Between Sample Sum of Squares
+
+$$ B = T - W $$
+
+with degree of freedom $m - 1$
+
+and Mean Square
+
+$$ M_B = \frac{B}{(m - 1)} $$
+
+and F-ratio
+
+$$ F = \frac{M_B}{M_W} $$
+Wilk's Lambda
+
+The Wilk's Lambda statistic is the ratio of the determinant of the within sample sum of squares and the total sum of squares
+
+$$ \Lambda = \frac{\left|W\right|}{\left|T\right|} $$ Alternately it can be calculated from the eigenvalue of $$ W^{-1}B $$ $$ \Lambda = \prod_{i=1}^p \frac{1}{1 + \lambda_i} $$
+
+The F statistic is calculated as follows
+
+$$ F = \frac{1 - \Lambda^{1/t}}{\Lambda^{1/t}}(df_2/df_1) $$
+with $df_1 = p (m-1)$ and $df_2 = wt - df_1/2 + 1$.
+
+The values for the variables used in the above and other calculations that follow are.
+
+$$ w = n - 1 - (p+m)/2 $$ 
+$$ t = \left[ \frac{(df_1^2 - 4)}{(p^2 + (m-1)^2 - 5)} \right]^{1/2} $$ 
+if $df_1 = 2$ then $t = 1$ 
+$$ d = max (p, m - 1) $$ 
+$$ s = min(p, m - 1) $$ $$ A = (|m-p-1| -1)/2 $$ $$ B = (n - m - p - 1)/2 $$
+Roy's Trace
+
+The Roy's trace is the highest eigenvalue of the matrix above and is simply.
+
+$$ Roy = \lambda_1 $$
+
+The F-statistic is calculated as
+
+$$ F = (df_2/df_1)\lambda_1 $$ With $df_1 = p$ and $df_2 = n - m - d - 1$
+Pillai's Trace
+
+Is the sum of the eigenvalues
+
+$$ V = \sum_{i=1}^p \frac{\lambda_i}{1 + \lambda_i} $$
+
+The F-statistic is calculated as
+
+$$ F = (n - m - p + s)V/\left[ d (s-V\right] $$ With $df_1 = sd$ and $df_2 = s(n-m-p+s)$
+Lawes Hotelling Trace
+
+The Lawes Hotelling Trace is the sum of of the eigenvalues
+
+$$ U = \sum_{i=1}^p \lambda_i $$
+
+With the F-statistic being calculated as
+
+$$ F = df_2 \frac{U}{(s df_1)} $$ with $df_1 = s(2A + s + 1)$ and $df_2 = 2(sB + 1)$.
+
+
+The Hotelling's T^2 test is reasonably robust to the assumption of multivariate normality and equal covariance matrices, particularly if the two sample sizes are roughly equal.
+
+If the two population covariance matrices and sample sizes are very different then the assumption of multivariate normality still needs to be applied to the modified tests.
+
+For the four statistics used in the MANOVA testing, all tests require multivariate normality, so prior to testing check the data for this assumption.
+
+They also all assume equal within sample covariance matrices accross the m hypothesised populations from which the samples are drawn.
+
+All tests are fairly robust if the sample sizes are not equal, but are not suited to small sample sizes.
+
+Also variables should be correlated, uncorrelated variables indicate that it is more appropriate to apply univariate testing.
+
+## Bonferroni Testing
+
+When using multiple univariate significance tests, the probability of a Type I error is set as the $\alpha$ parameter, typically at $\alpha = 0.05$. However on repeated tests the probability of at least 1 test being significant increases by the power of $p$ where the probability is $1 - (1-\alpha)^p$ or $1 - \beta^p$. The Bonferroni correction seeks to reduce the $\alpha$ value by dividing by the number of repetitions, for example
+
+$$ \alpha' = \frac{\alpha}{p} $$ where $p$ is the number of tests to perform. For example if $\alpha = 0.05$ this yields a significance level if $p = 5$ of $0.05/5 = 0.01$ hence the significance level of each test needs to be $< 0.01$ and the chance of one significant test becomes $1 - 0.99^5 = 0.05$.
+
+## Test Manova with mandible data
+
+Testing for a difference in means between groups.
+
+```{r}
+data <- read.csv("../../../data/test_mandible_data.csv", header=TRUE)
+str(data)
+```
+
+```{r}
+attach(data)
+Y <- cbind(X1,X2,X3,X4,X5,X6,X7,X8,X9)
+
+data.manova <- manova(Y ~ as.factor(Group), data=data)
+```
+
+Different test methods
+
+```{r}
+summary(data.manova, test="Pillai")
+```
+
+
+
+```{r}
+summary(data.manova, test="Wilks")
+```
+
+
+```{r}
+summary(data.manova, test="Roy")
+```
+
+
+```{r}
+summary(data.manova, test="Hotelling-Lawley")
+```
+
+
+
+Repeating the process but performing a test.
+
+```{r}
+mf <- data
+mf.manova1 <- data.manova
+alpha <- 0.05
+## Summarise as pillais test
+(s1 <- summary(mf.manova1))
+test1 <- s1$stats
+test1.F <- test1[1,3]
+test1.df1 <- test1[1,4]
+test1.df2 <- test1[1,5]
+test1.p <- test1[1,6]
+test1.reject <- test1.p < alpha
+
+## Summarise as wilks test
+(s2 <- summary(mf.manova1, test="Wilks"))
+test2 <- as.matrix(s2$stats)
+test2.F <- test2[1,3]
+test2.df1 <- test2[1,4]
+test2.df2 <- test2[1,5]
+test2.p <- test2[1,6]
+test2.reject <- test2.p < alpha
+
+
+## Summarise as Roys test
+(s3 <- summary(mf.manova1, test="Roy"))
+test3 <- as.matrix(s3$stats)
+test3.F <- test3[1,3]
+test3.df1 <- test3[1,4]
+test3.df2 <- test3[1,5]
+test3.p <- test3[1,6]
+test3.reject <- test3.p < alpha
+
+### Summarise as Lawes Hotellings trace
+(s4 <- summary(mf.manova1, test="Hotelling-Lawley"))
+test4 <- as.matrix(s4$stats)
+test4.F <- test4[1,3]
+test4.df1 <- test4[1,4]
+test4.df2 <- test4[1,5]
+test4.p <- test4[1,6]
+test4.reject <- test4.p < alpha
+
+## the test results
+print("Rejection of Null Hypothesis for equal means between groups")
+(results <- c(test1.reject,
+              test2.reject,
+              test3.reject,
+              test4.reject))
+```
+
+
+
+Reviewing eigenvalues of wilks lambda
+
+```{r}
+(ev2 <- s2$Eigenvalues)
+# approximate wilks statistic
+(wtest <- prod ( sapply(ev2, function(e) 1 / (1+e) ) ) )
+```
+
+Lets look at the manual calculations for column means.
+
+```{r}
+require(dplyr)
+require(tidyr)
+mu1 <- aggregate(. ~ Group, data = mf[2:11], mean)
+Gmu <- as.matrix(mu1[,2:10])
+cnts <- data %>% 
+  group_by(Group) %>%
+  summarise(count=n())
+cnt <- data.frame(cnts)
+cnt <- as.matrix(cnts[,2])
+
+
+# look at the column means
+sMu <- colMeans(mf[,3:11])
+
+SS <- Gmu
+for(i in 1:nrow(Gmu)) {
+  SS[i,] <- Gmu[i,] - sMu
+}
+## Between group variation.
+cntSS <- SS
+for(i in 1:nrow(SS)) {
+    cntSS[i,] <- cnt[i]*SS[i,]
+}
+B <- t(cntSS)%*%SS
+
+## Total variation.
+
+
+```
