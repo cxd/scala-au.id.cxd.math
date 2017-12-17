@@ -39,6 +39,7 @@ import scala.collection.immutable.Stream
   * In order to compute between group variation we need a column or vector in the data
   * that is a group categorical variable.
   *
+  *
   * From this value we then determine the set of group means $G_{\mu}$
   * which for m groups are m group means vectors. We then compute
   *
@@ -58,7 +59,7 @@ import scala.collection.immutable.Stream
   * Given the design matrix compute wilks lambda
   *
   * $$
-  * \Lambda = \frac{|W|}{|T|} = \prod_{i=1}^k \frac{1}{1+\lambda_i}
+  * \Lambda = \frac{|W|}{|T|} = \prod_{i=1}&#94;k \frac{1}{1+\lambda_i}
   * $$
   * Where $W$ is the within sample variation and $T$ is the total variation.
   *
@@ -71,14 +72,14 @@ import scala.collection.immutable.Stream
   * ## Pillai's Trace
   *
   * $$
-  * V = \sum_{i=1}^k \frac{\lambda_i}{1+\lambda_i}
+  * V = \sum_{i=1}&#94;k \frac{\lambda_i}{1+\lambda_i}
   * $$
   *
   * ## Lawes Hotelling trace
   *
-  * U = \sum_{i=1}^k \lambda+i
+  * U = \sum_{i=1}&#94;k \lambda+i
   * */
-class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Double], val alpha:Double = 0.05) {
+class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[Double], val alpha: Double = 0.05) {
 
   lazy val groups = groupIndexes(groupNames)
 
@@ -153,11 +154,13 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     * From this value we then determine the set of group means $G_{\mu}$
     * which for m groups are m group means vectors. We then compute
     *
+    *
     * $$
     * B = n G_{\mu}' G_{\mu}
     * $$
     *
     * $n$ here is the column vector with the number of observations for each group.
+    *
     *
     * Note that $G_{\mu}$ is a matrix of $m \times k$ where $k$ is the number of attributes
     * and $m$ the number of groups.
@@ -178,17 +181,27 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
         (accum._1 + 1, mat)
       }
     }
-    val counts = DenseMatrix.tabulate[Double](partitions.length, m.cols) {
-      case (i, j) => mu._2(i,j)*partitions(i)._2.rows
+
+    val nSS = DenseMatrix.tabulate[Double](partitions.length, m.cols) {
+      case (i, j) => mu._2(i, j) * partitions(i)._2.rows
     }
 
-    val B = counts.t * mu._2
+    val B = nSS.t * mu._2
     B
   }
 
-  def eig(m: DenseMatrix[Double]): DenseVector[Double] =  {
+  /**
+    * eigenvalues approximated by the square of the singular values
+    * http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
+    *
+    * @param m
+    * @return
+    */
+  def eig(m: DenseMatrix[Double]): DenseVector[Double] = {
     val svd.SVD(u, sigma, vt) = svd(m)
-    sigma
+    DenseVector.tabulate[Double](sigma.length) {
+      case i => Math.pow(sigma(i), 2.0)
+    }
   }
 
 
@@ -204,52 +217,57 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     */
   def wilksLambda(eigenValues: DenseVector[Double], n: Int, m: Int, p: Int) = {
 
-    val wilks = eigenValues.map { lambda => 1 / (1 + lambda) }.reduce(_ * _)
+    val wilks = eigenValues.map { lambda => 1.0 / (1.0 + lambda) }.reduce(_ * _)
 
     val w = n - 1 - (p + m) / 2
     val df1 = p * (m - 1)
-    val t = (Math.pow(df1,2) - 4) / Math.sqrt(Math.pow(p,2) + Math.pow(m-1,2) - 5)
-    val df2 = (w*t * df1 / 2 + 1).toInt
-    val F = Math.pow(1-wilks, 1/t)/Math.pow(wilks, 1/t) * (df2/df1)
-    ManovaStat("Wilk's Lambda", wilks, df1, df2, F)
+    val denom = (Math.pow(p, 2) + Math.pow(m - 1, 2) - 5)
+    val t = if (df1 == 2 || denom == 0) {
+      1.0
+    } else {
+      Math.sqrt((Math.pow(df1, 2) - 4) / denom)
+    }
+    val df2 = (w * t - df1 / 2 + 1)
+    val F = ((1.0 - Math.pow(wilks, 1.0 / t)) / Math.pow(wilks, 1.0 / t)) * (df2 / df1)
+    ManovaStat("Wilk's Lambda", wilks, df1, df2.toInt, F, eigenValues)
   }
 
   def roysLargestRoot(eigenValues: DenseVector[Double], n: Int, m: Int, p: Int) = {
     val maxLambda = eigenValues.toArray.max
     val df1 = p
-    val d = Array(p, m-1).max
+    val d = Array(p, m - 1).max
     val df2 = n - m - p - 1
-    val F = (df2/df1)*maxLambda
-    ManovaStat("Roys Largest Root", maxLambda, df1, df2, F)
+    val F = (df2 / df1) * maxLambda
+    ManovaStat("Roys Largest Root", maxLambda, df1, df2, F, eigenValues)
   }
 
-  def pillaisTrace(eigenValues:DenseVector[Double], n:Int, m:Int, p:Int) = {
-    val total = eigenValues.map { lambda => lambda / (1 + lambda ) }.toArray.sum
-    val d = Array(p,m-1).max
-    val s = Array(p,m-1).min
-    val df1 = s*d
-    val df2 = s*(n - m - p + s)
-    val F = (n-m-p+s)*total / (d*(s-total))
-    ManovaStat("Pillai's Trace", total, df1, df2, F)
+  def pillaisTrace(eigenValues: DenseVector[Double], n: Int, m: Int, p: Int) = {
+    val total = eigenValues.map { lambda => lambda / (1 + lambda) }.toArray.sum
+    val d = Array(p, m - 1).max
+    val s = Array(p, m - 1).min
+    val df1 = s * d
+    val df2 = s * (n - m - p + s)
+    val F = (n - m - p + s) * total / (d * (s - total))
+    ManovaStat("Pillai's Trace", total, df1, df2, F, eigenValues)
   }
 
-  def lawesHotellingTrace(eigenValues:DenseVector[Double], n:Int, m:Int, p:Int) = {
+  def lawesHotellingTrace(eigenValues: DenseVector[Double], n: Int, m: Int, p: Int) = {
     val U = eigenValues.toArray.sum
-    val d = Array(p,m-1).max
-    val s = Array(p,m-1).min
-    val A = (Math.abs(m - p - 1) - 1)/2
-    val B = (n - m - p - 1)/2
-    val df1 = s*(2*A + s + 1)
-    val df2 = 2*(s*B+1)
-    val F = df2*U/(s*df1)
-    ManovaStat("Lawes Hotelling Trace", U, df1, df2, F)
+    val d = Array(p, m - 1).max
+    val s = Array(p, m - 1).min
+    val A = (Math.abs(m - p - 1) - 1) / 2
+    val B = (n - m - p - 1) / 2
+    val df1 = s * (2 * A + s + 1)
+    val df2 = 2 * (s * B + 1)
+    val F = df2 * U / (s * df1)
+    ManovaStat("Lawes Hotelling Trace", U, df1, df2, F, eigenValues)
   }
 
   def selectMethod() = method match {
-    case WilksLambda() => wilksLambda(_,_,_,_)
-    case RoysLargestRoot() => roysLargestRoot(_,_,_,_)
-    case PillaisTrace() => pillaisTrace(_,_,_,_)
-    case LawesHotellingTrace() => lawesHotellingTrace(_,_,_,_)
+    case WilksLambda() => wilksLambda(_, _, _, _)
+    case RoysLargestRoot() => roysLargestRoot(_, _, _, _)
+    case PillaisTrace() => pillaisTrace(_, _, _, _)
+    case LawesHotellingTrace() => lawesHotellingTrace(_, _, _, _)
   }
 
   def op() = {
@@ -291,7 +309,7 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     // the selected method.
     // generally all methods will be used for comparison.
 
-    ManovaTest(reject= reject,
+    ManovaTest(reject = reject,
       criticalVal = test,
       alpha = alpha,
       manovaStat = manovaStat)
@@ -307,26 +325,28 @@ object Manova {
 
   /**
     * create an instance of manova but do not perform the operation.
+    *
     * @param groupNames
     * @param data
     * @param alpha
     * @param method
     * @return
     */
-  def build(groupNames: List[String], data: DenseMatrix[Double], alpha:Double = 0.05, method:ManovaMethod = WilksLambda()) =
+  def build(groupNames: List[String], data: DenseMatrix[Double], alpha: Double = 0.05, method: ManovaMethod = WilksLambda()) =
     new Manova(method, groupNames, data, alpha)
 
   /**
     * perform inference on the supply groups and data.
+    *
     * @param groupNames
     * @param data
     * @param alpha
     * @param method
-    *               the default manova method is set to wilks lambda
+    * the default manova method is set to wilks lambda
     * @return
     */
-  def apply(groupNames: List[String], data: DenseMatrix[Double], alpha:Double = 0.05, method:ManovaMethod = WilksLambda()) =
-    new Manova(method,groupNames,data,alpha).op
+  def apply(groupNames: List[String], data: DenseMatrix[Double], alpha: Double = 0.05, method: ManovaMethod = WilksLambda()) =
+    new Manova(method, groupNames, data, alpha).op
 
   /**
     * apply the four available tests for differences in group variation
@@ -335,36 +355,42 @@ object Manova {
     * - roys largest root
     * - pillais trace
     * - lawes hotelling trace
+    *
     * @param groupNames
     * @param data
     * @param alpha
     * @return
     */
-  def applyAll(groupNames:List[String], data:DenseMatrix[Double], alpha:Double=0.05) =
+  def applyAll(groupNames: List[String], data: DenseMatrix[Double], alpha: Double = 0.05) =
     List(WilksLambda(),
       RoysLargestRoot(),
       PillaisTrace(),
-      LawesHotellingTrace()).map (method => Manova(groupNames, data, alpha, method))
+      LawesHotellingTrace()).map(method => Manova(groupNames, data, alpha, method))
 
 }
 
 abstract class ManovaMethod() {}
+
 case class WilksLambda() extends ManovaMethod() {}
+
 case class RoysLargestRoot() extends ManovaMethod() {}
+
 case class PillaisTrace() extends ManovaMethod() {}
+
 case class LawesHotellingTrace() extends ManovaMethod() {}
 
 /**
   * a class to hold the statistic/
+  *
   * @param name
   * @param stat
   * @param df1
   * @param df2
   * @param Fstatistic
   */
-case class ManovaStat(val name:String, val stat: Double, val df1: Int, val df2: Int, val Fstatistic:Double) {
+case class ManovaStat(val name: String, val stat: Double, val df1: Int, val df2: Int, val Fstatistic: Double, val eigenValues: DenseVector[Double]) {
 
-  override def toString () =
+  override def toString() =
     s"""
        |Manova  method $name
        |Statistic: $stat
@@ -375,7 +401,7 @@ case class ManovaStat(val name:String, val stat: Double, val df1: Int, val df2: 
 
 }
 
-case class ManovaTest(val reject:Boolean, val alpha:Double, val criticalVal:Double, manovaStat:ManovaStat) {
+case class ManovaTest(val reject: Boolean, val alpha: Double, val criticalVal: Double, manovaStat: ManovaStat) {
   override def toString() =
     s"""
        |Manova Test at alpha = $alpha
