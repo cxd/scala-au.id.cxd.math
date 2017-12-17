@@ -275,11 +275,9 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     //println(s"DF1 ${manovaStat.df1} DF2 ${manovaStat.df2}")
 
     val fdist = FDistribution(manovaStat.df1, manovaStat.df2)
-    val criticalVal = CriticalValue(fdist, UpperTail()) _
 
     // calculate the critical value F statistic for (k-1), (n-k) df at alpha level
-    val critical = criticalVal(sequence(0.0).take(100))
-    val test = critical.value(alpha)
+    val test = fdist.invcdf(1.0 - alpha)
     val reject = manovaStat.stat > test
     // upper tail
     // get the probability of the observed F value
@@ -287,7 +285,7 @@ class Manova(method:ManovaMethod, groupNames: List[String], data: DenseMatrix[Do
     // calculating the minimum alpha-value for the p Value see Wackerly section 10.6
     // the pvalue in the case of the F-Distribution is equal to P(w_0 >= observedStat)
     // P(w_0 >= W) = 1 - P(w_0 < W)
-    val pValue = 1 - fdist.integral(0.0, manovaStat.stat)
+    val pValue = 1 - fdist.cdf(manovaStat.stat)
 
     // TODO: we should format the outputs of manova in the anova table format, although this will differ based on
     // the selected method.

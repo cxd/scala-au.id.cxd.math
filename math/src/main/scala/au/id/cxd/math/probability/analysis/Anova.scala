@@ -387,15 +387,11 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
     * @return
     */
   def test(alpha: Double): TestResult = {
-    def sequence(last: Double): Stream[Double] = {
-      last #:: sequence(last + 0.1)
-    }
     val (stat, interim) = statistic()
     val n = X.cols * X.rows
     val k = X.cols
     // calculate the critical value F statistic for (k-1), (n-k) df at alpha level
-    val critical = criticalVal(sequence(0.0).take(100))
-    val test = critical.value(alpha)
+    val test = fdist.invcdf(1.0 - alpha)
     val reject = stat > test
     // upper tail
     // get the probability of the observed F value
@@ -403,7 +399,7 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
     // calculating the minimum alpha-value for the p Value see Wackerly section 10.6
     // the pvalue in the case of the F-Distribution is equal to P(w_0 >= observedStat)
     // P(w_0 >= W) = 1 - P(w_0 < W)
-    val pValue = 1 - fdist.integral(0.0, stat)
+    val pValue = 1 - fdist.cdf(stat)
     return new AnovaTable(significance = alpha,
       reject = reject,
       pValue = pValue,

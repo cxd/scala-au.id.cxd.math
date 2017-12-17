@@ -3,7 +3,7 @@ package inference
 import java.io.File
 
 import au.id.cxd.math.data.MatrixReader
-import au.id.cxd.math.probability.analysis.{Manova, WilksLambda}
+import au.id.cxd.math.probability.analysis._
 import breeze.linalg.{DenseMatrix, eigSym, inv, svd}
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 
@@ -113,6 +113,31 @@ Residuals        72
 
   }
 
+  "Manova" should "test Roys Largest Root" in new TestManovaData {
+    val (groups, data) = read()
+
+    val result = Manova(groups, data, alpha=0.05, method=RoysLargestRoot())
+
+    println(result)
+
+    // TODO: evaluate result
+  }
+
+  "Manova" should "test Pillais trace" in new TestManovaData {
+    val (groups, data) = read()
+
+    val result = Manova(groups, data, alpha=0.05, method=PillaisTrace())
+    println(result)
+    // TODO: evaluate result
+  }
+
+  "Manova" should "test LawesHotelling trace" in new TestManovaData {
+    val (groups, data) = read()
+
+    val result = Manova(groups, data, alpha=0.05, method=LawesHotellingTrace())
+    println(result)
+    // TODO: evaluate result
+  }
 
 }
 
