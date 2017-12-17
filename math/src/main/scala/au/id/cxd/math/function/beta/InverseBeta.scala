@@ -55,9 +55,10 @@ class InverseBeta {
 **/
 
   /**
+    * lower limit for parameters
     * implementation of GSL gsl_cdf_beta_Pinv betainv.c line: 71
     */
-  protected def beta_Pinv(P: Double, a: Double, b: Double, n:Int): Double = {
+  def beta_Pinv(P: Double, a: Double, b: Double, n:Int): Double = {
     if (P < 0.0 || P > 1.0) {
       throw new IllegalArgumentException(s"P is invalid $P")
     }
@@ -135,13 +136,14 @@ class InverseBeta {
   }
 
   /**
+    * upper limit for parameters
     * implementation of beta_Qinv from GSL betainv.c line 189
     * @param Q
     * @param a
     * @param b
     * @return
     */
-  protected def beta_Qinv(Q:Double, a:Double, b:Double):Double = {
+  def beta_Qinv(Q:Double, a:Double, b:Double):Double = {
     if (Q < 0.0 || Q > 1.0) {
       throw new IllegalArgumentException(s"Q $Q is not in valid range, 0.0 <= Q <= 1.0")
     }
@@ -163,4 +165,6 @@ class InverseBeta {
 
 object InverseBeta {
   def apply(P:Double, a:Double, b:Double) = new InverseBeta().op(P,a,b)
+
+  def apply() = new InverseBeta()
 }

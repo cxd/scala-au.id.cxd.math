@@ -46,7 +46,7 @@ class LogGammaFn extends ContinuedSeries {
     val den = (eps + d._1) * (eps + d._2)
     val pade = padeCoeff * num / den
     val eps5 = Math.pow(eps, 5)
-    val corr = eps5 * (pade + additiveProductFn(coeffs, eps))
+    val corr = eps5 * (pade + poly(coeffs, eps))
     val err = 2.0 * Constants.DBL_EPSILON * Math.abs(corr)
     (corr, err)
   }
@@ -131,7 +131,7 @@ class LogGammaFn extends ContinuedSeries {
       0.00097473237804513221,
       -0.00048434392722255893
     )
-    val g = eps * additiveProductFn(coeffs, eps)
+    val g = eps * poly(coeffs, eps)
     /* calculate Gamma(eps) eps, a positive quantity */
     val g1 = g + 1.0 / (1.0 + eps) + 0.5 * eps
     val y = Math.log(g1 / Math.abs(eps))
@@ -165,7 +165,7 @@ class LogGammaFn extends ContinuedSeries {
         -0.00032205261682710437,
         0.00016229131039545456
       )
-      val g = eps * additiveProductFn(coeffs, eps)
+      val g = eps * poly(coeffs, eps)
       /* calculate eps gamma(-1+eps), a negative quantity */
       val gam_e = g - 1.0 - 0.5 * eps * (1.0 + 3.0 * eps) / (1.0 - eps * eps)
       val y = Math.log(Math.abs(gam_e) / Math.abs(eps))
@@ -184,7 +184,7 @@ class LogGammaFn extends ContinuedSeries {
         -0.0023460810354558236
       )
       val e2 = eps * eps
-      val sin_ser = 1.0 + e2 * additiveProductFn(coeffs1, e2)
+      val sin_ser = 1.0 + e2 * poly(coeffs1, e2)
 
       /** calculate series for ln(gamma(1+N-eps))
         * double-precision for |eps| < 0.02
@@ -213,7 +213,7 @@ class LogGammaFn extends ContinuedSeries {
         r6/720.0,
         r7/5040.0
       )
-      val lng = c0 - eps * additiveProductFn(coeffs2, eps)
+      val lng = c0 - eps * poly(coeffs2, eps)
       val g = lng - Math.log(sin_ser)
       val y = g - Math.log(Math.abs(eps))
       val err = c0 + 2.0*Constants.DBL_EPSILON*(Math.abs(g) + Math.abs(y))

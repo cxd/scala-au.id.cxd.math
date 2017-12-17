@@ -125,8 +125,13 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
     * @return
     */
   override def invcdf(p:Double):Double = {
-    val x = InverseBeta(p,0.5*numeratorDf, 0.5*denominatorDf)
-    denominatorDf*x / (numeratorDf*(1.0 - x))
+    if (p < 0.5) {
+      val x = InverseBeta().beta_Pinv(p,0.5*numeratorDf, 0.5*denominatorDf,0)
+      denominatorDf*x / (numeratorDf*(1.0 - x))
+    } else {
+      val x = InverseBeta().beta_Qinv(p,0.5*denominatorDf, 0.5*numeratorDf)
+      denominatorDf * (1.0-x) / (numeratorDf * x)
+    }
   }
 }
 

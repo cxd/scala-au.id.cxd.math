@@ -3,8 +3,9 @@ package au.id.cxd.math.function.series
 trait ContinuedSeries {
 
   /**
+    * Compute the polynomial
     * given a set of coefficients and a constant value x
-    * compute
+    *
     *
     * $$
     * f(x,i) = \begin{cases}
@@ -16,9 +17,9 @@ trait ContinuedSeries {
     * @param e
     * @return
     */
-  def additiveProductFn(coef: List[Double], e: Double): Double = coef match {
+  def poly(coef: List[Double], e: Double): Double = coef match {
     case c :: Nil => c
-    case (c :: cs) => c + e * additiveProductFn(cs, e)
+    case (c :: cs) => c + e * poly(cs, e)
   }
 
 }
