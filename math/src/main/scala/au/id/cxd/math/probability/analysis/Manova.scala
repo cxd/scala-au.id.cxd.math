@@ -12,6 +12,19 @@ import scala.collection.immutable.Stream
   * Manova for analysis of variance testing
   * whether there is a difference in variation between groups.
   *
+  * The resulting f statistic is used to test the null hypothesis that the groups within the sample have
+  * the same multivariate mean and common covariance, while the alternate hypothesis indicates
+  * that the groups within the sample do not share the same mean and do not have common covariance.
+  *
+  * The procedure assumes multivariate normality (test for this prior to using manova) and common variance between groups.
+  *
+  * Given the above assumptions hold, it is useful to perform the manova procedure with standardised data.
+  *
+  * The eigen value solution used in the process may differ from other packages, possibly because there are multiple solutions
+  * to the problem used in the calculation. The statistics obtained should be reported when displaying the output,
+  * those should include, the critical value for the significance level, the calculated f-statistics, the degrees of freedom and the
+  * calculated statistic corresponding to the method.
+  *
   * In order to perform the analysis several related methods are available.
   *
   * - Wilks Lambda
@@ -234,9 +247,9 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
 
   def roysLargestRoot(eigenValues: DenseVector[Double], n: Int, m: Int, p: Int) = {
     val maxLambda = eigenValues.toArray.max
-    val df1 = p
     val d = Array(p, m - 1).max
-    val df2 = n - m - p - 1
+    val df1 = d
+    val df2 = n - m - d - 1
     val F = (df2 / df1) * maxLambda
     ManovaStat("Roys Largest Root", maxLambda, df1, df2, F, eigenValues)
   }
@@ -277,16 +290,12 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
     val T = computeT(data)
     val B = computeB(data)
     val W = T + (-1.0 * B)
-    val WinvB = inv(W) * B
+    // W^{-1}B
+    val WinvB = W \ B
     val lambda = eig(WinvB)
     // call appropriate manova method. parameterise type of manova in use
     val inferenceFn = selectMethod()
     val manovaStat = inferenceFn(lambda, n, m, p)
-
-    // perform inferential test of F statistic.
-    def sequence(last: Double): Stream[Double] = {
-      last #:: sequence(last + 0.1)
-    }
 
     // TODO: debug the calculation of the critical value with high degree of freedom
     // in F-distribution.
@@ -296,14 +305,18 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
 
     // calculate the critical value F statistic for (k-1), (n-k) df at alpha level
     val test = fdist.invcdf(1.0 - alpha)
-    val reject = manovaStat.stat > test
+    /**
+      * test H_0: groups chare the same mean and common variance (ie share the same MVN distribution)
+      * vs H_1: at least one group does not share the same mean and common variance.
+      */
+    val reject = manovaStat.Fstatistic > test
     // upper tail
     // get the probability of the observed F value
-    val prob = fdist.pdf(manovaStat.stat)
+    val prob = fdist.pdf(manovaStat.Fstatistic)
     // calculating the minimum alpha-value for the p Value see Wackerly section 10.6
     // the pvalue in the case of the F-Distribution is equal to P(w_0 >= observedStat)
     // P(w_0 >= W) = 1 - P(w_0 < W)
-    val pValue = fdist.cdf(manovaStat.stat)
+    val pValue = fdist.cdf(manovaStat.Fstatistic)
 
     // TODO: we should format the outputs of manova in the anova table format, although this will differ based on
     // the selected method.
@@ -384,10 +397,16 @@ case class LawesHotellingTrace() extends ManovaMethod() {}
   * a class to hold the statistic/
   *
   * @param name
+  *             the name of the method used to calculate the statistic
   * @param stat
+  *             the resulting statistic
   * @param df1
+  *            the first degree of freedom for the f-distribution
   * @param df2
+  *            the second degree of freedom for the f-distribution
   * @param Fstatistic
+  *             the measure calculated by the method following the F distribution at df1 and df2 degrees of freedom.
+  *             the value is dependent on the kind of method used.
   */
 case class ManovaStat(val name: String, val stat: Double, val df1: Int, val df2: Int, val Fstatistic: Double, val eigenValues: DenseVector[Double]) {
 
@@ -403,7 +422,33 @@ case class ManovaStat(val name: String, val stat: Double, val df1: Int, val df2:
 
 }
 
+/**
+  * the outcome of the manova test
+  * In the case of the MANOVA test the null hypothesis asserts that the groups share the same mean and common variance.
+  * The f statistic is used to test whether the null hypothesis holds.
+  *
+  * @param reject
+  *               a flag indicating whether to reject $H_0$
+  * @param alpha
+  *              the threshold where the alpha level was evaluated eg .05
+  * @param criticalVal
+  *               the critical value is the quantile of the fdistribution for the alpha threshold
+  *               and the degrees of freedom produced in the test.
+  *               In order to reject the null hypothesis the observed statistic must be greater than the
+  *               critical value
+  * @param pValue
+  *               the pValue is the probability of the observed statistic for the
+  *               f-distribution based on the resulting degrees of freedom
+  * @param manovaStat
+  *               the manova stat instance containing the parameters output from the test process.
+  */
 case class ManovaTest(val reject: Boolean, val alpha: Double, val criticalVal: Double, val pValue:Double, val manovaStat: ManovaStat) {
+
+  def conclusion() = reject match {
+    case true => "Sample groups do not share the same mean and common variance."
+    case _ => "Sample groups are normally distributed with same mean and share common variance."
+  }
+
   override def toString() =
     s"""
        |Manova Test at alpha = $alpha
@@ -411,6 +456,9 @@ case class ManovaTest(val reject: Boolean, val alpha: Double, val criticalVal: D
        |Reject null hypothesis? $reject
        |Critical Value: $criticalVal
        |Pr(>F): $pValue
+       |
+       |Test Assertion: ${manovaStat.Fstatistic} > $criticalVal is ${reject}
+       |Conclusion: ${conclusion}
        |
        |${manovaStat.toString}
      """.stripMargin

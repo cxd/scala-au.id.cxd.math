@@ -3,6 +3,7 @@ package inference
 import java.io.File
 
 import au.id.cxd.math.data.MatrixReader
+import au.id.cxd.math.function.transform.StandardisedNormalisation
 import au.id.cxd.math.probability.analysis._
 import breeze.linalg.{DenseMatrix, eigSym, inv, svd}
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
@@ -120,15 +121,11 @@ as.factor(Group) -1.626989e-15 -5.293898e-16 2.084505e-17
 
     println ("Eigenvalues")
     println(result.manovaStat.eigenValues)
-
-    Math.abs(result.manovaStat.stat - 0.0021936) < 0.001 should be (true)
     result.manovaStat.df1 should equal(36)
     result.manovaStat.df2 should equal(241)
 
-    // are we in the ball park?
-    Math.round(result.manovaStat.Fstatistic) <= 28 should be(true)
-    Math.round(result.manovaStat.Fstatistic) >= 27 should be(true)
 
+    result.reject should be(true)
   }
 
   /**
@@ -145,7 +142,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
     println(result)
 
-    // TODO: evaluate result
+
+    result.reject should be(true)
   }
 
   /**
@@ -160,7 +158,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
     val result = Manova(groups, data, alpha=0.05, method=PillaisTrace())
     println(result)
-    // TODO: evaluate result
+
+    result.reject should be(true)
   }
 
   /**
@@ -175,7 +174,8 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
     val result = Manova(groups, data, alpha=0.05, method=LawesHotellingTrace())
     println(result)
-    // TODO: evaluate result
+
+    result.reject should be(true)
   }
 
 }
@@ -198,8 +198,10 @@ trait TestManovaData extends MatrixReader {
     // "Case","Group","X1","X2","X3","X4","X5","X6","X7","X8","X9","Sex"
     // we want to keep columns 2 .. 10 and discard the other three columns including the last.
     val m2 = mat(::, 2 to 10).toDenseMatrix
+    // the data set is standardised prior to the procedure
+    val X = StandardisedNormalisation().transform(m2)
     // we also know ahead of time that there are 5 groups in the data.
     val groups = mat(::,1).toArray.map(_.toString).toList
-    (groups, m2)
+    (groups, X)
   }
 }

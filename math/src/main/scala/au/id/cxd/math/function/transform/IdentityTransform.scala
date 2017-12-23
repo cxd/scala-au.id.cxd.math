@@ -6,7 +6,7 @@ import breeze.linalg.DenseMatrix
   * The identity transform will return the input unchanged.
   * Created by cd on 14/05/2016.
   */
-class IdentityTransform extends ContinuousTransform {
+case class IdentityTransform() extends ContinuousTransform {
   /**
     * transform the continuous matrix.
     *

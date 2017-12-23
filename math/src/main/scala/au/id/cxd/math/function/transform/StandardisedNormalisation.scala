@@ -10,7 +10,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   *
   * Created by cd on 14/05/2016.
   */
-class StandardisedNormalisation extends ContinuousTransform {
+case class StandardisedNormalisation() extends ContinuousTransform {
 
   var meanVector:DenseVector[Double] = DenseVector.ones[Double](1)
 

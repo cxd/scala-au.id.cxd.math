@@ -3,6 +3,7 @@ import java.io.PrintWriter
 import scala.io.Source
 import com.typesafe.sbt.SbtGit.GitKeys._
 import sbt.Keys._
+import AssemblyKeys._
 
 val breezeVersion = "0.12"
 
@@ -32,10 +33,15 @@ lazy val commonSettings = Seq(
     // native libraries are not included by default. add this if you want them (as of 0.7)
     // native libraries greatly improve performance, but increase jar sizes.
     "org.scalanlp" %% "breeze-natives" % breezeVersion,
+    // add the scalaz library
+    "org.scalaz" %% "scalaz-core" % "7.1.0"
+  )
+)
+
+lazy val uiDependencies = Seq(
+  libraryDependencies ++= Seq(
     // add breeze visualization
     "org.scalanlp" %% "breeze-viz" % breezeVersion,
-    // add the scalaz library
-    "org.scalaz" %% "scalaz-core" % "7.1.0",
     // wrapper around jfreechart
     "com.github.wookietreiber" %% "scala-chart" % "0.5.0",
     // include kumo for tag cloud generation
@@ -43,20 +49,34 @@ lazy val commonSettings = Seq(
   )
 )
 
-
-
+//test in assembly := {}
 
 lazy val math = (project in file("math"))
   .settings(unidocSettings: _*)
   .settings(commonSettings: _*)
+  .settings(assemblySettings: _*)
   .settings(
 
-    name := "au.id.cxd.math"
+    name := "au.id.cxd.math",
+
+    libraryDependencies ++= Seq(
+      // add breeze visualization
+      "org.scalanlp" %% "breeze-viz" % breezeVersion % "test",
+      // wrapper around jfreechart
+      "com.github.wookietreiber" %% "scala-chart" % "0.5.0" % "test",
+      // include kumo for tag cloud generation
+      "com.kennycason" % "kumo" % "1.8" % "test"
+    ),
+
+    test in assembly := {}
+
 
   ).settings(Common.commonPluginSettings: _*)
 
+
 lazy val examples = (project in file("examples"))
   .settings(commonSettings: _*)
+  .settings(uiDependencies: _*)
   .settings(
     name := "au.id.cxd.math.examples"
   )
@@ -67,6 +87,7 @@ lazy val examples = (project in file("examples"))
 lazy val swing = (project in file("app"))
   .settings(unidocSettings: _*)
   .settings(commonSettings: _*)
+  .settings(uiDependencies: _*)
   .settings(
     name := "au.id.cxd.math.app"
   ).settings(Common.commonPluginSettings: _*)
@@ -77,4 +98,3 @@ lazy val swing = (project in file("app"))
 
 lazy val root = (project in file("."))
   .aggregate(math, examples, swing)
-

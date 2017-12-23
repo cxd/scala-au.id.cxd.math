@@ -3,17 +3,44 @@ title: "Test Manova"
 output: html_notebook
 ---
 
-When you have several dependent variables and several samples/groups the four statistics that may be used to identify differences between group means are Pillai’s trace, Wilk’s Lambda, Roy’s largest root, and Lawes-Hotelling trace. Briefly, describe and compare.
+When you have several dependent variables and several samples/groups the four statistics that may be used to identify differences between group means are Pillai’s trace, Wilk’s Lambda, Roy’s largest root, and Lawes-Hotelling trace. 
 
-The four statistics are derived from the
+The manova procedure uses the methods above in order to calculate both a statistic and an f statistic. The f statistic is used to test the null hypothesis that the groups within the sample have the same multivariate mean and common covariance, while the alternate hypothesis indicates that the groups within the sample do not share the same mean and do not have common covariance.
 
-    Total Sum of Squares
+
+The Hotelling's T^2 test is reasonably robust to the assumption of multivariate normality and equal covariance matrices, particularly if the two sample sizes are roughly equal.
+
+If the two population covariance matrices and sample sizes are very different then the assumption of multivariate normality still needs to be applied to the modified tests.
+
+For the four statistics used in the MANOVA testing, all tests assume multivariate normality, so prior to testing check the data for this assumption.
+
+They also all assume equal within sample covariance matrices accross the m hypothesised populations from which the samples are drawn.
+
+All tests are fairly robust if the sample sizes are not equal, but are not suited to small sample sizes.
+
+Also variables should be correlated, uncorrelated variables indicate that it is more appropriate to apply univariate testing.
+
+
+The four statistics are derived from the following calculations.
+
+### Total Sum of Squares or Total Variation
 
 $$ T = \sum_{j=1}^m \sum_{i=1}^{n_j} \left (X_{ij} - \bar{X} \right)^2 $$ Where $\bar{X}$ is the mean of all samples.
 
 With degree of freedom $df = n - 1$
 
-    Within Sample Sum of Squares
+In the case of the implementation total sum of squares is calculated as total variation.
+
+$$
+T = cov(X)*(n-1)
+$$
+
+The matrix $T$ is $k \times k$ in size where $k$ is the number of attributes in $X$.
+$n$ is the total number of rows in the data set.
+
+Note when performing tests for normality it is recommended to standardise the data before hand, since we are testing to determine whether the data set follows the multivariate normal distribution. The $cov$ operation above is then equivalent to the correlation matrix of. 
+
+### Within Sample Sum of Squares or Within Group Variation
 
 $$ W = \sum_{j=1}^m \sum_{i=1}^{n_j} \left (X_{ij} - \bar{X_j} \right)^2 $$
 
@@ -25,7 +52,14 @@ and Mean Square
 
 $$ M_W = \frac{W}{(n-m)} $$
 
-    Between Sample Sum of Squares
+In the implementation $W$ or *Within Group Variation* is calculated as
+
+$$
+W = T - B
+$$
+where B is the between group variation.
+
+### Between Sample Sum of Squares or Between Group Variation
 
 $$ B = T - W $$
 
@@ -38,7 +72,20 @@ $$ M_B = \frac{B}{(m - 1)} $$
 and F-ratio
 
 $$ F = \frac{M_B}{M_W} $$
-Wilk's Lambda
+
+Note in order to compute between group variation we need a column or vector in the data
+that is a group categorical variable.
+
+From this value we then determine the set of group means $G_{\mu}$ which for $m$ groups are $m$ group means vectors. We then compute
+
+$$
+B = n G_{\mu}' G_{\mu}
+$$
+
+$n$ here is the column vector with the number of observations for each group.
+Note that $G_{\mu}$ is a matrix of $m \times k$ where $k$ is the number of attributes and $m$ the number of groups. The matrix $B$ is $k \times k$. We can then calculate within group variation as above.
+
+##### Wilk's Lambda
 
 The Wilk's Lambda statistic is the ratio of the determinant of the within sample sum of squares and the total sum of squares
 
@@ -56,7 +103,8 @@ $$ t = \left[ \frac{(df_1^2 - 4)}{(p^2 + (m-1)^2 - 5)} \right]^{1/2} $$
 if $df_1 = 2$ then $t = 1$ 
 $$ d = max (p, m - 1) $$ 
 $$ s = min(p, m - 1) $$ $$ A = (|m-p-1| -1)/2 $$ $$ B = (n - m - p - 1)/2 $$
-Roy's Trace
+
+##### Roy's Trace
 
 The Roy's trace is the highest eigenvalue of the matrix above and is simply.
 
@@ -65,7 +113,8 @@ $$ Roy = \lambda_1 $$
 The F-statistic is calculated as
 
 $$ F = (df_2/df_1)\lambda_1 $$ With $df_1 = p$ and $df_2 = n - m - d - 1$
-Pillai's Trace
+
+##### Pillai's Trace
 
 Is the sum of the eigenvalues
 
@@ -74,7 +123,9 @@ $$ V = \sum_{i=1}^p \frac{\lambda_i}{1 + \lambda_i} $$
 The F-statistic is calculated as
 
 $$ F = (n - m - p + s)V/\left[ d (s-V\right] $$ With $df_1 = sd$ and $df_2 = s(n-m-p+s)$
-Lawes Hotelling Trace
+
+
+##### Lawes Hotelling Trace
 
 The Lawes Hotelling Trace is the sum of of the eigenvalues
 
@@ -85,17 +136,6 @@ With the F-statistic being calculated as
 $$ F = df_2 \frac{U}{(s df_1)} $$ with $df_1 = s(2A + s + 1)$ and $df_2 = 2(sB + 1)$.
 
 
-The Hotelling's T^2 test is reasonably robust to the assumption of multivariate normality and equal covariance matrices, particularly if the two sample sizes are roughly equal.
-
-If the two population covariance matrices and sample sizes are very different then the assumption of multivariate normality still needs to be applied to the modified tests.
-
-For the four statistics used in the MANOVA testing, all tests require multivariate normality, so prior to testing check the data for this assumption.
-
-They also all assume equal within sample covariance matrices accross the m hypothesised populations from which the samples are drawn.
-
-All tests are fairly robust if the sample sizes are not equal, but are not suited to small sample sizes.
-
-Also variables should be correlated, uncorrelated variables indicate that it is more appropriate to apply univariate testing.
 
 ## Bonferroni Testing
 
