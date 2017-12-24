@@ -1,0 +1,270 @@
+---
+title: "Notes on MANOVA"
+output: 
+  html_document:
+    css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
+csl: journal-of-combinatorics.csl
+bibliography: bibliography.bib
+---
+
+<a href="../index.html">Home</a>
+
+The notes below are derived from the summary in @manly from chapter 4, "Tests of significance with Multivariate Data". 
+
+When you have several dependent variables and several samples/groups the four statistics that may be used to identify differences between group means are Pillai’s trace, Wilk’s Lambda, Roy’s largest root, and Lawes-Hotelling trace. 
+
+The manova procedure uses the methods above in order to calculate both a statistic and an f statistic. The f statistic is used to test the null hypothesis that the groups within the sample have the same multivariate mean and common covariance, while the alternate hypothesis indicates that the groups within the sample do not share the same mean and do not have common covariance.
+
+
+The Hotelling's T^2 test is reasonably robust to the assumption of multivariate normality and equal covariance matrices, particularly if the two sample sizes are roughly equal.
+
+If the two population covariance matrices and sample sizes are very different then the assumption of multivariate normality still needs to be applied to the modified tests.
+
+For the four statistics used in the MANOVA testing, all tests assume multivariate normality, so prior to testing check the data for this assumption.
+
+They also all assume equal within sample covariance matrices accross the m hypothesised populations from which the samples are drawn.
+
+All tests are fairly robust if the sample sizes are not equal, but are not suited to small sample sizes.
+
+Also variables should be correlated, uncorrelated variables indicate that it is more appropriate to apply univariate testing.
+
+
+The four statistics are derived from the following calculations.
+
+### Total Sum of Squares or Total Variation
+
+$$ T = \sum_{j=1}^m \sum_{i=1}^{n_j} \left (X_{ij} - \bar{X} \right)^2 $$ Where $\bar{X}$ is the mean of all samples.
+
+With degree of freedom $df = n - 1$
+
+In the case of the implementation total sum of squares is calculated as total variation.
+
+$$
+T = cov(X)*(n-1)
+$$
+
+The matrix $T$ is $k \times k$ in size where $k$ is the number of attributes in $X$.
+$n$ is the total number of rows in the data set.
+
+Note when performing tests for normality it is recommended to standardise the data before hand, since we are testing to determine whether the data set follows the multivariate normal distribution. The $cov$ operation above is then equivalent to the correlation matrix of. 
+
+### Within Sample Sum of Squares or Within Group Variation
+
+$$ W = \sum_{j=1}^m \sum_{i=1}^{n_j} \left (X_{ij} - \bar{X_j} \right)^2 $$
+
+where $\bar{X_j}$ is the mean of sample $j$.
+
+With degree of freedom $df = n - m$.
+
+and Mean Square
+
+$$ M_W = \frac{W}{(n-m)} $$
+
+In the implementation $W$ or *Within Group Variation* is calculated as
+
+$$
+W = T - B
+$$
+where B is the between group variation.
+
+### Between Sample Sum of Squares or Between Group Variation
+
+$$ B = T - W $$
+
+with degree of freedom $m - 1$
+
+and Mean Square
+
+$$ M_B = \frac{B}{(m - 1)} $$
+
+and F-ratio
+
+$$ F = \frac{M_B}{M_W} $$
+
+Note in order to compute between group variation we need a column or vector in the data
+that is a group categorical variable.
+
+From this value we then determine the set of group means $G_{\mu}$ which for $m$ groups are $m$ group means vectors. We then compute
+
+$$
+B = n G_{\mu}' G_{\mu}
+$$
+
+$n$ here is the column vector with the number of observations for each group.
+Note that $G_{\mu}$ is a matrix of $m \times k$ where $k$ is the number of attributes and $m$ the number of groups. The matrix $B$ is $k \times k$. We can then calculate within group variation as above.
+
+##### Wilk's Lambda
+
+The Wilk's Lambda statistic is the ratio of the determinant of the within sample sum of squares and the total sum of squares
+
+$$ \Lambda = \frac{\left|W\right|}{\left|T\right|} $$ Alternately it can be calculated from the eigenvalue of $$ W^{-1}B $$ $$ \Lambda = \prod_{i=1}^p \frac{1}{1 + \lambda_i} $$
+
+The F statistic is calculated as follows
+
+$$ F = \frac{1 - \Lambda^{1/t}}{\Lambda^{1/t}}(df_2/df_1) $$
+with $df_1 = p (m-1)$ and $df_2 = wt - df_1/2 + 1$.
+
+The values for the variables used in the above and other calculations that follow are.
+
+$$ w = n - 1 - (p+m)/2 $$ 
+$$ t = \left[ \frac{(df_1^2 - 4)}{(p^2 + (m-1)^2 - 5)} \right]^{1/2} $$ 
+if $df_1 = 2$ then $t = 1$ 
+$$ d = max (p, m - 1) $$ 
+$$ s = min(p, m - 1) $$ $$ A = (|m-p-1| -1)/2 $$ $$ B = (n - m - p - 1)/2 $$
+
+##### Roy's Trace
+
+The Roy's trace is the highest eigenvalue of the matrix above and is simply.
+
+$$ Roy = \lambda_1 $$
+
+The F-statistic is calculated as
+
+$$ F = (df_2/df_1)\lambda_1 $$ With $df_1 = p$ and $df_2 = n - m - d - 1$
+
+##### Pillai's Trace
+
+Is the sum of the eigenvalues
+
+$$ V = \sum_{i=1}^p \frac{\lambda_i}{1 + \lambda_i} $$
+
+The F-statistic is calculated as
+
+$$ F = (n - m - p + s)V/\left[ d (s-V\right] $$ With $df_1 = sd$ and $df_2 = s(n-m-p+s)$
+
+
+##### Lawes Hotelling Trace
+
+The Lawes Hotelling Trace is the sum of of the eigenvalues
+
+$$ U = \sum_{i=1}^p \lambda_i $$
+
+With the F-statistic being calculated as
+
+$$ F = df_2 \frac{U}{(s df_1)} $$ with $df_1 = s(2A + s + 1)$ and $df_2 = 2(sB + 1)$.
+
+## Examples
+
+The Manova procedure is implemented in the library by the class 'au.id.cxd.math.probability.analysis.Manova'. 
+
+The following example illustrates the procedure with two data sets.
+
+
+```{r}
+# setup the jvmr interpreter
+library(rJava)
+
+options(java.parameters = c("-Xmx1G", "-XX:MaxPermGen=1G"))
+
+cp <- getwd()
+includes <- list.files(file.path(cp, "../target"), full.names=TRUE)
+
+library(jvmr)
+library(knitr)
+
+scala <- scalaInterpreter(includes)
+knit_engines$set(scalainr = function(options) {
+  code <- paste(options$code, collapse = "\n")
+  output <- capture.output(interpret(scala, code, echo.output = TRUE))
+  engine_output(options, options$code, output)
+})
+```
+
+Firstly the example will load a data file given a location and select a subset of columns
+for the matrix data and the column representing the groups.
+
+The groups column may contain strings, which could represent the group labels. The data format is expected to be a wide data format.
+
+The first example uses a dataset from @manly 
+
+```{r, engine='scalainr'}
+
+
+import java.io.File
+import scala.collection.mutable
+import au.id.cxd.math.data.CsvReader
+
+import au.id.cxd.math.data.MatrixReader
+import au.id.cxd.math.function.transform.StandardisedNormalisation
+import au.id.cxd.math.probability.analysis._
+import breeze.linalg.{DenseMatrix, eigSym, inv, svd}
+
+val fileName:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/test_mandible_data.csv"
+
+val dataRange:Seq[Int] = 2 to 10
+val groupColumn:Int = 1
+
+
+val mat = MatrixReader.readFileAt(fileName)
+val m2 = mat(::, dataRange).toDenseMatrix
+val data = StandardisedNormalisation().transform(m2)
+val groups = mat(::,groupColumn).toArray.map(_.toString).toList
+
+val wilks = Manova(groups, data, alpha=0.05, method=WilksLambda())
+val pillai = Manova(groups, data, alpha=0.05, method=PillaisTrace())
+val roys = Manova(groups, data, alpha=0.05, method=RoysLargestRoot())
+val lawley = Manova(groups, data, alpha=0.05, method=LawesHotellingTrace())
+
+```
+We can inspect the result from the use of the Wilks lambda statistic.
+
+```{r, engine='scalainr'}
+println(wilks.toString)
+```
+
+In this case the analysis rejected the null hypothesis that the groups were from the same distribution. 
+
+
+
+However it is worth while testing against the other methods to ensure they are consistent.
+
+```{r, engine='scalainr'}
+
+List(pillai, roys, lawley).foreach(println)
+
+```
+
+The above results show that all tests reject the null hypothesis for the particular mandible dataset. 
+
+
+Suggesting that there is evidence that there is a difference between groups of species in this case, species of dogs, with regards to measurements taken from their mandibles.
+
+
+
+The second example illustrates a set of measures for the body dimensions for sparrows grouped by their survival of a storm. The analysis seeks to determine whether there are any differences in the body measurements that may give some indication whether there is a difference between those sparrows that died during a storm and those that survived. 
+
+The approach is repeated on a new data set.
+
+```{r, engine='scalainr'}
+
+
+val fileName:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/test_sparrows.csv"
+
+val dataRange:Seq[Int] = 1 to 5
+val groupColumn:Int = 6
+
+
+val mat = MatrixReader.readFileAt(fileName)
+val m2 = mat(::, dataRange).toDenseMatrix
+val data = StandardisedNormalisation().transform(m2)
+val groups = mat(::,groupColumn).toArray.map(_.toString).toList
+
+val result1 = Manova(groups, data, alpha=0.05, method=WilksLambda())
+val result2 = Manova(groups, data, alpha=0.05, method=PillaisTrace())
+val result3 = Manova(groups, data, alpha=0.05, method=RoysLargestRoot())
+val result4 = Manova(groups, data, alpha=0.05, method=LawesHotellingTrace())
+
+List(result1,
+     result2,
+     result3,
+     result4).foreach(println)
+
+```
+
+In this second case, each of the methods suggest that there is not enough evidence to reject the null hypothesis. It appears that the measurements do not account for enough variation between those sparrows that survived and those that did not.
+
+
+
+## References
+
+
