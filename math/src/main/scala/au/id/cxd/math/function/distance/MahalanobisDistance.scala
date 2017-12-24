@@ -12,9 +12,9 @@ import breeze.linalg.{DenseMatrix, DenseVector, diag, inv, tile, trace}
   * Given samples X and Y the Mahalanobis distance is given as
   *
   * $$
-  * dist(X,Y) = \left\{ (X-Y)' \Sigma_{X,Y}^{-1} (X-Y) \right\}^{1/2}
+  * dist(X,Y) = \left\{ (X-Y)' \Sigma_{X,Y}&#94;{-1} (X-Y) \right\}&#94;{1/2}
   * $$
-  * Where $\Sigma_{X,Y}^{-1}$ is the inverse of the variance-covariance matrix.
+  * Where $\Sigma_{X,Y}&#94;{-1}$ is the inverse of the variance-covariance matrix.
   *
   * This bears a relationship to the shape and location of a multivariate normal distribution where the $Y$ sample in
   * this case takes the place of the $\mu$ parameter for the mean of $X$ and the variance-covariance matrix is formed by the covariates of $X$.
