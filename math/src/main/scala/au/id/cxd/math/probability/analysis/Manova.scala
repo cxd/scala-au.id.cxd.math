@@ -318,10 +318,6 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
     // P(w_0 >= W) = 1 - P(w_0 < W)
     val pValue = fdist.cdf(manovaStat.Fstatistic)
 
-    // TODO: we should format the outputs of manova in the anova table format, although this will differ based on
-    // the selected method.
-    // generally all methods will be used for comparison.
-
     ManovaTest(reject = reject,
       criticalVal = test,
       alpha = alpha,

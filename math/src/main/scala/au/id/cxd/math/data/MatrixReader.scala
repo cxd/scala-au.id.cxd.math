@@ -79,3 +79,19 @@ trait MatrixReader {
     convertToMatrix(rows, cols, data)
   }
 }
+
+object MatrixReader {
+
+  /**
+    * a helper class to read the file at a given path.
+    * @param path
+    * @return
+    */
+  def readFileAt(path:String): DenseMatrix[Double] = {
+    val reader = new MatrixReader {
+
+    }
+    val file = new File(path)
+    reader.read(file)
+  }
+}

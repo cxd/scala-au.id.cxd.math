@@ -31,8 +31,14 @@ class Cov (a:DenseMatrix[Double], b:DenseMatrix[Double]) {
   def op():DenseMatrix[Double] = {
     val dA = deltaMat (a)
     val dB = deltaMat (b)
-    val C = dA.t * dB
-    val n = dA.rows.toDouble
+    val C = if (dA.rows == 1 && dB.rows == 1 && dA.cols == dB.cols) {
+      dA * dB.t
+    } else {
+      dA.t * dB
+    }
+    val n = if (dA.rows == 1 && dB.rows == 1) {
+      dA.cols.toDouble
+    } else dA.rows.toDouble
     C / (n - 1)
   }
 }

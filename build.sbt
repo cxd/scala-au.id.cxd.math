@@ -19,7 +19,17 @@ javaOptions ++= Seq(
 )
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
+  // note to cross compile for multiple versions of scala use the
+  // > + compile
+  // > + assembly
+  // to manually switch between versions
+  // > ++ 2.11.8
+  // > ++ 2.12.2
+  // this should generate multiple targets
+  // breeze does not seem to be available for 2.12
+  crossScalaVersions := Seq("2.11.8"),
+
   version := "1.0",
 
   resolvers += Opts.resolver.sonatypeReleases,
