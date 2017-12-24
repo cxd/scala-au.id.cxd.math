@@ -59,7 +59,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Created by cd on 9/09/2014.</p><p>Uniform distribution</p><p>$f(y) = 1 / (max - min)$ if $min \leq y \leq max$
-0 otherwise</p></div><div class="toggleContainer block">
+0 otherwise</p><p>CDF of uniform(a,b)
+$$
+P(y) = \begin{cases}
+  0 &amp; \text{if} y &lt; a\\
+  \frac{y-a}{b-a} &amp; \text{if} y \in [a,b)\\
+  1 &amp; \text{y &gt; b)
+\end{cases}
+$$</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a>, <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -72,7 +79,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -85,7 +92,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -192,6 +199,37 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.continuous.Uniform#cdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cdf(y:Double):Double"></a>
+      <a id="cdf(Double):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cdf</span><span class="params">(<span name="y">y: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.continuous.Uniform@cdf(y:Double):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">CDF of uniform(a,b)
+$$
+P(y) = \begin{cases}
+  0 &amp; \text{if} y &lt; a\\
+  \frac{y-a}{b-a} &amp; \text{if} y \in [a,b)\\
+  1 &amp; \text{y &gt; b)
+\end{cases}
+$$</p><div class="fullcomment"><div class="comment cmt"><p>CDF of uniform(a,b)
+$$
+P(y) = \begin{cases}
+  0 &amp; \text{if} y &lt; a\\
+  \frac{y-a}{b-a} &amp; \text{if} y \in [a,b)\\
+  1 &amp; \text{y &gt; b)
+\end{cases}
+$$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Uniform">Uniform</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#cdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="cdf(y:Seq[Double]):Double"></a>
       <a id="cdf(Seq[Double]):Double"></a>
@@ -323,7 +361,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.continuous.Uniform#integral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#integral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="integral(start:Double,end:Double):Double"></a>
       <a id="integral(Double,Double):Double"></a>
       <h4 class="signature">
@@ -339,7 +377,27 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">the integral of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>the integral of the distribution</p><p>integral 1/(theta2 - theta1) dy</p><h3> 1/(theta2-theta1)*y_upper - 1/(theta2-theta2)*ylower</h3></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Uniform">Uniform</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
+      <p class="shortcomment cmt">integral from start to end for the pdf</p><div class="fullcomment"><div class="comment cmt"><p>integral from start to end for the pdf</p><p>This is equivalent to cdf(end) - cdf(start)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#invcdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invcdf(p:Double):Double"></a>
+      <a id="invcdf(Double):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invcdf</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.continuous.Uniform@invcdf(p:Double):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">estimate the quartile y for the distribution given the
+percentage of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>estimate the quartile y for the distribution given the
+percentage of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

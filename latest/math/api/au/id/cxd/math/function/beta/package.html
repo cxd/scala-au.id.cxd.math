@@ -1,0 +1,304 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>beta - au.id.cxd.math.function.beta</title>
+          <meta name="description" content="beta - au.id.cxd.math.function.beta" />
+          <meta name="keywords" content="beta au.id.cxd.math.function.beta" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'au.id.cxd.math.function.beta.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.function">function</a></p>
+        <h1>beta</h1><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beta</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="au.id.cxd.math.function.beta.BetaFn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BetaFnextendsAnyRef"></a>
+      <a id="BetaFn:BetaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BetaFn.html"><span class="name">BetaFn</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@BetaFnextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Beta function implemented as:
+the beta function (from the gamma function)
+$$
+B(a, b) = \frac{ (a - 1)!(b - 1)! }{ (a + b - 1)! }
+$$</p><p>alternately</p><p>$$
+B(a,b) = \Gamma(a)\Gamma(b) / \Gamma(a + b)
+$$</p><p>https://en.wikipedia.org/wiki/Beta_function#Properties</p><p>Created by cd on 5/11/14.
+</p></div></div>
+    </li><li name="au.id.cxd.math.function.beta.DBetaFn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DBetaFnextendsAnyRef"></a>
+      <a id="DBetaFn:DBetaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DBetaFn.html"><span class="name">DBetaFn</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@DBetaFnextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>a derivative of the beta function
+leveraging the digamma function</p><p>$$
+\frac{\partial}{\partial x} B(x,y) = B(x,y)(\psi(x) - \psi(x+y))
+$$</p><p>https://en.wikipedia.org/wiki/Beta_function</p></div></div>
+    </li><li name="au.id.cxd.math.function.beta.IncompleteBetaFn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IncompleteBetaFnextendsAnyRef"></a>
+      <a id="IncompleteBetaFn:IncompleteBetaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="IncompleteBetaFn.html"><span class="name">IncompleteBetaFn</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@IncompleteBetaFnextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>CDF =
+$$
+I_x (\alpha, \beta) = \frac{B(x; \alpha,\beta)}{B(\alpha,\beta)}
+$$
+The regularised incomplete beta function</p><p>If x = 0, $I_x$ = 0, x=1, $I_x$ = 1, if $\alpha = 1$, $I_x = 1 - (1-x)&#94;\beta$.
+If $\beta = 1$ $I_x = x&#94;\alpha$.</p><p>Note that the complete beta function can be approximated by
+$$
+\Gamma(x)\Gamma(y) = B(x,y)\Gamma(x + y)
+$$
+$$
+B(x,y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x + y)}
+$$</p><p>The incomplete beta function can be written the product of the beta distribution and the complete gamma function</p><p>https://en.wikipedia.org/wiki/Beta_function#Properties
+</p></div></div>
+    </li><li name="au.id.cxd.math.function.beta.InverseBeta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InverseBetaextendsAnyRef"></a>
+      <a id="InverseBeta:InverseBeta"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="InverseBeta.html"><span class="name">InverseBeta</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@InverseBetaextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="au.id.cxd.math.function.beta.BetaFn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BetaFn"></a>
+      <a id="BetaFn:BetaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BetaFn$.html"><span class="name">BetaFn</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@BetaFn" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.beta.DBetaFn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DBetaFn"></a>
+      <a id="DBetaFn:DBetaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DBetaFn$.html"><span class="name">DBetaFn</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@DBetaFn" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.beta.IncompleteBetaFn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IncompleteBetaFn"></a>
+      <a id="IncompleteBetaFn:IncompleteBetaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IncompleteBetaFn$.html"><span class="name">IncompleteBetaFn</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@IncompleteBetaFn" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.beta.InverseBeta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InverseBeta"></a>
+      <a id="InverseBeta:InverseBeta"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="InverseBeta$.html"><span class="name">InverseBeta</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@InverseBeta" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

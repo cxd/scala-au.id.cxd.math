@@ -60,7 +60,9 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Gamma distribution</p><p>$\Gamma(alpha) = (alpha-1)!$</p><p>$$
 \left[y&#94;{alpha-1} * \exp(-y/beta)\right]/\left[\beta&#94;\alpha * \Gamma(alpha)\right]
-$$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p><p>$0 \leq y &lt; \infty$</p><p>Created by cd on 11/09/2014.
+$$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p><p>$0 \leq y &lt; \infty$</p><p>CDF:</p><p>$$
+P( &lt; y) = \frac{1}{\Gamma(\alpha)}\gamma(\alpha, \beta y)
+$$</p><p>Where $Gamma(\alpha)$ is the upper complete gamma function and $\gamma(\alpha, \beta y)$ is the lower incomplete gamma function.<code><code></code></code></p><p>Created by cd on 11/09/2014.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a>, <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -77,7 +79,7 @@ $$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p>
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -90,7 +92,7 @@ $$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p>
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -231,6 +233,28 @@ $$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p>
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.probability.continuous.Gamma#cdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cdf(y:Double):Double"></a>
+      <a id="cdf(Double):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cdf</span><span class="params">(<span name="y">y: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.continuous.Gamma@cdf(y:Double):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> * $$
+P( &lt; y) = \frac{1}{\Gamma(\alpha)}\gamma(\alpha, \beta y)
+$$</p><div class="fullcomment"><div class="comment cmt"><p> * $$
+P( &lt; y) = \frac{1}{\Gamma(\alpha)}\gamma(\alpha, \beta y)
+$$</p><p>Where $Gamma(\alpha)$ is the upper complete gamma function and $\gamma(\alpha, \beta y)$ is the lower incomplete gamma function.<code><code>
+</code></code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#cdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="cdf(y:Seq[Double]):Double"></a>
       <a id="cdf(Seq[Double]):Double"></a>
@@ -378,8 +402,27 @@ $$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p>
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">integral from start to end for the pdf</p><div class="fullcomment"><div class="comment cmt"><p>integral from start to end for the pdf</p><p>For those distributions that cannot be integrated the numeric integral is used.
+      <p class="shortcomment cmt">integral from start to end for the pdf</p><div class="fullcomment"><div class="comment cmt"><p>integral from start to end for the pdf</p><p>This is equivalent to cdf(end) - cdf(start)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#invcdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invcdf(p:Double):Double"></a>
+      <a id="invcdf(Double):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invcdf</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.continuous.Gamma@invcdf(p:Double):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">estimate the quartile y for the distribution given the
+percentage of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>estimate the quartile y for the distribution given the
+percentage of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

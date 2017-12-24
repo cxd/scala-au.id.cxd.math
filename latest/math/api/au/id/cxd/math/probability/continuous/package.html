@@ -99,13 +99,24 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
  </p><p>The beta distribution</p><p>Implements the pdf.
 $$
 f(y) = \frac{ y&#94;{\alpha - 1} (1-y)&#94;{\beta-1} } { Beta(\alpha, \beta) }
-$$</p><p>Where the $Beta$ is the beta function <a href="../../function/BetaFn.html" class="extype" name="au.id.cxd.math.function.BetaFn">au.id.cxd.math.function.BetaFn</a></p><p>Properties of the distribution:
+$$</p><p>Where the $Beta$ is the beta function <span class="extype" name="BetaFn">BetaFn</span></p><p>Properties of the distribution:
 Mean $\mu$:
 $$
 \frac{\alpha}{\alpha + \beta}
 $$</p><p>Variance $\sigma&#94;2$</p><p>$$
 \sigma&#94;2 = \frac{ \alpha\beta } { {(\alpha + \beta)&#94;2} (\alpha + \beta + 1)}
-$$</p><p>Created by cd on 5/11/14.
+$$</p><p>CDF =
+$$
+I_x (\alpha, \beta) = \frac{B(x; \alpha,\beta)}{B(\alpha,\beta)}
+$$
+The regularised incomplete beta function</p><p>If x = 0, $I_x$ = 0, x=1, $I_x$ = 1, if $\alpha = 1$, $I_x = 1 - (1-x)&#94;\beta$.
+If $\beta = 1$ $I_x = x&#94;\alpha$.</p><p>Note that the complete beta function can be approximated by
+$$
+\Gamma(x)\Gamma(y) = B(x,y)\Gamma(x + y)
+$$
+$$
+B(x,y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x + y)}
+$$</p><p>The incomplete beta function can be written as above, the ratio of the beta distribution over the complete gamma function</p><p>https://en.wikipedia.org/wiki/Beta_function#Properties</p><p>Created by cd on 5/11/14.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.ChiSquare" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ChiSquareextendsGamma"></a>
@@ -239,7 +250,10 @@ $$
 \mu = \frac{ d_2 }{d_2 - 2}
 $$</p><p>And the variance $\sigma^2$</p><p>of the distribution is defined where the denominator df &gt; 4</p><p>$$
 \frac{ 2 {d_2&#94;2} (d_1 + d_2 - 2) }{ d_1 {(d_2 - 2)}&#94;2 (d_2 - 4) }
-$$</p><p>The f distribution is most often used in testing hypothesis about an unknown variance.</p><p>Created by cd on 5/11/14.
+$$</p><p>The f distribution is most often used in testing hypothesis about an unknown variance.</p><p>CDF:
+$$
+F(x; d_1, d_2) = I_{\frac{d_1x}{d_1x + d_2x}} \left(\frac{d_1}{2},\frac{d_2}{2}\right)
+$$</p><p>Where $I_{\frac{d_1x}{d_1x + d_2x}}$ is the regularized incomplete beta function.</p><p>Created by cd on 5/11/14.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.Gamma" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="GammaextendsContinuousDistribution"></a>
@@ -273,7 +287,9 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Gamma distribution</p><p>$\Gamma(alpha) = (alpha-1)!$</p><p>$$
 \left[y&#94;{alpha-1} * \exp(-y/beta)\right]/\left[\beta&#94;\alpha * \Gamma(alpha)\right]
-$$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p><p>$0 \leq y &lt; \infty$</p><p>Created by cd on 11/09/2014.
+$$</p><p>Note the constraints are</p><p>$\alpha &gt; 0$</p><p>$\beta &gt; 0$</p><p>$0 \leq y &lt; \infty$</p><p>CDF:</p><p>$$
+P( &lt; y) = \frac{1}{\Gamma(\alpha)}\gamma(\alpha, \beta y)
+$$</p><p>Where $Gamma(\alpha)$ is the upper complete gamma function and $\gamma(\alpha, \beta y)$ is the lower incomplete gamma function.<code><code></code></code></p><p>Created by cd on 11/09/2014.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.Normal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NormalextendsContinuousDistribution"></a>
@@ -307,6 +323,9 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Created by cd on 9/09/2014.</p><p>the normal distribution</p><p>$$
   N(x; \mu, \sigma&#94;2) = \frac{1}{\sqrt{2\pi\sigma&#94;2}} \exp\left[\frac{1}{2\sigma&#94;2} (x - \mu)&#94;2 \right]
+$$</p><p>The cdf of the normal distribution
+$$
+P(&lt;x) = \int_{-\infty}&#94;x p(x')dx' = \frac{1}{2} erfc\left(-\frac{1}{\sqrt{2}}\left[\frac{x-\mu}{\sigma}\right]\right)
 $$</p></div></div>
     </li><li name="au.id.cxd.math.probability.continuous.Uniform" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="UniformextendsContinuousDistribution"></a>
@@ -339,7 +358,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 </script>
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Created by cd on 9/09/2014.</p><p>Uniform distribution</p><p>$f(y) = 1 / (max - min)$ if $min \leq y \leq max$
-0 otherwise</p></div></div>
+0 otherwise</p><p>CDF of uniform(a,b)
+$$
+P(y) = \begin{cases}
+  0 &amp; \text{if} y &lt; a\\
+  \frac{y-a}{b-a} &amp; \text{if} y \in [a,b)\\
+  1 &amp; \text{y &gt; b)
+\end{cases}
+$$</p></div></div>
     </li></ol>
             </div>
 

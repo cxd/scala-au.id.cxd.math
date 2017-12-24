@@ -66,7 +66,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -79,7 +79,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -96,7 +96,24 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#mean" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#cdf" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="cdf(y:Double):Double"></a>
+      <a id="cdf(Double):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cdf</span><span class="params">(<span name="y">y: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.continuous.ContinuousDistribution@cdf(y:Double):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">calculate the cdf $P( &lt; y)$.</p>
+    </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#mean" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="mean():Double"></a>
       <a id="mean():Double"></a>
       <h4 class="signature">
@@ -367,8 +384,26 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">integral from start to end for the pdf</p><div class="fullcomment"><div class="comment cmt"><p>integral from start to end for the pdf</p><p>For those distributions that cannot be integrated the numeric integral is used.
+      <p class="shortcomment cmt">integral from start to end for the pdf</p><div class="fullcomment"><div class="comment cmt"><p>integral from start to end for the pdf</p><p>This is equivalent to cdf(end) - cdf(start)
 </p></div></div>
+    </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#invcdf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="invcdf(p:Double):Double"></a>
+      <a id="invcdf(Double):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invcdf</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.continuous.ContinuousDistribution@invcdf(p:Double):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">estimate the quartile y for the distribution given the
+percentage of the distribution</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

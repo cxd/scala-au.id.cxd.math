@@ -1,0 +1,212 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>approximate - au.id.cxd.math.function.approximate</title>
+          <meta name="description" content="approximate - au.id.cxd.math.function.approximate" />
+          <meta name="keywords" content="approximate au.id.cxd.math.function.approximate" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'au.id.cxd.math.function.approximate.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.function">function</a></p>
+        <h1>approximate</h1><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">approximate</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="au.id.cxd.math.function.approximate.Bisect" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BisectextendsAnyRef"></a>
+      <a id="Bisect:Bisect"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Bisect.html"><span class="name">Bisect</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@BisectextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.approximate.Chebyshev" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ChebyshevextendsAnyRef"></a>
+      <a id="Chebyshev:Chebyshev"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Chebyshev.html"><span class="name">Chebyshev</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@ChebyshevextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">approximate evaluation of a function in the interval a to b using Chebyshev approximation.</p><div class="fullcomment"><div class="comment cmt"><p>approximate evaluation of a function in the interval a to b using Chebyshev approximation.</p><p>This is based on the GSL eval.c gsl_cheb_eval_err
+as well as the Chebyshev Approximation section in Numerical recipes pp 233 - 238.</p><p>Approximate the function $f(x)$ in the interval [a,b].</p><p>The function $f(x)$ is approximated using a change of variable</p><p>$$
+y \sim \frac{x - 1/2 (b-a)}{1/2(b-a)}
+$$</p><p>And the original function is approximated as</p><p>$$
+f(x) \approx \left[\sum_{k=0}&#94;n c_k T_k(y)\right] - c_0/2
+$$</p></div></div>
+    </li><li name="au.id.cxd.math.function.approximate.NumericIntegral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NumericIntegralextendsAnyRef"></a>
+      <a id="NumericIntegral:NumericIntegral"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NumericIntegral.html"><span class="name">NumericIntegral</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@NumericIntegralextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Numeric integration for a given range</p><p>determine the area beneath the curve
+for the sequence generated by f(x) -&gt; y
+between the given upper and lower limits using
+numeric quadrature</p><p>This is based on the algorithms provided by the GNU Scientific Library</p><p>http://savannah.gnu.org/projects/gsl</p><p>git://git.savannah.gnu.org/gsl.git</p><p>http://www.gnu.org/software/gsl/manual/html_node/Numerical-Integration.html#Numerical-Integration</p><p>https://en.wikipedia.org/wiki/Numerical_integration</p><p>https://en.wikipedia.org/wiki/Trapezoidal_Rule</p><p>Created by cd on 17/11/2015.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="au.id.cxd.math.function.approximate.Chebyshev" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Chebyshev"></a>
+      <a id="Chebyshev:Chebyshev"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Chebyshev$.html"><span class="name">Chebyshev</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@Chebyshev" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.approximate.NumericIntegral" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NumericIntegral"></a>
+      <a id="NumericIntegral:NumericIntegral"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NumericIntegral$.html"><span class="name">NumericIntegral</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@NumericIntegral" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

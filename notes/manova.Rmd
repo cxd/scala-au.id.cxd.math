@@ -10,6 +10,7 @@ bibliography: bibliography.bib
 <a href="../index.html">Home</a>
 
 The notes below are derived from the summary in @manly from chapter 4, "Tests of significance with Multivariate Data". 
+ 
 
 When you have several dependent variables and several samples/groups the four statistics that may be used to identify differences between group means are Pillai’s trace, Wilk’s Lambda, Roy’s largest root, and Lawes-Hotelling trace. 
 
@@ -264,6 +265,7 @@ List(result1,
 In this second case, each of the methods suggest that there is not enough evidence to reject the null hypothesis. It appears that the measurements do not account for enough variation between those sparrows that survived and those that did not.
 
 
+The implementation is a work in progress, the results are dependent on the inverse beta function which is still progressively being worked on. In general the implementation is a learning exercise to investigate the mechanism behind the manova testing. It is best to use a tool such as R for work which depends upon more rigor. 
 
 ## References
 

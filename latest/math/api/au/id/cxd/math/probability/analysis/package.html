@@ -265,6 +265,23 @@ $$</p><p>Created by cd on 11/11/14.
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.probability.analysis.LawesHotellingTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LawesHotellingTraceextendsManovaMethodwithProductwithSerializable"></a>
+      <a id="LawesHotellingTrace:LawesHotellingTrace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LawesHotellingTrace.html"><span class="name">LawesHotellingTrace</span></a><span class="params">()</span><span class="result"> extends <a href="ManovaMethod.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaMethod">ManovaMethod</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@LawesHotellingTraceextendsManovaMethodwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="au.id.cxd.math.probability.analysis.LowerTail" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LowerTailextendsRegionwithProductwithSerializable"></a>
       <a id="LowerTail:LowerTail"></a>
@@ -282,6 +299,140 @@ $$</p><p>Created by cd on 11/11/14.
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.probability.analysis.Manova" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ManovaextendsAnyRef"></a>
+      <a id="Manova:Manova"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Manova.html"><span class="name">Manova</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@ManovaextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Manova for analysis of variance testing
+whether there is a difference in variation between groups.</p><p>The resulting f statistic is used to test the null hypothesis that the groups within the sample have
+the same multivariate mean and common covariance, while the alternate hypothesis indicates
+that the groups within the sample do not share the same mean and do not have common covariance.</p><p>The procedure assumes multivariate normality (test for this prior to using manova) and common variance between groups.</p><p>Given the above assumptions hold, it is useful to perform the manova procedure with standardised data.</p><p>The eigen value solution used in the process may differ from other packages, possibly because there are multiple solutions
+to the problem used in the calculation. The statistics obtained should be reported when displaying the output,
+those should include, the critical value for the significance level, the calculated f-statistics, the degrees of freedom and the
+calculated statistic corresponding to the method.</p><p>In order to perform the analysis several related methods are available.</p><p>- Wilks Lambda
+- Roy's Largest Root
+- Pillai's Trace
+- Lawes-Hotelling trace</p><p>Each of the statistics rely on the following matrices.</p><p># Total Variation
+$$
+T = Cov(X)*(n-1)
+$$
+The matrix $T$ is $k \times k$ in size where $k$ is the number of attributes in $X$.
+$n$ is the total number of rows in the data set.</p><p># Within Group Variation
+$$
+W = T - B
+$$
+where B is the between group variation.</p><p># Between Group Variation</p><p>In order to compute between group variation we need a column or vector in the data
+that is a group categorical variable.</p><p>From this value we then determine the set of group means $G_{\mu}$
+which for m groups are m group means vectors. We then compute</p><p>$$
+B = n G_{\mu}' G_{\mu}
+$$</p><p>$n$ here is the column vector with the number of observations for each group.</p><p>Note that $G_{\mu}$ is a matrix of $m \times k$ where $k$ is the number of attributes
+and $m$ the number of groups. The matrix $B$ is $k \times k$.</p><p># Statistics</p><p>## Wilks Lambda</p><p>Given the design matrix compute wilks lambda</p><p>$$
+\Lambda = \frac{|W|}{|T|} = \prod_{i=1}&#94;k \frac{1}{1+\lambda_i}
+$$
+Where $W$ is the within sample variation and $T$ is the total variation.</p><p>## Roy's Largest Root</p><p>$$
+\lambda_{max}
+$$</p><p>## Pillai's Trace</p><p>$$
+V = \sum_{i=1}&#94;k \frac{\lambda_i}{1+\lambda_i}
+$$</p><p>## Lawes Hotelling trace</p><p>U = \sum_{i=1}&#94;k \lambda+i
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.analysis.ManovaMethod" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ManovaMethodextendsAnyRef"></a>
+      <a id="ManovaMethod:ManovaMethod"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ManovaMethod.html"><span class="name">ManovaMethod</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@ManovaMethodextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.analysis.ManovaStat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ManovaStatextendsProductwithSerializable"></a>
+      <a id="ManovaStat:ManovaStat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ManovaStat.html"><span class="name">ManovaStat</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stat">stat: <span class="extype" name="scala.Double">Double</span></span>, <span name="df1">df1: <span class="extype" name="scala.Int">Int</span></span>, <span name="df2">df2: <span class="extype" name="scala.Int">Int</span></span>, <span name="Fstatistic">Fstatistic: <span class="extype" name="scala.Double">Double</span></span>, <span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@ManovaStatextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">a class to hold the statistic/
+</p><div class="fullcomment"><div class="comment cmt"><p>a class to hold the statistic/
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>
+            the name of the method used to calculate the statistic</p></dd><dt class="param">stat</dt><dd class="cmt"><p>
+            the resulting statistic</p></dd><dt class="param">df1</dt><dd class="cmt"><p>
+           the first degree of freedom for the f-distribution</p></dd><dt class="param">df2</dt><dd class="cmt"><p>
+           the second degree of freedom for the f-distribution</p></dd><dt class="param">Fstatistic</dt><dd class="cmt"><p>
+            the measure calculated by the method following the F distribution at df1 and df2 degrees of freedom.
+            the value is dependent on the kind of method used.</p></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.ManovaTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ManovaTestextendsProductwithSerializable"></a>
+      <a id="ManovaTest:ManovaTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ManovaTest.html"><span class="name">ManovaTest</span></a><span class="params">(<span name="reject">reject: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span></span>, <span name="criticalVal">criticalVal: <span class="extype" name="scala.Double">Double</span></span>, <span name="pValue">pValue: <span class="extype" name="scala.Double">Double</span></span>, <span name="manovaStat">manovaStat: <a href="ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@ManovaTestextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the outcome of the manova test
+In the case of the MANOVA test the null hypothesis asserts that the groups share the same mean and common variance.</p><div class="fullcomment"><div class="comment cmt"><p>the outcome of the manova test
+In the case of the MANOVA test the null hypothesis asserts that the groups share the same mean and common variance.
+The f statistic is used to test whether the null hypothesis holds.
+</p></div><dl class="paramcmts block"><dt class="param">reject</dt><dd class="cmt"><p>
+              a flag indicating whether to reject $H_0$</p></dd><dt class="param">alpha</dt><dd class="cmt"><p>
+             the threshold where the alpha level was evaluated eg .05</p></dd><dt class="param">criticalVal</dt><dd class="cmt"><p>
+              the critical value is the quantile of the fdistribution for the alpha threshold
+              and the degrees of freedom produced in the test.
+              In order to reject the null hypothesis the observed statistic must be greater than the
+              critical value</p></dd><dt class="param">pValue</dt><dd class="cmt"><p>
+              the pValue is the probability of the observed statistic for the
+              f-distribution based on the resulting degrees of freedom</p></dd><dt class="param">manovaStat</dt><dd class="cmt"><p>
+              the manova stat instance containing the parameters output from the test process.</p></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.analysis.Odds" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="OddsextendsAnyRef"></a>
       <a id="Odds:Odds"></a>
@@ -314,6 +465,23 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Created by cd on 26/03/2016.
 </p></div></div>
+    </li><li name="au.id.cxd.math.probability.analysis.PillaisTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PillaisTraceextendsManovaMethodwithProductwithSerializable"></a>
+      <a id="PillaisTrace:PillaisTrace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PillaisTrace.html"><span class="name">PillaisTrace</span></a><span class="params">()</span><span class="result"> extends <a href="ManovaMethod.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaMethod">ManovaMethod</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@PillaisTraceextendsManovaMethodwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="au.id.cxd.math.probability.analysis.Region" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="RegionextendsAnyRef"></a>
       <a id="Region:Region"></a>
@@ -327,6 +495,23 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@RegionextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.analysis.RoysLargestRoot" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RoysLargestRootextendsManovaMethodwithProductwithSerializable"></a>
+      <a id="RoysLargestRoot:RoysLargestRoot"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RoysLargestRoot.html"><span class="name">RoysLargestRoot</span></a><span class="params">()</span><span class="result"> extends <a href="ManovaMethod.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaMethod">ManovaMethod</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@RoysLargestRootextendsManovaMethodwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -421,6 +606,23 @@ $$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p>
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.probability.analysis.WilksLambda" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WilksLambdaextendsManovaMethodwithProductwithSerializable"></a>
+      <a id="WilksLambda:WilksLambda"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="WilksLambda.html"><span class="name">WilksLambda</span></a><span class="params">()</span><span class="result"> extends <a href="ManovaMethod.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaMethod">ManovaMethod</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@WilksLambdaextendsManovaMethodwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
@@ -458,6 +660,23 @@ $$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@CriticalValue" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.analysis.Manova" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Manova"></a>
+      <a id="Manova:Manova"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Manova$.html"><span class="name">Manova</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@Manova" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

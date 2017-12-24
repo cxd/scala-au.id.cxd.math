@@ -252,9 +252,9 @@ val pillai = Manova(groups, data, alpha=0.05, method=PillaisTrace())
 val roys = Manova(groups, data, alpha=0.05, method=RoysLargestRoot())
 val lawley = Manova(groups, data, alpha=0.05, method=LawesHotellingTrace())
 </code></pre>
-<pre><code>## Dec 24, 2017 5:48:36 PM com.github.fommil.jni.JniLoader liberalLoad
-## INFO: successfully loaded /var/folders/tl/0t3p809x4gq1zz3g08wnrgm80000gn/T/jniloader5573345907579580857netlib-native_system-osx-x86_64.jnilib
-## Dec 24, 2017 5:48:36 PM com.github.fommil.jni.JniLoader load
+<pre><code>## Dec 24, 2017 6:05:03 PM com.github.fommil.jni.JniLoader liberalLoad
+## INFO: successfully loaded /var/folders/tl/0t3p809x4gq1zz3g08wnrgm80000gn/T/jniloader7324071039888269893netlib-native_system-osx-x86_64.jnilib
+## Dec 24, 2017 6:05:04 PM com.github.fommil.jni.JniLoader load
 ## INFO: already loaded netlib-native_system-osx-x86_64.jnilib
 ## [1] &quot;Java-Object{\nManova Test at alpha = 0.05\n\nReject null hypothesis? true\nCritical Value: 1.0000000000000007\nPr(&gt;F): Infinity\n\nTest Assertion: 113.59875718962388 &gt; 1.0000000000000007 is true\nConclusion: Sample groups do not share the same mean and common variance.\n\n\nManova  method Lawes Hotelling Trace\nStatistic: 65.43288414122335\nDf1: 36\nDf2: 250\nF-Statistic: 113.59875718962388\n\n     \n     }&quot;</code></pre>
 <p>We can inspect the result from the use of the Wilks lambda statistic.</p>
@@ -446,6 +446,8 @@ List(result1,
 ##      
 ##      
 ## NULL</code></pre>
+<p>In this second case, each of the methods suggest that there is not enough evidence to reject the null hypothesis. It appears that the measurements do not account for enough variation between those sparrows that survived and those that did not.</p>
+<p>The implementation is a work in progress, the results are dependent on the inverse beta function which is still progressively being worked on. In general the implementation is a learning exercise to investigate the mechanism behind the manova testing. It is best to use a tool such as R for work which depends upon more rigor.</p>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2>References</h2>
