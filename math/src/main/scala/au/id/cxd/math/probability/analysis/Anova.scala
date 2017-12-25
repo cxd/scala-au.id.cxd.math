@@ -141,7 +141,7 @@ import breeze.linalg.{DenseVector, DenseMatrix}
   *
   * The key assumptions are the normal assumption for the $k$ samples, with equal means and variance.
   *
-  * __Exampel Usage__
+  * __Example Usage__
   *
   * The example is derived from the test case TestAnovaInference which is also derived from an
   * example in Wackerly on page 671.

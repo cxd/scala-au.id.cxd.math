@@ -34,6 +34,8 @@ lazy val commonSettings = Seq(
 
   resolvers += Opts.resolver.sonatypeReleases,
 
+  coverageEnabled := false,
+
   libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   libraryDependencies ++= Seq(
     //// scalax io
