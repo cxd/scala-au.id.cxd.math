@@ -41,19 +41,19 @@ class InvErf {
       0.00943887047, 1.00167406, 2.83297682
     )
 
-    val w = Math.log((1.0 - p) * (1.0 + p))
+    val w = -1.0 * Math.log((1.0 - p) * (1.0 + p))
     val result = if (w < 5) {
       val w1 = w - 2.5
       val n = lq.length - 1
-      (for (i <- 0 to n) yield i).map {
-        i => lq(i) * Math.pow(w, i)
-      }.reduce(_ + _)
+      (for (i <- 0 to n) yield i).foldLeft(0.0) {
+        (p1,i) => lq(i) + p1 * w1
+      }
     } else {
       val w1 = Math.sqrt(w) - 3
       val n = gq.length - 1
-      (for (i <- 0 to n) yield i).map {
-        i => gq(i) * Math.pow(w, i)
-      }.reduce(_ + _)
+      (for (i <- 0 to n) yield i).foldLeft(0.0) {
+        (p1,i) => gq(i) + p1*w1
+      }
     }
     p * result
   }
