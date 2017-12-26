@@ -1,7 +1,7 @@
 package au.id.cxd.math.probability.continuous
 
 import au.id.cxd.math.function.approximate.NumericIntegral
-import au.id.cxd.math.function.gamma.{Erfc, InvErfc}
+import au.id.cxd.math.function.gamma.{Erfc, InvErf, InvErfc}
 import breeze.linalg.{max, min}
 
 import scala.math._
@@ -25,8 +25,10 @@ import scala.math._
   */
 class Normal(mu: Double, varianceVal: Double) extends ContinuousDistribution {
 
+  val sigma = Math.sqrt(varianceVal)
+
   def pdf(y: Double): Double = {
-    (1 / sqrt(variance * 2.0 * Pi)) * exp(-1.0 * pow(y - mu, 2.0) / (2.0 * variance))
+    (1 / sigma*sqrt(2.0 * Pi)) * exp(-1.0 * pow(y - mu, 2.0) / (2.0 * varianceVal))
   }
 
   def mean(): Double = mu
@@ -43,7 +45,7 @@ class Normal(mu: Double, varianceVal: Double) extends ContinuousDistribution {
     * @return
     */
   override def cdf(y:Double):Double =
-    1.0/2.0 * Erfc (-1/Math.sqrt(2) *((y-mean)/Math.sqrt(variance)) )
+    1.0/2.0 * Erfc (-1/Math.sqrt(2) *((y-mean)/sigma) )
 
   /**
     * the normal quantile function given as
@@ -53,8 +55,9 @@ class Normal(mu: Double, varianceVal: Double) extends ContinuousDistribution {
     * @param p
     * @return
     */
-  override def invcdf(p: Double): Double =
-    -Math.sqrt(2.0) * InvErfc(2 * p)
+  override def invcdf(p: Double): Double = {
+      mu + sigma * -1.0*Math.sqrt(2) * InvErfc(2.0*p)
+  }
 
 
 }

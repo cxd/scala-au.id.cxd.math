@@ -32,27 +32,33 @@ package au.id.cxd.math.function.gamma
   * Similarly the paper "Approximating the erfinv function" by Mike Giles is also cited in the resources that I've found so far.
   * https://people.maths.ox.ac.uk/gilesm/files/gems_erfinv.pdf
   *
+  * In relation to the Giles article the tensor flow library references this directly.
+  * https://github.com/tensorflow/tensorflow/blob/d27f758308d475ebd76cdfec85dbca12a32cfc3f/tensorflow/compiler/xla/service/elemental_ir_emitter.cc#L318
+  *
+  * The implementation is based upon this approximation.
+  *
   * Both of the latter will be of use in determining the methodology available for the implementation.
   */
 class InvErfc {
 
   /**
-    * Pseudo code to compute y = erfinv(x) with p_n(t)
+    * an example of the method as described in numeric recipes, this method is unused but provided for reference.
+    *
     * @param p
     * @return
     */
-  def inverfc(p:Double):Double = {
+  def numeric_recipes_inverfc(p: Double): Double = {
     if (p >= 2.0) -100.0
     else if (p <= 0.0) 100.0
     else {
       val pp = if (p < 1.0) p
-               else 2.0 - p
-      val t = Math.sqrt(-2.0 * Math.log(pp/2.0))
-      val x = -0.70711 * ((2.30753+t * 0.27601)/(1.0+t*(0.99229 + t*0.04481)) - 1)
+      else 2.0 - p
+      val t = Math.sqrt(-2.0 * Math.log(pp / 2.0))
+      val x = -0.70711 * ((2.30753 + t * 0.27601) / (1.0 + t * (0.99229 + t * 0.04481)) - 1)
       val result = (for (j <- 0 to 2) yield j).foldLeft(x) {
         (x1, j) => {
           val err = Erfc(x) - pp
-          x1 + err / (1.12837916709551257*Math.exp(-Math.sqrt(x)) - x*err)
+          x1 + err / (1.12837916709551257 * Math.exp(-Math.sqrt(x)) - x * err)
         }
       }
       if (p < 1.0) result
@@ -60,8 +66,12 @@ class InvErfc {
     }
   }
 
+
+
+  def inverfc(p: Double): Double = InvErf(1.0 - p)
+
 }
 
 object InvErfc {
-  def apply(p:Double):Double = new InvErfc().inverfc(p)
+  def apply(p: Double): Double = new InvErfc().inverfc(p)
 }
