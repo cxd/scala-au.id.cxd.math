@@ -23,7 +23,8 @@ This library is a hobby project, and is only occasionally worked on. It serves s
 Part of this is experimenting with library design, or to simply attempt an implementation of an algorithm in order to get to grips with the mechanics behind it. Alot of it is reading, reading other material, attempting to unravel and capture some form of it. 
 
  The library will change over time, and progress will be limited by other activities. This library is not intended as a stable production library, and is experimental in nature.
-Documentation.
+
+### Documentation.
 
 The documentation consists both of [API documentation](http://cxd.github.io/scala-au.id.cxd.math/latest/math/api/index.html) and some of this information is extracted into separate notes and examples.
 

@@ -27,7 +27,7 @@ class InverseBeta {
     * @param Ptol
     * @return
     */
-  /**
+
   protected def bisect(x: Double, P: Double, fn: (Int, Double) => Double, xtol: Double, Ptol: Double, n:Int, maxN:Int) = {
 
     @tailrec def inner(x0: Double, x1: Double, xNew: Double, n:Int, maxN:Int): Double = {
@@ -52,7 +52,7 @@ class InverseBeta {
 
     inner(0, 1, x, n, maxN)
   }
-**/
+
 
   /**
     * lower limit for parameters
@@ -83,7 +83,7 @@ class InverseBeta {
         val lg_b = LogGammaFn(b)._1
         val lx = (Math.log(a) + lg_a + lg_b - lg_ab + Math.log(P)) / a
         if (lx <= 0) {
-          val temp = Math.exp(lx) * Math.pow(1 - Math.exp(lx), -(b - 1) / 1)
+          val temp = Math.exp(lx) * Math.pow(1 - Math.exp(lx), -(b - 1) / a)
           if (temp > mean) mean
           else temp
         } else mean

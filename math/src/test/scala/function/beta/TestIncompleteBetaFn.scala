@@ -10,15 +10,20 @@ class TestIncompleteBetaFn extends FlatSpec with ShouldMatchers {
     // x, alpha, beta note the gsl method order is a, b, x instead
     val fn = IncompleteBetaFn(_,_,_)
 
-    val results = List(0.0,
+    val results = List(
+      0.0,
       1.0,
       1.0,
-      0.5)
+      0.5,
+      0.9330329915368074160)
 
-    val test = List(fn(0.0,1.0,1.0),
+    val test = List(
+
+      fn(0.0,1.0,1.0),
       fn(1.0,1.0,1.0),
       fn(1.0, 0.1, 0.1),
-      fn(0.5, 1.0, 1.0))
+      fn(0.5, 1.0, 1.0),
+      fn(0.5, 0.1, 1.0))
 
     val pairs = results.zip(test)
 

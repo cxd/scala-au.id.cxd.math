@@ -22,7 +22,7 @@ class TestBeta extends FlatSpec with ShouldMatchers {
     pairs.foreach(p => println(s"${p._1} ~ ${p._2}"))
 
     pairs.forall {
-      p => Math.abs(p._1 - p._2) < 0.1
+      p => Math.abs(p._1 - p._2) < 0.01
     } should be (true)
   }
 }

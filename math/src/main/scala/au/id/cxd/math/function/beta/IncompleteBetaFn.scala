@@ -91,7 +91,7 @@ class IncompleteBetaFn {
 
   /**
     * This implementation of the incomplete beta function is
-    * a copy of the GSL implementation in beta_inc.c line 107
+    * a copy of the GSL implementation in special/beta_inc.c line 107
     * @param x
     * @param a
     * @param b
@@ -122,12 +122,12 @@ class IncompleteBetaFn {
       /* Apply continued fraction directly. */
       // note the log beta function is used in the GSL, we may need to add a custom implementation of log beta.
       // for now am just using the log of the current beta implementation
-      val ln_beta = Math.log(BetaFn(a)(b))
+      val ln_beta = LogBetaFn(a, b)
 
       // log beta
       //val ln_beta = LogGammaFn(a+b)._1 - LogGammaFn(a)._1 - LogGammaFn(b)._1 +a*Math.log(x)+b*Math.log(1.0-x)
 
-      // In the method gsl_sf_log_1plusx_e is used instead of below.
+      // In the method gsl_sf_log_1plusx_e(-x) is used instead of below.
       val ln_1mx = Math.log(1.0-x)
       val ln_x = Math.log(x)
 
@@ -143,7 +143,7 @@ class IncompleteBetaFn {
         val cf = beta_cont_frac(b,a,1.0-x)
         val term = prefactor * cf / b
 
-        term
+        1.0 - term
       }
     }
 
