@@ -252,21 +252,21 @@ val pillai = Manova(groups, data, alpha=0.05, method=PillaisTrace())
 val roys = Manova(groups, data, alpha=0.05, method=RoysLargestRoot())
 val lawley = Manova(groups, data, alpha=0.05, method=LawesHotellingTrace())
 </code></pre>
-<pre><code>## Dec 24, 2017 6:05:03 PM com.github.fommil.jni.JniLoader liberalLoad
-## INFO: successfully loaded /var/folders/tl/0t3p809x4gq1zz3g08wnrgm80000gn/T/jniloader7324071039888269893netlib-native_system-osx-x86_64.jnilib
-## Dec 24, 2017 6:05:04 PM com.github.fommil.jni.JniLoader load
+<pre><code>## Dec 26, 2017 3:50:34 PM com.github.fommil.jni.JniLoader liberalLoad
+## INFO: successfully loaded /var/folders/tl/0t3p809x4gq1zz3g08wnrgm80000gn/T/jniloader6058291189336212031netlib-native_system-osx-x86_64.jnilib
+## Dec 26, 2017 3:50:35 PM com.github.fommil.jni.JniLoader load
 ## INFO: already loaded netlib-native_system-osx-x86_64.jnilib
-## [1] &quot;Java-Object{\nManova Test at alpha = 0.05\n\nReject null hypothesis? true\nCritical Value: 1.0000000000000007\nPr(&gt;F): Infinity\n\nTest Assertion: 113.59875718962388 &gt; 1.0000000000000007 is true\nConclusion: Sample groups do not share the same mean and common variance.\n\n\nManova  method Lawes Hotelling Trace\nStatistic: 65.43288414122335\nDf1: 36\nDf2: 250\nF-Statistic: 113.59875718962388\n\n     \n     }&quot;</code></pre>
+## [1] &quot;Java-Object{\nManova Test at alpha = 0.05\n\nReject null hypothesis? true\nCritical Value: 1.4644186384340279\nPr(&gt;F): 1.7066353968455592E-134\n\nTest Assertion: 113.59875718962388 &gt; 1.4644186384340279 is true\nConclusion: Sample groups do not share the same mean and common variance.\n\n\nManova  method Lawes Hotelling Trace\nStatistic: 65.43288414122335\nDf1: 36\nDf2: 250\nF-Statistic: 113.59875718962388\n\n     \n     }&quot;</code></pre>
 <p>We can inspect the result from the use of the Wilks lambda statistic.</p>
 <pre class="scalainr"><code>println(wilks.toString)</code></pre>
 <pre><code>## 
 ## Manova Test at alpha = 0.05
 ## 
 ## Reject null hypothesis? true
-## Critical Value: 1.4656931809598688
-## Pr(&gt;F): 9.606411163825983E-48
+## Critical Value: 1.46619122353599
+## Pr(&gt;F): 9.635566919974791E-48
 ## 
-## Test Assertion: 16.902075964694387 &gt; 1.4656931809598688 is true
+## Test Assertion: 16.902075964694387 &gt; 1.46619122353599 is true
 ## Conclusion: Sample groups do not share the same mean and common variance.
 ## 
 ## 
@@ -288,10 +288,10 @@ List(pillai, roys, lawley).foreach(println)
 ## Manova Test at alpha = 0.05
 ## 
 ## Reject null hypothesis? true
-## Critical Value: 1.0000000000000004
-## Pr(&gt;F): Infinity
+## Critical Value: 1.461228693620514
+## Pr(&gt;F): 8.304601451443555E-12
 ## 
-## Test Assertion: 4.125808635267817 &gt; 1.0000000000000004 is true
+## Test Assertion: 4.125808635267817 &gt; 1.461228693620514 is true
 ## Conclusion: Sample groups do not share the same mean and common variance.
 ## 
 ## 
@@ -307,10 +307,10 @@ List(pillai, roys, lawley).foreach(println)
 ## Manova Test at alpha = 0.05
 ## 
 ## Reject null hypothesis? true
-## Critical Value: 2.033535571100148
-## Pr(&gt;F): 5.007539592719541E-51
+## Critical Value: 2.034773788681919
+## Pr(&gt;F): 5.02211267089925E-51
 ## 
-## Test Assertion: 388.73803467378525 &gt; 2.033535571100148 is true
+## Test Assertion: 388.73803467378525 &gt; 2.034773788681919 is true
 ## Conclusion: Sample groups do not share the same mean and common variance.
 ## 
 ## 
@@ -326,10 +326,10 @@ List(pillai, roys, lawley).foreach(println)
 ## Manova Test at alpha = 0.05
 ## 
 ## Reject null hypothesis? true
-## Critical Value: 1.0000000000000007
-## Pr(&gt;F): Infinity
+## Critical Value: 1.4644186384340279
+## Pr(&gt;F): 1.7066353968455592E-134
 ## 
-## Test Assertion: 113.59875718962388 &gt; 1.0000000000000007 is true
+## Test Assertion: 113.59875718962388 &gt; 1.4644186384340279 is true
 ## Conclusion: Sample groups do not share the same mean and common variance.
 ## 
 ## 
@@ -373,10 +373,10 @@ List(result1,
 ## Manova Test at alpha = 0.05
 ## 
 ## Reject null hypothesis? false
-## Critical Value: 2.4256415933777498
-## Pr(&gt;F): 1.2959496049675805E-4
+## Critical Value: 2.4270401198339058
+## Pr(&gt;F): 1.2987865899826413E-4
 ## 
-## Test Assertion: 0.017694114587385505 &gt; 2.4256415933777498 is false
+## Test Assertion: 0.017694114587385505 &gt; 2.4270401198339058 is false
 ## Conclusion: Sample groups are normally distributed with same mean and share common variance.
 ## 
 ## 
@@ -392,10 +392,10 @@ List(result1,
 ## Manova Test at alpha = 0.05
 ## 
 ## Reject null hypothesis? false
-## Critical Value: 2.4308305680993763
-## Pr(&gt;F): 1.226730005748888E-4
+## Critical Value: 2.4322364718609233
+## Pr(&gt;F): 1.22941670606508E-4
 ## 
-## Test Assertion: 0.017291975619490346 &gt; 2.4308305680993763 is false
+## Test Assertion: 0.017291975619490346 &gt; 2.4322364718609233 is false
 ## Conclusion: Sample groups are normally distributed with same mean and share common variance.
 ## 
 ## 
@@ -411,10 +411,10 @@ List(result1,
 ## Manova Test at alpha = 0.05
 ## 
 ## Reject null hypothesis? false
-## Critical Value: 2.4420070479238967
-## Pr(&gt;F): 1.0302303168829936E-4
+## Critical Value: 2.4434286000950447
+## Pr(&gt;F): 1.0324884387295319E-4
 ## 
-## Test Assertion: 0.016085558715804974 &gt; 2.4420070479238967 is false
+## Test Assertion: 0.016085558715804974 &gt; 2.4434286000950447 is false
 ## Conclusion: Sample groups are normally distributed with same mean and share common variance.
 ## 
 ## 
@@ -430,10 +430,10 @@ List(result1,
 ## Manova Test at alpha = 0.05
 ## 
 ## Reject null hypothesis? false
-## Critical Value: 2.5928435744916833
-## Pr(&gt;F): 9.038895342517982E-4
+## Critical Value: 2.594263371345759
+## Pr(&gt;F): 9.056295813026685E-4
 ## 
-## Test Assertion: 0.021112295814494027 &gt; 2.5928435744916833 is false
+## Test Assertion: 0.021112295814494027 &gt; 2.594263371345759 is false
 ## Conclusion: Sample groups are normally distributed with same mean and share common variance.
 ## 
 ## 
