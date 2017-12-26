@@ -26,6 +26,7 @@ object Constants {
 
   val LN_PI:Double = 1.14472988584940017414342735135
 
+  val SQRT_PI:Double = 1.77245385090551602729816748334
   /**
     * Euler's constant
     */
