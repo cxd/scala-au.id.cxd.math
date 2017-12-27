@@ -139,7 +139,7 @@ class Erfc {
 
   def erfc8(x:Double) = {
     val e = erfc8_sum(x)
-    Math.log(e) - x*x
+    e * Math.exp(-x*x)
   }
 
   def erfc(x:Double) = {
@@ -155,7 +155,7 @@ class Erfc {
     } else if (ax < 10.0) {
       val exterm = Math.exp(-x*x)/ax
       val t = (2.0*ax - 15.0)/5.0
-      val temp = erfc_x510.op(x)._1
+      val temp = erfc_x510.op(t)._1
       exterm * temp
     }  else {
       erfc8(ax)

@@ -43,9 +43,9 @@ class Chebyshev(val coeffs: List[Double], val a: Double, b: Double) {
     */
 
   def op(x: Double) = {
-    val y = 2.0 * (x - a - b) / (b - a)
+    val y = (2.0 * x - a - b) / (b - a)
     val y2 = 2.0 * y
-    val d = coeffs.tail.foldLeft(0.0, 0.0) {
+    val d = coeffs.tail.reverse.foldLeft(0.0, 0.0) {
       (accum, c) => {
         val temp = accum._1
         val d1 = y2 * accum._1 - accum._2 + c
