@@ -51,11 +51,11 @@ class InverseGamma {
     * @param b
     * @return
     */
-  private def lagrangeInterpolate(x: Double, p: Double, a: Double, b: Double): Double = {
+  private def lagrangeInterpolate(x: Double, p: Double, a: Double, b: Double, fnDP:Double => Double, fnPhi:Double => Double): Double = {
 
     @tailrec def inner(n: Double, x: Double): Double = {
-      val dP = p - gammacdf(x, a, 1.0)
-      val phi = gammapdf(x, a, 1.0)
+      val dP = fnDP(x)
+      val phi = fnPhi(x)
       if (dP == 0.0 || n + 1 > 32) x
       else {
         val lambda = dP / List[Double](2 * Math.abs(dP / x), phi).max
@@ -75,23 +75,40 @@ class InverseGamma {
     b * x1
   }
 
+  /**
+    * gamma p inverse
+    * @param p
+    * @param a
+    * @param b
+    */
   def gammaPinv(p: Double, a: Double, b: Double) = {
+
+    def dP(x:Double) = p - gammacdf(x, a, 1.0)
+
+    def phi(x:Double) = gammapdf(x, a, 1.0)
+
     if (p == 1.0) Double.MaxValue
     else if (p == 0.0) 0.0
     else if (p < 0.05) {
       val x = Math.exp((LogGammaFn(a)._1 + Math.log(p)) / a)
-      lagrangeInterpolate(x, p, a, b)
+      lagrangeInterpolate(x, p, a, b, dP, phi)
     } else if (p > 0.95) {
       val x = -Math.log(1 - p) + LogGammaFn(a)._1
-      lagrangeInterpolate(x, p, a, b)
+      lagrangeInterpolate(x, p, a, b, dP, phi)
     } else {
       // we take gsl_cdf_ugaussian_Pinv to be the lower invcdf of the standard normal distribution
       val norm = Normal(0.0)(1.0)
       val xg = norm.invcdf(p)
       val x = if (xg < -0.5 * Math.sqrt(a)) a
       else Math.sqrt(a) * xg + a
-      lagrangeInterpolate(x, p, a, b)
+      lagrangeInterpolate(x, p, a, b, dP, phi)
     }
+  }
+
+  def gammaQinv(p:Double, a:Double, b:Double) = {
+
+
+
   }
 
 }
