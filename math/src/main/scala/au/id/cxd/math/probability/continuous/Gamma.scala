@@ -1,7 +1,7 @@
 package au.id.cxd.math.probability.continuous
 
 import au.id.cxd.math.count.Factorial
-import au.id.cxd.math.function.gamma.{GammaFn, InverseGamma}
+import au.id.cxd.math.function.gamma.{GammaFn, IncompleteGamma, InverseGamma}
 import breeze.numerics.{gammp, gammq}
 
 import scala.math._
@@ -74,7 +74,7 @@ class Gamma(alpha: Double, beta: Double) extends ContinuousDistribution {
     * @param y
     */
   override def cdf(y:Double) = {
-    ( 1.0 / GammaFn(y) ) * gammq (alpha, beta*y)
+    ( 1.0 / GammaFn(y) ) * IncompleteGamma.Q (alpha, beta*y)
   }
 
   override def invcdf(p: Double): Double = {

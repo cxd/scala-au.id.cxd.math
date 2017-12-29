@@ -31,7 +31,7 @@ trait Distribution {
   def mean(): Double
 
   /**
-    * variance for the distribution $\sigma^2$
+    * variance for the distribution $\sigma&#94;2$
     * @return
     */
   def variance(): Double
