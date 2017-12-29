@@ -1,5 +1,7 @@
 package au.id.cxd.math.function.approximate
 
+import au.id.cxd.math.function.Constants
+
 import scala.annotation.tailrec
 
 
@@ -16,6 +18,7 @@ import scala.annotation.tailrec
   */
 class ContinuedFractionLentz(afn: (Double, Double, Double, Double) => Double, bfn: (Double, Double, Double, Double) => Double, maxN: Double) {
 
+  private val small = Constants.DBL_EPSILON*Constants.DBL_EPSILON*Constants.DBL_EPSILON
   /**
     * tail recursive evaluation of the continued fraction around the point x
     * using the modified Lentz algorithm identified p 208 or numerical recipes.
@@ -35,16 +38,16 @@ class ContinuedFractionLentz(afn: (Double, Double, Double, Double) => Double, bf
       val b = bfn(n, x, a0, b0)
       val d = b + a * d0
       val dj =
-        if (d == 0.0) Double.MinValue
+        if (Math.abs(d) < small) small
         else d
-      val c = b0 + a0 / c0
+      val c = b + a / c0
       val cj =
-        if (c == 0.0) Double.MinValue
+        if (Math.abs(c) < small) small
         else c
       val d1 = 1.0 / dj
       val deltaj = cj * d1
       val fj = f0 * deltaj
-      if (Math.abs(deltaj - 1.0) < Math.E) fj
+      if (Math.abs(deltaj - 1.0) < Constants.DBL_EPSILON) fj
       else continue(n+1.0, x, fj, a, b, cj, d1)
     }
   }
@@ -52,12 +55,20 @@ class ContinuedFractionLentz(afn: (Double, Double, Double, Double) => Double, bf
   def op(x:Double) = {
     // initial values
     val a0 = afn(0,x,0,0)
-    val b0 = afn(0,x,0,0)
+    val b0 = bfn(0,x,0,0)
     val f0 = b0
     val c0 = f0
     val d0 = 0.0
-    continue(1.0, x, f0, a0, b0, c0, d0)
+    continue(2.0, x, f0, a0, b0, c0, d0)
   }
+
+  def op(x:Double, c0:Double, d0:Double, f0:Double) = {
+    // initial values
+    val a0 = afn(0,x,0,0)
+    val b0 = afn(0,x,0,0)
+    continue(2.0, x, f0, a0, b0, c0, d0)
+  }
+
 
 }
 object ContinuedFractionLentz {
@@ -66,5 +77,9 @@ object ContinuedFractionLentz {
   }
   def apply(x:Double, afn: (Double, Double, Double,Double) => Double, bfn: (Double, Double, Double,Double) => Double, maxN: Double) = {
     new ContinuedFractionLentz(afn, bfn, maxN).op(x)
+  }
+
+  def apply(x:Double, c1:Double, d1:Double, f1:Double, afn: (Double, Double, Double,Double) => Double, bfn: (Double, Double, Double,Double) => Double, maxN: Double) = {
+    new ContinuedFractionLentz(afn, bfn, maxN).op(x, c1, d1, f1)
   }
 }
