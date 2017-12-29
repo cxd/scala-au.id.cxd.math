@@ -21,12 +21,14 @@ class TestLoggamma extends FlatSpec with ShouldMatchers {
       (0.61, 0.383008),
       (0.71, 0.248808),
       (0.81, 0.142524),
-      (0.91, 0.0589226)
+      (0.91, 0.0589226),
+      (0.7, 0.26086724653166651439),
+      (0.1,2.2527126517342059599)
     )
     val lngamma = results.map { pair =>
       val test = LogGammaFn(pair._1)
-      println(s"LogGamma[${pair._1}] = $test ~ ${pair._2}")
-      (test._1 >= pair._2 - 0.00001 && test._1 <= pair._2 + 0.00001) should be (true)
+      println(s"LogGamma[${pair._1}] = ${pair._2} ~ ${test._1}")
+      Math.abs(test._1 - pair._2) < 0.001 should be (true)
     }
 
   }

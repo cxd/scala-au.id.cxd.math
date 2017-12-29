@@ -75,7 +75,7 @@ class IncompleteGamma extends ContinuedSeries {
     // bn defaults to 1.0 in this function
     def bFn(n: Double, x: Double, aj: Double, bj: Double) = 1.0
     // calculate continued fraction with initial values.
-    ContinuedFractionLentz(x, 1.0/small, 1.0, 1.0, aFn, bFn, nmax)
+    ContinuedFractionLentz(x, 1.0 / small, 1.0, 1.0, aFn, bFn, nmax)
   }
 
   /**
@@ -105,23 +105,24 @@ class IncompleteGamma extends ContinuedSeries {
       val nlow = if (x > a) {
         x - a
       } else 0.0
-      val result1 = (for (i <- 1 to nlow.toInt) yield i).foldLeft((1.0, 1.0, 1.0)) {
+      val result1 = (for (i <- 1 until nlow.toInt) yield i).foldLeft((1.0, 1.0, 1.0)) {
         (accum, i) => {
           val term = (x / (a + i)) * accum._2
           (i, term, accum._3 + term)
         }
       }
-      val n1 = result1._1
+      val n1 = if (nlow <= 1.0) 1.0
+      else result1._1 + 1.0
       val term = result1._2
       val sum = result1._3
 
-      val result2 = (for (j<-n1.toInt to nmax) yield j).foldLeft((n1,term, sum, false)) {
+      val result2 = (for (j <- n1.toInt until nmax) yield j).foldLeft((n1, term, sum, false)) {
         (accum, j) => {
           if (accum._4) accum
           else {
-            val term = (x/(a+j))*accum._2
+            val term = (x / (a + j)) * accum._2
             val sum = accum._3 + term
-            if (Math.abs(term/sum) < Constants.DBL_EPSILON) (j,term,sum, true)
+            if (Math.abs(term / sum) < Constants.DBL_EPSILON) (j, term, sum, true)
             else (j, term, sum, false)
           }
 
@@ -191,7 +192,7 @@ class IncompleteGamma extends ContinuedSeries {
     val term = 1.0
     val last = 1.0
     val D = gamma_inc_D(a, x)
-    val (sumA, termA, lastA, flagA) = (for (n <- 1 to nmax) yield n)
+    val (sumA, termA, lastA, flagA) = (for (n <- 1 until nmax) yield n)
       .foldLeft((1.0, 1.0, 1.0, false)) {
         (accum, n) => {
           val (sum, term, last, flag) = accum
@@ -225,77 +226,73 @@ class IncompleteGamma extends ContinuedSeries {
     // polygamma 2,1
     val pg21 = -2.404113806319188570799476
     val lnx = Math.log(x)
-    val el = Constants.EULER * lnx
+    val el = Constants.EULER + lnx
     val c1 = -el
     val c2 = Math.PI * Math.PI / 12.0 - 0.5 * el * el
     val c3 = el * (Math.PI * Math.PI / 12.0 - el * el / 6.0) + pg21 / 6.0
-    val c4 = -0.04166666666666666667 * poly(List(-1.758243446661483480,
-      -0.764428657272716373,
-      0.723980571623507657,
-      4.107554191916823640, 1.0), lnx)
-    val c5 = -0.0083333333333333333 * poly(List(
-      -2.06563396085715900,
-      -1.28459889470864700,
-      -0.27583535756454143,
-      1.33677371336239618,
-      5.17537282427561550,
-      1.0
-    ), lnx)
-    val c6 = -0.0013888888888888889 * poly(List(
-      -2.30814336454783200,
-      -1.65846557706987300,
-      -0.88768082560020400,
-      0.17043847751371778,
-      1.92135970115863890,
-      6.22578557795474900,
-      1.0
-    ), lnx)
-    val c7 = -0.00019841269841269841 * poly(List(
-      -2.5078657901291800,
-      -1.9478900888958200,
-      -1.3194837322612730,
-      -0.5281322700249279,
-      0.5913834939078759,
-      2.4876819633378140,
-      7.2648160783762400,
-      1.0
-    ), lnx)
-    val c8 = -0.00002480158730158730 * poly(List(
-      -2.677341544966400,
-      -2.182810448271700,
-      -1.649350342277400,
-      -1.014099048290790,
-      -0.191366955370652,
-      0.995403817918724,
-      3.041323283529310,
-      8.295966556941250,
-      1.0
-    ), lnx)
-    val c9 = -2.75573192239859e-6 * poly(List(
-      -2.8243487670469080,
-      -2.3798494322701120,
-      -1.9143674728689960,
-      -1.3814529102920370,
-      -0.7294312810261694,
-      0.1299079285269565,
-      1.3873333251885240,
-      3.5857258865210760,
-      9.3214237073814600,
-      1.0
-    ), lnx)
-    val c10 = -2.75573192239859e-7 * poly(List(
-      -2.9540329644556910,
-      -2.5491366926991850,
-      -2.1348279229279880,
-      -1.6741881076349450,
-      -1.1325949616098420,
-      -0.4590034650618494,
-      0.4399352987435699,
-      1.7702236517651670,
-      4.1231539047474080,
-      10.342627908148680,
-      1.0
-    ), lnx)
+    val c4 = -0.04166666666666666667 *
+      (-1.758243446661483480 + lnx) *
+      (-0.764428657272716373 + lnx) *
+      (0.723980571623507657 + lnx) *
+      (4.107554191916823640 + lnx)
+
+    val c5 = -0.0083333333333333333 *
+      (-2.06563396085715900 + lnx) *
+      (-1.28459889470864700 + lnx) *
+      (-0.27583535756454143 + lnx) *
+      (1.33677371336239618 + lnx) *
+      (5.17537282427561550 + lnx)
+
+    val c6 = -0.0013888888888888889 *
+      (-2.30814336454783200 + lnx) *
+      (-1.65846557706987300 + lnx) *
+      (-0.88768082560020400 + lnx) *
+      (0.17043847751371778 + lnx) *
+      (1.92135970115863890 + lnx) *
+      (6.22578557795474900 + lnx)
+
+    val c7 = -0.00019841269841269841 *
+      (-2.5078657901291800 + lnx) *
+      (-1.9478900888958200 + lnx) *
+      (-1.3194837322612730 + lnx) *
+      (-0.5281322700249279 + lnx) *
+      (0.5913834939078759 + lnx) *
+      (2.4876819633378140 + lnx) *
+      (7.2648160783762400 + lnx)
+
+    val c8 = -0.00002480158730158730 *
+      (-2.677341544966400 + lnx) *
+      (-2.182810448271700 + lnx) *
+      (-1.649350342277400 + lnx) *
+        (-1.014099048290790 + lnx) *
+        (-0.191366955370652 + lnx) *
+      (0.995403817918724 + lnx) *
+      (3.041323283529310 + lnx) *
+      (8.295966556941250 + lnx)
+
+    val c9 = -2.75573192239859e-6 *
+      (-2.8243487670469080 + lnx) *
+      (-2.3798494322701120 + lnx) *
+      (-1.9143674728689960 + lnx) *
+      (-1.3814529102920370 + lnx) *
+      (-0.7294312810261694 + lnx) *
+      (0.1299079285269565 + lnx) *
+      (1.3873333251885240 + lnx) *
+      (3.5857258865210760 + lnx) *
+      (9.3214237073814600 + lnx)
+
+    val c10 = -2.75573192239859e-7 *
+      (-2.9540329644556910 + lnx) *
+      (-2.5491366926991850 + lnx) *
+      (-2.1348279229279880 + lnx) *
+      (-1.6741881076349450 + lnx) *
+      (-1.1325949616098420 + lnx) *
+      (-0.4590034650618494 + lnx) *
+      (0.4399352987435699 + lnx) *
+      (1.7702236517651670 + lnx) *
+      (4.1231539047474080 + lnx) *
+      (10.342627908148680 + lnx)
+
     val term1 = a * poly(List(c1, c2, c3, c4, c5, c6, c7, 8, c9, 10), a)
     val nmax = 5000
     val (t1, sum1, flag1) = (for (n <- 1 to nmax) yield n)
@@ -312,7 +309,7 @@ class IncompleteGamma extends ContinuedSeries {
           }
         }
       }
-    val term2 = (1.0 - term1) * a / (a + 1.0) + x * sum1
+    val term2 = (1.0 - term1) * a / (a + 1.0) * x * sum1
     term1 + term2
   }
 
@@ -429,8 +426,8 @@ object IncompleteGamma {
     new IncompleteGamma().gammaincQ(a, x)
   else new IncompleteGamma().gammaincP(a, x)
 
-  def P(a:Double, x:Double) = new IncompleteGamma().gammaincP(a,x)
+  def P(a: Double, x: Double) = new IncompleteGamma().gammaincP(a, x)
 
-  def Q(a:Double, x:Double) = new IncompleteGamma().gammaincQ(a,x)
+  def Q(a: Double, x: Double) = new IncompleteGamma().gammaincQ(a, x)
 
 }

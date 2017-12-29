@@ -6,7 +6,11 @@ import org.scalatest.{FlatSpec, Matchers}
 class TestIncompleteGamma extends FlatSpec with Matchers {
 
   def evaluate(fn:(Double, Double) => Double, params:List[(Double,Double)], results:List[Double], threshold:Double) = {
-    val output = params.map { pair => fn(pair._1, pair._2)}
+    val output = params.map { pair => {
+      // allow break point
+      val result = fn(pair._1, pair._2)
+      result
+    }}
     val tests = results.zip(output)
     tests.foreach {
       pair => println(s"${pair._1} ~ ${pair._2}")
@@ -16,6 +20,17 @@ class TestIncompleteGamma extends FlatSpec with Matchers {
     }
   }
 
+  "Incomplete Gamma P" should "work for focus test cases" in {
+    val fn = IncompleteGamma.P(_,_)
+    val params = List[(Double,Double)](
+      (0.001, 1.0)
+     )
+    val results = List[Double](
+      0.9997803916424144436
+     )
+    println("Incomplete Gamma P")
+    evaluate(fn, params, results, 0.1) should be (true)
+  }
 
   "Incomplete Gamma P" should "agree with GSL gamma_inc_P" in {
     val fn = IncompleteGamma.P(_,_)
