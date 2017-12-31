@@ -74,7 +74,7 @@ class InverseGamma {
   }
 
 
-  def ratEval (x:Double, a:List[Double], b:List[Double]) = {
+  private def ratEval (x:Double, a:List[Double], b:List[Double]) = {
     var u = a(a.length - 1)
     for (i <- a.length - 1 to 1 by -1) yield {
       u = x * u + a(i-1)
