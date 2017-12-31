@@ -1,5 +1,7 @@
 package au.id.cxd.math.function.series
 
+import scala.annotation.tailrec
+
 trait ContinuedSeries {
 
   /**
@@ -21,5 +23,8 @@ trait ContinuedSeries {
     case c :: Nil => c
     case (c :: cs) => c + e * poly(cs, e)
   }
+
+
+
 
 }

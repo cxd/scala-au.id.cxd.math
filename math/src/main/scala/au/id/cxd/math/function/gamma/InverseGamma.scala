@@ -30,6 +30,27 @@ class InverseGamma {
   }
 
   /**
+    * copy of gsl_ran_gamma_pdf line 131 randist/gamma.c
+    * @param x
+    * @param a
+    * @param b
+    * @return
+    */
+  private def ran_gammapdf(x:Double, a:Double, b:Double) :Double = {
+    if (x < 0) 0.0
+    else if (x == 0.0) {
+      if (a == 1.0) 1.0/b
+      else 0.0
+    } else if (a == 1.0) {
+      Math.exp(-x/b)/b
+    } else {
+      val lng = LogGammaFn(a)._1
+      val p = Math.exp((a-1.0) * Math.log(x/b) - x/b - lng)/b
+      p
+    }
+  }
+
+  /**
     * * $$
     * P( < y) = \frac{1}{\Gamma(\alpha)}\gamma(\alpha, \beta y)
     * $$
@@ -45,12 +66,99 @@ class InverseGamma {
     else IncompleteGamma.P(alpha,y1)
   }
 
+  private def gammacdfQ(y:Double, a:Double, b:Double) = {
+    val y1 = y/b
+    if (y <= 0) 1.0
+    else if (y1 < a) 1 - IncompleteGamma.P(a, y1)
+    else IncompleteGamma.Q(a,y1)
+  }
+
+
+  def ratEval (x:Double, a:List[Double], b:List[Double]) = {
+    var u = a(a.length - 1)
+    for (i <- a.length - 1 to 1 by -1) yield {
+      u = x * u + a(i-1)
+    }
+    var v = b(b.length - 1)
+    for (j <- b.length - 1 to 1 by -1) yield {
+      v = x*v + b(j-1)
+    }
+    val r = u/v
+    r
+  }
+
+  private def smallrat_eval(q:Double) = {
+    val a = List[Double](
+      3.387132872796366608, 133.14166789178437745,
+      1971.5909503065514427, 13731.693765509461125,
+      45921.953931549871457, 67265.770927008700853,
+      33430.575583588128105, 2509.0809287301226727
+    )
+    val b = List[Double](
+      1.0, 42.313330701600911252,
+      687.1870074920579083, 5394.1960214247511077,
+      21213.794301586595867, 39307.89580009271061,
+      28729.085735721942674, 5226.495278852854561
+    )
+    val r = 0.180625 - q*q
+    val x = q * ratEval(r, a, b)
+    x
+  }
+
+  private def intermediate_rat_eval(q:Double) = {
+    val a = List[Double](
+      1.42343711074968357734, 4.6303378461565452959,
+      5.7694972214606914055, 3.64784832476320460504,
+      1.27045825245236838258, 0.24178072517745061177,
+      0.0227238449892691845833, 7.7454501427834140764e-4
+    )
+    val b = List[Double](
+      1.0, 2.05319162663775882187,
+      1.6763848301838038494, 0.68976733498510000455,
+      0.14810397642748007459, 0.0151986665636164571966,
+      5.475938084995344946e-4, 1.05075007164441684324e-9
+    )
+    val x = ratEval((q-1.6), a, b)
+    x
+  }
+
+  private def tail_rat_eval(q:Double) = {
+    val a = List[Double](
+      6.6579046435011037772, 5.4637849111641143699,
+      1.7848265399172913358, 0.29656057182850489123,
+      0.026532189526576123093, 0.0012426609473880784386,
+      2.71155556874348757815e-5, 2.01033439929228813265e-7
+    )
+    val b = List[Double](
+      1.0, 0.59983220655588793769,
+      0.13692988092273580531, 0.0148753612908506148525,
+      7.868691311456132591e-4, 1.8463183175100546818e-5,
+      1.4215117583164458887e-7, 2.04426310338993978564e-15
+    )
+    val x = ratEval((q-5.0), a, b)
+    x
+  }
+
   /**
     * approximate function for the inverse cdf of the standard normal distribution.
+    * implementation from the GSL gaussinv.c line 146
     * @param q
     */
   private def cdf_uguassian_Qinv(q:Double) = {
-
+    val dp = q - 0.5
+    if (q == 1.0) Double.NegativeInfinity
+    else if (q == 0.0) Double.PositiveInfinity
+    else if (Math.abs(dp) <= 0.425) {
+      val x = smallrat_eval(dp)
+      -x
+    } else {
+      val pp = if (q < 0.5) q else 1.0 - q
+      val r = Math.sqrt(-Math.log(pp))
+      val x = if (r <= 5.0) intermediate_rat_eval(r)
+      else tail_rat_eval(r)
+      if (q < 0.5) x
+      else -x
+    }
   }
 
   /**
@@ -98,7 +206,7 @@ class InverseGamma {
 
     def phi(x:Double) = gammapdf(x, a, 1.0)
 
-    if (p == 1.0) Double.MaxValue
+    if (p == 1.0) Double.PositiveInfinity
     else if (p == 0.0) 0.0
     else if (p < 0.05) {
       val x = Math.exp((LogGammaFn(a)._1 + Math.log(p)) / a)
@@ -116,10 +224,32 @@ class InverseGamma {
     }
   }
 
-  def gammaQinv(p:Double, a:Double, b:Double) = {
+  /**
+    * implementation of gsl_cdf_gamma_Qinv from gammainv.c line 119
+    * @param q
+    * @param a
+    * @param b
+    * @return
+    */
+  def gammaQinv(q:Double, a:Double, b:Double) = {
 
+    def dQ (x:Double) = -(q - gammacdfQ(x,a,1.0))
+    def dPhi (x:Double) = gammapdf(x,a,1.0)
 
-
+    if (q == 1.0) 0.0
+    else if (q == 0.0) Double.PositiveInfinity
+    else if (q < 0.05) {
+      val x = -Math.log(q) + LogGammaFn(a)._1
+      lagrangeInterpolate(x,q,a,b, dQ, dPhi)
+    } else if (q > 0.95) {
+      val x = Math.exp( (LogGammaFn(a)._1 + Math.log(1.0-q) ) / a)
+      lagrangeInterpolate(x,q,a,b, dQ, dPhi)
+    } else {
+      val xg = cdf_uguassian_Qinv(q)
+      val x0 = if (xg < -0.5 * Math.sqrt(a)) a
+      else Math.sqrt(a)*xg + a
+      lagrangeInterpolate(x0, q, a, b, dQ, dPhi)
+    }
   }
 
 }
