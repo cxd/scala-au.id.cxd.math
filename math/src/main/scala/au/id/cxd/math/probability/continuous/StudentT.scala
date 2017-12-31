@@ -36,10 +36,40 @@ class StudentT(val df: Double = 1.0, val mu: Double = 0.0, val sigma: Double = 1
     * @return
     */
   override def cdf(y: Double): Double = {
-    val x = df / (df + Math.sqrt((y-mu)/sigma))
-    val p = 0.5 * IncompleteBetaFn(x, 0.5*df, 0.5)
-    if (y >= mu) 1.0 - p
-    else p
+    val x2 = y*y
+    if (x2 < df) {
+      val u = x2/df
+      val eps = u / (1.0 + u)
+      if (y >= 0) {
+        val a = 0.5
+        val y1 = 0.5
+        val b = IncompleteBetaFn(eps, 0.5, df/2.0)
+        val p = a*b + y1
+        p
+      } else {
+        val a = -0.5
+        val y1 = 0.5
+        val b = IncompleteBetaFn(eps, 0.5, df/2.0)
+        val p = a*b + y1
+        p
+      }
+    } else {
+      val v = df / (y*y)
+      val eps = v / (1 + v)
+      if (y >= 0) {
+        val a = -0.5
+        val y1 = 1.0
+        val b = IncompleteBetaFn(eps, 0.5, df/2.0)
+        val p = a*b + y1
+        p
+      } else {
+        val a = 0.5
+        val y1 = 0.0
+        val b = IncompleteBetaFn(eps, 0.5, df/2.0)
+        val p = a*b + y1
+        p
+      }
+    }
   }
 
 
@@ -68,7 +98,7 @@ class StudentT(val df: Double = 1.0, val mu: Double = 0.0, val sigma: Double = 1
     */
   override def pdf(y: Double): Double = {
     val num = GammaFn(0.5*(df+1.0))
-    val den = GammaFn(0*5*df)*Math.sqrt(df*Math.PI)*sigma
+    val den = GammaFn(0.5*df)*Math.sqrt(df*Math.PI)*sigma
     val loc2 = (y - mu)/sigma*(y - mu)/sigma
     val right = Math.pow(1 + 1.0/df * loc2, -0.5*(df+1))
     num / den * right
