@@ -175,10 +175,10 @@ class MardiaTest(val alpha:Double) {
     val df = p*(p+1)*(p+2)/6.0
     val chisq = ChiSquare(df)
     val pVal_skew = chisq.pdf(z1)
-    val cVal_skew = chisq.invcdf(alpha)
+    val cVal_skew = chisq.invcdf(1.0 - alpha)
     val norm = Normal(0.0)(1.0)
     val pVal_kurt = norm.pdf(z2)
-    val cVal_kurt = norm.invcdf(alpha)
+    val cVal_kurt = norm.invcdf(1.0 - alpha/2.0)
     val stat = MardiaTestStatistic(
       skewness = b1,
       skewStat = z1,
