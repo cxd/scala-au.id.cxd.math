@@ -39,7 +39,18 @@ class InverseGamma {
     * @param y
     */
   private def gammacdf(y: Double, alpha: Double, beta: Double) = {
-    (1.0 / GammaFn(y)) * gammq(alpha, beta * y)
+    val y1 = y / beta
+    if (y1 <= 0.0) 0.0
+    else if (y1 > alpha) 1 - IncompleteGamma.Q(alpha,y1)
+    else IncompleteGamma.P(alpha,y1)
+  }
+
+  /**
+    * approximate function for the inverse cdf of the standard normal distribution.
+    * @param q
+    */
+  private def cdf_uguassian_Qinv(q:Double) = {
+
   }
 
   /**
@@ -116,4 +127,10 @@ class InverseGamma {
 object InverseGamma {
   def apply(p: Double, a: Double, b: Double) =
     new InverseGamma().gammaPinv(p, a, b)
+
+  def P(p:Double, a:Double, b:Double) =
+    new InverseGamma().gammaPinv(p,a,b)
+
+  def Q(p:Double, a:Double, b:Double) =
+    new InverseGamma().gammaQinv(p,a,b)
 }

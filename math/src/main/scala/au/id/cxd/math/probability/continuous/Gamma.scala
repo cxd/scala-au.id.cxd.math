@@ -54,8 +54,8 @@ class Gamma(alpha: Double, beta: Double) extends ContinuousDistribution {
     * @return
     */
   def pdf(y: Double): Double = {
-    val gamma = GammaFn(alpha)
-    ( pow(beta, alpha)/gamma ) * pow(y, alpha-1.0)*exp(-beta*y)
+    val gamma = GammaFn(a)
+    ( pow(b, a)/gamma ) * pow(y, a-1.0)*exp(-b*y)
     //(pow(y, a - 1.0) * exp(-y / b)) / (pow(b, a) * gamma)
   }
 
@@ -73,12 +73,15 @@ class Gamma(alpha: Double, beta: Double) extends ContinuousDistribution {
     *
     * @param y
     */
-  override def cdf(y:Double) = {
-    ( 1.0 / GammaFn(y) ) * IncompleteGamma.Q (alpha, beta*y)
+  override def cdf(y:Double):Double = {
+    val y1 = y / b
+    if (y1 <= 0.0) 0.0
+    else if (y1 > a) 1 - IncompleteGamma.Q(a,y1)
+    else IncompleteGamma.P(a,y1)
   }
 
   override def invcdf(p: Double): Double = {
-    InverseGamma(p, alpha, beta)
+    InverseGamma(p, a, b)
   }
 
 }
