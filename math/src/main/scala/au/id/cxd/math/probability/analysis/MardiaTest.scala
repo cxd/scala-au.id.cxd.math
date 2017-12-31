@@ -146,7 +146,7 @@ class MardiaTest(val alpha:Double) {
     */
   def mardia(X:DenseMatrix[Double]) = {
     val (delta, mean, sigma) = parameters(X)
-    val rMatrix = computeR(delta, sigma)
+    val rMatrix = computeR(delta.t, sigma)
     val n = X.rows
     val p = X.cols
     val b1 = skewness(X.rows, rMatrix)
@@ -179,7 +179,7 @@ class MardiaTest(val alpha:Double) {
     val norm = Normal(0.0)(1.0)
     val pVal_kurt = norm.pdf(z2)
     val cVal_kurt = norm.invcdf(1.0 - alpha/2.0)
-    val stat = MardiaTestStatistic(
+    val stat = MardiaTestStatistic(alpha=alpha,
       skewness = b1,
       skewStat = z1,
       pvalueSkew = pVal_skew,
@@ -189,7 +189,7 @@ class MardiaTest(val alpha:Double) {
       pvalueKurtosis = pVal_kurt,
       critValueKurtosis = cVal_kurt,
       skewTestRejectNull = z1 > cVal_skew,
-      kurtotisTestRejectNull = z2 < cVal_kurt
+      kurtotisTestRejectNull = z2 > cVal_kurt
     )
     stat
   }
@@ -214,7 +214,8 @@ object MardiaTest {
   * @param skewTestRejectNull
   * @param kurtotisTestRejectNull
   */
-case class MardiaTestStatistic (val skewness:Double,
+case class MardiaTestStatistic (val alpha:Double,
+                                val skewness:Double,
                                 val skewStat:Double,
                                 val pvalueSkew:Double,
                                 val critValueSkew:Double,
@@ -223,4 +224,21 @@ case class MardiaTestStatistic (val skewness:Double,
                                 val pvalueKurtosis:Double,
                                 val critValueKurtosis:Double,
                                 val skewTestRejectNull:Boolean,
-                                val kurtotisTestRejectNull:Boolean) {}
+                                val kurtotisTestRejectNull:Boolean) {
+
+
+  override def toString() =
+    s"""
+       |Mardia Test at alpha = $alpha
+       |Skewness: $skewness
+       |Skew Statistic: $skewStat
+       |Skew P-Value: $pvalueSkew
+       |Skew Critical Value: $critValueSkew
+       |Skew Test Reject H0:$skewTestRejectNull
+       |Kurtosis: $kurtosis
+       |Kurtosis Statistic: $kurtosisStat
+       |Kurtosis P-Value: $pvalueKurtosis
+       |Kurtosis Critical Value: $critValueKurtosis
+       |Kurtosis Test Reject H0: $kurtotisTestRejectNull
+     """.stripMargin
+}
