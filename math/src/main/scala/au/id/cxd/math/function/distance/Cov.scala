@@ -19,11 +19,15 @@ import breeze.linalg.DenseMatrix
   */
 class Cov (a:DenseMatrix[Double], b:DenseMatrix[Double]) {
   protected  def deltaMat (m:DenseMatrix[Double]) = {
-    val means = ColMeans (m)
-    val delta = m.mapPairs {
+
+    val x = if (m.rows == 1) m.t
+            else m
+
+    val means = ColMeans(x)
+    val delta = x.mapPairs {
       (ind, value) =>
         val mu = means(0,ind._2)
-        Math.pow(value - mu, 2.0)
+        (value - mu)
     }
     delta
   }

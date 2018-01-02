@@ -8,16 +8,21 @@ import au.id.cxd.math.function.distance.MahalanobisDistance
 import au.id.cxd.math.function.transform.StandardisedNormalisation
 import au.id.cxd.math.probability.analysis._
 import breeze.linalg.{DenseMatrix, eigSym, inv, svd}
-import inference.TestManovaData
+import inference.{MardiaIris, TestManovaData}
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 
 class TestMahalanobisDistance extends FlatSpec with Matchers {
 
   "MahalanobisDistance" should "calculate distance for two vectors" in new TestManovaData {
-    val (groups, data) = read()
+    val (groups, data) = readNonStandardised()
+
     val X = data(0,::).inner
-    val Y = data(1,::).inner
+    val Y = data(3,::).inner
     // note
+
+    println(s"X: ${X.toString}")
+    println(s"Y: ${Y.toString}")
+
     val distance = MahalanobisDistance(X,Y)
     println(s"Distance: $distance")
     distance should not be(0)
@@ -39,6 +44,12 @@ class TestMahalanobisDistance extends FlatSpec with Matchers {
     // in this case the distance will be 0
     println(s"Rows: ${distance.rows} Cols: ${distance.cols}")
     distance.toArray.sum should equal(0.0)
+  }
+
+  "MahalanobisDistance" should "calculate distance" in new MardiaIris {
+    val (data) = read()
+    val distance = MahalanobisDistance(data)
+    println(distance)
   }
 
 

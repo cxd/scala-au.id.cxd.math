@@ -204,4 +204,19 @@ trait TestManovaData extends MatrixReader {
     val groups = mat(::,1).toArray.map(_.toString).toList
     (groups, X)
   }
+
+  def readNonStandardised():(List[String], DenseMatrix[Double]) = {
+    val url = getClass.getClassLoader.getResource(fileName)
+    val file = new File(url.getFile)
+    val mat = read(file)
+    // we know the headers on the first line
+    // they are:
+    // "Case","Group","X1","X2","X3","X4","X5","X6","X7","X8","X9","Sex"
+    // we want to keep columns 2 .. 10 and discard the other three columns including the last.
+    val m2 = mat(::, 2 to 10).toDenseMatrix
+    // the data set is standardised prior to the procedure
+    // we also know ahead of time that there are 5 groups in the data.
+    val groups = mat(::,1).toArray.map(_.toString).toList
+    (groups, m2)
+  }
 }

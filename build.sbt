@@ -57,7 +57,10 @@ lazy val uiDependencies = Seq(
     // wrapper around jfreechart
     "com.github.wookietreiber" %% "scala-chart" % "0.5.0",
     // include kumo for tag cloud generation
-    "com.kennycason" % "kumo" % "1.8"
+    "com.kennycason" % "kumo" % "1.8",
+    // vegas library
+    "com.github.vegas-viz" %% "vegas" % "0.3.5",
+    "com.github.vegas-viz" %% "vegas-macros" % "0.3.5"
   )
 )
 
@@ -85,12 +88,26 @@ lazy val math = (project in file("math"))
 
   ).settings(Common.commonPluginSettings: _*)
 
+lazy val exclude = List(
+  "jcommon-1.0.16.jar",
+  "kumo-1.8.jar",
+  "jfreechart-1.0.13.jar"
+)
 
 lazy val examples = (project in file("examples"))
   .settings(commonSettings: _*)
   .settings(uiDependencies: _*)
+  .settings(assemblySettings: _*)
   .settings(
-    name := "au.id.cxd.math.examples"
+    name := "au.id.cxd.math.examples",
+
+    libraryDependencies ++= Seq(
+      "jfree" % "jcommon" % "1.0.16" % "provided"
+    ),
+
+    excludedJars in assembly <<= (fullClasspath in assembly) map { cp =>
+      cp filter {x => exclude.exists(item => x.data.getName.matches(item))}
+    }
   )
   .settings(Common.commonPluginSettings: _*)
   .dependsOn(math)

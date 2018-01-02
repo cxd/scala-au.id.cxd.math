@@ -64,5 +64,8 @@ class TestChisq extends FlatSpec with Matchers with TestEvaluation {
     println("ChiSquare INVCDF")
     evaluate1(fn, cdftest, quantiles, 0.01) should be(true)
     println()
+
+    val quantiles1 = for (i <- 0.1 to 1.0 by 0.1) yield fn (i)
+
   }
 }
