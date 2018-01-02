@@ -3,6 +3,8 @@ title: "Notes on Testing for Multivariate Normality"
 output: 
   html_document:
     css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
+    includes:
+      in_header: mvn_testing_head.html
 csl: journal-of-combinatorics.csl
 bibliography: bibliography.bib
 ---
