@@ -52,7 +52,7 @@ knit_engines$set(scalainr = function(options) {
 
 The visual assessment can be demonstrated on two data sets. The first example is a subset of the iris data set, subsetted on the species "virginica", in order to generate an example of a multivariate normal data sample.
 
-```{r, engine='scalainr', echo=FALSE}
+```{r, engine='scalainr', echo=FALSE, results='hide'}
 System.getProperty("java.version")
 ```
 
@@ -102,8 +102,8 @@ Now we will produce a plot of the ordered distance measure over the chisq quanti
 
 ```{r cleaned, results="asis"}
 x <- scala["x"]
-(quantiles <- scala["quantiles"])
-(distances <- scala["distSorted"])
+quantiles <- scala["quantiles"]
+distances <- scala["distSorted"]
 distances <- sapply(distances, function(d) d^2)
 
 m <- lm(quantiles ~ distances)
@@ -212,7 +212,7 @@ Printing the result:
 println(test.toString)
 ```
 
-As both tests do not reject the nul hypothesis, the outcome suggests that the set of observations are from a multivariate normal distribution.
+As both tests do not reject the null hypothesis, the outcome suggests that the set of observations are from a multivariate normal distribution.
 
 The Mardia Test from the MVN package is demonstrated below for the iris subset of data from above.
 

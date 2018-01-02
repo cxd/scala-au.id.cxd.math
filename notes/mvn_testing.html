@@ -155,7 +155,6 @@ knit_engines$set(scalainr = function(options) {
   engine_output(options, options$code, output)
 })</code></pre>
 <p>The visual assessment can be demonstrated on two data sets. The first example is a subset of the iris data set, subsetted on the species “virginica”, in order to generate an example of a multivariate normal data sample.</p>
-<pre><code>## [1] &quot;1.6.0_51&quot;</code></pre>
 <pre class="scalainr"><code>// imports
 import java.io.File
 import scala.collection.mutable
@@ -192,11 +191,9 @@ val quantiles = x.map(chisq.invcdf(_))
 </code></pre>
 <p>Now we will produce a plot of the ordered distance measure over the chisq quantiles.</p>
 <pre class="r"><code>x &lt;- scala[&quot;x&quot;]
-(quantiles &lt;- scala[&quot;quantiles&quot;])</code></pre>
-<p>[1] 0.2971095 0.5350537 0.7107230 0.8616294 0.9986541 1.1267820 [7] 1.2488030 1.3664772 1.4810094 1.5932768 1.7039499 1.8135630 [13] 1.9225575 2.0313098 2.1401506 2.2493785 2.3592700 2.4700874 [19] 2.5820847 2.6955130 2.8106253 2.9276801 3.0469464 3.1687075 [25] 3.2932654 3.4209461 3.5521051 3.6871338 3.8264676 3.9705951 [31] 4.1200697 4.2755242 4.4376892 4.6074163 4.7857092 4.9737648 [37] 5.1730281 5.3852691 5.6126910 5.8580877 6.1250789 6.4184772 [43] 6.7448831 7.1137062 7.5390415 8.0434353 8.6664282 9.4877290 [49] 10.7118983 13.2767041</p>
-<pre class="r"><code>(distances &lt;- scala[&quot;distSorted&quot;])</code></pre>
-<p>[1] 0.6150734 0.7054221 0.8685126 0.8789550 0.9215628 0.9861681 1.0332557 [8] 1.1377342 1.1866962 1.2744800 1.2793085 1.3265620 1.3295722 1.3961089 [15] 1.5124493 1.5483242 1.5671150 1.5749693 1.6295127 1.6622825 1.7062291 [22] 1.7087991 1.7657805 1.8035469 1.8782616 1.8876394 1.9425856 1.9793587 [29] 2.0567588 2.0675469 2.0919372 2.1097529 2.1152668 2.1754494 2.1762608 [36] 2.3199974 2.3539575 2.3641832 2.3995492 2.4295620 2.4631646 2.4681279 [43] 2.4821457 2.5359115 2.5546551 2.6709009 2.8441053 2.9179811 3.2079264 [50] 3.5340438</p>
-<pre class="r"><code>distances &lt;- sapply(distances, function(d) d^2)
+quantiles &lt;- scala[&quot;quantiles&quot;]
+distances &lt;- scala[&quot;distSorted&quot;]
+distances &lt;- sapply(distances, function(d) d^2)
 
 m &lt;- lm(quantiles ~ distances)
 intercept &lt;- m$coefficients[1]
@@ -276,11 +273,12 @@ val test = MardiaTest(0.05, X)</code></pre>
 ## Skew Test Reject H0:false
 ## Kurtosis: 21.973352110762903
 ## Kurtosis Statistic: -1.0342194201915518
-## Kurtosis P-Value: 1.468341641089874
+## Kurtosis P-Value: 0.23369383032711913
 ## Kurtosis Critical Value: 1.9599639523015855
 ## Kurtosis Test Reject H0: false
 ##      
 ## NULL</code></pre>
+<p>As both tests do not reject the nul hypothesis, the outcome suggests that the set of observations are from a multivariate normal distribution.</p>
 <p>The Mardia Test from the MVN package is demonstrated below for the iris subset of data from above.</p>
 <pre class="r"><code>require(MVN)</code></pre>
 <pre><code>## 
