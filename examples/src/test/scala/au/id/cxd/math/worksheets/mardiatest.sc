@@ -17,7 +17,16 @@ new File(fileName).getAbsolutePath
 val mat = MatrixReader.readFileAt(fileName)
 val data = mat(::, 0 to 3).toDenseMatrix
 val X = StandardisedNormalisation().transform(data)
-
 val test = MardiaTest(0.05, X)
 
 println(s"$test")
+
+val file2:String = "/Users/cd/Projects/scala/au.id.cxd.math/data/test_sparrows.csv"
+val mat2 = MatrixReader.readFileAt(file2)
+
+val data2 = mat(::, 1 to 5).toDenseMatrix
+
+val X2 = StandardisedNormalisation().transform(data2)
+val test2 = MardiaTest(0.05, X2)
+
+println(test2.toString)

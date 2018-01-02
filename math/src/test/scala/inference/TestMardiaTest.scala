@@ -15,6 +15,21 @@ class TestMardiaTest extends FlatSpec with Matchers {
     val test = MardiaTest(0.05, data)
 
     println(s"$test")
+
+    test.skewTestRejectNull should be(false)
+    test.kurtotisTestRejectNull should be(false)
+  }
+
+  "Mardia" should "test sparrow data" in new TestManovaDataSparrows {
+    val (groups, data) = read()
+    val test = MardiaTest(0.05, data)
+    println(s"$test")
+  }
+
+  "Mardia" should "test mandible data" in new TestManovaData {
+    val (groups, data) = read()
+    val test = MardiaTest(0.05, data)
+    println(s"$test")
   }
 
 }

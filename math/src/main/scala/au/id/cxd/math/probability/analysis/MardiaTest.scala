@@ -195,6 +195,7 @@ class MardiaTest(val alpha:Double) {
       skewStat = z1,
       pvalueSkew = pVal_skew,
       critValueSkew = cVal_skew,
+      skewDf=df,
       kurtosis = b2,
       kurtosisStat = z2,
       pvalueKurtosis = pVal_kurt,
@@ -230,6 +231,7 @@ case class MardiaTestStatistic (val alpha:Double,
                                 val skewStat:Double,
                                 val pvalueSkew:Double,
                                 val critValueSkew:Double,
+                                val skewDf:Double,
                                 val kurtosis:Double,
                                 val kurtosisStat:Double,
                                 val pvalueKurtosis:Double,
@@ -238,18 +240,30 @@ case class MardiaTestStatistic (val alpha:Double,
                                 val kurtotisTestRejectNull:Boolean) {
 
 
+  private def result() = {
+    if (!skewTestRejectNull && !kurtotisTestRejectNull) {
+      "Cannot reject null hypothesis, sample is multivariate normal"
+    } else {
+      "Reject null hypothesis, sample is not multivariate normal"
+    }
+  }
+
   override def toString() =
     s"""
        |Mardia Test at alpha = $alpha
        |Skewness: $skewness
        |Skew Statistic: $skewStat
+       |Skew DF: $skewDf
        |Skew P-Value: $pvalueSkew
        |Skew Critical Value: $critValueSkew
        |Skew Test Reject H0:$skewTestRejectNull
+       |
        |Kurtosis: $kurtosis
        |Kurtosis Statistic: $kurtosisStat
        |Kurtosis P-Value: $pvalueKurtosis
        |Kurtosis Critical Value: $critValueKurtosis
        |Kurtosis Test Reject H0: $kurtotisTestRejectNull
+       |
+       |Result: ${result}
      """.stripMargin
 }
