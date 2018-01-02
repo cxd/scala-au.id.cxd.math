@@ -28,7 +28,7 @@ class Normal(mu: Double, varianceVal: Double) extends ContinuousDistribution {
   val sigma = Math.sqrt(varianceVal)
 
   def pdf(y: Double): Double = {
-    (1 / sigma*sqrt(2.0 * Pi)) * exp(-1.0 * pow(y - mu, 2.0) / (2.0 * varianceVal))
+    (1.0 / (sigma*Math.sqrt(2.0 * Math.PI)) ) * Math.exp( (-(y-mu)*(y-mu)) / (2.0 * varianceVal))
   }
 
   def mean(): Double = mu

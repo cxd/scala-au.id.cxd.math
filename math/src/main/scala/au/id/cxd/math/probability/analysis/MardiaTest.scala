@@ -63,6 +63,10 @@ import breeze.linalg.{DenseMatrix, diag, inv}
   * c = \frac{(n+1)(n+3)(k+1)}{n(n+1)(k+1)-6}
   * $$
   * then $z1 = \frac{nc}{6}b_{1,p}
+  *
+  *
+  * Both tests need to be small in order to not reject the null hypothesis.
+  *
   */
 class MardiaTest(val alpha:Double) {
 
@@ -168,6 +172,13 @@ class MardiaTest(val alpha:Double) {
       * kurtosis statistic has normal distribution N(0,1)
       */
     val z2 = Math.sqrt(n) * (b2 - p * (p+2)) / Math.sqrt(8.0*p*(p+2))
+    val z2mu = 0.0
+    val z2Var = 1.0
+    /**
+    val z2 = b2
+    val z2mu = p*(p+2)
+    val z2Var = 8*p*(p+2)/n
+    **/
 
     // we should reject the hypothesis if the pvalue is < 0.05 or if the statistic is > critical value
     // H_0: data is multivariate normal
@@ -176,7 +187,7 @@ class MardiaTest(val alpha:Double) {
     val chisq = ChiSquare(df)
     val pVal_skew = chisq.pdf(z1)
     val cVal_skew = chisq.invcdf(1.0 - alpha)
-    val norm = Normal(0.0)(1.0)
+    val norm = Normal(z2mu)(z2Var)
     val pVal_kurt = norm.pdf(z2)
     val cVal_kurt = norm.invcdf(1.0 - alpha/2.0)
     val stat = MardiaTestStatistic(alpha=alpha,
