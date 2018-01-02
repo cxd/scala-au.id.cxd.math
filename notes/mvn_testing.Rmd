@@ -1,0 +1,225 @@
+---
+title: "Notes on Testing for Multivariate Normality"
+output: 
+  html_document:
+    css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
+csl: journal-of-combinatorics.csl
+bibliography: bibliography.bib
+---
+
+<a href="../index.html">Home</a>
+
+It is necessary to check the assumption of multivariate normality prior to applying procedures which have the assumption of MVN, and common variance. For example, prior to applying MANOVA, procedures such as PCA or linear regression.
+
+There are several methods available for checking for multivariate normality, which include visual inspection of Mahalanobis distance values for each observation from the expected chisq quantile, as well as performing tests available such as the Mardia, Henze-Zirkler and Royston tests which each use different measures to test for multivariate normality.
+
+## Example Plotting Mahalanobis Distance over Chisq Quantiles
+
+One visual method of inspecting multivariate data for normality is to plot the mahalanobis distances obtained over the quantiles of the chisq distribution with 2 degrees of freedom.
+
+The library implements the Mahalanobis distance measure via:
+
+$$
+dist(X) = \left\{ (X-\bar{X})' S_{X,X}^{-1} (X-\bar{X}) \right\}^{1/2}
+$$
+
+Where $S_{X,X}^{-1}$ is the inverse of the estimated variance-covariance matrix and $\bar{X}$ is the estimated column mean vector for the matrix X.
+
+
+```{r}
+# set the JVM
+Sys.setenv(JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/') 
+Sys.setenv(LD_LIBRARY_PATH = '$LD_LIBRARY_PATH:$JAVA_HOME/lib')
+
+# setup the jvmr interpreter
+library(rJava)
+
+options(java.parameters = c("-Xmx1G", "-XX:MaxPermGen=1G"))
+
+cp <- getwd()
+includes <- list.files(file.path(cp, "../target"), full.names=TRUE)
+
+library(jvmr)
+library(knitr)
+
+scala <- scalaInterpreter(includes)
+knit_engines$set(scalainr = function(options) {
+  code <- paste(options$code, collapse = "\n")
+  output <- capture.output(interpret(scala, code, echo.output = TRUE))
+  engine_output(options, options$code, output)
+})
+```
+
+The visual assessment can be demonstrated on two data sets. The first example is a subset of the iris data set, subsetted on the species "virginica", in order to generate an example of a multivariate normal data sample.
+
+```{r, engine='scalainr', echo=FALSE}
+System.getProperty("java.version")
+```
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+// imports
+import java.io.File
+import scala.collection.mutable
+import au.id.cxd.math.data.CsvReader
+
+import au.id.cxd.math.data.MatrixReader
+import au.id.cxd.math.function.transform.StandardisedNormalisation
+import au.id.cxd.math.probability.analysis._
+import breeze.linalg.{DenseMatrix, eigSym, inv, svd}
+
+import au.id.cxd.math.function.distance.MahalanobisDistance
+import au.id.cxd.math.probability.continuous.ChiSquare
+
+
+
+val fileName:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/iris_virginica.csv"
+
+val mat = MatrixReader.readFileAt(fileName)
+// extract the columns of interest.
+val data = mat(::, 0 to 3)
+```
+
+Once the data is loaded we then obtain the distance measures for each observation.
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+// get the distance measures for each example.
+val distance = MahalanobisDistance(data)
+
+// sort distance from lowest to highest.
+val distSorted = distance.toArray.sorted
+
+// chisquare quantiles
+val n = distSorted.length
+val x = (for (i <- 1.0 to n.toDouble by 1.0) yield (i-0.5)/n.toDouble).toArray
+val df = data.cols
+val chisq = ChiSquare(df)
+val quantiles = x.map(chisq.invcdf(_))
+
+```
+
+Now we will produce a plot of the ordered distance measure over the chisq quantiles.
+
+
+```{r cleaned, results="asis"}
+x <- scala["x"]
+(quantiles <- scala["quantiles"])
+(distances <- scala["distSorted"])
+distances <- sapply(distances, function(d) d^2)
+
+m <- lm(quantiles ~ distances)
+intercept <- m$coefficients[1]
+slope <- m$coefficients[2]
+
+plot(distances, quantiles, col="blue", main="QQPlot of squared mahalanobis distance over Chisq Quantiles df=4")
+abline(0,1, col="red")
+
+```
+
+The plot above suggests the data is close to multivariate normal, since the squared mahalanobis distance closely follows the chisquared distribution of the same degree of freedom, with 4 attributes. 
+
+We can also repeat this process using R for comparison.
+
+```{r}
+data1 <- read.csv("../data/iris_virginica.csv", header=TRUE)
+data <- (data1[,1:4])
+mu <- colMeans(data)
+sigma <- cov(data)
+dist <- mahalanobis(data, mu, sigma)
+
+
+df <- ncol(data)
+n <- length(dist)
+u <- ((1:n)-0.5)/n
+p <- qchisq(u,df)
+distsorted <- sort(dist)
+
+plot(distsorted,p, 
+     col="blue",
+     main="QQ Plot of mahalnobis distance v chisq quantiles")
+abline(0,1, col="red")
+
+```
+
+
+## Tests for Multivariate Normality.
+
+There are a number of procedures available for testing multivariate normality. The procedures are summarised in the article by Kormaz, Goksuluk and Zarasiz @korkmaz.
+
+The procedures include
+
+- The Mardia Test
+- The Henze-Zirkler Test
+- The Roystan Test
+
+When inspecting data for multivariate normality, it is advisable to use the combination of tests and visualisation, as well as using more than one test in order to determine whether the procedures agree.
+
+The __Mardia Test__ makes use of statistics for skew and kurtosis.
+
+Like the Mahalanobis distance measure $m$, the kurtosis and skew statistics are derived from the matrix
+
+$$
+m^2 = R = (X-\bar{X})'S^{-1}(X-\bar{X})
+$$
+
+Where we have the estimate of the parameters for the MVN distribution, the mean vector parameter $\bar{X}$ and the estimate of the variance covariance matrix $S$.
+
+The measures of skewness $b_{1,p}$ and kurtosis $b_{2,p}$ are calculated as
+ 
+$$
+b_{1,p} = \frac{1}{n^2} \sum_{i,j=1}^n r^3_{ij}
+$$
+and
+$$
+b_{2,p} = \frac{1}{n}\sum_{i=1}^n r^2_{ii}
+$$
+where $n$ is the number of observations in the sample $X$
+
+For large $n$ the test statistic for skewness is derived as
+$$
+z_1 = \frac{n}{6}b_{1,p}
+$$
+which has a $\chi^2$ distribution with df
+$$
+df = p(p+1)(p+2)/6
+$$
+
+and the statistic for kurtosis $z_2$ is
+$$
+z_2 = \sqrt{n} \frac{b_{2,p} -  p(p+2) } { \sqrt{8 p(p+2) } }
+$$
+which is distributed as $N(0,1)$. It is a standardisation of $b_{2,p}$ with $\mu=p(p+2)$ and $\sigma = \sqrt{ 8p(p+2)/n}$
+
+In the case of small sample sizes less then 20 observations, a correction factor $c$ is given for $z_1$
+$$
+c = \frac{(n+1)(n+3)(k+1)}{n(n+1)(k+1)-6}
+$$
+then $z1 = \frac{nc}{6}b_{1,p}$.
+
+The null hypothesis asserts that the data is MVN distributed. Two tests are performed using the statistics and associated distributions. In order to reject the null hypothesis, either of the tests must disagree, both tests must agree in order to accept the MVN hypothesis.
+
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+import au.id.cxd.math.probability.analysis.MardiaTest
+
+// test with standardised data
+val X = StandardisedNormalisation().transform(data)
+val test = MardiaTest(0.05, X)
+```
+
+Printing the result:
+
+```{r, engine='scalainr'}
+println(test.toString)
+```
+
+As both tests do not reject the nul hypothesis, the outcome suggests that the set of observations are from a multivariate normal distribution.
+
+The Mardia Test from the MVN package is demonstrated below for the iris subset of data from above.
+
+```{r, message=FALSE, error=FALSE, warning=FALSE}
+require(MVN)
+mardiaTest(data, qqplot=TRUE)
+```
+
+## References
+
