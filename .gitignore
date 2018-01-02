@@ -1,6 +1,4 @@
 .idea/**
 .Rproj.user
-target/**
-target
 notes/*_cache/**
 notes/*_cache

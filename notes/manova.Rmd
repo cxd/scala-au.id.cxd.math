@@ -176,9 +176,9 @@ for the matrix data and the column representing the groups.
 
 The groups column may contain strings, which could represent the group labels. The data format is expected to be a wide data format.
 
-The first example uses a dataset from @manly 
+The first example uses a dataset from @manly which consists of the measurements mandibles taken from a number of skulls for different species of dog. 
 
-```{r, engine='scalainr'}
+```{r, engine='scalainr', results='hide'}
 
 
 import java.io.File
