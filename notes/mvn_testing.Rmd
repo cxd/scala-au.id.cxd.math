@@ -141,6 +141,52 @@ abline(0,1, col="red")
 ```
 
 
+### A QQPlot for non-MVN distributed data
+
+The mandible data set is not multivariate normally distributed, as the groups do not share common variance (as shown in the [manova](manova.html) notes).
+
+The qqplot can be displayed in a similar manner using the Mahalanobis distance measures.
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+
+
+val fileName2:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/test_mandible_data.csv"
+
+val dataRange:Seq[Int] = 2 to 10
+
+val mat2 = MatrixReader.readFileAt(fileName2)
+val m2 = mat2(::, dataRange).toDenseMatrix
+val data2 = StandardisedNormalisation().transform(m2)
+
+val distance2 = MahalanobisDistance(data2)
+
+// sort distance from lowest to highest.
+val distSorted2 = distance2.toArray.sorted
+
+// chisquare quantiles
+val n2 = distSorted2.length
+val x2 = (for (i <- 1.0 to n2.toDouble by 1.0) yield (i-0.5)/n2.toDouble).toArray
+val df2 = data2.cols
+val chisq2 = ChiSquare(df2)
+val quantiles2 = x2.map(chisq2.invcdf(_))
+
+```
+
+Displaying the plot below
+
+```{r results="asis"}
+x <- scala["x"]
+quantiles2 <- scala["quantiles2"]
+distances2 <- scala["distSorted2"]
+distances2 <- sapply(distances2, function(d) d^2)
+
+plot(distances2, quantiles2, col="blue", main="QQPlot of mandible data")
+abline(0,1, col="red")
+
+```
+
+It is apparent that there are a small number of examples whose distances deviate from the expected quantiles. It may be interesting to identify which observations they are and when the segments (species of dog in this case) are known before hand identify whether there may be some commonality of segment or not for those cases. It appears that the other samples may correspond closely to observations from an MVN distribution, it is possible that the four examples that deviate largely could be outliers or particularly interesting observations.
+
 ## Tests for Multivariate Normality.
 
 There are a number of procedures available for testing multivariate normality. The procedures are summarised in the article by Kormaz, Goksuluk and Zarasiz @korkmaz.
