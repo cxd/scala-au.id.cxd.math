@@ -44,6 +44,9 @@ Notes on [ANOVA](http://cxd.github.io/scala-au.id.cxd.math/notes/anova.html)
 
 Notes on [MANOVA](http://cxd.github.io/scala-au.id.cxd.math/notes/manova.html)
 
+[Testing assumptions of Multivariate Normality](http://cxd.github.io/scala-au.id.cxd.math/notes/mvn_testing.html)
+
+
 ### Notes Sequential Learning.
 
 Notes on [Hidden Markov Model](http://cxd.github.io/scala-au.id.cxd.math/notes/hmm.html)
