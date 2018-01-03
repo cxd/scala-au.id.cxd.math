@@ -34,6 +34,12 @@ import breeze.linalg.{DenseMatrix, DenseVector, diag, inv, tile, trace}
   */
 class MahalanobisDistance() {
 
+  /**
+    * after the distance calculation keep the full distance matrix.
+    */
+  var distMatrix:DenseMatrix[Double] = DenseMatrix.zeros(1,1)
+
+
   def mahalanobis(delta:DenseMatrix[Double], sigma:DenseMatrix[Double]):DenseMatrix[Double] = {
     val m = if (delta.rows == 1 || delta.cols == 1) delta
             else delta.t
@@ -41,6 +47,7 @@ class MahalanobisDistance() {
       sigma.map{ v => if (v != 0.0) 1.0/v else 0.0 }
     } else inv(sigma)
     val d = m.t * (sigmaInv * m)
+    distMatrix = d
     diag(d).toDenseMatrix.map(Math.sqrt)
   }
 
