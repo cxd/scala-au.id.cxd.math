@@ -44,7 +44,7 @@ class MahalanobisDistance() {
     val m = if (delta.rows == 1 || delta.cols == 1) delta
             else delta.t
     val sigmaInv = if (sigma.rows == 1 && sigma.cols == 1) {
-      sigma.map{ v => if (v != 0.0) 1.0/v else 0.0 }
+      sigma.map{ v => if (v != 0.0) 1.0/(v*v) else 0.0 }
     } else inv(sigma)
     val d = m.t * (sigmaInv * m)
     distMatrix = d

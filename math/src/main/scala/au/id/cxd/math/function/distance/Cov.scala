@@ -43,7 +43,7 @@ class Cov (a:DenseMatrix[Double], b:DenseMatrix[Double]) {
     val n = if (dA.rows == 1 && dB.rows == 1) {
       dA.cols.toDouble
     } else dA.rows.toDouble
-    C / (n - 1)
+    C / (n - 1.0)
   }
 }
 object Cov {

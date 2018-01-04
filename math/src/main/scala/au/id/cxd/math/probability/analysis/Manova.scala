@@ -89,9 +89,11 @@ import scala.collection.immutable.Stream
   * $$
   *
   * ## Lawes Hotelling trace
-  *
+  * $$
   * U = \sum_{i=1}&#94;k \lambda+i
-  * */
+  * $$
+  *
+  **/
 class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[Double], val alpha: Double = 0.05) {
 
   lazy val groups = groupIndexes(groupNames)
@@ -152,7 +154,7 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
   def computeT(m: DenseMatrix[Double]): DenseMatrix[Double] = {
     val C = Cov(m)
     val n = m.rows
-    val T = C.map(_ * (n - 1))
+    val T = C.map(_ * (n.toDouble - 1.0))
     T
   }
 
@@ -232,48 +234,48 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
 
     val wilks = eigenValues.map { lambda => 1.0 / (1.0 + lambda) }.reduce(_ * _)
 
-    val w = n - 1 - (p + m) / 2
-    val df1 = p * (m - 1)
-    val denom = (Math.pow(p, 2) + Math.pow(m - 1, 2) - 5)
+    val w = n.toDouble - 1.0 - (p + m) / 2.0
+    val df1 = p * (m - 1.0)
+    val denom = (Math.pow(p, 2) + Math.pow(m - 1.0, 2) - 5.0)
     val t = if (df1 == 2 || denom == 0) {
       1.0
     } else {
-      Math.sqrt((Math.pow(df1, 2) - 4) / denom)
+      Math.sqrt((Math.pow(df1, 2) - 4d) / denom)
     }
-    val df2 = (w * t - df1 / 2 + 1)
+    val df2 = (w * t - df1 / 2d + 1d)
     val F = ((1.0 - Math.pow(wilks, 1.0 / t)) / Math.pow(wilks, 1.0 / t)) * (df2 / df1)
-    ManovaStat("Wilk's Lambda", wilks, df1, df2.toInt, F, eigenValues)
+    ManovaStat("Wilk's Lambda", wilks, df1.toInt, df2.toInt, F, eigenValues)
   }
 
   def roysLargestRoot(eigenValues: DenseVector[Double], n: Int, m: Int, p: Int) = {
     val maxLambda = eigenValues.toArray.max
-    val d = Array(p, m - 1).max
+    val d = Array(p, m - 1d).max
     val df1 = d
-    val df2 = n - m - d - 1
+    val df2 = n - m - d - 1d
     val F = (df2 / df1) * maxLambda
-    ManovaStat("Roys Largest Root", maxLambda, df1, df2, F, eigenValues)
+    ManovaStat("Roys Largest Root", maxLambda, df1.toInt, df2.toInt, F, eigenValues)
   }
 
   def pillaisTrace(eigenValues: DenseVector[Double], n: Int, m: Int, p: Int) = {
     val total = eigenValues.map { lambda => lambda / (1 + lambda) }.toArray.sum
-    val d = Array(p, m - 1).max
-    val s = Array(p, m - 1).min
+    val d = Array(p, m - 1d).max
+    val s = Array(p, m - 1d).min
     val df1 = s * d
     val df2 = s * (n - m - p + s)
     val F = (n - m - p + s) * total / (d * (s - total))
-    ManovaStat("Pillai's Trace", total, df1, df2, F, eigenValues)
+    ManovaStat("Pillai's Trace", total, df1.toInt, df2.toInt, F, eigenValues)
   }
 
   def lawesHotellingTrace(eigenValues: DenseVector[Double], n: Int, m: Int, p: Int) = {
     val U = eigenValues.toArray.sum
-    val d = Array(p, m - 1).max
-    val s = Array(p, m - 1).min
-    val A = (Math.abs(m - p - 1) - 1) / 2
-    val B = (n - m - p - 1) / 2
-    val df1 = s * (2 * A + s + 1)
-    val df2 = 2 * (s * B + 1)
+    val d = Array(p, m - 1d).max
+    val s = Array(p, m - 1d).min
+    val A = (Math.abs(m - p - 1d) - 1d) / 2d
+    val B = (n - m - p - 1d) / 2d
+    val df1 = s * (2d * A + s + 1d)
+    val df2 = 2d * (s * B + 1d)
     val F = df2 * U / (s * df1)
-    ManovaStat("Lawes Hotelling Trace", U, df1, df2, F, eigenValues)
+    ManovaStat("Lawes Hotelling Trace", U, df1.toInt, df2.toInt, F, eigenValues)
   }
 
   def selectMethod() = method match {

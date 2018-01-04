@@ -35,7 +35,7 @@ object Common extends AutoPlugin {
           |"HTML-CSS": {preferredFont: 'TeX'}
           |});
           |</script>
-          |<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+          |<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
           | """.stripMargin
       // find all html file and apply patch
       docDirs.foreach { docDir =>

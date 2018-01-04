@@ -16,7 +16,7 @@ class ColStddev (m:DenseMatrix[Double]) {
     }
     val colSums = sum(delta(::,*)).inner.toDenseMatrix
     val n = m.rows.toDouble
-    colSums / (n-1)
+    colSums / (n-1.0)
   }
 }
 object ColStddev {

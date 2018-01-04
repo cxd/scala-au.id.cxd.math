@@ -2,7 +2,8 @@ package au.id.cxd.math.function.approximate
 
 import au.id.cxd.math.function.Constants
 
-/**
+/** ##import MathJax
+  *
   * approximate evaluation of a function in the interval a to b using Chebyshev approximation.
   *
   * This is based on the GSL eval.c gsl_cheb_eval_err

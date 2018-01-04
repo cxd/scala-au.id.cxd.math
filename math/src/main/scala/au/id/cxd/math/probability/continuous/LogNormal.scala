@@ -55,7 +55,7 @@ class LogNormal(val mu: Double, val sigma2: Double) extends ContinuousDistributi
     if (y <= 0.0) 0.0
     else {
       val u = (Math.log(y) - mu) / sigma
-      val p = 1 - (y * Math.abs(sigma) * Math.sqrt(2.0 * Math.PI)) * Math.exp(-(u * u) / 2.0)
+      val p = 1d / (y * Math.abs(sigma) * Math.sqrt(2.0 * Math.PI)) * Math.exp(-(u * u) / 2.0)
       p
     }
   }

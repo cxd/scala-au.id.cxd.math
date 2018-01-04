@@ -13,7 +13,7 @@ class ColMeans(m:DenseMatrix[Double]) {
     val meanVector = DenseVector.tabulate[Double](m.cols) {
       j => {
         val col = m(::,j)
-        col.foldLeft(0.0) { (a, b) => a + b } / n
+        col.foldLeft(0.0) { (a, b) => a + b } / n.toDouble
       }
     }
     meanVector.toDenseMatrix
