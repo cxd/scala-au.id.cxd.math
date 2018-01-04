@@ -1,7 +1,7 @@
 package au.id.cxd.math.probability.analysis
 
 import au.id.cxd.math.function.distance.{Cov, MahalanobisDistance}
-import au.id.cxd.math.probability.continuous.LogNormal
+import au.id.cxd.math.probability.continuous.{LogNormal, Normal}
 import breeze.linalg.{DenseMatrix, diag, inv, pinv}
 import spire.syntax.cfor
 
@@ -106,8 +106,8 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
   def henzeZirkler(X: DenseMatrix[Double]) = {
     val distMat = distanceMatrix(X)
     val dist_ij = distanceMatrix_ij(X)
-    val p = X.cols
-    val n = X.rows
+    val p = X.cols.toDouble
+    val n = X.rows.toDouble
     val beta = 1.0 / Math.sqrt(2.0) * Math.pow((n * (2.0 * p + 1.0)) / 4.0, 1.0 / (p + 4.0))
     val beta2 = Math.pow(beta, 2.0)
     val a = dist_ij.toArray.foldLeft(0.0) {
@@ -121,7 +121,9 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
         accum + f
     }
     // hz statistic
-    val hz = (1.0 / n) * a - 2.0 * Math.pow(1.0 + beta2, -p / 2.0) * b + n * Math.pow(1.0 + 2.0 * beta2, -p / 2.0)
+    val hz1 = n*(1.0 / (n*n)) * a - 2.0 * Math.pow(1.0 + beta2, -p / 2.0)*(1d/n) * b + Math.pow(1.0 + 2.0 * beta2, -p / 2.0)
+
+    val hz = 1d/n * a -2*Math.pow(1+beta2, -p/2d) * b + n * Math.pow(1d+2d*beta2,-p/2d)
     // calculate mu, and sigma
     val beta4 = beta2 * beta2
     val beta8 = beta4 * beta4
@@ -148,14 +150,15 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
     val mu2 = mu * mu
     val mu4 = mu2 * mu2
     val logmu = Math.log(Math.sqrt(mu4 / (sigma2 + mu2)))
-    val logsigma2 = Math.log((sigma2 + mu2) / sigma2)
     val logsigma = Math.log(Math.sqrt((sigma2 + mu2) / sigma2))
 
     val z = (logHz - logmu) / logsigma
 
-    val pvalue = LogNormal(logmu, logsigma2).pdf(logHz)
+    val pvalue = LogNormal(mu, sigma2).pdf(z)
 
-    val critValue = LogNormal(logmu, logsigma2).invcdf(alpha)
+    val critValue1 = LogNormal(logmu, logsigma).invcdf(alpha)
+    val critValue = LogNormal(mu, sigma2).invcdf(alpha)
+
 
     val rejecttest = pvalue < alpha
     HenzeZirklerTestResult(
@@ -165,7 +168,9 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
       pValue = pvalue,
       criticalValue = critValue,
       logmu = logmu,
-      logsigma2 = logsigma2,
+      logsigma2 = logsigma,
+      mu = mu,
+      sigma2 = sigma2,
       rejectTest = rejecttest
     )
   }
@@ -186,6 +191,8 @@ case class HenzeZirklerTestResult(
                                    val criticalValue: Double,
                                    val logmu: Double,
                                    val logsigma2: Double,
+                                   val mu:Double,
+                                   val sigma2:Double,
                                    val rejectTest: Boolean) {
 
   def result() = if (rejectTest) "Reject null hypothesis, data is not multivariate normal"
@@ -197,9 +204,12 @@ case class HenzeZirklerTestResult(
        |Henze-Zirkler Statistic: $hzStat
        |Z Wald Statistic: $zStat
        |P-Value: $pValue
-       |Critical Value: $criticalValue
-       |LogNormal log(mu): $logmu
-       |LogNormal log(sigma2): $logsigma2
+       |
+       |LogNormal logmu: $logmu
+       |LogNormal mu: $mu
+       |LogNormal logsigma2: $logsigma2
+       |LogNormal sigma2: $sigma2
+       |
        |Reject H_0: $rejectTest
        |Result: ${result()}
      """.stripMargin
