@@ -282,7 +282,7 @@ abline(0,1, col=&quot;red&quot;)</code></pre>
 <ul>
 <li>The Mardia Test</li>
 <li>The Henze-Zirkler Test</li>
-<li>The Roystan Test</li>
+<li>The Royston Test</li>
 </ul>
 <p>When inspecting data for multivariate normality, it is advisable to use the combination of tests and visualisation, as well as using more than one test in order to determine whether the procedures agree.</p>
 <p>The <strong>Mardia Test</strong> makes use of statistics for skew and kurtosis.</p>
@@ -354,6 +354,50 @@ val test = MardiaTest(0.05, X)</code></pre>
 ## 
 ##    Result         : Data are multivariate normal. 
 ## ---------------------------------------</code></pre>
+</div>
+<div id="an-example-of-testing-non-mvn-data." class="section level2">
+<h2>An example of testing non-MVN data.</h2>
+<p>Similarly we can observe the result for the non-multivariate data for the mandible dataset.</p>
+<pre class="scalainr"><code>// test with standardised data
+val test2 = MardiaTest(0.05, data2)</code></pre>
+<p>Printing the results;</p>
+<pre class="scalainr"><code>println(test2)</code></pre>
+<pre><code>## 
+## Mardia Test at alpha = 0.05
+## Skewness: 23.979566313845982
+## Skew Statistic: 307.73776769435676
+## Skew P-Value: 2.5579712406170127E-11
+## Skew Critical Value: 195.9633891051611
+## Skew Test Reject H0:true
+## Kurtosis: 108.82316943260668
+## Kurtosis Statistic: 3.0629112057537298
+## Kurtosis P-Value: 0.003662347072825814
+## Kurtosis Critical Value: 1.9599639523015855
+## Kurtosis Test Reject H0: true
+##      
+## NULL</code></pre>
+<p>We can see that the test rejects the null hypothesis of MVN for this particulare dataset.</p>
+<p>For comparison in R as below,</p>
+<pre class="r"><code>data2 &lt;- read.csv(&quot;../data/test_mandible_data.csv&quot;, )
+mardiaTest(data2[,1:9])</code></pre>
+<pre><code>##    Mardia's Multivariate Normality Test 
+## --------------------------------------- 
+##    data : data2[, 1:9] 
+## 
+##    g1p            : 21.50832 
+##    chi.skew       : 276.0235 
+##    p.value.skew   : 1.329211e-07 
+## 
+##    g2p            : 103.9797 
+##    z.kurtosis     : 1.552691 
+##    p.value.kurt   : 0.120497 
+## 
+##    chi.small.skew : 289.0007 
+##    p.value.small  : 8.061309e-09 
+## 
+##    Result          : Data are not multivariate normal. 
+## ---------------------------------------</code></pre>
+<p>reinforces the conclusion that the dataset is not multivariate normal.</p>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2>References</h2>

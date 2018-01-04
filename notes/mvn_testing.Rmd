@@ -197,7 +197,7 @@ The procedures include
 
 - The Mardia Test
 - The Henze-Zirkler Test
-- The Roystan Test
+- The Royston Test
 
 When inspecting data for multivariate normality, it is advisable to use the combination of tests and visualisation, as well as using more than one test in order to determine whether the procedures agree.
 
@@ -262,12 +262,40 @@ println(test.toString)
 
 As both tests do not reject the null hypothesis, the outcome suggests that the set of observations are from a multivariate normal distribution.
 
+
 The Mardia Test from the MVN package is demonstrated below for the iris subset of data from above.
 
 ```{r, message=FALSE, error=FALSE, warning=FALSE}
 require(MVN)
 mardiaTest(data, qqplot=TRUE)
 ```
+
+## An example of testing non-MVN data.
+
+Similarly we can observe the result for the non-multivariate data for the mandible dataset.
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+// test with standardised data
+val test2 = MardiaTest(0.05, data2)
+```
+
+Printing the results;
+
+```{r, engine='scalainr'}
+println(test2)
+```
+
+We can see that the test rejects the null hypothesis of MVN for this particulare dataset.
+
+For comparison in R as below,
+
+```{r}
+data2 <- read.csv("../data/test_mandible_data.csv", )
+mardiaTest(data2[,1:9])
+
+```
+
+reinforces the conclusion that the dataset is not multivariate normal.
 
 ## References
 
