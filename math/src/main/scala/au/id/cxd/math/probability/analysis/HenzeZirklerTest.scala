@@ -119,11 +119,12 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
 
     val a = dist_ij.mapPairs {
       (ind, dij) => {
-        //if (ind._1 == ind._2) 1.0
-        //else {
+        // the diagonal should be 0, exp(0) = 1
+        if (ind._1 == ind._2) 1.0
+        else {
           val f = -(beta2 / 2.0) * dij
           Math.exp(f)
-        //}
+        }
       }
     }.toArray.reduce(_ + _)
 
@@ -172,7 +173,7 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
     val mu2 = mu * mu
     val mu4 = mu2 * mu2
     val logmu = Math.log(Math.sqrt(mu4 / (sigma2 + mu2)))
-    val logsigma = Math.sqrt(Math.log((sigma2 + mu2) / sigma2))
+    val logsigma = Math.sqrt(Math.log((sigma2 + mu2) / mu2))
 
     // the wald statistic
     val z = (logHz - logmu) / logsigma
@@ -181,23 +182,24 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
 
     // TODO: determine whether this is the correct parameterisation for the lognormal test.
     // need more data sets to test this.
-    val pvalue = 1.0 - LogNormal(logmu, logsigma).cdf(hz)
+    val pvalue1 = LogNormal(logmu, logsigma).pdf(hz)
 
 
     // using wald test with p degrees of freedom
     val chisq = ChiSquare(p)
-    //val pvalue = chisq.pdf(z)
+    val pvalue = chisq.pdf(z)
 
 
     //println(s"HZP2:$pvalue2 P1:$pvalue1 P:$pvalue")
 
     val critValue1 = LogNormal(logmu, logsigma).invcdf(alpha)
+    println(s"C1:$critValue1")
 
-    // approximate critical value
+    // approximate critical value for wald test
     val critValue = chisq.invcdf(alpha)
 
-
     val rejecttest = pvalue < alpha
+
     HenzeZirklerTestResult(
       alpha = this.alpha,
       hzStat = hz,
