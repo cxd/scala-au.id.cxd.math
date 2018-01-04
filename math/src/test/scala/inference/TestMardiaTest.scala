@@ -10,7 +10,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class TestMardiaTest extends FlatSpec with Matchers {
 
-  "Mardia" should "test iris data " in new MardiaIris {
+  "Mardia" should "test iris data " in new MardiaIrisSubset {
     val data = read()
     val test = MardiaTest(0.05, data)
 
@@ -18,6 +18,18 @@ class TestMardiaTest extends FlatSpec with Matchers {
 
     test.skewTestRejectNull should be(false)
     test.kurtotisTestRejectNull should be(false)
+  }
+
+
+  "Mardia" should "test all iris data " in new MardiaIrisAll {
+    val data = read()
+    val test = MardiaTest(0.05, data)
+
+    println(s"$test")
+
+    val reject = test.skewTestRejectNull || test.kurtotisTestRejectNull
+
+    reject should be(true)
   }
 
   "Mardia" should "test sparrow data" in new TestManovaDataSparrows {
@@ -34,7 +46,13 @@ class TestMardiaTest extends FlatSpec with Matchers {
 
 }
 
-trait MardiaIris extends TestMardiaData {
+
+trait MardiaIrisAll extends TestMardiaData {
+  val fileName:String = "iris.csv"
+  val cols = 0 to 3
+}
+
+trait MardiaIrisSubset extends TestMardiaData {
   val fileName:String = "iris_virginica.csv"
   val cols = 0 to 3
 }

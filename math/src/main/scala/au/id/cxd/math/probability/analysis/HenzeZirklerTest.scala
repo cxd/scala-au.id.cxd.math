@@ -1,8 +1,10 @@
 package au.id.cxd.math.probability.analysis
 
+import au.id.cxd.math.function.Constants
 import au.id.cxd.math.function.distance.{Cov, MahalanobisDistance}
-import au.id.cxd.math.probability.continuous.{LogNormal, Normal}
-import breeze.linalg.{DenseMatrix, diag, inv, pinv}
+import au.id.cxd.math.probability.continuous.{ChiSquare, LogNormal, Normal}
+import breeze.linalg.qr.QR
+import breeze.linalg.{DenseMatrix, diag, inv, pinv, qr}
 import spire.syntax.cfor
 
 import scala.util.Try
@@ -77,17 +79,17 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
     *
     * @param X
     */
-  def distanceMatrix_ij(X:DenseMatrix[Double]):DenseMatrix[Double] = {
+  def distanceMatrix_ij(X: DenseMatrix[Double]) = {
     val n = X.rows
-    val S = Cov(X).map { k => ((n-1.0)/n)*k }
+    val S = Cov(X).map { k => ((n - 1.0) / n) * k }
     val Sinv = inv(S)
     val Y = X * Sinv * X.t
-    val I = DenseMatrix.ones[Double](1,n)
+    val I = DenseMatrix.ones[Double](1, n)
     val y2 = Y.map { y => 2.0 * y }
     val da = diag(Y.t).toDenseMatrix.t * I
     val db = (I.t * diag(Y.t).toDenseMatrix)
     val Dij = y2.t + da + db
-    Dij
+    (Dij, S)
   }
 
 
@@ -105,28 +107,48 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
 
   def henzeZirkler(X: DenseMatrix[Double]) = {
     val distMat = distanceMatrix(X)
-    val dist_ij = distanceMatrix_ij(X)
+    val (dist_ij, sMat) = distanceMatrix_ij(X)
+
     val p = X.cols.toDouble
     val n = X.rows.toDouble
+
     val beta = 1.0 / Math.sqrt(2.0) * Math.pow((n * (2.0 * p + 1.0)) / 4.0, 1.0 / (p + 4.0))
-    val beta2 = Math.pow(beta, 2.0)
-    val a = dist_ij.toArray.foldLeft(0.0) {
-      (accum, dij) =>
-        val f = -(beta2 / 2.0) * dij
-        accum + Math.exp(f)
+    val beta2 = beta * beta
+    val beta4 = beta2 * beta2
+    val beta8 = beta2 * beta2 * beta2 * beta2
+
+    val a = dist_ij.mapPairs {
+      (ind, dij) => {
+        //if (ind._1 == ind._2) 1.0
+        //else {
+          val f = -(beta2 / 2.0) * dij
+          Math.exp(f)
+        //}
       }
+    }.toArray.reduce(_ + _)
+
     val b = distMat.toArray.foldLeft(0.0) {
       (accum, di) =>
         val f = -(beta2 / (2.0 * (1.0 + beta2))) * di
-        accum + f
+        accum + Math.exp(f)
     }
-    // hz statistic
-    val hz1 = n*(1.0 / (n*n)) * a - 2.0 * Math.pow(1.0 + beta2, -p / 2.0)*(1d/n) * b + Math.pow(1.0 + 2.0 * beta2, -p / 2.0)
 
-    val hz = 1d/n * a -2*Math.pow(1+beta2, -p/2d) * b + n * Math.pow(1d+2d*beta2,-p/2d)
-    // calculate mu, and sigma
-    val beta4 = beta2 * beta2
-    val beta8 = beta4 * beta4
+    // determine the rank of the convariance matrix
+    val QR(q, r) = qr(sMat)
+    val k = Math.min(sMat.rows, sMat.cols)
+    val rank = (for (i <- 0 until k) yield i).foldLeft(0) {
+      (accum, i) => {
+        val rVal = r(i, i)
+        if (Math.abs(rVal) > Constants.DBL_EPSILON) accum + 1
+        else accum
+      }
+    }
+
+    // hz statistic
+    //val hz = n*(1.0 / (n*n)) * a - 2.0 * Math.pow(1.0 + beta2, -p / 2.0)*(1d/n) * b + Math.pow(1.0 + 2.0 * beta2, -p / 2.0)
+    val hz = if (rank == p)
+      n * (1d / (n * n) * a - 2d * Math.pow(1d + beta2, -p / 2d) * (1d / n) * b + Math.pow(1d + 2d * beta2, -p / 2d))
+    else n * 4
 
     val a1 = 1.0 + 2.0 * beta2
     val a2 = a1 * a1
@@ -138,11 +160,11 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
     val wb = (1.0 + beta2) * (1.0 + 3.0 * beta2)
     val wb2 = wb * wb
 
-    val mu = 1.0 - a1p2 * (1.0 + (p * beta2)/a1 + (p * (p + 2.0) * beta4)/ (2.0 * a2))
+    val mu = 1.0 - a1p2 * (1.0 + (p * beta2) / a1 + (p * (p + 2.0) * beta4) / (2.0 * a2))
 
     val sigma2 = List(
       2.0 * Math.pow(1.0 + 4.0 * beta2, -p / 2.0),
-      2.0 * Math.pow(a1, -p) * (1.0 + (2.0 * p * beta4)/ (a1 * a1) + (3.0 * p * (p + 2.0) * beta8) / (4.0 * a4)),
+      2.0 * Math.pow(a1, -p) * (1.0 + (2.0 * p * beta4) / a2 + (3.0 * p * (p + 2.0) * beta8) / (4.0 * a4)),
       -4.0 * Math.pow(wb, -p / 2.0) * (1.0 + (3.0 * p * beta4) / (2.0 * wb) + (p * (p + 2.0) * beta8) / (2.0 * wb2))
     ).reduce(_ + _)
 
@@ -150,14 +172,29 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
     val mu2 = mu * mu
     val mu4 = mu2 * mu2
     val logmu = Math.log(Math.sqrt(mu4 / (sigma2 + mu2)))
-    val logsigma = Math.log(Math.sqrt((sigma2 + mu2) / sigma2))
+    val logsigma = Math.sqrt(Math.log((sigma2 + mu2) / sigma2))
 
+    // the wald statistic
     val z = (logHz - logmu) / logsigma
 
-    val pvalue = LogNormal(mu, sigma2).pdf(z)
+    // we will perform the wald test against the chisq distribution
+
+    // TODO: determine whether this is the correct parameterisation for the lognormal test.
+    // need more data sets to test this.
+    val pvalue = 1.0 - LogNormal(logmu, logsigma).cdf(hz)
+
+
+    // using wald test with p degrees of freedom
+    val chisq = ChiSquare(p)
+    //val pvalue = chisq.pdf(z)
+
+
+    //println(s"HZP2:$pvalue2 P1:$pvalue1 P:$pvalue")
 
     val critValue1 = LogNormal(logmu, logsigma).invcdf(alpha)
-    val critValue = LogNormal(mu, sigma2).invcdf(alpha)
+
+    // approximate critical value
+    val critValue = chisq.invcdf(alpha)
 
 
     val rejecttest = pvalue < alpha
@@ -191,8 +228,8 @@ case class HenzeZirklerTestResult(
                                    val criticalValue: Double,
                                    val logmu: Double,
                                    val logsigma2: Double,
-                                   val mu:Double,
-                                   val sigma2:Double,
+                                   val mu: Double,
+                                   val sigma2: Double,
                                    val rejectTest: Boolean) {
 
   def result() = if (rejectTest) "Reject null hypothesis, data is not multivariate normal"
@@ -204,6 +241,7 @@ case class HenzeZirklerTestResult(
        |Henze-Zirkler Statistic: $hzStat
        |Z Wald Statistic: $zStat
        |P-Value: $pValue
+       |Critical Value:$criticalValue
        |
        |LogNormal logmu: $logmu
        |LogNormal mu: $mu

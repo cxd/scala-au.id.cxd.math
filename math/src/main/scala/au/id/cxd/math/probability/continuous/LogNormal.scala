@@ -30,9 +30,12 @@ class LogNormal(val mu: Double, val sigma2: Double) extends ContinuousDistributi
     * @return
     */
   override def cdf(y: Double): Double = {
-    val u = (Math.log(y) - mu)/sigma
-    val P = Normal(0)(1).cdf(u)
-    P
+    if (Math.log(y).isNaN) 0.0
+    else {
+      val u = (Math.log(y) - mu) / sigma
+      val P = Normal(0)(1).cdf(u)
+      P
+    }
   }
 
   override def invcdf(p: Double): Double = {

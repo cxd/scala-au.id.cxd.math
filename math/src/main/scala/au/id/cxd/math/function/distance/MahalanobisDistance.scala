@@ -46,7 +46,7 @@ class MahalanobisDistance() {
     val sigmaInv = if (sigma.rows == 1 && sigma.cols == 1) {
       sigma.map{ v => if (v != 0.0) 1.0/(v*v) else 0.0 }
     } else inv(sigma)
-    val d = m.t * (sigmaInv * m)
+    val d = m.t * sigmaInv * m
     distMatrix = d
     diag(d).toDenseMatrix.map(Math.sqrt)
   }
@@ -81,7 +81,7 @@ class MahalanobisDistance() {
     * @param X
     */
   def dist(X:DenseMatrix[Double]) = {
-    val Sigma = Cov(X,X)
+    val Sigma = Cov(X)
     val colMean = ColMeans(X)
     val Mean = DenseMatrix.tabulate(X.rows, X.cols) {
       case (i,j) => colMean(0,j)
