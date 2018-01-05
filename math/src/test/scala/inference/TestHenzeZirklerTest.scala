@@ -41,7 +41,11 @@ class TestHenzeZirklerTest extends FlatSpec with Matchers {
 
     println(result.toString)
 
-    result.rejectTest should be(false)
+    // note that the sparrow data based on this test does not appear to be MVN.
+    // while the mardia test disagrees. It is possible for different MVN tests to disagree.
+    // Note also the qqplot indicates an outlier in the data set that may influence the test result.
+    // a third test is required for further decisions such as a Royston test.
+    result.rejectTest should be(true)
   }
 
 }

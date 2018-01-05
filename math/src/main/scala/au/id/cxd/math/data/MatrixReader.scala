@@ -34,6 +34,8 @@ trait MatrixReader {
 
   /**
     * convert to a matrix
+    * When reading data ensure that the data is within range of precision of Double.
+    *
     * @param data
     * @return
     */

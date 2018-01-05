@@ -185,10 +185,10 @@ class MardiaTest(val alpha:Double) {
     // H_1: data is not multivariate normal
     val df = p*(p+1)*(p+2)/6.0
     val chisq = ChiSquare(df)
-    val pVal_skew = chisq.pdf(z1)
+    val pVal_skew = 1.0 - chisq.cdf(z1)
     val cVal_skew = chisq.invcdf(1.0 - alpha)
     val norm = Normal(z2mu)(z2Var)
-    val pVal_kurt = norm.pdf(z2)
+    val pVal_kurt = 1.0 - norm.cdf(z2)
     val cVal_kurt = norm.invcdf(1.0 - alpha/2.0)
     val stat = MardiaTestStatistic(alpha=alpha,
       skewness = b1,

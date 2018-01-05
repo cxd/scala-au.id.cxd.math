@@ -1,8 +1,9 @@
 package au.id.cxd.math.probability.analysis
 
 import au.id.cxd.math.function.Constants
+import au.id.cxd.math.function.column.ColMeans
 import au.id.cxd.math.function.distance.{Cov, MahalanobisDistance}
-import au.id.cxd.math.probability.continuous.{ChiSquare, LogNormal, Normal}
+import au.id.cxd.math.probability.continuous.{ChiSquare, LogNormal, Normal, StudentT}
 import breeze.linalg.qr.QR
 import breeze.linalg.{DenseMatrix, diag, inv, pinv, qr}
 import spire.syntax.cfor
@@ -53,13 +54,16 @@ import scala.util.Try
   * \log(\sigma&#94;2) = \log{ \left( \frac{\sigma&#94;2 + \mu&#94;2}{\sigma&#94;2} \right)}
   * $$
   *
-  * The test statistic is then derived as
+  * The Wald test statistic is then derived as
   *
   * $$
   * z = \frac{\log(HZ) - \log(\mu)}{\log(\sigma)}
   * $$
   *
+  * This is used in inference where $z \sim N(0,1)$ the critical value is the $Z_{\alpha/2.0}$ value for the statistic.
+  * If $1 - P(|z| <= Y) < \alpha/2$ then the null hypothesis is rejected.
   *
+  * The output of the test reports the z statistic as well as the original hz statistic and parameters $\log(\mu)$ and $\log(\sigma&#94;2)$.
   *
   */
 class HenzeZirklerTest(val alpha: Double = 0.05) {
@@ -100,17 +104,26 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
     */
   def distanceMatrix(X: DenseMatrix[Double]) = {
     // calculate the squared distances
-    val distMat = MahalanobisDistance(X).map { d => d * d }
-    distMat
+    val n = X.rows
+    val S = Cov(X).map { k => ((n - 1.0) / n) * k }
+    val Sinv = inv(S)
+    val Means = ColMeans(X)
+    val Delta = X.mapPairs {
+      (ind, x) => x - Means(0,ind._2)
+    }
+    val distMat = Delta*Sinv*Delta.t
+    diag(distMat).toDenseMatrix
   }
 
 
   def henzeZirkler(X: DenseMatrix[Double]) = {
-    val distMat = distanceMatrix(X)
-    val (dist_ij, sMat) = distanceMatrix_ij(X)
 
     val p = X.cols.toDouble
     val n = X.rows.toDouble
+
+    val distMat = distanceMatrix(X)
+    val (dist_ij, sMat) = distanceMatrix_ij(X)
+
 
     val beta = 1.0 / Math.sqrt(2.0) * Math.pow((n * (2.0 * p + 1.0)) / 4.0, 1.0 / (p + 4.0))
     val beta2 = beta * beta
@@ -146,7 +159,6 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
     }
 
     // hz statistic
-    //val hz = n*(1.0 / (n*n)) * a - 2.0 * Math.pow(1.0 + beta2, -p / 2.0)*(1d/n) * b + Math.pow(1.0 + 2.0 * beta2, -p / 2.0)
     val hz = if (rank == p)
       n * (1d / (n * n) * a - 2d * Math.pow(1d + beta2, -p / 2d) * (1d / n) * b + Math.pow(1d + 2d * beta2, -p / 2d))
     else n * 4
@@ -175,30 +187,18 @@ class HenzeZirklerTest(val alpha: Double = 0.05) {
     val logmu = Math.log(Math.sqrt(mu4 / (sigma2 + mu2)))
     val logsigma = Math.sqrt(Math.log((sigma2 + mu2) / mu2))
 
-    // the wald statistic
+    // the wald statistic approx distributed N(0,1) since logHz \sim Normal(logmu, logsigma)
     val z = (logHz - logmu) / logsigma
 
-    // we will perform the wald test against the chisq distribution
+    // upper tail pvalue for wald statistic
+    val pvalue = 1.0 - Normal(0.0)(1.0).cdf(Math.abs(z))
 
-    // TODO: determine whether this is the correct parameterisation for the lognormal test.
-    // need more data sets to test this.
-    val pvalue1 = LogNormal(logmu, logsigma).pdf(hz)
-
-
-    // using wald test with p degrees of freedom
-    val chisq = ChiSquare(p)
-    val pvalue = chisq.pdf(z)
+    // critical value for the wald statistic
+    val critValue = Normal(0.0)(1.0).invcdf(alpha/2.0)
 
 
-    //println(s"HZP2:$pvalue2 P1:$pvalue1 P:$pvalue")
 
-    val critValue1 = LogNormal(logmu, logsigma).invcdf(alpha)
-    println(s"C1:$critValue1")
-
-    // approximate critical value for wald test
-    val critValue = chisq.invcdf(alpha)
-
-    val rejecttest = pvalue < alpha
+    val rejecttest = pvalue < alpha/2.0
 
     HenzeZirklerTestResult(
       alpha = this.alpha,
@@ -242,8 +242,8 @@ case class HenzeZirklerTestResult(
        |Henze Zirkler Test at alpha = $alpha
        |Henze-Zirkler Statistic: $hzStat
        |Z Wald Statistic: $zStat
-       |P-Value: $pValue
-       |Critical Value:$criticalValue
+       |Wald Statistic P-Value: $pValue
+       |Wald Statistic Critical Value:$criticalValue
        |
        |LogNormal logmu: $logmu
        |LogNormal mu: $mu

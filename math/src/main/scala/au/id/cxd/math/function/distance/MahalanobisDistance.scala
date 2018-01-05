@@ -60,7 +60,9 @@ class MahalanobisDistance() {
     * @return
     */
   def dist(X:DenseMatrix[Double], Mu:DenseMatrix[Double], Sigma:DenseMatrix[Double]):DenseMatrix[Double] = {
-    val Delta = X-Mu
+    val Delta = X.mapPairs {
+      (ind, x) => x - Mu(ind._1, ind._2)
+    }
     mahalanobis(Delta, Sigma)
   }
 
@@ -72,7 +74,9 @@ class MahalanobisDistance() {
     */
   def dist(X:DenseMatrix[Double], Y:DenseMatrix[Double]):DenseMatrix[Double] = {
     val Sigma = Cov(X,Y)
-    val Delta = X - Y
+    val Delta = X.mapPairs {
+      (ind, x) => x - Y(ind._1, ind._2)
+    }
     mahalanobis(Delta, Sigma)
   }
 
@@ -83,10 +87,10 @@ class MahalanobisDistance() {
   def dist(X:DenseMatrix[Double]) = {
     val Sigma = Cov(X)
     val colMean = ColMeans(X)
-    val Mean = DenseMatrix.tabulate(X.rows, X.cols) {
-      case (i,j) => colMean(0,j)
+
+    val Delta = X.mapPairs {
+      (ind, x) => x - colMean(0,ind._2)
     }
-    val Delta = X - Mean
     mahalanobis(Delta, Sigma)
   }
 
@@ -99,7 +103,9 @@ class MahalanobisDistance() {
   def dist(X:DenseVector[Double], Y:DenseVector[Double]):Double = {
     val xMat = X.asDenseMatrix
     val yMat = Y.asDenseMatrix
-    val Delta = xMat - yMat
+    val Delta = xMat.mapPairs {
+      (ind, x) => x - yMat(ind._1, ind._2)
+    }
     val Sigma = Cov(xMat,yMat)
     val d = mahalanobis(Delta,Sigma)
     // in this case the distance between two vectors is a single value.

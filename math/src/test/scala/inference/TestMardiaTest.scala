@@ -69,9 +69,13 @@ trait TestMardiaData extends MatrixReader {
     val mat = read(file)
     // we know the headers on the first line
     // they are:
+
+    // there is limited accuracy available to this test so we will reduce the accuracy of the input data to 6 decimal places.
+
     val data = mat(::, cols).toDenseMatrix
     // the data set is standardised prior to the procedure
-    val X = StandardisedNormalisation().transform(data)
+    val X = StandardisedNormalisation()
+      .transform(data)
     X
   }
 }

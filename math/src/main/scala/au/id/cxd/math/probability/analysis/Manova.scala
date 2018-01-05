@@ -318,7 +318,7 @@ class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[D
     // calculating the minimum alpha-value for the p Value see Wackerly section 10.6
     // the pvalue in the case of the F-Distribution is equal to P(w_0 >= observedStat)
     // P(w_0 >= W) = 1 - P(w_0 < W)
-    val pValue = fdist.cdf(manovaStat.Fstatistic)
+    val pValue = 1.0 - fdist.cdf(manovaStat.Fstatistic)
 
     ManovaTest(reject = reject,
       criticalVal = test,
