@@ -1,6 +1,7 @@
 import java.io.{File, PrintWriter}
 
 import au.id.cxd.math.data.MatrixReader
+import au.id.cxd.math.example.charting.VegasHelper
 import au.id.cxd.math.model.components.PrincipleComponentsAnalysis
 import vegas.DSL.ExtendedUnitSpecBuilder
 import vegas.spec.Spec.MarkEnums.Bar
@@ -36,22 +37,6 @@ val componentData = components.map {
     "percentVariance" -> comp._3)
 }
 
-def showPlot(p:ExtendedUnitSpecBuilder, name:String="temp.html") = {
-
-  import vegas.render.HTMLRenderer._
-
-  val plotFrame = p.pageHTML()
-  val fileout = new File(name)
-  val writer = new PrintWriter(fileout)
-  writer.write(plotFrame)
-  writer.close()
-
-  val browser = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-
-  Runtime.getRuntime.exec(
-    Array(browser, fileout.getAbsolutePath))
-
-}
 
 import vegas.render._
 val plot1 = Vegas("Percent Variance Explained for Component",
@@ -64,7 +49,7 @@ val plot1 = Vegas("Percent Variance Explained for Component",
   encodeX("component", Nominal).
   encodeY("percentVariance", Quantitative)
 
-showPlot(plot1, name="plot1.html")
+VegasHelper.showPlot(plot1, name="plot1.html")
 
 
 
@@ -93,4 +78,4 @@ val plot2 = Vegas("Ordination of sparrows vs survival",
   encodeY("c2", Quantitative).
   encodeColor(field="survived", dataType=Nominal)
 
-showPlot(plot2, name="plot2.html")
+VegasHelper.showPlot(plot2, name="plot2.html")

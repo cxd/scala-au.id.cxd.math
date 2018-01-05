@@ -3,6 +3,7 @@ import java.io.{File, PrintWriter}
 import scala.collection.mutable
 import au.id.cxd.math.data.CsvReader
 import au.id.cxd.math.data.MatrixReader
+import au.id.cxd.math.example.charting.VegasHelper
 import au.id.cxd.math.function.column.ColMeans
 import au.id.cxd.math.function.transform.StandardisedNormalisation
 import au.id.cxd.math.probability.analysis._
@@ -35,32 +36,37 @@ val quantiles = x.map(chisq.invcdf(_))
 
 import vegas._
 
-import vegas.render.HTMLRenderer._
-import vegas.render._
+val maxY = Math.round(quantiles.filter(q => q < Double.PositiveInfinity).max)
 
-val plotData = distSorted.zip(quantiles).map {
-  pair => Map("distance" -> pair._1, "quantile" -> pair._2)
-}.seq
+val abline = (for (i <- 0.0 to n by 1.0) yield (i/maxY)*0.5)
 
-val plot = Vegas("Quantiles for chisq distribution",
+
+
+val plotData = distSorted
+  .zip(quantiles)
+    .zip(abline)
+    .map { group => (group._1._1, group._1._2, group._2) }
+  .map {
+  pair => Map("distance" -> pair._1,
+    "quantile" -> pair._2,
+  "abline" -> pair._3)
+}
+
+val plot = Vegas.layered("Quantiles for chisq distribution",
   width=800.0,
   height=600.0).
   withData(
     plotData
   ).
-  mark(Point).
-  encodeX("distance", Quantitative).
-  encodeY("quantile", Quantitative)
+  withLayers(
+    Layer().
+      mark(Point).
+        encodeX("distance", Quantitative).
+        encodeY("quantile", Quantitative),
+    Layer().
+      mark(Line).
+      encodeX("abline", Quantitative).
+      encodeY("abline", Quantitative).encodeColor(value="red")
+  )
 
-
-val plotFrame = plot.pageHTML()
-val fileout = new File("temp.html")
-val writer = new PrintWriter(fileout)
-writer.write(plotFrame)
-writer.close()
-
-val browser = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-
-//  Runtime.getRuntime.exec(
-//  Array(browser, fileout.getAbsolutePath))
-
+VegasHelper.showPlot(plot, name="mahalanobis.html")
