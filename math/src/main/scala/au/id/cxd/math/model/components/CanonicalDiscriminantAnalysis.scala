@@ -63,9 +63,11 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     val components = eigenValues(0 until numComponents).toDenseVector
     val percentVar = varExplained(0 until numComponents).toDenseVector
     val coeffs = eigenVectors(::,0 until numComponents).toDenseMatrix
-    val zMat = projections(::, 0 until numComponents).toDenseMatrix
+    val mat = (projections * dataX.t).t
+    val zMat = mat(::,0 until numComponents).toDenseMatrix
+    println(s"DIM (${zMat.rows} , ${zMat.cols})")
     // determine the correlation between the columns of the original data and the components
-    val cor = Cor(dataX, zMat)
+    val cor = Cor(dataX, mat)
     (components, coeffs, percentVar, zMat, cor)
   }
 
