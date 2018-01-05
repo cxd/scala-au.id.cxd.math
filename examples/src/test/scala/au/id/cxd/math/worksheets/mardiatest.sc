@@ -24,7 +24,7 @@ println(s"$test")
 val file2:String = "/Users/cd/Projects/scala/au.id.cxd.math/data/test_sparrows.csv"
 val mat2 = MatrixReader.readFileAt(file2)
 
-val data2 = mat(::, 1 to 5).toDenseMatrix
+val data2 = mat2(::, 1 to 5).toDenseMatrix
 
 val X2 = StandardisedNormalisation().transform(data2)
 val test2 = MardiaTest(0.05, X2)
