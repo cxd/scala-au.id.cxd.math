@@ -221,6 +221,26 @@ implementation of GSL gsl_cdf_beta_Pinv betainv.c line: 71
     </span>
       <p class="shortcomment cmt">upper limit for parameters
 implementation of beta_Qinv from GSL betainv.c line 189</p>
+    </li><li name="au.id.cxd.math.function.beta.InverseBeta#bisect" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bisect(x:Double,P:Double,fn:(Int,Double)=&gt;Double,xtol:Double,Ptol:Double,n:Int,maxN:Int):Double"></a>
+      <a id="bisect(Double,Double,(Int,Double)⇒Double,Double,Double,Int,Int):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bisect</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Double">Double</span></span>, <span name="P">P: <span class="extype" name="scala.Double">Double</span></span>, <span name="fn">fn: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>, <span name="xtol">xtol: <span class="extype" name="scala.Double">Double</span></span>, <span name="Ptol">Ptol: <span class="extype" name="scala.Double">Double</span></span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="maxN">maxN: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.InverseBeta@bisect(x:Double,P:Double,fn:(Int,Double)=&gt;Double,xtol:Double,Ptol:Double,n:Int,maxN:Int):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">bisection method of supplied function</p><div class="fullcomment"><div class="comment cmt"><p>bisection method of supplied function</p><p>The implementation of this bisection method is not used due to the
+method calling back into the fn parameter.</p><p>In the GSL the fn parameter is actually the same method of the callee.
+The termination condition in this case takes a very long time to be met.</p><p>The bisect method is used for initialisation before performing further approximation,
+ So the accuracy in this case is being sacrificed for compute time.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>

@@ -320,14 +320,18 @@ val test = MardiaTest(0.05, X)</code></pre>
 ## Mardia Test at alpha = 0.05
 ## Skewness: 2.8444717653387737
 ## Skew Statistic: 23.703931377823114
-## Skew P-Value: 0.04529780344027552
+## Skew DF: 20.0
+## Skew P-Value: 0.25344347457257643
 ## Skew Critical Value: 31.37599076506435
 ## Skew Test Reject H0:false
+## 
 ## Kurtosis: 21.973352110762903
 ## Kurtosis Statistic: -1.0342194201915518
-## Kurtosis P-Value: 0.23369383032711913
+## Kurtosis P-Value: 0.8494832013464653
 ## Kurtosis Critical Value: 1.9599639523015855
 ## Kurtosis Test Reject H0: false
+## 
+## Result: Cannot reject null hypothesis, sample is multivariate normal
 ##      
 ## NULL</code></pre>
 <p>As both tests do not reject the null hypothesis, the outcome suggests that the set of observations are from a multivariate normal distribution.</p>
@@ -366,19 +370,23 @@ val test2 = MardiaTest(0.05, data2)</code></pre>
 ## Mardia Test at alpha = 0.05
 ## Skewness: 23.979566313845982
 ## Skew Statistic: 307.73776769435676
-## Skew P-Value: 2.5579712406170127E-11
+## Skew DF: 165.0
+## Skew P-Value: 1.0708556263949731E-10
 ## Skew Critical Value: 195.9633891051611
 ## Skew Test Reject H0:true
+## 
 ## Kurtosis: 108.82316943260668
 ## Kurtosis Statistic: 3.0629112057537298
-## Kurtosis P-Value: 0.003662347072825814
+## Kurtosis P-Value: 0.0010959754505137642
 ## Kurtosis Critical Value: 1.9599639523015855
 ## Kurtosis Test Reject H0: true
+## 
+## Result: Reject null hypothesis, sample is not multivariate normal
 ##      
 ## NULL</code></pre>
 <p>We can see that the test rejects the null hypothesis of MVN for this particulare dataset.</p>
 <p>For comparison in R as below,</p>
-<pre class="r"><code>data2 &lt;- read.csv(&quot;../data/test_mandible_data.csv&quot;, )
+<pre class="r"><code>data2 &lt;- read.csv(&quot;../data/test_mandible_data.csv&quot;, header=TRUE)
 mardiaTest(data2[,1:9])</code></pre>
 <pre><code>##    Mardia's Multivariate Normality Test 
 ## --------------------------------------- 

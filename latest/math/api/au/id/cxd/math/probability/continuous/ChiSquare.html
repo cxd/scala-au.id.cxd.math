@@ -57,7 +57,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Chi Square distribution is a special case of the <a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> distribution
 with the parameter &quot;df&quot; for degrees of freedom (or $k$)</p><p>This results in a gamma distribution with $\alpha = df/2$ and $\beta = 2$</p><p>Created by cd on 5/11/14.
 </p></div><div class="toggleContainer block">
@@ -415,7 +415,7 @@ $$</p><p>Where $Gamma(\alpha)$ is the upper complete gamma function and $\gamma(
     </span>
       <p class="shortcomment cmt">integral from start to end for the pdf</p><div class="fullcomment"><div class="comment cmt"><p>integral from start to end for the pdf</p><p>This is equivalent to cdf(end) - cdf(start)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#invcdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.continuous.Gamma#invcdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="invcdf(p:Double):Double"></a>
       <a id="invcdf(Double):Double"></a>
       <h4 class="signature">
@@ -433,7 +433,7 @@ $$</p><p>Where $Gamma(\alpha)$ is the upper complete gamma function and $\gamma(
     </span>
       <p class="shortcomment cmt">estimate the quartile y for the distribution given the
 percentage of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>estimate the quartile y for the distribution given the
-percentage of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
+percentage of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -519,7 +519,7 @@ percentage of the distribution</p></div><dl class="attributes block"> <dt>Defini
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.continuous.Gamma#pdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.continuous.ChiSquare#pdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="pdf(y:Double):Double"></a>
       <a id="pdf(Double):Double"></a>
       <h4 class="signature">
@@ -535,11 +535,7 @@ percentage of the distribution</p></div><dl class="attributes block"> <dt>Defini
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">pdf function
-equivalent to &quot;dgamma&quot; in R
-</p><div class="fullcomment"><div class="comment cmt"><p>pdf function
-equivalent to &quot;dgamma&quot; in R
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">implementation of chisq pdf derived from gsl_ran_chisq_pdf file randist/chisq.c line:40</p><div class="fullcomment"><div class="comment cmt"><p>implementation of chisq pdf derived from gsl_ran_chisq_pdf file randist/chisq.c line:40</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.ChiSquare">ChiSquare</a> → <a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.Distribution#stddev" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stddev():Double"></a>
       <a id="stddev():Double"></a>
@@ -607,7 +603,7 @@ equivalent to &quot;dgamma&quot; in R
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">variance for the distribution $\sigma^2$</p><div class="fullcomment"><div class="comment cmt"><p>variance for the distribution $\sigma^2$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">variance for the distribution $\sigma&#94;2$</p><div class="fullcomment"><div class="comment cmt"><p>variance for the distribution $\sigma&#94;2$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Gamma.html" class="extype" name="au.id.cxd.math.probability.continuous.Gamma">Gamma</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

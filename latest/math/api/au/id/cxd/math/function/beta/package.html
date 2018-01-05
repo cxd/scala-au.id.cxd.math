@@ -88,14 +88,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Beta function implemented as:
 the beta function (from the gamma function)
 $$
@@ -126,14 +126,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>a derivative of the beta function
 leveraging the digamma function</p><p>$$
 \frac{\partial}{\partial x} B(x,y) = B(x,y)(\psi(x) - \psi(x+y))
@@ -160,14 +160,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>CDF =
 $$
 I_x (\alpha, \beta) = \frac{B(x; \alpha,\beta)}{B(\alpha,\beta)}
@@ -198,6 +198,27 @@ $$</p><p>The incomplete beta function can be written the product of the beta dis
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.function.beta.LogBetaFn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LogBetaFnextendsAnyRef"></a>
+      <a id="LogBetaFn:LogBetaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LogBetaFn.html"><span class="name">LogBetaFn</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@LogBetaFnextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">#import MathJax</p><div class="fullcomment"><div class="comment cmt"><p>#import MathJax</p><p>Log beta is implemented as the log of the beta function.</p><p>So for example if beta is:</p><p>$$
+B(a,b) = \Gamma(a)\Gamma(b) / \Gamma(a + b)
+$$</p><p>Then log beta is</p><p>$$
+\log B(a,b) = \log \Gamma(a) + \log \Gamma(b) - \log \Gamma(a + b)
+$$</p><p>log gamma is provided by the log gamma function.</p></div></div>
     </li></ol>
             </div>
 
@@ -269,6 +290,23 @@ $$</p><p>The incomplete beta function can be written the product of the beta dis
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@InverseBeta" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.beta.LogBetaFn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LogBetaFn"></a>
+      <a id="LogBetaFn:LogBetaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LogBetaFn$.html"><span class="name">LogBetaFn</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.beta.package@LogBetaFn" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

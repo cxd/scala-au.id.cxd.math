@@ -66,24 +66,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="au.id.cxd.math.function.approximate.Bisect" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="BisectextendsAnyRef"></a>
-      <a id="Bisect:Bisect"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="Bisect.html"><span class="name">Bisect</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@BisectextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="au.id.cxd.math.function.approximate.Chebyshev" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="au.id.cxd.math.function.approximate.Chebyshev" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ChebyshevextendsAnyRef"></a>
       <a id="Chebyshev:Chebyshev"></a>
       <h4 class="signature">
@@ -99,12 +82,69 @@
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">approximate evaluation of a function in the interval a to b using Chebyshev approximation.</p><div class="fullcomment"><div class="comment cmt"><p>approximate evaluation of a function in the interval a to b using Chebyshev approximation.</p><p>This is based on the GSL eval.c gsl_cheb_eval_err
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>approximate evaluation of a function in the interval a to b using Chebyshev approximation.</p><p>This is based on the GSL eval.c gsl_cheb_eval_err
 as well as the Chebyshev Approximation section in Numerical recipes pp 233 - 238.</p><p>Approximate the function $f(x)$ in the interval [a,b].</p><p>The function $f(x)$ is approximated using a change of variable</p><p>$$
 y \sim \frac{x - 1/2 (b-a)}{1/2(b-a)}
 $$</p><p>And the original function is approximated as</p><p>$$
 f(x) \approx \left[\sum_{k=0}&#94;n c_k T_k(y)\right] - c_0/2
 $$</p></div></div>
+    </li><li name="au.id.cxd.math.function.approximate.ContinuedFractionLentz" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContinuedFractionLentzextendsAnyRef"></a>
+      <a id="ContinuedFractionLentz:ContinuedFractionLentz"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ContinuedFractionLentz.html"><span class="name">ContinuedFractionLentz</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@ContinuedFractionLentzextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Use the modified lentz algorithm to evaluate a continued fraction.</p>
+    </li><li name="au.id.cxd.math.function.approximate.ContinuedFractionWallis" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ContinuedFractionWallisextendsAnyRef"></a>
+      <a id="ContinuedFractionWallis:ContinuedFractionWallis"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ContinuedFractionWallis.html"><span class="name">ContinuedFractionWallis</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@ContinuedFractionWallisextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">#import MathJax</p><div class="fullcomment"><div class="comment cmt"><p>#import MathJax</p><p>Use the wallis algorithm to evaluate a continued fraction</p><p>$$
+f_n = \frac{A_n}{B_n}
+$$</p><p>where
+$A_{-1} = 1$, $B_{-1} = 0$
+$A_0 = b_0$, $B_0 = 1$
+$A_j = b_jA_j{-1} + a_jA_{j-2}$
+$B_j = b_jB_{j-1} + a_jB_{j-2}$</p><p>This approach appears in the numerical recipes section 5.2
+and is used in the evaluation of exponents in the GSL in
+exp.c exprel_n_CF line 35
+</p></div></div>
     </li><li name="au.id.cxd.math.function.approximate.NumericIntegral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NumericIntegralextendsAnyRef"></a>
       <a id="NumericIntegral:NumericIntegral"></a>
@@ -127,14 +167,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Numeric integration for a given range</p><p>determine the area beneath the curve
 for the sequence generated by f(x) -&gt; y
 between the given upper and lower limits using
@@ -160,6 +200,40 @@ numeric quadrature</p><p>This is based on the algorithms provided by the GNU Sci
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@Chebyshev" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.approximate.ContinuedFractionLentz" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContinuedFractionLentz"></a>
+      <a id="ContinuedFractionLentz:ContinuedFractionLentz"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ContinuedFractionLentz$.html"><span class="name">ContinuedFractionLentz</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@ContinuedFractionLentz" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.approximate.ContinuedFractionWallis" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContinuedFractionWallis"></a>
+      <a id="ContinuedFractionWallis:ContinuedFractionWallis"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ContinuedFractionWallis$.html"><span class="name">ContinuedFractionWallis</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.approximate.package@ContinuedFractionWallis" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

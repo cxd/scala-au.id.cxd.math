@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>approximate evaluation of a function in the interval a to b using Chebyshev approximation.</p><p>This is based on the GSL eval.c gsl_cheb_eval_err
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>approximate evaluation of a function in the interval a to b using Chebyshev approximation.</p><p>This is based on the GSL eval.c gsl_cheb_eval_err
 as well as the Chebyshev Approximation section in Numerical recipes pp 233 - 238.</p><p>Approximate the function $f(x)$ in the interval [a,b].</p><p>The function $f(x)$ is approximated using a change of variable</p><p>$$
 y \sim \frac{x - 1/2 (b-a)}{1/2(b-a)}
 $$</p><p>And the original function is approximated as</p><p>$$

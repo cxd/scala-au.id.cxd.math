@@ -57,7 +57,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Created by cd on 9/09/2014.</p><p>the normal distribution</p><p>$$
   N(x; \mu, \sigma&#94;2) = \frac{1}{\sqrt{2\pi\sigma&#94;2}} \exp\left[\frac{1}{2\sigma&#94;2} (x - \mu)&#94;2 \right]
 $$</p><p>The cdf of the normal distribution
@@ -368,7 +368,7 @@ $$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href
     </span>
       <p class="shortcomment cmt">integral from start to end for the pdf</p><div class="fullcomment"><div class="comment cmt"><p>integral from start to end for the pdf</p><p>This is equivalent to cdf(end) - cdf(start)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.continuous.ContinuousDistribution#invcdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.continuous.Normal#invcdf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="invcdf(p:Double):Double"></a>
       <a id="invcdf(Double):Double"></a>
       <h4 class="signature">
@@ -384,9 +384,13 @@ $$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">estimate the quartile y for the distribution given the
-percentage of the distribution</p><div class="fullcomment"><div class="comment cmt"><p>estimate the quartile y for the distribution given the
-percentage of the distribution</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
+      <p class="shortcomment cmt">the normal quantile function given as
+$$
+\psi(u) = \sqrt{2} erf&#94;{-1} (2u - 1) = -\sqrt{2} erfc&#94;{-1}(2u)
+$$</p><div class="fullcomment"><div class="comment cmt"><p>the normal quantile function given as
+$$
+\psi(u) = \sqrt{2} erf&#94;{-1} (2u - 1) = -\sqrt{2} erfc&#94;{-1}(2u)
+$$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Normal">Normal</a> → <a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -489,6 +493,23 @@ percentage of the distribution</p></div><dl class="attributes block"> <dt>Defini
       </a>
     </span>
       <p class="shortcomment cmt">probability density function</p><div class="fullcomment"><div class="comment cmt"><p>probability density function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Normal">Normal</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.continuous.Normal#sigma" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sigma:Double"></a>
+      <a id="sigma:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sigma</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.continuous.Normal@sigma:Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="au.id.cxd.math.probability.Distribution#stddev" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stddev():Double"></a>
       <a id="stddev():Double"></a>
@@ -556,7 +577,7 @@ percentage of the distribution</p></div><dl class="attributes block"> <dt>Defini
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">variance for the distribution $\sigma^2$</p><div class="fullcomment"><div class="comment cmt"><p>variance for the distribution $\sigma^2$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Normal">Normal</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
+      <p class="shortcomment cmt">variance for the distribution $\sigma&#94;2$</p><div class="fullcomment"><div class="comment cmt"><p>variance for the distribution $\sigma&#94;2$</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.continuous.Normal">Normal</a> → <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

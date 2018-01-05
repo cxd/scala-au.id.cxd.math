@@ -290,12 +290,13 @@ We can see that the test rejects the null hypothesis of MVN for this particulare
 For comparison in R as below,
 
 ```{r}
-data2 <- read.csv("../data/test_mandible_data.csv", )
+data2 <- read.csv("../data/test_mandible_data.csv", header=TRUE)
 mardiaTest(data2[,1:9])
 
 ```
 
 reinforces the conclusion that the dataset is not multivariate normal.
+
 
 ## References
 

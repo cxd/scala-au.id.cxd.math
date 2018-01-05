@@ -57,12 +57,12 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>The gamma function $\Gamma(a)$ is equivalent to $(a - 1)!$</p><p>$\Gamma(z)$ = $\int_0&#94;\infty t&#94;{z-1} \exp(-t) dt$</p><p>It can be approximated using the equation:
 $$
 \Gamma(z+1) = \sqrt{2\pi} \times pow \left(  z + \gamma + \frac{1}{2} , {z + \frac{1}{2}} \right) \exp\left[ -\left(z + \gamma + \frac{1}{2} \right) \right] \left[ c_0 + \sum_{i=1}^N \frac{C_i}{z+i} \right]
-$$</p><p>Note that the approximation is minimized when $\gamma = 5$ and $N = 6$</p><p>The implementation of the gamma function is taken from
-Grant Palmer &quot;Technical Java : Developing Scientific and Engineering Applications&quot;, Prentice Hall 2007</p><p>It is also described in  &quot;Numerical Recipes The Art of Scientific Computing&quot; pp213..215</p><p>Created by cd on 5/11/14.
+$$</p><p>Note that the approximation is minimized when $\gamma = 5$ and $N = 6$</p><p>The implementation of the gamma function is derived from the GSL implementation of the Log Gamma function
+in special/gamma.c gsl_sf_lngamma_e</p><p>Created by cd on 5/11/14.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -379,18 +379,18 @@ Grant Palmer &quot;Technical Java : Developing Scientific and Engineering Applic
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="au.id.cxd.math.function.gamma.GammaFn#op" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="op:Double=&gt;Double"></a>
-      <a id="op:(Double)⇒Double"></a>
+      <a id="op(a:Double):Double"></a>
+      <a id="op(Double):Double"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">op</span><span class="result">: (<span class="extype" name="scala.Double">Double</span>) ⇒ <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">op</span><span class="params">(<span name="a">a: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.function.gamma.GammaFn@op:Double=&gt;Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.gamma.GammaFn@op(a:Double):Double" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

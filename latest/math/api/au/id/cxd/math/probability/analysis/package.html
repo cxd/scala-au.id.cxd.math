@@ -88,14 +88,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>This class implements an Anova procedure as derived from 'Mathematical Statistics with Applications' 7th edition by Wackerly, et el.</p><p>That resource provides a full explanation, however a summary is given below.</p><p>The goal of Anova is to &quot;identify the important independent variables and determine how they affect the response&quot;.</p><p>Where each independent variable is a factor and the intensity of the variable the level.</p><p>The procedure calculates the Total Sum of Squares which is the sum of the squared deviations of each
 variable from the mean and a remainder random error.</p><p>We consider that under the null hypothesis the independent variables are assumed to be unrelated
 to the response variable, and each portion of the total sum of squares divided
@@ -228,14 +228,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>An abstract class with a dependency on a distributon
 it is used to tabulate the distribution to find a value that corresponds
 to the critical region.</p><p>critical value supports both continuous and discrete distributions</p><p>The critical value searches for the input value that corresponds with the alpha value.</p><p>Given a distribution find Y where P(X &lt;= Y) = alpha</p><p>Alpha is commonly defined as 0.05 for tests.</p><p>The value that results is the critical value, and is used as a rejection region
@@ -261,6 +261,70 @@ $$</p><p>Created by cd on 11/11/14.
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@DiscreteCriticalValueextendsCriticalValue" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.analysis.HenzeZirklerTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HenzeZirklerTestextendsAnyRef"></a>
+      <a id="HenzeZirklerTest:HenzeZirklerTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HenzeZirklerTest.html"><span class="name">HenzeZirklerTest</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@HenzeZirklerTestextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">#import MathJax</p><div class="fullcomment"><div class="comment cmt"><p>#import MathJax</p><p>The Henze Zirkler test for normality defines the statistic</p><p>$$
+HZ = \frac{1}{n}\sum_{i=1}&#94;n\sum_{j=1}&#94;n \exp {-\frac{\beta&#94;2}{2} D_{ij}} - 2(1+\beta&#94;2)&#94;{-p/2} \sum_{i=1}&#94;n \exp{-\frac{\beta&#94;2}{2(1+\beta&#94;2)}D_i} + n(1+2\beta&#94;2)&#94;{-p/2}
+$$
+where $p$ is the number of attributes.
+$$
+\beta = \frac{1}{\sqrt{2}} (\frac{n(2p+1)}{4} )&#94;{1/(p+4)}
+$$
+$$
+D_{ij} = (x_i - x_j)'S&#94;{-1}(x_i - x_j)
+$$
+Is the squared mahalanobis distance between the $ith$ and $jth$ observations.
+$$
+D_i = (x_i - \bar{x})'S&#94;{-1}(x_i - \bar{x})
+$$
+Is the squared mahalanobis distance between the $ith$ observation and the mean.</p><p>The test statistic $HZ$ follows a log-normal distribution with $\mu$ and $\sigma&#94;2$</p><p>$$
+\mu = 1 - a&#94;{-p/2} \left[1 + \frac{p\beta&#94;2}{a} + \frac{p(p+2)\beta&#94;4}{2a&#94;2}\right]
+$$
+$$
+\sigma&#94;2 = 2(1+4\beta&#94;2)&#94;{-p/2} + 2a&#94;{-p}}\left[ 1+ \frac{2p\beta&#94;4)}{a&#94;2} + \frac{3p(p+2)\beta&#94;8}{4a&#94;4}\right]
+$$
+$$
+- 4w_\beta&#94;{-p/2} \left[1 + \frac{3p\beta&#94;4}{2w_\beta} + \frac{p(p+2)\beta&#94;8}{2w_{\beta}&#94;2}\right]
+$$
+with $a = 1 + 2\beta&#94;2$ and $w_\beta = (1+ \beta&#94;2)(1+3\beta&#94;2)$.</p><p>The log-normalised parameters are given as</p><p>$$
+\log(\mu) = \log{\left( \sqrt{ \frac{\mu&#94;4}{\sigma&#94;2 + \mu&#94;2} } \right)}
+$$</p><p>$$
+\log(\sigma&#94;2) = \log{ \left( \frac{\sigma&#94;2 + \mu&#94;2}{\sigma&#94;2} \right)}
+$$</p><p>The Wald test statistic is then derived as</p><p>$$
+z = \frac{\log(HZ) - \log(\mu)}{\log(\sigma)}
+$$</p><p>This is used in inference where $z \sim N(0,1)$ the critical value is the $Z_{\alpha/2.0}$ value for the statistic.
+If $1 - P(|z| &lt;= Y) &lt; \alpha/2$ then the null hypothesis is rejected.</p><p>The output of the test reports the z statistic as well as the original hz statistic and parameters $\log(\mu)$ and $\log(\sigma&#94;2)$.</p></div></div>
+    </li><li name="au.id.cxd.math.probability.analysis.HenzeZirklerTestResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HenzeZirklerTestResultextendsProductwithSerializable"></a>
+      <a id="HenzeZirklerTestResult:HenzeZirklerTestResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="HenzeZirklerTestResult.html"><span class="name">HenzeZirklerTestResult</span></a><span class="params">(<span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span></span>, <span name="hzStat">hzStat: <span class="extype" name="scala.Double">Double</span></span>, <span name="zStat">zStat: <span class="extype" name="scala.Double">Double</span></span>, <span name="pValue">pValue: <span class="extype" name="scala.Double">Double</span></span>, <span name="criticalValue">criticalValue: <span class="extype" name="scala.Double">Double</span></span>, <span name="logmu">logmu: <span class="extype" name="scala.Double">Double</span></span>, <span name="logsigma2">logsigma2: <span class="extype" name="scala.Double">Double</span></span>, <span name="mu">mu: <span class="extype" name="scala.Double">Double</span></span>, <span name="sigma2">sigma2: <span class="extype" name="scala.Double">Double</span></span>, <span name="rejectTest">rejectTest: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@HenzeZirklerTestResultextendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -321,14 +385,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Manova for analysis of variance testing
 whether there is a difference in variation between groups.</p><p>The resulting f statistic is used to test the null hypothesis that the groups within the sample have
 the same multivariate mean and common covariance, while the alternate hypothesis indicates
@@ -359,8 +423,10 @@ Where $W$ is the within sample variation and $T$ is the total variation.</p><p>#
 \lambda_{max}
 $$</p><p>## Pillai's Trace</p><p>$$
 V = \sum_{i=1}&#94;k \frac{\lambda_i}{1+\lambda_i}
-$$</p><p>## Lawes Hotelling trace</p><p>U = \sum_{i=1}&#94;k \lambda+i
-</p></div></div>
+$$</p><p>## Lawes Hotelling trace
+$$
+U = \sum_{i=1}&#94;k \lambda+i
+$$</p></div></div>
     </li><li name="au.id.cxd.math.probability.analysis.ManovaMethod" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ManovaMethodextendsAnyRef"></a>
       <a id="ManovaMethod:ManovaMethod"></a>
@@ -433,6 +499,64 @@ The f statistic is used to test whether the null hypothesis holds.
               the pValue is the probability of the observed statistic for the
               f-distribution based on the resulting degrees of freedom</p></dd><dt class="param">manovaStat</dt><dd class="cmt"><p>
               the manova stat instance containing the parameters output from the test process.</p></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.MardiaTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MardiaTestextendsAnyRef"></a>
+      <a id="MardiaTest:MardiaTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MardiaTest.html"><span class="name">MardiaTest</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@MardiaTestextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">#import MathJax</p><div class="fullcomment"><div class="comment cmt"><p>#import MathJax</p><p>The main reference for the multivariate tests is the paper discussing the MVN package for R</p><p>https://journal.r-project.org/archive/2014-2/korkmaz-goksuluk-zararsiz.pdf</p><p>Korkmaz S, Goksuluk D, Zararsiz G. MVN: An R Package for Assessing Multivariate Normality, The R Journal. 2014 6(2):151-162.</p><p>Mardia test for multivariate normality based on measures of kurtosis and skewness</p><p>The matrix R is formed by the covariance variance matrix and the difference between the sample from the column means</p><p>$$
+R = (X-\bar{X})'S&#94;{-1}(X-\bar{X})
+$$</p><p>The matrix $S$ is the sample estimate of the variance covariance matrix.</p><p>The measures of kurtosis is fiven as the measure of the ratio between the fourth moment and the third moment of the distribution.</p><p>And the skewness the ratio between the third and second moments.</p><p>The measures of skewness $b_{1,p}$ and kurtosis $b_{2,p}$ are calculated as</p><p>$$
+b_{1,p} = \frac{1}{n&#94;2} \sum_{i,j=1}&#94;n r&#94;3_{ij}
+$$
+and
+$$
+b_{2,p} = \frac{1}{n}\sum_{i=1}&#94;n r&#94;2_{ii}
+$$
+where $n$ is the number of observations in the sample $X$</p><p>For large $n$ the test statistic for skewness is derived as</p><p>$$
+z_1 = \frac{n}{6}b_{1,p}
+$$
+which has a $\chi&#94;2$ distribution with df
+$$
+df = p(p+1)(p+2)/6
+$$
+in the case of fewer than 20 samples there is a factor $c$ given at</p><p>and the statistic for kurtosis $z_2$ is
+$$
+z_2 = \sqrt{n} \frac{b_{2,p} -  p(p+2) } { \sqrt{8 p(p+2) } }
+$$
+which is distributed as $N(0,1)$. It is a standardisation of $b_{2,p}$ with $\mu=p(p+2)$ and $\sigma = \sqrt{ 8p(p+2)/n}$</p><p>In the case of small sample sizes less then 20 observations, a correction factor $c$ is given for $z_1$
+$$
+c = \frac{(n+1)(n+3)(k+1)}{n(n+1)(k+1)-6}
+$$
+then $z1 = \frac{nc}{6}b_{1,p}</p><p>Both tests need to be small in order to not reject the null hypothesis.</p></div></div>
+    </li><li name="au.id.cxd.math.probability.analysis.MardiaTestStatistic" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MardiaTestStatisticextendsProductwithSerializable"></a>
+      <a id="MardiaTestStatistic:MardiaTestStatistic"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MardiaTestStatistic.html"><span class="name">MardiaTestStatistic</span></a><span class="params">(<span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span></span>, <span name="skewness">skewness: <span class="extype" name="scala.Double">Double</span></span>, <span name="skewStat">skewStat: <span class="extype" name="scala.Double">Double</span></span>, <span name="pvalueSkew">pvalueSkew: <span class="extype" name="scala.Double">Double</span></span>, <span name="critValueSkew">critValueSkew: <span class="extype" name="scala.Double">Double</span></span>, <span name="skewDf">skewDf: <span class="extype" name="scala.Double">Double</span></span>, <span name="kurtosis">kurtosis: <span class="extype" name="scala.Double">Double</span></span>, <span name="kurtosisStat">kurtosisStat: <span class="extype" name="scala.Double">Double</span></span>, <span name="pvalueKurtosis">pvalueKurtosis: <span class="extype" name="scala.Double">Double</span></span>, <span name="critValueKurtosis">critValueKurtosis: <span class="extype" name="scala.Double">Double</span></span>, <span name="skewTestRejectNull">skewTestRejectNull: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="kurtotisTestRejectNull">kurtotisTestRejectNull: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@MardiaTestStatisticextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">an object to hold the results output from the mardia test procedure.</p>
     </li><li name="au.id.cxd.math.probability.analysis.Odds" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="OddsextendsAnyRef"></a>
       <a id="Odds:Odds"></a>
@@ -455,14 +579,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Created by cd on 26/03/2016.
 </p></div></div>
     </li><li name="au.id.cxd.math.probability.analysis.PillaisTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
@@ -557,14 +681,14 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 "HTML-CSS": {preferredFont: 'TeX'}
 });
 </script>
-<script type="text/javascript" async src="http://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
  </p><p>Created by cd on 7/09/2014.</p><p>apply tchebysheff's inequality</p><p>used to provide a lower bound estimate for P where</p><p>$$
 P(\mu - k\sigma &lt; Y &lt; \mu + k\sigma) &gt;= 1 - 1/k^2
 $$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p><p>The parameters for $\mu$ and $\sigma$ are estimated.</p><p><u>Example Usage</u></p><p>The following provides an example for estimating a distribution with</p><p>$\mu = 20$ and $\sigma = 2$</p><pre>  <span class="kw">val</span> mu = <span class="num">20.0</span>
@@ -664,6 +788,23 @@ $$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p>
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.probability.analysis.HenzeZirklerTest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HenzeZirklerTest"></a>
+      <a id="HenzeZirklerTest:HenzeZirklerTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HenzeZirklerTest$.html"><span class="name">HenzeZirklerTest</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@HenzeZirklerTest" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="au.id.cxd.math.probability.analysis.Manova" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Manova"></a>
       <a id="Manova:Manova"></a>
@@ -677,6 +818,23 @@ $$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@Manova" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.analysis.MardiaTest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MardiaTest"></a>
+      <a id="MardiaTest:MardiaTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MardiaTest$.html"><span class="name">MardiaTest</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@MardiaTest" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
