@@ -94,7 +94,7 @@ import scala.collection.immutable.Stream
   * $$
   *
   **/
-class Manova(method: ManovaMethod, groupNames: List[String], data: DenseMatrix[Double], val alpha: Double = 0.05) {
+class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], data: DenseMatrix[Double], val alpha: Double = 0.05) {
 
   lazy val groups = groupIndexes(groupNames)
 
