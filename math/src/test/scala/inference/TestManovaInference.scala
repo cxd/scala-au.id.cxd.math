@@ -49,25 +49,25 @@ class TestManovaInference extends FlatSpec
     val (groups, data) = read()
 
     val m = Manova.build(groups, data)
-    val B = m.computeB(data)
+    val (b,mu) = m.computeB(data)
 
     // we should have 20 groups in the data, hence 20 rows.
 
 
-    println(s"B: (${B.rows} x ${B.cols})")
+    println(s"B: (${b.rows} x ${b.cols})")
 
-    println(B)
+    println(b)
 
-    B.rows should be (data.cols)
-    B.cols should be (data.cols)
+    b.rows should be (data.cols)
+    b.cols should be (data.cols)
   }
 
   "Manova" should "compute inverse" in new TestManovaData {
     val (groups, data) = read()
 
     val m = Manova.build(groups, data)
-    val B = m.computeB(data)
-
+    val (b,mu) = m.computeB(data)
+    val B = b
     val T = m.computeT(data)
 
     val W = T + (-1.0 * B)

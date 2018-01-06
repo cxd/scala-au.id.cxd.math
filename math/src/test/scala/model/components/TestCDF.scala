@@ -13,7 +13,7 @@ class TestCDF extends FlatSpec with Matchers {
 
   "CDF" should "extract canonical functions" in new TestEmployPopData {
     val (groups, data) = read()
-    val (components, coeffs, percentVar, zMat, cor) = CanonicalDiscriminantAnalysis(groups, data)
+    val (components, coeffs, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(groups, data)
 
     println(s"$percentVar")
     println("Correlations")
@@ -35,7 +35,7 @@ trait TestEmployPopData extends MatrixReader {
     val file = new File(url.getFile)
     val mat = read(file)
 
-    val m2 = mat(::, 1 to 10).toDenseMatrix
+    val m2 = mat(::, 1 to 9).toDenseMatrix
 
     //println(m2)
     // the data set is standardised prior to the procedure

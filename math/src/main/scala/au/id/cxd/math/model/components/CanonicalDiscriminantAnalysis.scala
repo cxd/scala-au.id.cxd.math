@@ -51,9 +51,11 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     val n = dataX.rows
     val m = groups.size
     val p = dataX.cols
-    val numComponents = List(n-1,p).min
+    val numComponents = List(m-1,p).min
     val T = computeT(dataX)
-    val B = computeB(dataX)
+    // the group means is also available
+    val (betweenMat, mu) = computeB(dataX)
+    val B = betweenMat
     val W = T + (-1.0 * B)
     // W^{-1}B
     val WinvB = W \ B
@@ -68,7 +70,7 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     println(s"DIM (${zMat.rows} , ${zMat.cols})")
     // determine the correlation between the columns of the original data and the components
     val cor = Cor(dataX, mat)
-    (components, coeffs, percentVar, zMat, cor)
+    (components, coeffs, percentVar, zMat, cor, mu)
   }
 
 }

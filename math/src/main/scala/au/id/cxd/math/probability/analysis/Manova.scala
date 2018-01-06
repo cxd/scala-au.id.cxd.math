@@ -184,7 +184,7 @@ class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], dat
     *
     * @param m
     */
-  def computeB(m: DenseMatrix[Double]): DenseMatrix[Double] = {
+  def computeB(m: DenseMatrix[Double]): (DenseMatrix[Double], DenseMatrix[Double]) = {
     // generate a matrix of column means for each group.
     val mu = partitions.foldLeft((0, DenseMatrix.zeros[Double](partitions.length, m.cols))) {
       (accum, partition) => {
@@ -202,7 +202,7 @@ class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], dat
     }
 
     val B = nSS.t * mu._2
-    B
+    (B, mu._2)
   }
 
   /**
@@ -290,7 +290,8 @@ class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], dat
     val m = groups.size
     val p = data.cols
     val T = computeT(data)
-    val B = computeB(data)
+    val (betweenMat, mu) = computeB(data)
+    val B = betweenMat
     val W = T + (-1.0 * B)
     // W^{-1}B
     val WinvB = W \ B

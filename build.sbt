@@ -46,7 +46,9 @@ lazy val commonSettings = Seq(
     // native libraries greatly improve performance, but increase jar sizes.
     "org.scalanlp" %% "breeze-natives" % breezeVersion,
     // add the scalaz library
-    "org.scalaz" %% "scalaz-core" % "7.1.0"
+    "org.scalaz" %% "scalaz-core" % "7.1.0",
+    // json4s
+    "org.json4s" %% "json4s-jackson" % "3.6.0-M2"
   )
 )
 

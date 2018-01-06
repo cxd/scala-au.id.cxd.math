@@ -49,7 +49,7 @@ val plot1 = Vegas("Percent Variance Explained for Component",
   encodeX("component", Nominal).
   encodeY("percentVariance", Quantitative)
 
-VegasHelper.showPlot(plot1, name="plot1.html")
+VegasHelper.showPlot(plot1, fileName="plot1.html")
 
 
 
@@ -78,4 +78,4 @@ val plot2 = Vegas("Ordination of sparrows vs survival",
   encodeY("c2", Quantitative).
   encodeColor(field="survived", dataType=Nominal)
 
-VegasHelper.showPlot(plot2, name="plot2.html")
+VegasHelper.showPlot(plot2, fileName="plot2.html")

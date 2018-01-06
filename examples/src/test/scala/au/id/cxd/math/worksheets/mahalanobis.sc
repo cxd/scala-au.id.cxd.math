@@ -69,4 +69,4 @@ val plot = Vegas.layered("Quantiles for chisq distribution",
       encodeY("abline", Quantitative).encodeColor(value="red")
   )
 
-VegasHelper.showPlot(plot, name="mahalanobis.html")
+VegasHelper.showPlot(plot, fileName="mahalanobis.html")
