@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Manova - au.id.cxd.math.probability.analysis.Manova</title>
-          <meta name="description" content="Manova - au.id.cxd.math.probability.analysis.Manova" />
-          <meta name="keywords" content="Manova au.id.cxd.math.probability.analysis.Manova" />
+          <title>CanonicalDiscriminantAnalysis - au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis</title>
+          <meta name="description" content="CanonicalDiscriminantAnalysis - au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis" />
+          <meta name="keywords" content="CanonicalDiscriminantAnalysis au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'au.id.cxd.math.probability.analysis.Manova';
+            var hash = 'au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,14 +28,14 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="Manova$.html" title="See companion object"><img alt="Class/Object" src="../../../../../../lib/class_to_object_big.png" /></a>
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.probability">probability</a>.<a href="package.html" class="extype" name="au.id.cxd.math.probability.analysis">analysis</a></p>
-        <h1><a href="Manova$.html" title="See companion object">Manova</a></h1><h3><span class="morelinks"><div>
+        <a href="CanonicalDiscriminantAnalysis$.html" title="See companion object"><img alt="Class/Object" src="../../../../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.model">model</a>.<a href="package.html" class="extype" name="au.id.cxd.math.model.components">components</a></p>
+        <h1><a href="CanonicalDiscriminantAnalysis$.html" title="See companion object">CanonicalDiscriminantAnalysis</a></h1><h3><span class="morelinks"><div>
             Related Docs:
-            <a href="Manova$.html" title="See companion object">object Manova</a>
-            | <a href="package.html" class="extype" name="au.id.cxd.math.probability.analysis">package analysis</a>
+            <a href="CanonicalDiscriminantAnalysis$.html" title="See companion object">object CanonicalDiscriminantAnalysis</a>
+            | <a href="package.html" class="extype" name="au.id.cxd.math.model.components">package components</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -47,7 +47,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Manova</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">CanonicalDiscriminantAnalysis</span><span class="result"> extends <a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></span>
       </span>
       </h4>
       
@@ -58,46 +58,22 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 });
 </script>
 <script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
- </p><p>Manova for analysis of variance testing
-whether there is a difference in variation between groups.</p><p>The resulting f statistic is used to test the null hypothesis that the groups within the sample have
-the same multivariate mean and common covariance, while the alternate hypothesis indicates
-that the groups within the sample do not share the same mean and do not have common covariance.</p><p>The procedure assumes multivariate normality (test for this prior to using manova) and common variance between groups.</p><p>Given the above assumptions hold, it is useful to perform the manova procedure with standardised data.</p><p>The eigen value solution used in the process may differ from other packages, possibly because there are multiple solutions
-to the problem used in the calculation. The statistics obtained should be reported when displaying the output,
-those should include, the critical value for the significance level, the calculated f-statistics, the degrees of freedom and the
-calculated statistic corresponding to the method.</p><p>In order to perform the analysis several related methods are available.</p><p>- Wilks Lambda
-- Roy's Largest Root
-- Pillai's Trace
-- Lawes-Hotelling trace</p><p>Each of the statistics rely on the following matrices.</p><p># Total Variation
-$$
-T = Cov(X)*(n-1)
-$$
-The matrix $T$ is $k \times k$ in size where $k$ is the number of attributes in $X$.
-$n$ is the total number of rows in the data set.</p><p># Within Group Variation
-$$
-W = T - B
-$$
-where B is the between group variation.</p><p># Between Group Variation</p><p>In order to compute between group variation we need a column or vector in the data
-that is a group categorical variable.</p><p>From this value we then determine the set of group means $G_{\mu}$
-which for m groups are m group means vectors. We then compute</p><p>$$
-B = n G_{\mu}' G_{\mu}
-$$</p><p>$n$ here is the column vector with the number of observations for each group.</p><p>Note that $G_{\mu}$ is a matrix of $m \times k$ where $k$ is the number of attributes
-and $m$ the number of groups. The matrix $B$ is $k \times k$.</p><p># Statistics</p><p>## Wilks Lambda</p><p>Given the design matrix compute wilks lambda</p><p>$$
-\Lambda = \frac{|W|}{|T|} = \prod_{i=1}&#94;k \frac{1}{1+\lambda_i}
-$$
-Where $W$ is the within sample variation and $T$ is the total variation.</p><p>## Roy's Largest Root</p><p>$$
-\lambda_{max}
-$$</p><p>## Pillai's Trace</p><p>$$
-V = \sum_{i=1}&#94;k \frac{\lambda_i}{1+\lambda_i}
-$$</p><p>## Lawes Hotelling trace
-$$
-U = \sum_{i=1}&#94;k \lambda+i
-$$</p></div><div class="toggleContainer block">
+ </p><p>Similar in manner to the MANOVA procedure,
+the Canonical Discriminant functions makes use of the
+within group variation $W$ and the between group variation $B$
+in order to solve the eigen decomposition of</p><p>$$
+W&#94;{-1}B
+$$</p><p>The resulting eigenvectors form the coefficients of the canonical functions for</p><p>$$
+Z_i = a_{i1}X_1 + a_{i2}X_2 + \cdots + a_{ip}X_p
+$$</p><p>Hence $Z_i$ is the projection of $X$ into the number of components that best describe the variability in the data.
+The number of components is the smaller of $p$ and $n-1$.</p><p>The value $Z_1$ is the F-ratio for a one-way analysis of variance for the variation within and between groups.
+The subsequent discriminant function $Z_2$ represents the variation within and between groups that is not correlated with $Z_1$.
+Subsequent discriminant functions capture the variation within and between groups not correlated with previous discriminant functions.</p><p>The correlation between the original attributes and the canonical discriminant functions can then be used to identify which attributes
+are represented by each of the discriminant functions. As these are a linear combination of covariates there may be more than one attribute
+with a large magnitude of correlation with the resulting function.</p><p>The resulting projection of the canonical functions can be used for visualisation of the ordination.</p><p>The associated correlation matrix between attributes and components can be used to assist in the interpretation of the ordination.</p><p>This technique can serve as a form of dimensionality reduction as well as a method for visualisation and interpretation.</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="../../model/components/CanonicalDiscriminantAnalysis.html" class="extype" name="au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis">CanonicalDiscriminantAnalysis</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -114,7 +90,7 @@ $$</p></div><div class="toggleContainer block">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="au.id.cxd.math.probability.analysis.Manova"><span>Manova</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis"><span>CanonicalDiscriminantAnalysis</span></li><li class="in" name="au.id.cxd.math.probability.analysis.Manova"><span>Manova</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -133,19 +109,19 @@ $$</p></div><div class="toggleContainer block">
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="au.id.cxd.math.probability.analysis.Manova#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(method:au.id.cxd.math.probability.analysis.ManovaMethod,groupNames:List[String],data:breeze.linalg.DenseMatrix[Double],alpha:Double):au.id.cxd.math.probability.analysis.Manova"></a>
-      <a id="&lt;init&gt;:Manova"></a>
+              <ol><li name="au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(groups:List[String],dataX:breeze.linalg.DenseMatrix[Double]):au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis"></a>
+      <a id="&lt;init&gt;:CanonicalDiscriminantAnalysis"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Manova</span><span class="params">(<span name="method">method: <a href="ManovaMethod.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaMethod">ManovaMethod</a> = <span class="symbol">WilksLambda()</span></span>, <span name="groupNames">groupNames: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="data">data: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="alpha">alpha: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.05</span></span>)</span>
+        <span class="name">CanonicalDiscriminantAnalysis</span><span class="params">(<span name="groups">groups: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="dataX">dataX: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@&lt;init&gt;(method:au.id.cxd.math.probability.analysis.ManovaMethod,groupNames:List[String],data:breeze.linalg.DenseMatrix[Double],alpha:Double):au.id.cxd.math.probability.analysis.Manova" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@&lt;init&gt;(groups:List[String],dataX:breeze.linalg.DenseMatrix[Double]):au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -171,7 +147,7 @@ $$</p></div><div class="toggleContainer block">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -188,7 +164,7 @@ $$</p></div><div class="toggleContainer block">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@##():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -205,12 +181,12 @@ $$</p></div><div class="toggleContainer block">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#alpha" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#alpha" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="alpha:Double"></a>
       <a id="alpha:Double"></a>
       <h4 class="signature">
@@ -222,11 +198,11 @@ $$</p></div><div class="toggleContainer block">
         <span class="name">alpha</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@alpha:Double" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@alpha:Double" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -239,11 +215,50 @@ $$</p></div><div class="toggleContainer block">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis#classify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="classify(Y:breeze.linalg.DenseMatrix[Double],coeffs:breeze.linalg.DenseMatrix[Double],groupMeans:breeze.linalg.DenseMatrix[Double],groupLabels:List[String]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double],scala.collection.immutable.IndexedSeq[(Int,String)])"></a>
+      <a id="classify(DenseMatrix[Double],DenseMatrix[Double],DenseMatrix[Double],List[String]):(DenseMatrix[Double],DenseMatrix[Double],DenseMatrix[Double],IndexedSeq[(Int,String)])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">classify</span><span class="params">(<span name="Y">Y: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="coeffs">coeffs: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="groupMeans">groupMeans: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="groupLabels">groupLabels: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>)])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@classify(Y:breeze.linalg.DenseMatrix[Double],coeffs:breeze.linalg.DenseMatrix[Double],groupMeans:breeze.linalg.DenseMatrix[Double],groupLabels:List[String]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double],scala.collection.immutable.IndexedSeq[(Int,String)])" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">after having obtained the coefficients
+we can project new data $Y$ into the canonical functions
+and then do the same for the group means.</p><div class="fullcomment"><div class="comment cmt"><p>after having obtained the coefficients
+we can project new data $Y$ into the canonical functions
+and then do the same for the group means.
+We then use mahalanobis distance to identify the closest corresponding group for
+each row of the data.
+</p></div><dl class="paramcmts block"><dt class="param">Y</dt><dd class="cmt"><p>
+the new data examples</p></dd><dt class="param">coeffs</dt><dd class="cmt"><p>
+the coefficients obtained from the canonical function analysis.</p></dd><dt class="param">groupMeans</dt><dd class="cmt"><p>
+the group means obtained from the original analysis.
+each row of the group means is assumed to have been ordered alpha numerically
+the row labels</p></dd><dt class="param">groupLabels</dt><dd class="cmt"><p>
+the group labels to assign to each group.
+this is the same length as the rows of the group column means
+and the indexes are assumed to be in the same order as the group column means.
+the group means is initially obtained in alpha numeric order of the original group names.
+this parameter allows arbitrary labels to be returned instead of indexes</p></dd><dt>returns</dt><dd class="cmt"><p>
+the result is a tuple consisting of the new projection matrix for the data Y
+the projection matrix for the group Means
+the mahalanobis distance matrix for Y to the groupMeans for each row of Y
+the list of indexes for the row of the group means that has the corresponding closest mahalanobis distance
+to the corresponding row of Y</p></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -256,7 +271,7 @@ $$</p></div><div class="toggleContainer block">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -279,7 +294,7 @@ $$</p></div><div class="toggleContainer block">
         <span class="name">computeB</span><span class="params">(<span name="m">m: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@computeB(m:breeze.linalg.DenseMatrix[Double]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double])" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@computeB(m:breeze.linalg.DenseMatrix[Double]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double])" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -289,7 +304,7 @@ which for m groups are m group means vectors. We then compute</p><p>$$
 B = n G_{\mu}' G_{\mu}
 $$</p><p>$n$ here is the column vector with the number of observations for each group.</p><p>Note that $G_{\mu}$ is a matrix of $m \times k$ where $k$ is the number of attributes
 and $m$ the number of groups.</p><p>The matrix $B$ is $k \times k$.
-</p></div></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.analysis.Manova#computeT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="computeT(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
       <a id="computeT(DenseMatrix[Double]):DenseMatrix[Double]"></a>
@@ -302,7 +317,7 @@ and $m$ the number of groups.</p><p>The matrix $B$ is $k \times k$.
         <span class="name">computeT</span><span class="params">(<span name="m">m: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@computeT(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@computeT(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -312,8 +327,26 @@ T = Cov(X)*(n-1)
 $$
 The matrix $T$ is $k \times k$ in size where $k$ is the number of attributes in $X$.
 $n$ is the total number of rows in the data set.
-</p></div></div>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#eig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis#computeZ" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="computeZ():(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double])"></a>
+      <a id="computeZ():(DenseVector[Double],DenseMatrix[Double],DenseVector[Double],DenseMatrix[Double],DenseMatrix[Double],DenseMatrix[Double])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">computeZ</span><span class="params">()</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@computeZ():(breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseVector[Double],breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double])" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">extract the canonical discriminant functions and calculate the correlation between the original groups
+and the components.</p>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#eig" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eig(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseVector[Double]"></a>
       <a id="eig(DenseMatrix[Double]):DenseVector[Double]"></a>
       <h4 class="signature">
@@ -325,13 +358,15 @@ $n$ is the total number of rows in the data set.
         <span class="name">eig</span><span class="params">(<span name="m">m: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@eig(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@eig(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseVector[Double]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">eigenvalues approximated by the square of the singular values
 http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>eigenvalues approximated by the square of the singular values
+http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -344,7 +379,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -361,7 +396,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -378,7 +413,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -401,12 +436,12 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#groupIndexes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#groupIndexes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="groupIndexes(groupNames:List[String]):scala.collection.immutable.Map[String,Vector[Int]]"></a>
       <a id="groupIndexes(List[String]):Map[String,Vector[Int]]"></a>
       <h4 class="signature">
@@ -418,12 +453,13 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">groupIndexes</span><span class="params">(<span name="groupNames">groupNames: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groupIndexes(groupNames:List[String]):scala.collection.immutable.Map[String,Vector[Int]]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@groupIndexes(groupNames:List[String]):scala.collection.immutable.Map[String,Vector[Int]]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">identify the group indexes.</p>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#groups" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">identify the group indexes.</p><div class="fullcomment"><div class="comment cmt"><p>identify the group indexes.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#groups" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="groups:scala.collection.immutable.Map[String,Vector[Int]]"></a>
       <a id="groups:Map[String,Vector[Int]]"></a>
       <h4 class="signature">
@@ -435,11 +471,11 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">groups</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groups:scala.collection.immutable.Map[String,Vector[Int]]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@groups:scala.collection.immutable.Map[String,Vector[Int]]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -452,7 +488,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -469,12 +505,12 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#lawesHotellingTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#lawesHotellingTrace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lawesHotellingTrace(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat"></a>
       <a id="lawesHotellingTrace(DenseVector[Double],Int,Int,Int):ManovaStat"></a>
       <h4 class="signature">
@@ -483,14 +519,14 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lawesHotellingTrace</span><span class="params">(<span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
+        <span class="name">lawesHotellingTrace</span><span class="params">(<span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../../probability/analysis/ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@lawesHotellingTrace(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@lawesHotellingTrace(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -503,7 +539,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -520,7 +556,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -537,12 +573,12 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#op" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#op" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="op():au.id.cxd.math.probability.analysis.ManovaTest"></a>
       <a id="op():ManovaTest"></a>
       <h4 class="signature">
@@ -551,15 +587,15 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">op</span><span class="params">()</span><span class="result">: <a href="ManovaTest.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaTest">ManovaTest</a></span>
+        <span class="name">op</span><span class="params">()</span><span class="result">: <a href="../../probability/analysis/ManovaTest.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaTest">ManovaTest</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@op():au.id.cxd.math.probability.analysis.ManovaTest" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@op():au.id.cxd.math.probability.analysis.ManovaTest" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#partitionGroups" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#partitionGroups" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partitionGroups(m:breeze.linalg.DenseMatrix[Double])(groups:Map[String,Vector[Int]]):List[(String,breeze.linalg.DenseMatrix[Double])]"></a>
       <a id="partitionGroups(DenseMatrix[Double])(Map[String,Vector[Int]]):List[(String,DenseMatrix[Double])]"></a>
       <h4 class="signature">
@@ -571,12 +607,13 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">partitionGroups</span><span class="params">(<span name="m">m: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="params">(<span name="groups">groups: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@partitionGroups(m:breeze.linalg.DenseMatrix[Double])(groups:Map[String,Vector[Int]]):List[(String,breeze.linalg.DenseMatrix[Double])]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@partitionGroups(m:breeze.linalg.DenseMatrix[Double])(groups:Map[String,Vector[Int]]):List[(String,breeze.linalg.DenseMatrix[Double])]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">extract the partitions for each of the groups.</p>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#partitions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">extract the partitions for each of the groups.</p><div class="fullcomment"><div class="comment cmt"><p>extract the partitions for each of the groups.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#partitions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partitions:List[(String,breeze.linalg.DenseMatrix[Double])]"></a>
       <a id="partitions:List[(String,DenseMatrix[Double])]"></a>
       <h4 class="signature">
@@ -588,12 +625,12 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">partitions</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@partitions:List[(String,breeze.linalg.DenseMatrix[Double])]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@partitions:List[(String,breeze.linalg.DenseMatrix[Double])]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#pillaisTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#pillaisTrace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="pillaisTrace(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat"></a>
       <a id="pillaisTrace(DenseVector[Double],Int,Int,Int):ManovaStat"></a>
       <h4 class="signature">
@@ -602,15 +639,15 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pillaisTrace</span><span class="params">(<span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
+        <span class="name">pillaisTrace</span><span class="params">(<span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../../probability/analysis/ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@pillaisTrace(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@pillaisTrace(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#roysLargestRoot" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#roysLargestRoot" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="roysLargestRoot(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat"></a>
       <a id="roysLargestRoot(DenseVector[Double],Int,Int,Int):ManovaStat"></a>
       <h4 class="signature">
@@ -619,15 +656,15 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">roysLargestRoot</span><span class="params">(<span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
+        <span class="name">roysLargestRoot</span><span class="params">(<span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../../probability/analysis/ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@roysLargestRoot(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@roysLargestRoot(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#selectMethod" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#selectMethod" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="selectMethod():(breeze.linalg.DenseVector[Double],Int,Int,Int)=&gt;au.id.cxd.math.probability.analysis.ManovaStat"></a>
       <a id="selectMethod():(DenseVector[Double],Int,Int,Int)⇒ManovaStat"></a>
       <h4 class="signature">
@@ -636,14 +673,14 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">selectMethod</span><span class="params">()</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ <a href="ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
+        <span class="name">selectMethod</span><span class="params">()</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ <a href="../../probability/analysis/ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@selectMethod():(breeze.linalg.DenseVector[Double],Int,Int,Int)=&gt;au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@selectMethod():(breeze.linalg.DenseVector[Double],Int,Int,Int)=&gt;au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -656,7 +693,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -673,7 +710,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@toString():String" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -690,7 +727,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -713,7 +750,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -736,7 +773,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -747,7 +784,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#wilksLambda" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#wilksLambda" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wilksLambda(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat"></a>
       <a id="wilksLambda(DenseVector[Double],Int,Int,Int):ManovaStat"></a>
       <h4 class="signature">
@@ -756,15 +793,16 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wilksLambda</span><span class="params">(<span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
+        <span class="name">wilksLambda</span><span class="params">(<span name="eigenValues">eigenValues: <span class="extype" name="breeze.linalg.DenseVector">DenseVector</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="n">n: <span class="extype" name="scala.Int">Int</span></span>, <span name="m">m: <span class="extype" name="scala.Int">Int</span></span>, <span name="p">p: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../../probability/analysis/ManovaStat.html" class="extype" name="au.id.cxd.math.probability.analysis.ManovaStat">ManovaStat</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@wilksLambda(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis@wilksLambda(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">calculate wilksLambda
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>calculate wilksLambda
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -774,7 +812,9 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="au.id.cxd.math.probability.analysis.Manova">
+              <h3>Inherited from <a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

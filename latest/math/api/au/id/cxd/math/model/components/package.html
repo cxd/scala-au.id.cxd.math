@@ -66,7 +66,50 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="au.id.cxd.math.model.components.PrincipleComponentsAnalysis" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CanonicalDiscriminantAnalysisextendsManova"></a>
+      <a id="CanonicalDiscriminantAnalysis:CanonicalDiscriminantAnalysis"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CanonicalDiscriminantAnalysis.html"><span class="name">CanonicalDiscriminantAnalysis</span></a><span class="result"> extends <a href="../../probability/analysis/Manova.html" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.package@CanonicalDiscriminantAnalysisextendsManova" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Similar in manner to the MANOVA procedure,
+the Canonical Discriminant functions makes use of the
+within group variation $W$ and the between group variation $B$
+in order to solve the eigen decomposition of</p><p>$$
+W&#94;{-1}B
+$$</p><p>The resulting eigenvectors form the coefficients of the canonical functions for</p><p>$$
+Z_i = a_{i1}X_1 + a_{i2}X_2 + \cdots + a_{ip}X_p
+$$</p><p>Hence $Z_i$ is the projection of $X$ into the number of components that best describe the variability in the data.
+The number of components is the smaller of $p$ and $n-1$.</p><p>The value $Z_1$ is the F-ratio for a one-way analysis of variance for the variation within and between groups.
+The subsequent discriminant function $Z_2$ represents the variation within and between groups that is not correlated with $Z_1$.
+Subsequent discriminant functions capture the variation within and between groups not correlated with previous discriminant functions.</p><p>The correlation between the original attributes and the canonical discriminant functions can then be used to identify which attributes
+are represented by each of the discriminant functions. As these are a linear combination of covariates there may be more than one attribute
+with a large magnitude of correlation with the resulting function.</p><p>The resulting projection of the canonical functions can be used for visualisation of the ordination.</p><p>The associated correlation matrix between attributes and components can be used to assist in the interpretation of the ordination.</p><p>This technique can serve as a form of dimensionality reduction as well as a method for visualisation and interpretation.</p></div></div>
+    </li><li name="au.id.cxd.math.model.components.PrincipleComponentsAnalysis" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="PrincipleComponentsAnalysisextendsAnyRef"></a>
       <a id="PrincipleComponentsAnalysis:PrincipleComponentsAnalysis"></a>
       <h4 class="signature">
@@ -96,8 +139,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 });
 </script>
 <script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
- </p><p>TODO: implement operations to support PCA
-Created by cd on 10/07/2016.
+ </p><p>implement operations to support PCA</p><p>generate the PCA of the correlation matrix for the sphereised data.</p><p>Created by cd on 10/07/2016.
 </p></div></div>
     </li><li name="au.id.cxd.math.model.components.SingularValueDecomposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SingularValueDecompositionextendsAnyRef"></a>
@@ -158,7 +200,41 @@ performing the procedure.</p><p>There are some exceptions to this rule as in the
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="au.id.cxd.math.model.components.SingularValueDecomposition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CanonicalDiscriminantAnalysis"></a>
+      <a id="CanonicalDiscriminantAnalysis:CanonicalDiscriminantAnalysis"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CanonicalDiscriminantAnalysis$.html"><span class="name">CanonicalDiscriminantAnalysis</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.package@CanonicalDiscriminantAnalysis" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.model.components.PrincipleComponentsAnalysis" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PrincipleComponentsAnalysis"></a>
+      <a id="PrincipleComponentsAnalysis:PrincipleComponentsAnalysis"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PrincipleComponentsAnalysis$.html"><span class="name">PrincipleComponentsAnalysis</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.package@PrincipleComponentsAnalysis" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.model.components.SingularValueDecomposition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SingularValueDecomposition"></a>
       <a id="SingularValueDecomposition:SingularValueDecomposition"></a>
       <h4 class="signature">
