@@ -1,8 +1,8 @@
 package au.id.cxd.math.model.components
 
-import au.id.cxd.math.function.distance.Cor
+import au.id.cxd.math.function.distance.{Cor, MahalanobisDistance}
 import au.id.cxd.math.probability.analysis.Manova
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
   * ##import MathJax
@@ -41,7 +41,7 @@ import breeze.linalg.DenseMatrix
   *
   */
 class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Double])
-  extends Manova(groupNames=groups, data=dataX) {
+  extends Manova(groupNames = groups, data = dataX) {
 
   /**
     * extract the canonical discriminant functions and calculate the correlation between the original groups
@@ -51,7 +51,7 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     val n = dataX.rows
     val m = groups.size
     val p = dataX.cols
-    val numComponents = List(m-1,p).min
+    val numComponents = List(m - 1, p).min
     val T = computeT(dataX)
     // the group means is also available
     val (betweenMat, mu) = computeB(dataX)
@@ -64,17 +64,82 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     // the projections are the canonocal projections. //
     val components = eigenValues(0 until numComponents).toDenseVector
     val percentVar = varExplained(0 until numComponents).toDenseVector
-    val coeffs = eigenVectors(::,0 until numComponents).toDenseMatrix
-    val mat = (projections * dataX.t).t
-    val zMat = mat(::,0 until numComponents).toDenseMatrix
+    val coeffs = eigenVectors(::, 0 until numComponents).toDenseMatrix
+    val mat = (coeffs * dataX.t).t
+    val zMat = mat(::, 0 until numComponents).toDenseMatrix
     println(s"DIM (${zMat.rows} , ${zMat.cols})")
     // determine the correlation between the columns of the original data and the components
     val cor = Cor(dataX, mat)
     (components, coeffs, percentVar, zMat, cor, mu)
   }
 
+  /**
+    * after having obtained the coefficients
+    * we can project new data $Y$ into the canonical functions
+    * and then do the same for the group means.
+    * We then use mahalanobis distance to identify the closest corresponding group for
+    * each row of the data.
+    *
+    * @param Y
+    * the new data examples
+    * @param coeffs
+    * the coefficients obtained from the canonical function analysis.
+    * @param groupMeans
+    * the group means obtained from the original analysis.
+    * each row of the group means is assumed to have been ordered alpha numerically
+    * the row labels
+    * @param groupLabels
+    * the group labels to assign to each group.
+    * this is the same length as the rows of the group column means
+    * and the indexes are assumed to be in the same order as the group column means.
+    * the group means is initially obtained in alpha numeric order of the original group names.
+    * this parameter allows arbitrary labels to be returned instead of indexes
+    * @return
+    * the result is a tuple consisting of the new projection matrix for the data Y
+    * the projection matrix for the group Means
+    * the mahalanobis distance matrix for Y to the groupMeans for each row of Y
+    * the list of indexes for the row of the group means that has the corresponding closest mahalanobis distance
+    * to the corresponding row of Y
+    *
+    */
+  def classify(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
+    val groupProjection = (coeffs * groupMeans.t).t
+    val yProjection = (coeffs * Y.t).t
+    // we need to find the mahalanobis distance between each group and each row of y.
+    // the distance matrix will be Y rows x group number rows
+    val distances = DenseMatrix.tabulate[Double](yProjection.rows, groupProjection.rows) {
+      case (i, j) => {
+        val row = yProjection(i, ::)
+        val group = groupProjection(j, ::)
+        val dij = MahalanobisDistance(row.t, group.t)
+        dij
+      }
+    }
+    // for each row of the distance matrix we now need to identify which index is the minimum
+    val groupAssignments = (for (i <- 0 until distances.rows) yield i).map {
+      i => {
+        val row = distances(i, ::).t.toArray
+        val minD = row.map(d => Math.abs(d)).min
+        val search = row.foldLeft((0, false)) {
+          (accum, d) =>
+            if (accum._2) accum
+            else if (Math.abs(d) == minD) (accum._1, true)
+            else (accum._1 + 1, false)
+        }
+        (search._1, groupLabels(search._1))
+      }
+    }
+    (yProjection, groupProjection, distances, groupAssignments)
+  }
+
 }
+
 object CanonicalDiscriminantAnalysis {
   def apply(groups: List[String], dataX: DenseMatrix[Double]) =
     new CanonicalDiscriminantAnalysis(groups, dataX).computeZ()
+
+
+  def classify(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
+    new CanonicalDiscriminantAnalysis(groupLabels, Y).classify(Y, coeffs, groupMeans, groupLabels)
+  }
 }

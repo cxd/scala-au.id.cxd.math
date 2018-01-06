@@ -56,9 +56,10 @@ val corData = (for (i <- 0 until attributes.length) yield i)
   }
 
 
-// looking at the correlation plot the first two dimensions look quite interesting
+// looking at the correlation plot the first and fourth
+// dimensions look quite interesting
 val comp1 = zMat(::,0).toArray
-val comp2 = zMat(::,1).toArray
+val comp2 = zMat(::,4).toArray
 // note however there is not alot of linear separation as one component
 // seems to be described mystely by the absence of attributes, most strngly X2
 // and the other seems to be defined by the presence of elements
@@ -127,3 +128,49 @@ configScale(
 VegasHelper.transformAndShowPlot(plot2,
   VegasHelper.replaceMark("rect", _),
   fileName="plotcormandible.html")
+
+val groupNames = List[String](
+  "1.0", "2.0", "3.0", "4.0", "5.0"
+)
+
+// while we have not partitioned the data,
+// we can still reclassify the original data
+// to get some indication of the prediction that the
+// model will make based on minimum distances from the group means
+val (yProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(X, coeffs, groupMeans, groupNames)
+
+// and we can plot the predicted groups using the coordinates of the resulting projection.
+val p1 = yProjection(::,0).toArray
+val p2 = yProjection(::,4).toArray
+
+groupAssignments
+
+val dataset2 = p1.zip(p2).zip(groupAssignments).
+  map { group => (group._1._1, group._1._2, group._2._1, group._2._2) }.
+  map { group => Map("p1" -> group._1,
+    "p2" -> group._2,
+    "group" -> group._4)}
+
+
+val plot3 = Vegas.layered("Predicted Ordination of Mandible Data",
+  width=800.0,
+  height=600.0).
+  withData(
+    dataset2
+  ).withLayers(
+  /*Layer().
+    mark(Point).
+      encodeX("c1", Quantitative).
+      encodeY("c2", Quantitative).
+      encodeColor(field="country", dataType=Nominal).
+      encodeText(field="country", dataType=Nominal),
+  */
+  Layer().
+    mark(Text).
+    encodeX("p1", Quantitative).
+    encodeY("p2", Quantitative).
+    encodeColor(field="group", dataType=Nominal).
+    encodeText(field="group", dataType=Nominal)
+)
+
+VegasHelper.showPlot(plot3, fileName="plotpredictmandible.html")

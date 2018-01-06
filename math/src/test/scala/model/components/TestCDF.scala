@@ -20,6 +20,13 @@ class TestCDF extends FlatSpec with Matchers {
     println(s"$cor")
   }
 
+  "CDF" should "perform classification task" in new TestEmployPopData {
+    val (groups, data) = read()
+    val (components, coeffs, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(groups, data)
+    val result = CanonicalDiscriminantAnalysis.classify(data, coeffs, groupMeans, groups)
+    println(result._4)
+  }
+
 }
 
 
