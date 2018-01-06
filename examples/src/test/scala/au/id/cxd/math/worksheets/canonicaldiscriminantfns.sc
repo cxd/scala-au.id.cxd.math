@@ -109,7 +109,7 @@ val plot1 = Vegas.layered("Ordination of CDF",
   )
 
 
-VegasHelper.showPlot(plot1, fileName="plotcdf.html")
+VegasHelper.showPlot(plot1, fileName="docs/plots/plotcdf1.html")
 
 // color ranges can be updated using:
 // https://vega.github.io/vega/docs/schemes/#scheme-properties
@@ -135,4 +135,4 @@ val plot2 = Vegas("Heatmap of attribute and component correlation",
 
 VegasHelper.transformAndShowPlot(plot2,
   VegasHelper.replaceMark("rect", _),
-  fileName="plotcor.html")
+  fileName="docs/plots/plotcor1.html")

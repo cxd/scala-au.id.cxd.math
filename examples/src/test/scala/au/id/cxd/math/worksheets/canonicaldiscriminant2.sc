@@ -103,7 +103,7 @@ val plot1 = Vegas.layered("Ordination of Mandible Data",
     encodeText(field="group", dataType=Nominal)
 )
 
-VegasHelper.showPlot(plot1, fileName="plotcdfmandible.html")
+VegasHelper.showPlot(plot1, fileName="docs/plots/plotcdfmandible.html")
 
 
 // display a heatmap of attributes and correlation
@@ -127,7 +127,7 @@ configScale(
 
 VegasHelper.transformAndShowPlot(plot2,
   VegasHelper.replaceMark("rect", _),
-  fileName="plotcormandible.html")
+  fileName="docs/plots/plotcormandible.html")
 
 val groupNames = List[String](
   "1.0", "2.0", "3.0", "4.0", "5.0"
@@ -173,4 +173,4 @@ val plot3 = Vegas.layered("Predicted Ordination of Mandible Data",
     encodeText(field="group", dataType=Nominal)
 )
 
-VegasHelper.showPlot(plot3, fileName="plotpredictmandible.html")
+VegasHelper.showPlot(plot3, fileName="docs/plots/plotpredictmandible.html")

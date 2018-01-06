@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/vega/2.6.3/vega.min.js" charset="utf-8"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/vega-lite/1.2.0/vega-lite.min.js" charset="utf-8"></script>
+<script src="https://vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+  </head>
+  <body>
+ <script>
+   var embedSpec = {
+     mode: "vega-lite",
+     spec: {
+  "width" : 800.0,
+  "height" : 600.0,
+  "mark" : "bar",
+  "encoding" : {
+    "x" : {
+      "field" : "component",
+      "type" : "nominal"
+    },
+    "y" : {
+      "field" : "percentVariance",
+      "type" : "quantitative"
+    }
+  },
+  "description" : "Percent Variance Explained for Component",
+  "data" : {
+    "values" : [
+      {
+        "component" : 1,
+        "eigenValue" : 3.6159783445042653,
+        "percentVariance" : 72.31956689008531
+      },
+      {
+        "component" : 2,
+        "eigenValue" : 0.5315040766786125,
+        "percentVariance" : 10.630081533572252
+      },
+      {
+        "component" : 3,
+        "eigenValue" : 0.3864245490255034,
+        "percentVariance" : 7.728490980510068
+      },
+      {
+        "component" : 4,
+        "eigenValue" : 0.3015655175496859,
+        "percentVariance" : 6.031310350993718
+      },
+      {
+        "component" : 5,
+        "eigenValue" : 0.16452751224193277,
+        "percentVariance" : 3.290550244838655
+      }
+    ]
+  }
+}
+   }
+   vg.embed("#vegas-be78080e-136c-4380-b111-f5b538831910", embedSpec, function(error, result) {});
+ </script>
+ <div id='vegas-be78080e-136c-4380-b111-f5b538831910'></div>
+    </body>
+</html>
