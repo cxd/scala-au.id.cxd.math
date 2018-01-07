@@ -1,5 +1,5 @@
 ---
-title: "Canonical Discriminant Functions"
+title: "Canonical Discriminant Function Analysis"
 output: 
   html_document:
     css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
@@ -11,7 +11,6 @@ bibliography: bibliography.bib
 
 <a href="../index.html">Home</a>
 
-## Canonical Discriminant Function Analysis
 
 In examining datasets that have been labelled with classes, variation within and between classes is a desirable property that can help provide class separability and interpretation of differences, especially when examining the relationship between attributes and classes. Similarly, it is useful to visualise the data set in a manner where these grouping may be evident, and in such a way that summarises the characteristics of the data that contributes to the separation between groups. Such a visualisation may be assisted by a dimensional reduction technique which helps to project the attributes of each observation into a smaller space, such a method is known as an ordination. Canonical Discriminant Function Analysis is one approach that can assist with both tasks. 
 
