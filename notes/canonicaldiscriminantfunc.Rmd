@@ -1,0 +1,421 @@
+---
+title: "Canonical Discriminant Functions"
+output: 
+  html_document:
+    css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
+    includes:
+      in_header: canonicaldiscrimfunc_head.html
+csl: journal-of-combinatorics.csl
+bibliography: bibliography.bib
+---
+
+<a href="../index.html">Home</a>
+
+## Canonical Discriminant Function Analysis
+
+In examining datasets that have been labelled with classes, variation within and between classes is a desirable property that can help provide class separability and interpretation of differences, especially when examining the relationship between attributes and classes. Similarly, it is useful to visualise the data set in a manner where these grouping may be evident, and in such a way that summarises the characteristics of the data that contributes to the separation between groups. Such a visualisation may be assisted by a dimensional reduction technique which helps to project the attributes of each observation into a smaller space, such a method is known as an ordination. Canonical Discriminant Function Analysis is one approach that can assist with both tasks. 
+
+This page provides a summary derived from @manly that describes a decomposition that is related to MANOVA and linear discriminant analysis, although does not implement the same technique in classification as linear discriminant analysis. As such it is a simplified implementation of canonical discriminant functions. 
+
+Canonical because they are derived from a set of characteristic equations that result from the decomposition of the ratio of within group variation $W$ and between group variation $B$. 
+
+This ratio $W^-1B$ is also used within the [MANOVA](manova.html) technique when generating test statistics for difference in variation between multiple groups. As such the canonical discriminant function analysis shares the assumption of multivariate normality and common variance as applied by MANOVA. Like MANOVA it is useful to standardise the data prior to performing the analysis.
+
+The canonical discriminant functions are at set of functions
+
+$$
+Z_i = a_{i1}X_1 + a_{i2}X_2 + \cdots + a_{ij}X_k
+$$
+that give the maximum possible F-ratio of between and within group variation in a one-way analysis of variance test. The function $Z_1$ gives the maximum ratio of variation within and between groups, the function $Z_2$ gives the maximum ratio of variation uncorrelated to $Z_1$ and subsequent functions $Z_n$ give the maximum ratio fo variation uncorrelated to $Z_1, Z_2, \cdots Z_{n-1}$, that is, each function $Z_i$ is orthogonal to each other. 
+
+The functions $Z_1, \cdots Z_n$ are found through the eigendecomposition of the ratio of between group variation and within group variation $W^{-1}B$.
+
+$$
+\Lambda a = W^{-1}B a
+$$
+
+The same decomposition is used in extracting the eigenvalues $\Lambda$ that are used to calculate the key statistics for the MANOVA test. 
+
+The eigenvalues $a$ form the coefficients of the canonical discriminant functions $Z' = aX'$. Since $a$ is orthogonal, $Z$ forms an orthogonal basis of X.
+
+Similarly it is possible to project the group means $\mu$ into the basis $Z'_\mu = a\mu'$ which forms a basis for the group means. 
+
+The number of functions that should be retained are the smaller of either the number of groups minus 1 $m - 1$ or the number of attributes $p$ hence we keep $Z_1,\cdots Z_{min(m-1,p)}$ canonical functions. 
+
+For the task of visualisation it is possible to select two or more vectors from the projection $Z$ and plot them accordingly, often labelled with group labels and coloured by groups. This can help visualise the groups in relation to the new coordinate space. 
+
+However interpretation of the coordinate space, like other dimensional reduction techniques, is subjective. Although the correlation of the attributes of the original data with the canonical functions can be used to provide an interpretation as to which attributes have higher influence on each of the components. As such the technique can be used to obtain some insight into the attributes that account for the highest amount of variation within each of the canonical functions. 
+
+As a method of classification one simple method is to take the mahalanobis distances between each observations projection in $Z$ and the group means projection in $Z_\mu$ and assign the class label for the closest group means. Note that this method differs from Linear Discriminant Analysis in that it does not calculate probabilities and does not take into account prior probabilities.
+
+## An example.
+
+The au.id.cxd.math library provides an implementation of canonical discriminant functions as described that produces the projection and correlation of attributes to discriminant functions, as well as a simplistic classification approach using the mahalanobis distances from the projection of group means. This implementation can be used as input to visualisation, and the correlations can assist with interpretation. 
+
+```{r}
+# set the JVM
+Sys.setenv(JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/') 
+Sys.setenv(LD_LIBRARY_PATH = '$LD_LIBRARY_PATH:$JAVA_HOME/lib')
+
+# setup the jvmr interpreter
+library(rJava)
+
+options(java.parameters = c("-Xmx1G", "-XX:MaxPermGen=1G"))
+
+cp <- getwd()
+includes <- list.files(file.path(cp, "../target"), full.names=TRUE)
+
+library(jvmr)
+library(knitr)
+
+scala <- scalaInterpreter(includes)
+knit_engines$set(scalainr = function(options) {
+  code <- paste(options$code, collapse = "\n")
+  output <- capture.output(interpret(scala, code, echo.output = TRUE))
+  engine_output(options, options$code, output)
+})
+```
+
+
+The data used in this example is also taken from @manly, it consists of a set of different skull measurements taken from egyption skulls accross the periods of 
+
+- Early.P, Early Predynastic (2)
+- Late.P, Late Predynastic (3)
+- Dyn.12.13, 12 and 13th Dynasties (1)
+- Ptolemaic (4) 
+- Roman (5) 
+
+The individual measurements taken from each skull are
+
+- MB maximum breadth
+- BH basilbregmatic height
+- BL basilveolar length
+- NH nasal height
+
+Initially the data will be loaded into the library and the initial assumptions for multivariate normality tested. These assumptions are checked on the full data set.
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+import java.io.File
+import scala.collection.mutable
+import au.id.cxd.math.data.CsvReader
+
+import au.id.cxd.math.data.MatrixReader
+import au.id.cxd.math.function.transform.StandardisedNormalisation
+import au.id.cxd.math.probability.analysis._
+
+import au.id.cxd.math.function.distance.MahalanobisDistance
+import au.id.cxd.math.probability.continuous.ChiSquare
+
+val fileName:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/egyption_skulls.csv"
+
+val mat = MatrixReader.readFileAt(fileName)
+// extract the columns of interest.
+val data = mat(::, 0 to 3)
+val eraNum = mat(::, 4).toArray.map(_.toInt.toString)
+val eras = Map("1" -> "Dyn.12.13", 
+               "2" -> "Early.P", 
+               "3" -> "Late.P", 
+               "4" -> "Ptolemic", 
+               "5" -> "Roman")
+val eraNames = List("Dyn.12.13","Early.P","Late.P","Ptolemic","Roman")
+val eraLabels = eraNum.map { num => eras(num) }.toArray
+val X = StandardisedNormalisation().transform(data)
+
+```
+
+Initially checking the qqplot.
+
+
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+// get the distance measures for each example.
+val distance = MahalanobisDistance(X)
+
+// sort distance from lowest to highest.
+val distSorted = distance.toArray.sorted
+
+// chisquare quantiles
+val n = distSorted.length
+val x = (for (i <- 1.0 to n.toDouble by 1.0) yield (i-0.5)/n.toDouble).toArray
+val df = data.cols
+val chisq = ChiSquare(df)
+val quantiles = x.map(chisq.invcdf(_))
+
+```
+
+```{r cleaned, results="asis"}
+x <- scala["x"]
+quantiles <- scala["quantiles"]
+distances <- scala["distSorted"]
+distances <- sapply(distances, function(d) d^2)
+
+m <- lm(quantiles ~ distances)
+intercept <- m$coefficients[1]
+slope <- m$coefficients[2]
+
+plot(distances, quantiles, col="blue", main="QQPlot of squared mahalanobis distance over Chisq Quantiles df=4")
+abline(0,1, col="red")
+
+```
+
+
+The distances of the observations do not appear to deviate far from the expected quantiles, except for the upper tail of the distribution, it appears that there may be one example in particular that deviates from the expected quantile.
+
+And performing a mardia test and henze zirlker test for MVN.
+
+```{r, engine='scalainr', message=FALSE}
+import au.id.cxd.math.probability.analysis.{HenzeZirklerTest, MardiaTest}
+
+val test1 = MardiaTest(0.05, X)
+val test2 = HenzeZirklerTest(0.05, X)
+
+println(s"""
+${test1.toString}
+
+${test2.toString}
+        """)
+```
+
+The data does appear to be MVN distributed.
+
+There are two tasks of interest, the first is to obtain an ordination of the data with some explanation as to the skull measurements that may account for differences between eras. Since the goal of this task is not to perform classification a data partition is not used to explore the data.
+
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+import au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis
+
+val (components, coeffs, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(eraNum.toList, X)
+
+val (yProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(X, coeffs, groupMeans, eraNames)
+
+
+// converting to array to exchange with R.
+val z = zMat.toArray
+val zrows = zMat.rows
+val zcols = zMat.cols 
+var varianceExplained = percentVar.toArray
+val correlation = cor.toArray
+val corRows = cor.rows
+val corCols = cor.cols
+
+val y = yProjection.toArray
+val yrows = yProjection.rows
+val ycols = yProjection.cols
+val yNames = groupAssignments.map(_._2).toArray
+
+```
+
+
+```{r}
+varExplained <- scala["varianceExplained"]
+functions <- 1:length(varExplained)
+plot(varExplained ~ functions, type="b", ylab="percent of variation", xlab="canonical function")
+```
+
+There are four canonical functions produced (4 attributes vs 5 groups).
+
+The first function Z1 provides almost all explanation of the variation, Z2 provides the next largest amount of variation and so on. 
+
+
+```{r}
+cor <- scala["correlation"]
+cor <- (matrix(cor, scala["corRows"], scala["corCols"]))
+#colnames(cor) <- c("Dyn.12.13", "Early.P", "Late.P", "Ptolemic", "Roman")
+colnames(cor) <- c("Z1","Z2","Z3","Z4")
+rownames(cor) <- c("MB", "BH", "BL", "NH")
+require(corrplot)
+corrplot(cor)
+```
+
+If we examine the correlation between attributes and functions it appears that MB (maximum breadth) and NH (nasal height) are strongly negatively correlated with Z1. 
+
+While BH (basilbregmatic height) is most strongly correlated with Z2.
+
+If we plot the ordination along the first two functions we can see firstly that there is not a great separation of groups along these axis, however one interpretation is that smaller values of Z2 and Z1 are examples where there is a larger value of breadth and nasal height. While those with larger values of Z2 and Z1 will have relatively smaller breadth skulls but a larger value of basilbregmatic height. Visually there is a suggestion of more abundance of Ptolemic and Roman skulls that are negatively correlated with the Z2 dimension and are positively correlated with the Z1 dimension. 
+
+
+```{r}
+z <- scala["z"]
+# getting matrix back from scala
+zMat <- as.data.frame(matrix(z, scala["zrows"], scala["zcols"]))
+eraNum <- scala["eraNum"]
+
+eraLabels <- scala["eraLabels"]
+
+plot(zMat[,1],zMat[,2], type="n", xlab="Z2", ylab="Z1")
+text(zMat[,1],zMat[,2], labels=eraLabels, col=eraNum, cex=0.6)
+
+```
+
+It is also possible to view how the canonical functions group the data set having assigned labels by mahalanobis distance from the mean. Visually, this suggests that the ordination does seem to have difficulty identifying skulls from the 12th and 13th dynasties. Note also the method does not take into account prior probabilities (in this sense the probabilities are uniform).
+
+```{r}
+y <- scala["y"]
+yMat <- as.data.frame(matrix(y, scala["yrows"], scala["ycols"]))
+yNames <- scala["yNames"]
+
+
+plot(yMat[,1],yMat[,2], type="n", xlab="Z2", ylab="Z1")
+text(yMat[,1],yMat[,2], labels=yNames, col=as.numeric(as.factor(yNames)), cex=0.6)
+
+```
+
+The second task will be to perform classification, and to determine whether it is possible to use the canonical discriminant functions to assign the corresponding era to observations, for the second purpose a partition between training and test data will be used. The data is partitioned into a 75% training and 25% test set.
+
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+
+val trainFile:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/egyption_skulls_train.csv"
+val testFile:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/egyption_skulls_test.csv"
+
+
+val mat2 = MatrixReader.readFileAt(trainFile)
+// extract the columns of interest.
+val data2 = mat2(::, 0 to 3)
+val eraNum2 = mat2(::, 4).toArray.map(_.toInt.toString)
+val eraLabels2 = eraNum2.map { num => eras(num) }.toArray
+val train = StandardisedNormalisation().transform(data2)
+
+
+
+val mat3 = MatrixReader.readFileAt(testFile)
+// extract the columns of interest.
+val data3 = mat3(::, 0 to 3)
+val eraNum3 = mat3(::, 4).toArray.map(_.toInt.toString)
+val eraLabels3 = eraNum3.map { num => eras(num) }.toArray
+val test = StandardisedNormalisation().transform(data3)
+
+
+val (components2, coeffs2, percentVar2, zMat2, cor2, groupMeans2) = CanonicalDiscriminantAnalysis(eraNum2.toList, train)
+
+val (testProjection2, groupProjection2, distances2, groupAssignments2) = CanonicalDiscriminantAnalysis.classify(test, coeffs2, groupMeans2, eraNames)
+
+val y2 = testProjection2.toArray
+val yrows2 = testProjection2.rows
+val ycols2 = testProjection2.cols
+val yNames2 = groupAssignments2.map(_._2).toArray
+```
+
+
+```{r}
+y2 <- scala["y2"]
+yMat2 <- as.data.frame(matrix(y, scala["yrows2"], scala["ycols2"]))
+yNames2 <- scala["yNames2"]
+
+actualNames <- scala["eraLabels3"]
+
+plot(yMat2[,1],yMat2[,2], type="n", xlab="Z2", ylab="Z1")
+text(yMat2[,1],yMat2[,2], labels=yNames2, col=as.numeric(as.factor(yNames2)), cex=0.6)
+
+```
+
+```{r}
+(m <- table(actualNames, yNames2))
+
+total <- sum(m)
+tp <- sum(diag(m))
+fp <- total - tp
+(percent <- tp/total)
+(falsePc <- fp/total)
+```
+
+
+Note that the classification did not succeed terribly well due to the classes not being entirely separable. However given the 5 classes with a uniformly random class assignment we'd expect a 20% accuracy at least, so this did perform slightly better than random. 
+
+We can repeat the process using the MASS library LDA function which uses a different method of defining the decision boundary, but does make the assumption of common variance.
+
+```{r}
+train <- read.csv(scala["trainFile"], header=TRUE)
+test <- read.csv(scala["testFile"], header=TRUE)
+
+train$Period <- as.factor(scala["eraLabels2"])
+test$Period <- as.factor(scala["eraLabels3"])
+
+require(MASS)
+
+model <- lda(Period~MB+BH+BL+NH, train)
+
+pred <- predict(model, test)
+(m <- table(test$Period, pred$class))
+
+total <- sum(m)
+tp <- sum(diag(m))
+fp <- total - tp
+(percent <- tp/total)
+(falsePc <- fp/total)
+```
+It seems that this particular data set is not easily separated using a linear basis. And perhaps the tests for multivariate normality gave some insight into that, since the assumption of common variance may be a strong indicator that the data groups themselves are not easily separated on a linear basis. In this case it is desirable to have more variability between groups, and less variability within groups. 
+
+## Example with non-MVN distribution.
+
+The mandible data set is an example of set of groups that are separable and have a non-MVN distribution (see [MVN testing](mvn_testing.html) and [Manova](manova.html)). We can generate a training and test set for these groups and demonstrate the separability through classification as follows.
+
+
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+
+val trainFile2:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/test_mandible_train.csv"
+val testFile2:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/test_mandible_test.csv"
+
+
+val mat4 = MatrixReader.readFileAt(trainFile2)
+// extract the columns of interest.
+val data4 = mat4(::, 2 to 10)
+val groupNumTrain = mat4(::, 1).toArray.map(_.toInt.toString)
+val train4 = StandardisedNormalisation().transform(data4)
+
+val mat5 = MatrixReader.readFileAt(testFile2)
+// extract the columns of interest.
+val data5 = mat5(::, 2 to 10)
+val groupNumTest = mat5(::, 1).toArray.map(_.toInt.toString)
+val test5 = StandardisedNormalisation().transform(data5)
+
+// create the model
+val result = CanonicalDiscriminantAnalysis(groupNumTrain.toList, train4)
+// perform the classification
+val (testProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(test5, result._2, result._6, (groupNumTrain ++ groupNumTest).distinct.sorted.toList)
+
+// pass results back to R.
+val y3 = testProjection.toArray
+val yrows3 = testProjection.rows
+val ycols3 = testProjection.cols
+val yNames3 = groupAssignments.map(_._2).toArray
+```
+
+
+
+```{r, width=8, height=6}
+y3 <- scala["y3"]
+yMat3 <- as.data.frame(matrix(y, scala["yrows3"], scala["ycols3"]))
+yNames3 <- scala["yNames3"]
+
+actualNames3 <- scala["groupNumTest"]
+
+par.old <- par(mfrow=c(1,2))
+
+plot(yMat2[,1],yMat2[,2], type="n", xlab="Z2", ylab="Z1", main="Mandible actual class")
+text(yMat2[,1],yMat2[,2], labels=actualNames3, col=as.numeric(as.factor(actualNames3)), cex=0.6)
+
+plot(yMat2[,1],yMat2[,2], type="n", xlab="Z2", ylab="Z1", main="Mandible predicted class")
+text(yMat2[,1],yMat2[,2], labels=yNames3, col=as.numeric(as.factor(yNames3)), cex=0.6)
+
+par(par.old)
+
+```
+
+```{r}
+(m <- table(actualNames3, yNames3))
+
+total <- sum(m)
+tp <- sum(diag(m))
+fp <- total - tp
+(percent <- tp/total)
+(falsePc <- fp/total)
+```
+
+Given that there are 5 species associated with the mandible data, a 50% prediction is better than a 20% chance of being correct with a uniformly random prediction. 
+Note however another reason why the model may perform slightly better is due to the increased number of attributes, in this case there are 9 different measurements of the mandibles in different species, due to this there may be an increased sensitivity to variation. 
+
+
+Note that predicting using LDA from MASS on the same mandible dataset results in even higher accuracy. I'm intending on implementing a separate class that uses the LDA decision boundary, and will also investigate the use of the QDA decision function as well. For the current implementation of the canonical discriminant function however, the classification method is a simple nearest neighbour search based on the mahalanobis distances produced from the projection of the new observation and the group means into the basis generated from the decomposition of the ratio between group variation and the within group variation.
+
