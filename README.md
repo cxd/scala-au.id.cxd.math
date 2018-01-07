@@ -7,7 +7,7 @@ Provides probability distributions (similar to Breeze), and other utilities for 
 
 Further details are available at the "github pages" branch for the project located at:
 
-[au.id.cxd.math](http://cxd.github.io/scala-au.id.cxd.math/)
+[au.id.cxd.math](https://cxd.github.io/scala-au.id.cxd.math/)
 
 
 ### A library experimenting with statistics.
@@ -26,32 +26,37 @@ Part of this is experimenting with library design, or to simply attempt an imple
 
 ### Documentation.
 
-The documentation consists both of [API documentation](http://cxd.github.io/scala-au.id.cxd.math/latest/math/api/index.html) and some of this information is extracted into separate notes and examples.
+The documentation consists both of [API documentation](https://cxd.github.io/scala-au.id.cxd.math/latest/math/api/index.html) and some of this information is extracted into separate notes and examples.
 
 ### Notes on Regression.
 
-Notes on [Linear Regression](http://cxd.github.io/scala-au.id.cxd.math/notes/linearregression.html)
+Notes on [Linear Regression](https://cxd.github.io/scala-au.id.cxd.math/notes/linearregression.html)
 
-Notes on [Logistic Regression](http://cxd.github.io/scala-au.id.cxd.math/notes/logisticregression.html)
+Notes on [Logistic Regression](https://cxd.github.io/scala-au.id.cxd.math/notes/logisticregression.html)
 
-Notes on [Bayesian Linear Regression](http://cxd.github.io/scala-au.id.cxd.math/notes/bayesianlinearregression.html)
+Notes on [Bayesian Linear Regression](https://cxd.github.io/scala-au.id.cxd.math/notes/bayesianlinearregression.html)
 
-Notes on [Bayesian Regression applied to estimation of Project durations](http://cxd.github.io/scala-au.id.cxd.math/notes/bayesianestimation.html)
+Notes on [Bayesian Regression applied to estimation of Project durations](https://cxd.github.io/scala-au.id.cxd.math/notes/bayesianestimation.html)
 
 ### Notes Inference.
 
-Notes on [ANOVA](http://cxd.github.io/scala-au.id.cxd.math/notes/anova.html)
+Notes on [ANOVA](https://cxd.github.io/scala-au.id.cxd.math/notes/anova.html)
 
-Notes on [MANOVA](http://cxd.github.io/scala-au.id.cxd.math/notes/manova.html)
+Notes on [MANOVA](https://cxd.github.io/scala-au.id.cxd.math/notes/manova.html)
 
-[Testing assumptions of Multivariate Normality](http://cxd.github.io/scala-au.id.cxd.math/notes/mvn_testing.html)
+[Testing assumptions of Multivariate Normality](https://cxd.github.io/scala-au.id.cxd.math/notes/mvn_testing.html)
+
+## Notes on Multivariate Methods
+
+[Canonical Discriminant Analysis](https://cxd.github.io/scala-au.id.cxd.math/notes/canonicaldiscriminantfunc.html)
+
 
 
 ### Notes Sequential Learning.
 
-Notes on [Hidden Markov Model](http://cxd.github.io/scala-au.id.cxd.math/notes/hmm.html)
+Notes on [Hidden Markov Model](https://cxd.github.io/scala-au.id.cxd.math/notes/hmm.html)
 
 ### Text Processing.
 
-Notes on [Singular Value Decomposition and Latent Semantic Indexing](http://cxd.github.io/scala-au.id.cxd.math/notes/latentsemanticindex.html)
+Notes on [Singular Value Decomposition and Latent Semantic Indexing](https://cxd.github.io/scala-au.id.cxd.math/notes/latentsemanticindex.html)
 

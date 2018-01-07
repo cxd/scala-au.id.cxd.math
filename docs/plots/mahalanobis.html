@@ -1,0 +1,306 @@
+<html>
+  <head>
+    <script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/vega/2.6.3/vega.min.js" charset="utf-8"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/vega-lite/1.2.0/vega-lite.min.js" charset="utf-8"></script>
+<script src="https://vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+  </head>
+  <body>
+ <script>
+   var embedSpec = {
+     mode: "vega-lite",
+     spec: {
+  "width" : 800.0,
+  "height" : 600.0,
+  "layers" : [
+    {
+      "mark" : "point",
+      "encoding" : {
+        "x" : {
+          "field" : "distance",
+          "type" : "quantitative"
+        },
+        "y" : {
+          "field" : "quantile",
+          "type" : "quantitative"
+        }
+      }
+    },
+    {
+      "mark" : "line",
+      "encoding" : {
+        "x" : {
+          "field" : "abline",
+          "type" : "quantitative"
+        },
+        "y" : {
+          "field" : "abline",
+          "type" : "quantitative"
+        },
+        "color" : {
+          "value" : "red"
+        }
+      }
+    }
+  ],
+  "description" : "Quantiles for chisq distribution",
+  "data" : {
+    "values" : [
+      {
+        "distance" : 0.6150733707421258,
+        "quantile" : 0.04040541463503889,
+        "abline" : 0.0
+      },
+      {
+        "distance" : 0.7054221378341223,
+        "quantile" : 0.08164398904051029,
+        "abline" : 0.0625
+      },
+      {
+        "distance" : 0.8685125504184229,
+        "quantile" : 0.1237508074361749,
+        "abline" : 0.125
+      },
+      {
+        "distance" : 0.8789549601961173,
+        "quantile" : 0.1667632178781021,
+        "abline" : 0.1875
+      },
+      {
+        "distance" : 0.9215627575037648,
+        "quantile" : 0.2107210313156527,
+        "abline" : 0.25
+      },
+      {
+        "distance" : 0.9861680638747161,
+        "quantile" : 0.2556667430197698,
+        "abline" : 0.3125
+      },
+      {
+        "distance" : 1.0332557307376022,
+        "quantile" : 0.3016457794691672,
+        "abline" : 0.375
+      },
+      {
+        "distance" : 1.1377342145542402,
+        "quantile" : 0.34870677428955554,
+        "abline" : 0.4375
+      },
+      {
+        "distance" : 1.1866961563856044,
+        "quantile" : 0.3969018774476766,
+        "abline" : 0.5
+      },
+      {
+        "distance" : 1.2744799530112514,
+        "quantile" : 0.44628710262841953,
+        "abline" : 0.5625
+      },
+      {
+        "distance" : 1.2793085167059055,
+        "quantile" : 0.4969227185969993,
+        "abline" : 0.625
+      },
+      {
+        "distance" : 1.3265619985832215,
+        "quantile" : 0.5488736914035207,
+        "abline" : 0.6875
+      },
+      {
+        "distance" : 1.3295721543727799,
+        "quantile" : 0.6022101855678434,
+        "abline" : 0.75
+      },
+      {
+        "distance" : 1.3961089392421335,
+        "quantile" : 0.6570081339440721,
+        "abline" : 0.8125
+      },
+      {
+        "distance" : 1.5124493331244193,
+        "quantile" : 0.7133498878774649,
+        "abline" : 0.875
+      },
+      {
+        "distance" : 1.5483241915696708,
+        "quantile" : 0.7713249616239696,
+        "abline" : 0.9375
+      },
+      {
+        "distance" : 1.5671149691186457,
+        "quantile" : 0.8310308879233317,
+        "abline" : 1.0
+      },
+      {
+        "distance" : 1.5749692860837115,
+        "quantile" : 0.892574205256839,
+        "abline" : 1.0625
+      },
+      {
+        "distance" : 1.6295126990999094,
+        "quantile" : 0.9560716018859999,
+        "abline" : 1.125
+      },
+      {
+        "distance" : 1.662282512863531,
+        "quantile" : 1.0216512475319817,
+        "abline" : 1.1875
+      },
+      {
+        "distance" : 1.7062290567765308,
+        "quantile" : 1.0894543508833443,
+        "abline" : 1.25
+      },
+      {
+        "distance" : 1.7087991474735769,
+        "quantile" : 1.1596369905058848,
+        "abline" : 1.3125
+      },
+      {
+        "distance" : 1.7657805041615173,
+        "quantile" : 1.2323722788476341,
+        "abline" : 1.375
+      },
+      {
+        "distance" : 1.8035469407124878,
+        "quantile" : 1.3078529348133274,
+        "abline" : 1.4375
+      },
+      {
+        "distance" : 1.8782616449918021,
+        "quantile" : 1.3862943611198906,
+        "abline" : 1.5
+      },
+      {
+        "distance" : 1.8876393911242964,
+        "quantile" : 1.4679383501604013,
+        "abline" : 1.5625
+      },
+      {
+        "distance" : 1.9425855782394437,
+        "quantile" : 1.5530575789979935,
+        "abline" : 1.625
+      },
+      {
+        "distance" : 1.9793587236871686,
+        "quantile" : 1.6419611041396602,
+        "abline" : 1.6875
+      },
+      {
+        "distance" : 2.0567587804405085,
+        "quantile" : 1.735001135409445,
+        "abline" : 1.75
+      },
+      {
+        "distance" : 2.067546852778875,
+        "quantile" : 1.8325814637483098,
+        "abline" : 1.8125
+      },
+      {
+        "distance" : 2.091937190456023,
+        "quantile" : 1.9351680525234114,
+        "abline" : 1.875
+      },
+      {
+        "distance" : 2.1097529087817057,
+        "quantile" : 2.0433024950639624,
+        "abline" : 1.9375
+      },
+      {
+        "distance" : 2.1152667919376413,
+        "quantile" : 2.1576193227438605,
+        "abline" : 2.0
+      },
+      {
+        "distance" : 2.1754493859652606,
+        "quantile" : 2.278868566376729,
+        "abline" : 2.0625
+      },
+      {
+        "distance" : 2.176260775608774,
+        "quantile" : 2.407945608651872,
+        "abline" : 2.125
+      },
+      {
+        "distance" : 2.3199974446225426,
+        "quantile" : 2.5459313516257747,
+        "abline" : 2.1875
+      },
+      {
+        "distance" : 2.3539575436901354,
+        "quantile" : 2.6941472959332184,
+        "abline" : 2.25
+      },
+      {
+        "distance" : 2.364183221303271,
+        "quantile" : 2.8542327112802917,
+        "abline" : 2.3125
+      },
+      {
+        "distance" : 2.399549226238713,
+        "quantile" : 3.0282554652595515,
+        "abline" : 2.375
+      },
+      {
+        "distance" : 2.4295620264251925,
+        "quantile" : 3.218875824868201,
+        "abline" : 2.4375
+      },
+      {
+        "distance" : 2.463164577208037,
+        "quantile" : 3.4295968561838523,
+        "abline" : 2.5
+      },
+      {
+        "distance" : 2.4681278599776886,
+        "quantile" : 3.6651629274966204,
+        "abline" : 2.5625
+      },
+      {
+        "distance" : 2.4821456650899267,
+        "quantile" : 3.932225712745665,
+        "abline" : 2.625
+      },
+      {
+        "distance" : 2.535911480565586,
+        "quantile" : 4.240527072400181,
+        "abline" : 2.6875
+      },
+      {
+        "distance" : 2.5546550810705932,
+        "quantile" : 4.60517018598809,
+        "abline" : 2.75
+      },
+      {
+        "distance" : 2.6709009099817544,
+        "quantile" : 5.051457288616513,
+        "abline" : 2.8125
+      },
+      {
+        "distance" : 2.844105292479585,
+        "quantile" : 5.626821433520073,
+        "abline" : 2.875
+      },
+      {
+        "distance" : 2.917981090528412,
+        "quantile" : 6.437751649736399,
+        "abline" : 2.9375
+      },
+      {
+        "distance" : 3.2079264258466553,
+        "quantile" : 7.82404601085629,
+        "abline" : 3.0
+      },
+      {
+        "distance" : 3.534043785278831,
+        "abline" : 3.0625
+      }
+    ]
+  }
+}
+   }
+   vg.embed("#vegas-8829b926-018d-4d33-9225-897d669e0dd9", embedSpec, function(error, result) {});
+ </script>
+ <div id='vegas-8829b926-018d-4d33-9225-897d669e0dd9'></div>
+    </body>
+</html>
