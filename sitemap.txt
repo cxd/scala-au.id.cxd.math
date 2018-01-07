@@ -48,6 +48,9 @@
     <loc>https://cxd.github.io/bayes/linear/r/2016/12/28/bayes-estimation.html</loc>
   </url>
   <url>
+    <loc>https://cxd.github.io/scala-au.id.cxd.math/notes/canonicaldiscriminantfunc.html</loc>
+  </url>
+  <url>
     <loc>https://cxd.github.io/svd/r/2016/10/02/text-svd.html</loc>
   </url>
 </urlset>
