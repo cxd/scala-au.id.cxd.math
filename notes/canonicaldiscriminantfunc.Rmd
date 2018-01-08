@@ -392,11 +392,11 @@ actualNames3 <- scala["groupNumTest"]
 
 par.old <- par(mfrow=c(1,2))
 
-plot(yMat2[,1],yMat2[,2], type="n", xlab="Z2", ylab="Z1", main="Mandible actual class")
-text(yMat2[,1],yMat2[,2], labels=actualNames3, col=as.numeric(as.factor(actualNames3)), cex=0.6)
+plot(yMat3[,1],yMat3[,2], type="n", xlab="Z2", ylab="Z1", main="Mandible actual class")
+text(yMat3[,1],yMat3[,2], labels=actualNames3, col=as.numeric(as.factor(actualNames3)), cex=0.6)
 
-plot(yMat2[,1],yMat2[,2], type="n", xlab="Z2", ylab="Z1", main="Mandible predicted class")
-text(yMat2[,1],yMat2[,2], labels=yNames3, col=as.numeric(as.factor(yNames3)), cex=0.6)
+plot(yMat3[,1],yMat3[,2], type="n", xlab="Z2", ylab="Z1", main="Mandible predicted class")
+text(yMat3[,1],yMat3[,2], labels=yNames3, col=as.numeric(as.factor(yNames3)), cex=0.6)
 
 par(par.old)
 
