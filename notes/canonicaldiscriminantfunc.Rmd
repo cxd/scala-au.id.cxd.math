@@ -183,9 +183,9 @@ There are two tasks of interest, the first is to obtain an ordination of the dat
 ```{r, engine='scalainr', message=FALSE, results='hide'}
 import au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis
 
-val (components, coeffs, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(eraNum.toList, X)
+val (components, coeffs, intercept, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(eraNum.toList, X)
 
-val (yProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(X, coeffs, groupMeans, eraNames)
+val (yProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(X, coeffs, intercept, groupMeans, eraNames)
 
 
 // converting to array to exchange with R.
@@ -285,9 +285,9 @@ val eraLabels3 = eraNum3.map { num => eras(num) }.toArray
 val test = StandardisedNormalisation().transform(data3)
 
 
-val (components2, coeffs2, percentVar2, zMat2, cor2, groupMeans2) = CanonicalDiscriminantAnalysis(eraNum2.toList, train)
+val (components2, coeffs2, intercept2, percentVar2, zMat2, cor2, groupMeans2) = CanonicalDiscriminantAnalysis(eraNum2.toList, train)
 
-val (testProjection2, groupProjection2, distances2, groupAssignments2) = CanonicalDiscriminantAnalysis.classify(test, coeffs2, groupMeans2, eraNames)
+val (testProjection2, groupProjection2, distances2, groupAssignments2) = CanonicalDiscriminantAnalysis.classify(test, coeffs2, intercept2, groupMeans2, eraNames)
 
 val y2 = testProjection2.toArray
 val yrows2 = testProjection2.rows
@@ -372,7 +372,7 @@ val test5 = StandardisedNormalisation().transform(data5)
 // create the model
 val result = CanonicalDiscriminantAnalysis(groupNumTrain.toList, train4)
 // perform the classification
-val (testProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(test5, result._2, result._6, (groupNumTrain ++ groupNumTest).distinct.sorted.toList)
+val (testProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(test5, result._2, result._3, result._7, (groupNumTrain ++ groupNumTest).distinct.sorted.toList)
 
 // pass results back to R.
 val y3 = testProjection.toArray
@@ -417,4 +417,120 @@ Note however another reason why the model may perform slightly better is due to 
 
 
 Note that predicting using LDA from MASS on the same mandible dataset results in even higher accuracy. I'm intending on implementing a separate class that uses the LDA decision boundary, and will also investigate the use of the QDA decision function as well. For the current implementation of the canonical discriminant function however, the classification method is a simple nearest neighbour search based on the mahalanobis distances produced from the projection of the new observation and the group means into the basis generated from the decomposition of the ratio between group variation and the within group variation.
+
+## Prior Probabilities and Estimates of Class Probabilities
+
+The resulting discriminant functions can be used to estimate probabilities for the class membership, and take into account the class prior. It is possible to make use of the following decision function given in Duda and Hart @dudahart.
+
+$$
+g(x) = w_i' x + w_{i0}
+$$
+where 
+$$
+w_i = \Sigma^{-1}\mu_i
+$$
+$$
+w_{i0} = -\frac{1}{2} \mu_i'\Sigma^{-1}\mu_i + \log{P(\omega_i)}
+$$
+in the implementation the inverse covariance matrix above is taken to be the resulting coefficients of the decomposition described earlier, hence the matrix $A$ is substituted for $\Sigma^{-1}$. 
+
+$$
+w_i = A\mu_i
+$$
+$$
+w_{i0} = -\frac{1}{2} \mu_i'A\mu_i + \log{P(\omega_i)}
+$$
+
+The prior probabilities $P(\omega_i)$ are estimated from the quantities of the observations in each group over the total number of observations. The resulting function $g(x)$ is then used to estimate the log of the probabilities of class membership. 
+
+Where the test observations is a matrix, the result $g(x)$ gives a matrix with one row for each observation in the test set where the columns are associated with the group membership probabilities. The classification of the observation is then assigned to the highest group probability (the exponent of $g$ is taken to estimate the probabilities).
+
+The implementation provides this approach using the method __classifyDiscriminant__.
+Note that the original eigenvectors $A$, the intercept $w_{i0}$ and the priors $P(\omega_i)$ are originally estimated from the training data.
+
+The following estimates for class membership of the egyption skulls taken from the original data is shown below.
+
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+
+val (testProjection2, groupProjection2, distances2, groupAssignments2) = CanonicalDiscriminantAnalysis.classifyDiscriminant(test, coeffs2, intercept2, groupMeans2, eraNames)
+
+val y2 = testProjection2.toArray
+val yrows2 = testProjection2.rows
+val ycols2 = testProjection2.cols
+val yNames2 = groupAssignments2.map(_._2).toArray
+```
+
+
+
+```{r}
+y2 <- scala["y2"]
+yMat2 <- as.data.frame(matrix(y, scala["yrows2"], scala["ycols2"]))
+yNames2 <- scala["yNames2"]
+
+actualNames <- scala["eraLabels3"]
+
+plot(yMat2[,1],yMat2[,2], type="n", xlab="Z2", ylab="Z1")
+text(yMat2[,1],yMat2[,2], labels=yNames2, col=as.numeric(as.factor(yNames2)), cex=0.6)
+
+```
+
+```{r}
+(m <- table(actualNames, yNames2))
+
+total <- sum(m)
+tp <- sum(diag(m))
+fp <- total - tp
+(percent <- tp/total)
+(falsePc <- fp/total)
+```
+
+In this case the estimate for the period with which a skull is associated is slightly improved from approximately 30% to 40% correct class assignment.
+
+The same approach is applied to the classification of the Mandible test data shown below.
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+
+// perform the classification
+val (testProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classifyDiscriminant(test5, result._2, result._3, result._7, (groupNumTrain ++ groupNumTest).distinct.sorted.toList)
+
+// pass results back to R.
+val y3 = testProjection.toArray
+val yrows3 = testProjection.rows
+val ycols3 = testProjection.cols
+val yNames3 = groupAssignments.map(_._2).toArray
+```
+
+
+
+```{r, width=8, height=6}
+y3 <- scala["y3"]
+yMat3 <- as.data.frame(matrix(y, scala["yrows3"], scala["ycols3"]))
+yNames3 <- scala["yNames3"]
+
+actualNames3 <- scala["groupNumTest"]
+
+par.old <- par(mfrow=c(1,2))
+
+plot(yMat3[,1],yMat3[,2], type="n", xlab="Z2", ylab="Z1", main="Mandible actual class")
+text(yMat3[,1],yMat3[,2], labels=actualNames3, col=as.numeric(as.factor(actualNames3)), cex=0.6)
+
+plot(yMat3[,1],yMat3[,2], type="n", xlab="Z2", ylab="Z1", main="Mandible predicted class")
+text(yMat3[,1],yMat3[,2], labels=yNames3, col=as.numeric(as.factor(yNames3)), cex=0.6)
+
+par(par.old)
+
+```
+
+```{r}
+(m <- table(actualNames3, yNames3))
+
+total <- sum(m)
+tp <- sum(diag(m))
+fp <- total - tp
+(percent <- tp/total)
+(falsePc <- fp/total)
+```
+
+At 88% correct classification this is also an improvement over 50% correct for the mahalanobis distance method of class assignment in the projected space.
 
