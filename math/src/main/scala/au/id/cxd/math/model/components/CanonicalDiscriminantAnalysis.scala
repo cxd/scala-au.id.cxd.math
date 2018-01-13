@@ -177,6 +177,32 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     (yProjection, groupProjection, distances, groupAssignments)
   }
 
+  /** consider method of calculating coefficients
+    *
+    * coeffs = (mu * evec) * evec'
+    *
+    * intercept = ( 0.5 * diag(mu * coeffs') ) + log(pi)
+    *
+    * where pi are the prior estimates of each class.
+    *
+    * assuming then that the prediction is
+    *
+    * log phat = intercept + coeffs X
+    *
+    * the most likely class is then the max log phat
+    *
+    * The discriminant function is then
+    * $$
+    * g_i(x) = w&#94;t_i x + w_{i0}
+    * $$
+    * $$
+    * w_i = \Sigma&#94;{-1}\mu_i
+    * $$
+    * and
+    * $$
+    * w_{i0} = -\frac{1}{2}\mu_i'\Sigma&#94;{-1}\mu_i + \log{P (w_i))
+    * $$
+    */
   def classifyDiscriminant(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
     val yProjection = (coeffs * Y.t).t
     val groupProjection = (coeffs * groupMeans.t).t
