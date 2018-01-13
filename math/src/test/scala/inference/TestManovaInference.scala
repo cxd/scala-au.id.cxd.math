@@ -35,8 +35,8 @@ class TestManovaInference extends FlatSpec
 
     val m = Manova.build(groups, data)
 
-    val T = m.computeT(data)
-
+    val (c,t) = m.computeT(data)
+    val T = t
     val groupCount = groups.length
 
     println(s"T: (${T.rows} x ${T.cols})")
@@ -68,8 +68,8 @@ class TestManovaInference extends FlatSpec
     val m = Manova.build(groups, data)
     val (b,mu) = m.computeB(data)
     val B = b
-    val T = m.computeT(data)
-
+    val (c,t) = m.computeT(data)
+    val T = t
     val W = T + (-1.0 * B)
     val Winv = inv(W)
     val WinvB = inv(W) * B

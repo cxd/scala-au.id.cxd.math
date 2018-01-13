@@ -93,7 +93,7 @@ import scala.collection.immutable.Stream
   * U = \sum_{i=1}&#94;k \lambda+i
   * $$
   *
-  **/
+  * */
 class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], data: DenseMatrix[Double], val alpha: Double = 0.05) {
 
   lazy val groups = groupIndexes(groupNames)
@@ -119,6 +119,30 @@ class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], dat
         })
       }
     }._2
+
+
+  /**
+    * given the group names for each row
+    * determine the size of each group and the approximate proportion of each group.
+    *
+    * @param groupNames
+    * @return
+    * (groupname x n_i x \pi_i)
+    *
+    * where n_i is the size of the group
+    * and \pi_i is the proportion of the training data for the group.
+    */
+  def groupSizes(groupNames: List[String]) = {
+    val totalSize = groupNames.length
+
+    groups.map {
+      pair => {
+        val groupName = pair._1
+        val ni = pair._2.length
+        (groupName, ni, ni.toDouble / totalSize.toDouble)
+      }
+    }
+  }
 
   /**
     * extract the partitions for each of the groups.
@@ -151,11 +175,11 @@ class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], dat
     * @param m
     * @return
     */
-  def computeT(m: DenseMatrix[Double]): DenseMatrix[Double] = {
+  def computeT(m: DenseMatrix[Double]): (DenseMatrix[Double],DenseMatrix[Double]) = {
     val C = Cov(m)
     val n = m.rows
     val T = C.map(_ * (n.toDouble - 1.0))
-    T
+    (C, T)
   }
 
   /**
@@ -289,7 +313,8 @@ class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], dat
     val n = data.rows
     val m = groups.size
     val p = data.cols
-    val T = computeT(data)
+    val (c, t) = computeT(data)
+    val T = t
     val (betweenMat, mu) = computeB(data)
     val B = betweenMat
     val W = T + (-1.0 * B)
@@ -396,16 +421,16 @@ case class LawesHotellingTrace() extends ManovaMethod() {}
   * a class to hold the statistic/
   *
   * @param name
-  *             the name of the method used to calculate the statistic
+  * the name of the method used to calculate the statistic
   * @param stat
-  *             the resulting statistic
+  * the resulting statistic
   * @param df1
-  *            the first degree of freedom for the f-distribution
+  * the first degree of freedom for the f-distribution
   * @param df2
-  *            the second degree of freedom for the f-distribution
+  * the second degree of freedom for the f-distribution
   * @param Fstatistic
-  *             the measure calculated by the method following the F distribution at df1 and df2 degrees of freedom.
-  *             the value is dependent on the kind of method used.
+  * the measure calculated by the method following the F distribution at df1 and df2 degrees of freedom.
+  * the value is dependent on the kind of method used.
   */
 case class ManovaStat(val name: String, val stat: Double, val df1: Int, val df2: Int, val Fstatistic: Double, val eigenValues: DenseVector[Double]) {
 
@@ -427,21 +452,21 @@ case class ManovaStat(val name: String, val stat: Double, val df1: Int, val df2:
   * The f statistic is used to test whether the null hypothesis holds.
   *
   * @param reject
-  *               a flag indicating whether to reject $H_0$
+  * a flag indicating whether to reject $H_0$
   * @param alpha
-  *              the threshold where the alpha level was evaluated eg .05
+  * the threshold where the alpha level was evaluated eg .05
   * @param criticalVal
-  *               the critical value is the quantile of the fdistribution for the alpha threshold
-  *               and the degrees of freedom produced in the test.
-  *               In order to reject the null hypothesis the observed statistic must be greater than the
-  *               critical value
+  * the critical value is the quantile of the fdistribution for the alpha threshold
+  * and the degrees of freedom produced in the test.
+  * In order to reject the null hypothesis the observed statistic must be greater than the
+  * critical value
   * @param pValue
-  *               the pValue is the probability of the observed statistic for the
-  *               f-distribution based on the resulting degrees of freedom
+  * the pValue is the probability of the observed statistic for the
+  * f-distribution based on the resulting degrees of freedom
   * @param manovaStat
-  *               the manova stat instance containing the parameters output from the test process.
+  * the manova stat instance containing the parameters output from the test process.
   */
-case class ManovaTest(val reject: Boolean, val alpha: Double, val criticalVal: Double, val pValue:Double, val manovaStat: ManovaStat) {
+case class ManovaTest(val reject: Boolean, val alpha: Double, val criticalVal: Double, val pValue: Double, val manovaStat: ManovaStat) {
 
   def conclusion() = reject match {
     case true => "Sample groups do not share the same mean and common variance."

@@ -30,7 +30,7 @@ val groups = mat(::,0).toArray.map(_.toString).toList
 
 // perform the analysis.
 
-val (components, coeffs, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(groups, X)
+val (components, coeffs, intercept, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(groups, X)
 
 
 

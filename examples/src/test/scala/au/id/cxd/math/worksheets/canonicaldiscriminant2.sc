@@ -20,7 +20,7 @@ val X = StandardisedNormalisation().transform(m2)
 val groups = mat(::,1).toArray.map(_.toString).toList
 
 
-val (components, coeffs, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(groups, X)
+val (components, coeffs, intercept, percentVar, zMat, cor, groupMeans) = CanonicalDiscriminantAnalysis(groups, X)
 
 percentVar
 
@@ -137,7 +137,7 @@ val groupNames = List[String](
 // we can still reclassify the original data
 // to get some indication of the prediction that the
 // model will make based on minimum distances from the group means
-val (yProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(X, coeffs, groupMeans, groupNames)
+val (yProjection, groupProjection, distances, groupAssignments) = CanonicalDiscriminantAnalysis.classify(X, coeffs, intercept, groupMeans, groupNames)
 
 // and we can plot the predicted groups using the coordinates of the resulting projection.
 val p1 = yProjection(::,0).toArray

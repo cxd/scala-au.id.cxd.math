@@ -2,7 +2,7 @@ package au.id.cxd.math.model.components
 
 import au.id.cxd.math.function.distance.{Cor, MahalanobisDistance}
 import au.id.cxd.math.probability.analysis.Manova
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, diag}
 
 /**
   * ##import MathJax
@@ -40,7 +40,7 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   * This technique can serve as a form of dimensionality reduction as well as a method for visualisation and interpretation.
   *
   */
-class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Double])
+class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Double], priors:DenseVector[Double]=DenseVector.zeros[Double](0))
   extends Manova(groupNames = groups, data = dataX) {
 
   /**
@@ -52,7 +52,8 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     val m = groups.size
     val p = dataX.cols
     val numComponents = List(m - 1, p).min
-    val T = computeT(dataX)
+    val (sigma,t) = computeT(dataX)
+    val T = t
     // the group means is also available
     val (betweenMat, mu) = computeB(dataX)
     val B = betweenMat
@@ -70,7 +71,48 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     println(s"DIM (${zMat.rows} , ${zMat.cols})")
     // determine the correlation between the columns of the original data and the components
     val cor = Cor(dataX, mat)
-    (components, coeffs, percentVar, zMat, cor, mu)
+
+    /** consider method of calculating coefficients
+      *
+      * coeffs = (mu * evec) * evec'
+      *
+      * intercept = ( 0.5 * diag(mu * coeffs') ) + log(pi)
+      *
+      * where pi are the prior estimates of each class.
+      *
+      * assuming then that the prediction is
+      *
+      * log phat = intercept + coeffs X
+      *
+      * the most likely class is then the max log phat
+      *
+      * The discriminant function is then
+      * $$
+      * g_i(x) = w&#94;t_i x + w_{i0}
+      * $$
+      * $$
+      * w_i = \Sigma&#94;{-1}\mu_i
+      * $$
+      * and
+      * $$
+      * w_{i0} = -\frac{1}{2}\mu_i'\Sigma&#94;{-1}\mu_i + \log{P (w_i))
+      * $$
+      */
+    val groupPriors = groupSizes(groups)
+
+    val logP = if (priors.length > 0) priors.map(p => Math.log(p))
+    else {
+      val p = groupPriors.map(pair => Math.log(pair._3)).toArray
+      DenseVector[Double](p)
+    }
+
+    val mu1 = mu * coeffs.t
+    val coeffs1 = (mu * coeffs) * coeffs.t
+    // initially use equal estimate for pi, this can be derived later.
+    val pi = 1.0 / mu.rows
+    val intercept = (-0.5 * (diag(mu * coeffs1.t))) + logP
+
+    (components, coeffs, intercept, percentVar, zMat, cor, mu)
   }
 
   /**
@@ -102,9 +144,12 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     * to the corresponding row of Y
     *
     */
-  def classify(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
+  def classify(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
     val groupProjection = (coeffs * groupMeans.t).t
     val yProjection = (coeffs * Y.t).t
+
+    // now we search for the maximum discrimiant and associate the y value with that class.
+
     // we need to find the mahalanobis distance between each group and each row of y.
     // the distance matrix will be Y rows x group number rows
     val distances = DenseMatrix.tabulate[Double](yProjection.rows, groupProjection.rows) {
@@ -132,6 +177,38 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     (yProjection, groupProjection, distances, groupAssignments)
   }
 
+  def classifyDiscriminant(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
+    val yProjection = (coeffs * Y.t).t
+    val groupProjection = (coeffs * groupMeans.t).t
+
+    val coeffs1 = (groupMeans * coeffs) * coeffs.t
+    val wx = (coeffs1*Y.t).t
+    //println(s"WX DIM (${wx.rows} x ${wx.cols})")
+    val wi = DenseMatrix.tabulate[Double](wx.rows, wx.cols) {
+      case (i,j) => intercept(j)
+    }
+    val discriminant = wi + wx
+    // discriminent has m columns for each group.
+    // each row of the disciminant then can be translated to a propbability
+    // p represents the probabilities for each group at each row of Y.
+    val p = discriminant.map { lp => Math.exp(lp) }
+    // we now need to identify for each row in Y the index of the most probable group
+    val groupAssignments = (for (i <- 0 until p.rows) yield i).map {
+      i => {
+        val row = p(i, ::).t.toArray
+        val minD = row.map(d => d).max
+        val search = row.foldLeft((0, false)) {
+          (accum, d) =>
+            if (accum._2) accum
+            else if (Math.abs(d) == minD) (accum._1, true)
+            else (accum._1 + 1, false)
+        }
+        (search._1, groupLabels(search._1))
+      }
+    }
+    (yProjection, groupProjection, p, groupAssignments)
+  }
+
 }
 
 object CanonicalDiscriminantAnalysis {
@@ -139,7 +216,11 @@ object CanonicalDiscriminantAnalysis {
     new CanonicalDiscriminantAnalysis(groups, dataX).computeZ()
 
 
-  def classify(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
-    new CanonicalDiscriminantAnalysis(groupLabels, Y).classify(Y, coeffs, groupMeans, groupLabels)
+  def classify(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
+    new CanonicalDiscriminantAnalysis(groupLabels, Y).classify(Y, coeffs, intercept, groupMeans, groupLabels)
+  }
+
+  def classifyDiscriminant(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
+    new CanonicalDiscriminantAnalysis(groupLabels, Y).classifyDiscriminant(Y, coeffs, intercept, groupMeans, groupLabels)
   }
 }
