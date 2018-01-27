@@ -40,8 +40,8 @@ import breeze.linalg.{DenseMatrix, DenseVector, diag}
   * This technique can serve as a form of dimensionality reduction as well as a method for visualisation and interpretation.
   *
   */
-class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Double], priors:DenseVector[Double]=DenseVector.zeros[Double](0))
-  extends Manova(groupNames = groups, data = dataX) {
+class CanonicalDiscriminantAnalysis(val classes: List[String], dataX: DenseMatrix[Double], priors:DenseVector[Double]=DenseVector.zeros[Double](0))
+  extends Manova(groupNames=classes, data = dataX) {
 
   /**
     * extract the canonical discriminant functions and calculate the correlation between the original groups
@@ -49,7 +49,7 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
     */
   def computeZ() = {
     val n = dataX.rows
-    val m = groups.size
+    val m = classes.size
     val p = dataX.cols
     val numComponents = List(m - 1, p).min
     val (sigma,t) = computeT(dataX)
@@ -98,7 +98,7 @@ class CanonicalDiscriminantAnalysis(groups: List[String], dataX: DenseMatrix[Dou
       * w_{i0} = -\frac{1}{2}\mu_i'\Sigma&#94;{-1}\mu_i + \log{P (w_i))
       * $$
       */
-    val groupPriors = groupSizes(groups)
+    val groupPriors = groupSizes(classes)
 
     val logP = if (priors.length > 0) priors.map(p => Math.log(p))
     else {

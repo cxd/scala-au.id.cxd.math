@@ -14,6 +14,10 @@ import breeze.linalg.{DenseMatrix, DenseVector, eig, eigSym}
   *
   * generate the PCA of the correlation matrix for the sphereised data.
   *
+  * The opertion returns a tuple of:
+  *
+  * (eigenValues, eigenVectors, varExplained, projection)
+  *
   * Created by cd on 10/07/2016.
   */
 class PrincipleComponentsAnalysis(scale:Boolean=true) {

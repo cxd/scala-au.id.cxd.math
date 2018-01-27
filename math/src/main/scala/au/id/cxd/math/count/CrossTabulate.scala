@@ -12,8 +12,13 @@ import scala.math.Ordering
 class CrossTabulate[A] {
 
   def op(a:Seq[A], b:Seq[A])(implicit ord: Ordering[A]) = {
+
+
     val uniqueA = a.sorted.distinct
     val uniqueB = b.sorted.distinct
+
+    val merged = (uniqueA ++ uniqueB).sorted.distinct
+
     val m = DenseMatrix.tabulate[Double](uniqueA.length, uniqueB.length) {
       case (i,j) => {
         val testA = uniqueA(i)
@@ -38,13 +43,25 @@ class CrossTabulate[A] {
         bcount._2.toDouble
       }
     }
-    m
+
+    val m2 = DenseMatrix.tabulate[Double](merged.length, merged.length) {
+      case (i,j) => {
+        val iIdx = uniqueA.indexOf(merged(i))
+        val jIdx = uniqueB.indexOf(merged(j))
+        if (iIdx < 0 || jIdx < 0) {
+          0.0
+        } else {
+          m(iIdx,jIdx)
+        }
+      }
+    }
+
+    m2
   }
 
 }
 object CrossTabulate {
   def apply[A](a:Seq[A], b:Seq[A])(implicit ord: Ordering[A]) = new CrossTabulate[A]().op(a,b)
-
 
   def metrics(m:DenseMatrix[Double]) = {
     val total = m.toArray.sum.toDouble

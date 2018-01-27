@@ -1,5 +1,6 @@
 package au.id.cxd.math.probability.analysis
 
+import au.id.cxd.math.data.GroupPartition
 import au.id.cxd.math.function.column.ColMeans
 import au.id.cxd.math.function.distance.Cov
 import au.id.cxd.math.probability.continuous.FDistribution
@@ -94,73 +95,13 @@ import scala.collection.immutable.Stream
   * $$
   *
   * */
-class Manova(method: ManovaMethod = WilksLambda(), groupNames: List[String], data: DenseMatrix[Double], val alpha: Double = 0.05) {
+class Manova(method: ManovaMethod = WilksLambda(),
+             val groupNames: List[String],
+             override val data: DenseMatrix[Double], val alpha: Double = 0.05)
+  extends GroupPartition {
 
-  lazy val groups = groupIndexes(groupNames)
+  override val groupLabels = groupNames
 
-  lazy val partitions: List[(String, DenseMatrix[Double])] = partitionGroups(data)(groups)
-
-  /**
-    * identify the group indexes.
-    *
-    * @param groupNames
-    */
-  def groupIndexes(groupNames: List[String]) =
-    groupNames.foldLeft((0, Map[String, Vector[Int]]())) {
-      (accum, groupName) => {
-        val i = accum._1
-        val groups = accum._2
-        (i + 1, groups.contains(groupName.toLowerCase) match {
-          case true => {
-            val indexes = groups(groupName.toLowerCase) :+ i
-            (groups - (groupName.toLowerCase)) + (groupName.toLowerCase -> indexes)
-          }
-          case _ => (groups + (groupName.toLowerCase -> Vector(i)))
-        })
-      }
-    }._2
-
-
-  /**
-    * given the group names for each row
-    * determine the size of each group and the approximate proportion of each group.
-    *
-    * @param groupNames
-    * @return
-    * (groupname x n_i x \pi_i)
-    *
-    * where n_i is the size of the group
-    * and \pi_i is the proportion of the training data for the group.
-    */
-  def groupSizes(groupNames: List[String]) = {
-    val totalSize = groupNames.length
-
-    groups.map {
-      pair => {
-        val groupName = pair._1
-        val ni = pair._2.length
-        (groupName, ni, ni.toDouble / totalSize.toDouble)
-      }
-    }
-  }
-
-  /**
-    * extract the partitions for each of the groups.
-    *
-    * @param m
-    * @param groups
-    * @return
-    */
-  def partitionGroups(m: DenseMatrix[Double])(groups: Map[String, Vector[Int]]): List[(String, DenseMatrix[Double])] = {
-    val keys = groups.keys.toIndexedSeq.sorted
-    keys.foldLeft(List[(String, DenseMatrix[Double])]()) {
-      (accum, key) => {
-        val idx = groups(key)
-        val submat = m(idx, ::).toDenseMatrix
-        accum :+ (key, submat)
-      }
-    }
-  }
 
   /**
     * compute the total variation
