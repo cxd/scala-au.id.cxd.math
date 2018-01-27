@@ -4,6 +4,7 @@ import au.id.cxd.math.data.GroupPartition
 import au.id.cxd.math.function.column.ColMeans
 import au.id.cxd.math.function.distance.Cov
 import breeze.linalg.{*, DenseMatrix, DenseVector, diag, inv, sum, tile}
+import org.apache.commons.math3.linear.EigenDecomposition
 
 /**
   * ##import MathJax
@@ -121,7 +122,7 @@ class QuadraticDiscriminant(override val data: DenseMatrix[Double],
           * \hat{\Sigma_i} = U_i D_i U'_i
           * $$
           */
-        val (eigenValues, eigenVectors, varExplained, projection) = PrincipleComponentsAnalysis(Ci)
+        val (eigenValues, eigenVectors, varExplained) = EigenDecomposition(Ci)
 
         val lp = groupPrior(groupName, groupPriors, logP)
 
@@ -132,7 +133,7 @@ class QuadraticDiscriminant(override val data: DenseMatrix[Double],
           */
         val intercept = lp
 
-        (groupName, (mui, eigenValues, eigenVectors, varExplained, projection, intercept))
+        (groupName, (mui, eigenValues, eigenVectors, varExplained, intercept))
     }
   }
 
@@ -142,7 +143,7 @@ class QuadraticDiscriminant(override val data: DenseMatrix[Double],
 object QuadraticDiscriminant {
 
 
-  type QuadraticDiscrimantParameters = (DenseMatrix[Double], DenseVector[Double], DenseMatrix[Double], DenseVector[Double], DenseMatrix[Double], Double)
+  type QuadraticDiscrimantParameters = (DenseMatrix[Double], DenseVector[Double], DenseMatrix[Double], DenseVector[Double], Double)
 
 
   def apply(data: DenseMatrix[Double],
@@ -171,7 +172,7 @@ object QuadraticDiscriminant {
     val gY = groupParams.map {
       groupParam => {
         val groupName = groupParam._1
-        val (mui, eV, eVecs, varExp, proj, wi0) = groupParam._2
+        val (mui, eV, eVecs, varExp, wi0) = groupParam._2
 
         /**
           * $$

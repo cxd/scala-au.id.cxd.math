@@ -62,6 +62,7 @@ class CanonicalDiscriminantAnalysis(val classes: List[String], dataX: DenseMatri
     val WinvB = W \ B
     // compute the eigenvectors and the projection for W^{-1}B
     val (eigenValues, eigenVectors, varExplained, projections) = PrincipleComponentsAnalysis(WinvB)
+
     // the projections are the canonocal projections. //
     val components = eigenValues(0 until numComponents).toDenseVector
     val percentVar = varExplained(0 until numComponents).toDenseVector

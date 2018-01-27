@@ -26,25 +26,11 @@ class PrincipleComponentsAnalysis(scale:Boolean=true) {
     var x1 =  if (scale) StandardisedNormalisation().transform(X)
               else X
     val corMat = Cor(x1)
-    // find the eigendecomposition of the correlation matrix.
-    val EigSym(eValues, eVectors) = eigSym(corMat)
-    // note that the order of eVectors and eValues differ so we want to rearrange them.
-    val n = eValues.length - 1
-    val eigenValues = DenseVector.tabulate[Double](n+1) {
-      case i => eValues(n-i)
-    }
-    val ncols = eVectors.cols - 1
-    val eigenVectors = (for (i <- 0 to ncols) yield i).foldLeft(DenseMatrix.zeros[Double](eVectors.rows, eVectors.cols)) {
-      (accum, j) =>
-        accum(::,j) := eVectors(::, ncols - j)
-        accum
-    }
 
+    val (eigenValues, eigenVectors, varExplained) = EigenDecomposition(corMat)
 
     // now we can project the original data into the eigen vector
     val projection = x1 * eigenVectors
-    // also return the amount of variance explained by each component
-    val varExplained = PrincipleComponentsAnalysis.varianceExplained(eigenValues)
 
     (eigenValues, eigenVectors, varExplained, projection)
   }

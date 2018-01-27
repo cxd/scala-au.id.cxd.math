@@ -22,7 +22,6 @@ class TestQDA extends FlatSpec with Matchers {
   }
 
   "QDA" should "label with params" in new MandibleClassData {
-    val (groups, data) = (trainGroups, trainData)
 
     val groupParams = QuadraticDiscriminant(data, groups)
 
@@ -39,9 +38,8 @@ class TestQDA extends FlatSpec with Matchers {
 
 
   "QDA" should "classify with params" in new MandibleClassData {
-    val (groups, data) = (trainGroups, trainData)
 
-    val groupParams = QuadraticDiscriminant(data, groups)
+    val groupParams = QuadraticDiscriminant(trainData, trainGroups)
 
     val predictedClasses = QuadraticDiscriminant.classifyDiscriminant(testData, groupParams)
 
@@ -58,7 +56,9 @@ class TestQDA extends FlatSpec with Matchers {
 trait MandibleClassData {
   val train = new TrainMandibleDataSet()
   val test = new TestMandibleDataSet()
+  val all = new AllMandibleDataSet()
 
+  val (groups, data) = all.read()
   val (trainGroups, trainData) = train.read()
   val (testGroups, testData) = test.read()
 }
@@ -69,6 +69,10 @@ class TrainMandibleDataSet extends ManovaDataSet {
 
 class TestMandibleDataSet extends ManovaDataSet {
   val fileName = "test_mandible_test.csv"
+}
+
+class AllMandibleDataSet extends ManovaDataSet {
+  val fileName = "test_mandible_data.csv"
 }
 
 
