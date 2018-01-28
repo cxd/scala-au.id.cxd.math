@@ -77,3 +77,20 @@ val plot1 = Vegas.layered("Ordination of Wine Test Data",
 )
 
 VegasHelper.showPlot(plot1, fileName="docs/plots/qdawine_example.html")
+
+// make a comparison with the lda method
+
+val groupNames = trainGroups.distinct.sorted
+
+val compareLDA = CanonicalDiscriminantAnalysis(trainGroups, trainData)
+val test = CanonicalDiscriminantAnalysis.classifyDiscriminant(testData,
+  compareLDA._2,
+  compareLDA._3,
+  compareLDA._7,
+  groupNames)
+
+val predictions = test._4.map(_._2)
+
+val crosstab2 = CrossTabulate(testGroups, predictions.toList)
+
+val metrics2 = CrossTabulate.metrics(crosstab2)
