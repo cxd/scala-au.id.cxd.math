@@ -181,8 +181,8 @@ g_i(x) = x'W_ix + x'w_i + w_{i0}
 <p>Hence memory and storage can be an issue for computing the entire set of discriminant functions in one go.</p>
 <p>One option is to compute each decomposition separately, since the covariance matrix is estimated within groups and to store those separately, rather than computing all at once.</p>
 <p>An issue of interest is that of visualisation. The ordination available in a method such as lda is convenient for its application accross all groups. I am unsure as to whether qda is able to be used directly for visualisation, however, intuitively this may be possible perhaps by computing a projection for each group and combining the results. I’ll need to look further afield for potential application in this area.</p>
-<div id="an-example-to-classification" class="section level2">
-<h2>An Example to Classification</h2>
+<div id="example-classification-application" class="section level2">
+<h2>Example Classification Application</h2>
 <p>The following example makes use of the <a href="https://archive.ics.uci.edu/ml/datasets/wine">wine data set</a> which associates the chemical measurements of different wines with one of three producers for the wine. The task of the discriminant functions will be to define the boundaries that best separate the observations between each of the three groups.</p>
 <pre class="scalainr"><code>import au.id.cxd.math.count.CrossTabulate
 import au.id.cxd.math.data.MatrixReader
@@ -237,7 +237,6 @@ val metrics = Array(results._1, results._2, results._3, results._4, results._5, 
 <pre><code>## [1] 0.09090909</code></pre>
 <p>The qda method correctly assigns 40 out of the 44 examples to the original groups.</p>
 <p>The comparison with lda is given below.</p>
-<p>, message=FALSE, results=‘hide’</p>
 <pre class="scalainr"><code>val groupNames = trainGroups.distinct.sorted
 
 val compareLDA = CanonicalDiscriminantAnalysis(trainGroups, trainData)
@@ -260,8 +259,6 @@ val tabcols2 = crosstab2.cols
 val tab2 = crosstab2.toArray
 
 val metrics2 = Array(results2._1, results2._2, results2._3, results2._4, results2._5, results2._6)</code></pre>
-<pre><code>## DIM (134 , 13)
-## [1] 44.00000000 41.00000000  3.00000000  0.93181818  0.06818182 13.66666667</code></pre>
 <pre class="r"><code>(crosstab &lt;- matrix(scala[&quot;tab2&quot;], scala[&quot;tabrows2&quot;], scala[&quot;tabcols2&quot;]))</code></pre>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]   18    2    0
