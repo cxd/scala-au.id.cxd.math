@@ -1,0 +1,215 @@
+---
+title: "Quadratic Discriminant Functions"
+output: 
+  html_document:
+    css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
+    includes:
+      in_header: quadraticdiscrimfunc_head.html
+csl: journal-of-combinatorics.csl
+bibliography: bibliography.bib
+---
+
+<a href="../index.html">Home</a>
+
+Linear or [canonical discriminant](canonicaldiscriminantfunc.html) functions assume that groups share common covariance within and between groups, whereas the quadratic discriminant functions while assuming multivariate normality, do not assume common covariance between groups.
+
+The linear discriminant functions
+  
+
+$$
+  g_i(x) = w^t_i x + w_{i0}
+$$
+$$
+  w_i = \Sigma^{-1}\mu_i
+$$
+and
+$$
+w_{i0} = -\frac{1}{2}\mu_i' \Sigma^{-1}\mu_i + \log{P (w_i)}
+$$
+
+Are altered to introduce the quadratic term $W_i$ giving the discriminant functions from @dudahart below
+
+$$
+g_i(x) = x'W_ix + x'w_i + w_{i0}
+$$
+
+$$
+= -\frac{1}{2} x' \Sigma_i^{-1} x + x'\Sigma_i^{-1} \mu_i - \frac{1}{2}\mu'_i\Sigma_i^{-1}\mu_i - \frac{1}{2}\log{|\Sigma_i|} + \log \pi_i
+$$   
+
+where
+$$
+  W_i = -\frac{1}{2}\Sigma_i^{-1}
+$$
+$$
+  w_i = \Sigma_i^{-1}\mu_i
+$$
+and
+
+$$
+  w_{i0} = -\frac{1}{2}\mu'_i \Sigma_i^{-1}\mu_i - \frac{1}{2}\log |\Sigma_i| + \log P(\omega_i)
+$$
+
+The calculation of the quadratic functions can employ the eigen decomposition of the estimate for $\hat{\Sigma}$ as follows (from @hastie).
+
+$$
+  \hat{\Sigma_i} = U_i D_i U'_i
+$$
+
+$$
+  \mu'_i \Sigma_i^{-1} \mu_i = [U'_i\mu_i]'D_i^{-1}[U'_i\mu_i]
+$$
+$$
+  (x-\hat{\mu_i})' \Sigma_i^{-1} (x-\hat{\mu_i}) = [U'_i(x-\hat{\mu_i})]'D_i^{-1}[U'_i(x-\hat{\mu_i})]
+$$
+
+Note that $(x-\hat{\mu_i})' \Sigma_i^{-1} (x-\hat{\mu_i})$ expands to $x'W_ix + x'w_i$.
+
+$$
+\log|\Sigma_i| = \sum_l \log d_{il}
+$$
+where $d_{il}$ is the $lth$ diagonal value of the eigenvalue matrix $D_i$
+
+The maximum value of $g_i(x)$ estimated by the discriminant function is then used to provide the classification for the corresponding group.
+
+This implementation provides a naive implementation of the approach.
+
+The primary drawback is where the number of groups $m$ increases so too does the number of resulting decompositions.
+
+Hence memory and storage can be an issue for computing the entire set of discriminant functions in one go.
+
+One option is to compute each decomposition separately, since the covariance matrix is estimated within groups and to
+  store those separately, rather than computing all at once.
+
+An issue of interest is that of visualisation. The ordination available in a method such as lda is convenient for its application accross all groups. I am unsure as to whether qda is able to be used directly for visualisation, however, intuitively this may be possible perhaps by computing a projection for each group and combining the results. I'll need to look further afield for potential application in this area.
+
+## An Example to Classification
+
+The following example makes use of the [wine data set](https://archive.ics.uci.edu/ml/datasets/wine) which associates the chemical measurements of different wines with one of three producers for the wine. The task of the discriminant functions will be to define the boundaries that best separate the observations between each of the three groups.
+
+
+```{r, echo=FALSE}
+# set the JVM
+Sys.setenv(JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/') 
+Sys.setenv(LD_LIBRARY_PATH = '$LD_LIBRARY_PATH:$JAVA_HOME/lib')
+
+# setup the jvmr interpreter
+library(rJava)
+
+options(java.parameters = c("-Xmx1G", "-XX:MaxPermGen=1G"))
+
+cp <- getwd()
+includes <- list.files(file.path(cp, "../target"), full.names=TRUE)
+
+library(jvmr)
+library(knitr)
+
+scala <- scalaInterpreter(includes)
+knit_engines$set(scalainr = function(options) {
+  code <- paste(options$code, collapse = "\n")
+  output <- capture.output(interpret(scala, code, echo.output = TRUE))
+  engine_output(options, options$code, output)
+})
+```
+
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+import au.id.cxd.math.count.CrossTabulate
+import au.id.cxd.math.data.MatrixReader
+import au.id.cxd.math.function.transform.StandardisedNormalisation
+import au.id.cxd.math.model.components.{CanonicalDiscriminantAnalysis, QuadraticDiscriminant}
+
+val file1:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/wine_data_train.csv"
+
+val file2:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/wine_data_test.csv"
+
+val mat1 = MatrixReader.readFileAt(file1)
+val mat2 = MatrixReader.readFileAt(file2)
+
+// 1st column is group
+// 14 columns
+val trainGroups = mat1(::,0).toArray.map(_.toString).toList
+val testGroups = mat2(::,0).toArray.map(_.toString).toList
+val temp1 = mat1(::,1 to 13)
+val temp2 = mat2(::,1 to 13)
+val trainData = StandardisedNormalisation().transform(temp1)
+val testData = StandardisedNormalisation().transform(temp2)
+
+
+// build the canonical discriminant model.
+val quadParams = QuadraticDiscriminant(trainData, trainGroups)
+
+// perform the test classification.
+val predictedClasses = QuadraticDiscriminant.classifyDiscriminant(testData, quadParams)
+
+val predictGroups = predictedClasses.map(_._1)
+
+val crosstab = CrossTabulate(testGroups, predictGroups)
+
+val results = CrossTabulate.metrics(crosstab)
+
+
+// translate for display in r
+val tabrows = crosstab.rows
+val tabcols = crosstab.cols
+val tab = crosstab.toArray
+
+val metrics = Array(results._1, results._2, results._3, results._4, results._5, results._6)
+```
+
+```{r}
+(crosstab <- matrix(scala["tab"], scala["tabrows"], scala["tabcols"]))
+
+
+metrics <- scala["metrics"]
+(accuracy <- metrics[4])
+(error <- metrics[5])
+```
+The qda method correctly assigns 40 out of the 44 examples to the original groups. 
+
+The comparison with lda is given below.
+
+```{r, engine='scalainr', message=FALSE, results='hide'}
+val groupNames = trainGroups.distinct.sorted
+
+val compareLDA = CanonicalDiscriminantAnalysis(trainGroups, trainData)
+val test = CanonicalDiscriminantAnalysis.classifyDiscriminant(testData,
+  compareLDA._2,
+  compareLDA._3,
+  compareLDA._7,
+  groupNames)
+
+val predictions = test._4.map(_._2)
+
+val crosstab2 = CrossTabulate(testGroups, predictions.toList)
+
+val results2 = CrossTabulate.metrics(crosstab2)
+
+
+// translate for display in r
+val tabrows2 = crosstab2.rows
+val tabcols2 = crosstab2.cols
+val tab2 = crosstab2.toArray
+
+val metrics2 = Array(results2._1, results2._2, results2._3, results2._4, results2._5, results2._6)
+```
+
+
+
+```{r}
+(crosstab <- matrix(scala["tab2"], scala["tabrows2"], scala["tabcols2"]))
+
+
+metrics <- scala["metrics2"]
+(accuracy <- metrics[4])
+(error <- metrics[5])
+```
+
+Note the lda in this case generalises quite well, being less complex, with 41 correct labels applied out of 44.
+
+The ability to perform multi-class assignment with both methods through the use of the decomposition of the estimates of the covariance matrix seems to have demonstrable utility in both inference (such as where applied in [manova](manova.html)) and in classification tasks. 
+
+
+
+
+
