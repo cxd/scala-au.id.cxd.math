@@ -50,7 +50,7 @@ Notes on [MANOVA](https://cxd.github.io/scala-au.id.cxd.math/notes/manova.html)
 
 [Canonical Discriminant Analysis](https://cxd.github.io/scala-au.id.cxd.math/notes/canonicaldiscriminantfunc.html)
 
-
+[Quadratic Discriminant Functions](https://cxd.github.io/scala-au.id.cxd.math/notes/quadraticdiscriminantfunction.html)
 
 ### Notes Sequential Learning.
 

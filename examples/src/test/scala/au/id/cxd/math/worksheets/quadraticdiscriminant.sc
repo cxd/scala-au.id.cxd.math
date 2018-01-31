@@ -94,3 +94,4 @@ val predictions = test._4.map(_._2)
 val crosstab2 = CrossTabulate(testGroups, predictions.toList)
 
 val metrics2 = CrossTabulate.metrics(crosstab2)
+
