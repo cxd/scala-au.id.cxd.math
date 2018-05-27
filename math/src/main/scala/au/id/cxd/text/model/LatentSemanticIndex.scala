@@ -2,7 +2,7 @@ package au.id.cxd.text.model
 
 import breeze.linalg.svd.SVD
 import breeze.linalg.{DenseMatrix, DenseVector}
-import java.nio.file.{Files, Path}
+import java.nio.file.{Files, Path, Paths}
 import java.io.File
 
 import breeze.linalg._
@@ -149,7 +149,10 @@ trait LatentSemanticIndexWriter {
     */
   def writeZipTemp(index: LatentSemanticIndex)(path: String) = {
     val tmpFile = path.stripSuffix(".zip")
-    val tmp = Files.createTempDirectory(tmpFile)
+    val p1 = Paths.get(tmpFile)
+    val cnt = p1.getNameCount()
+    val childDir = p1.getName(cnt-1)
+    val tmp = Files.createTempDirectory(childDir.toString)
     tmp.toFile.deleteOnExit()
     val tmpPath = tmp.toString
     // now we can create a set of separate files.

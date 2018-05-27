@@ -1,9 +1,11 @@
 package au.id.cxd.math.example.text.model
 
 import java.io.File
+import java.net.URL
 
 import au.id.cxd.math.data.CsvReader
 import au.id.cxd.math.example.text.model.LsiModelExample.getClass
+import au.id.cxd.math.example.text.model.config.ModelConfig
 import au.id.cxd.text.count.TfIdfCount
 import au.id.cxd.text.helpers.EmbeddedStopwordsLoader
 import au.id.cxd.text.model.LatentSemanticIndex
@@ -38,17 +40,13 @@ import scala.util.Success
   */
 object LsiModelWriteExample {
 
-  val textData = "example_text_corpus_data.csv"
+  val defaultConfig = "lsi-model.conf"
 
-  // binary serialization file
-  val targetSer = "lsiexample.ser"
-  // zip archives with CSV for use in other tools for visualisation
-  val targetZip = "lsiexample.zip"
 
-  def buildModel() = {
-    val url = getClass.getClassLoader().getResource(textData)
+  def buildModel(config:ModelConfig) = {
+    val url = config.getInputFile()
     val inputCsv = url.getFile
-    val idCols = Seq(0,1)
+    val idCols = config.idCols
     val (entropy, contributions, lsi) = LatentSemanticIndex.buildFromCsv(inputCsv, idCols)
 
     println(s"Entropy: $entropy")
@@ -68,37 +66,37 @@ object LsiModelWriteExample {
 
     // write the model to the zip file
     // the contents of the zip file contains csv data for use in visualisation tools such as R.
-    val writeResult = LatentSemanticIndex.writeZipTemp(lsi2)(targetZip)
+    val writeResult = LatentSemanticIndex.writeZipTemp(lsi2)(config.targetZip)
 
     writeResult match {
       case Success(flag) => flag match {
         case true => {
-          println(s"Wrote model to $targetZip")
+          println(s"Wrote model to ${config.targetZip}")
         }
-        case _ => println(s"Failed to write model to $targetZip")
+        case _ => println(s"Failed to write model to ${config.targetZip}")
       }
-      case _ => println(s"Failed to write $targetZip")
+      case _ => println(s"Failed to write ${config.targetZip}")
     }
 
 
     // write to binary format
     // this is useful for working in scala/java without the need for using external tools
     // it is also alot faster to read.
-    val writeResult2 = LatentSemanticIndex.writeBinary(lsi2)(targetSer)
+    val writeResult2 = LatentSemanticIndex.writeBinary(lsi2)(config.targetSer)
     writeResult2 match {
       case Some(flag) => flag match {
-        case true => println(s"wrote model to $targetSer")
-        case _ => println(s"failed to write model to $targetSer")
+        case true => println(s"wrote model to ${config.targetSer}")
+        case _ => println(s"failed to write model to ${config.targetSer}")
       }
-      case _ => println(s"failed to write model to $targetSer")
+      case _ => println(s"failed to write model to ${config.targetSer}")
     }
   }
 
 
 
   def main(args: Array[String]) = {
-
-    buildModel()
+    val config = ModelConfig(args, defaultConfig)
+    buildModel(config)
 
   }
 }

@@ -104,7 +104,8 @@ lazy val examples = (project in file("examples"))
     name := "au.id.cxd.math.examples",
 
     libraryDependencies ++= Seq(
-      "jfree" % "jcommon" % "1.0.16" % "provided"
+      "jfree" % "jcommon" % "1.0.16" % "provided",
+      "com.typesafe" % "config" % "1.3.2"
     ),
 
     excludedJars in assembly <<= (fullClasspath in assembly) map { cp =>

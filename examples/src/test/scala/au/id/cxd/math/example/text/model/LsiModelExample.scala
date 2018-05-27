@@ -3,6 +3,8 @@ package au.id.cxd.math.example.text.model
 import java.io.File
 
 import au.id.cxd.math.data.CsvReader
+import au.id.cxd.math.example.text.model.LsiModelWriteExample.defaultConfig
+import au.id.cxd.math.example.text.model.config.ModelConfig
 import au.id.cxd.text.count.TfIdfCount
 import au.id.cxd.text.helpers.EmbeddedStopwordsLoader
 import au.id.cxd.text.model.LatentSemanticIndex
@@ -58,15 +60,15 @@ List((55452,"Redirect"), (48499,"mod_rewrite can't redirect to files with ? in t
   */
 object LsiModelExample {
 
-  val textData = "example_text_corpus_data.csv"
 
-  val defaultQuery = Array("http", "redirect", "error")
+  val defaultConfig = "lsi-model.conf"
 
 
-  def buildModel(query:Array[String]) = {
-    val url = getClass.getClassLoader().getResource(textData)
+
+  def buildModel(config:ModelConfig, query:Array[String]) = {
+    val url = config.getInputFile()
     val inputCsv = url.getFile
-    val idCols = Seq(0,1)
+    val idCols = config.idCols
     val (entropy, contributions, lsi) = LatentSemanticIndex.buildFromCsv(inputCsv, idCols)
 
     println(s"Entropy: $entropy")
@@ -124,13 +126,15 @@ object LsiModelExample {
 
   def main(args: Array[String]) = {
 
+    val config = ModelConfig(args, defaultConfig)
+
     val query = args.length > 0 match {
       case true => args(0).split(" ")
-      case _ => defaultQuery
+      case _ => config.defaultQuery
     }
 
 
-    buildModel(query)
+    buildModel(config, query)
 
   }
 

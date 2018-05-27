@@ -3,7 +3,8 @@ package au.id.cxd.math.example.text.model
 import java.io.File
 
 import au.id.cxd.math.data.CsvReader
-import au.id.cxd.math.example.text.model.LsiModelExample.getClass
+import au.id.cxd.math.example.text.model.LsiModelExample.{defaultConfig, getClass}
+import au.id.cxd.math.example.text.model.config.ModelConfig
 import au.id.cxd.text.count.TfIdfCount
 import au.id.cxd.text.helpers.EmbeddedStopwordsLoader
 import au.id.cxd.text.model.LatentSemanticIndex
@@ -38,32 +39,25 @@ import scala.util.{Failure, Success}
   */
 object LsiReadModelExample {
 
-  val targetZip = "lsiexample.zip"
-
-  // binary serialization file
-  val targetSer = "lsiexample.ser"
-
-  val textData = "example_text_corpus_data.csv"
-
-  val defaultQuery = Array("http", "redirect", "error")
+  val defaultConfig = "lsi-model.conf"
 
 
-  def loadDocuments() = {
-    val url = getClass.getClassLoader().getResource(textData)
+  def loadDocuments(config:ModelConfig) = {
+    val url = getClass.getClassLoader().getResource(config.textFile)
     val inputCsv = url.getFile
     val data = new CsvReader().readCsv(new File(inputCsv))
     data
   }
 
-  def readModel() = {
-    val readResult = LatentSemanticIndex.readBinary(targetSer)
+  def readModel(config:ModelConfig) = {
+    val readResult = LatentSemanticIndex.readBinary(config.targetSer)
     readResult match {
       case Some(lsi2) => {
         println(s"Dimensions: U (${lsi2.svD.U.rows} x ${lsi2.svD.U.cols}) S: ${lsi2.svD.S.length} Vt: (${lsi2.svD.Vt.rows} x ${lsi2.svD.Vt.cols})")
         Some(lsi2)
       }
       case _ => {
-        println(s"Failed to read $targetSer")
+        println(s"Failed to read ${config.targetSer}")
         None
       }
     }
@@ -86,7 +80,7 @@ object LsiReadModelExample {
   }
 
 
-  def performSearch(query: Array[String])(search:(LsiSearchSpace, LatentSemanticIndex)) = {
+  def performSearch(config:ModelConfig, query: Array[String])(search:(LsiSearchSpace, LatentSemanticIndex)) = {
     val loader = EmbeddedStopwordsLoader()
     val stopwords = loader.load()
 
@@ -97,7 +91,7 @@ object LsiReadModelExample {
     val searchResults = LatentSemanticIndex.performSearch((ssU, ssS, ssVt), TfIdfCount(), query, stopwords, lsi)
 
     // Note:
-    val data = loadDocuments()
+    val data = loadDocuments(config)
     // find the data that matches the search results.
     val results = searchResults.take(10).foldLeft(Seq[(String, String)]()) {
       (accum, result) => {
@@ -117,14 +111,15 @@ object LsiReadModelExample {
 
 
   def main(args: Array[String]) = {
+    val config = ModelConfig(args, defaultConfig)
 
     val query = args.length > 0 match {
       case true => args(0).split(" ")
-      case _ => defaultQuery
+      case _ => config.defaultQuery
     }
 
-    readModel().flatMap (loadSearchSpace).foreach {
-      search => performSearch(query)(search)
+    readModel(config).flatMap (loadSearchSpace).foreach {
+      search => performSearch(config, query)(search)
     }
 
   }

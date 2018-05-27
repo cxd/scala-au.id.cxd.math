@@ -4,15 +4,17 @@ import java.awt.event.{ActionEvent, ActionListener}
 import java.awt.{BorderLayout, Graphics, GridLayout}
 import java.io.File
 import java.util
+
 import javax.swing._
 import javax.swing.table.{AbstractTableModel, TableModel}
-
 import org.jfree.data._
 import org.jfree.data.category._
 import org.jfree.chart._
 import au.id.cxd.math.data.CsvReader
 import au.id.cxd.math.example.charting.ChartHelper
+import au.id.cxd.math.example.text.model.LsiModelWriteExample.defaultConfig
 import au.id.cxd.math.example.text.model.LsiReadModelExample.getClass
+import au.id.cxd.math.example.text.model.config.ModelConfig
 import au.id.cxd.math.model.components.SingularValueDecomposition
 import au.id.cxd.text.model.LsiComponentCluster.{LsiAttributeCluster, LsiDocumentCluster}
 import au.id.cxd.text.model.{LatentSemanticIndex, LsiComponentCluster}
@@ -35,28 +37,25 @@ import scala.swing.{Color, Dimension}
   */
 object LsiModelClusterExample {
 
+  val defaultConfig = "lsi-model.conf"
 
-  // binary serialization file
-  val targetSer = "lsiexample.ser"
 
-  val textData = "example_text_corpus_data.csv"
-
-  def loadDocuments(): ListBuffer[mutable.Buffer[String]] = {
-    val url = getClass.getClassLoader().getResource(textData)
+  def loadDocuments(config:ModelConfig): ListBuffer[mutable.Buffer[String]] = {
+    val url = config.getInputFile()
     val inputCsv = url.getFile
     val data = new CsvReader().readCsv(new File(inputCsv))
     data
   }
 
-  def readModel() = {
-    val readResult = LatentSemanticIndex.readBinary(targetSer)
+  def readModel(config:ModelConfig) = {
+    val readResult = LatentSemanticIndex.readBinary(config.targetSer)
     readResult match {
       case Some(lsi2) => {
         println(s"Dimensions: U (${lsi2.svD.U.rows} x ${lsi2.svD.U.cols}) S: ${lsi2.svD.S.length} Vt: (${lsi2.svD.Vt.rows} x ${lsi2.svD.Vt.cols})")
         Some(lsi2)
       }
       case _ => {
-        println(s"Failed to read $targetSer")
+        println(s"Failed to read ${config.targetSer}")
         None
       }
     }
@@ -205,12 +204,14 @@ object LsiModelClusterExample {
           doc => {
             // index x docIds x Component x ComponentWeight
             // (Int , Seq[String], Int, Double )
-            val id = doc._2(1)
-            val matchRecord = data.find { row => row(1).equalsIgnoreCase(id) }
-            matchRecord match {
-              case Some(row) => Some((row(0), row(1), row(2)))
-              case _ => None
-            }
+            if (doc._2.length > 0) {
+              val id = doc._2(0)
+              val matchRecord = data.find { row => row(0).equalsIgnoreCase(id) }
+              matchRecord match {
+                case Some(row) => Some((row(0), row(1), row(2)))
+                case _ => None
+              }
+            } else None
           }
         }.filter(!_.isEmpty)
           .map(_.get)
@@ -544,8 +545,9 @@ object LsiModelClusterExample {
 
 
   def main(args: Array[String]) = {
-    val data = loadDocuments()
-    readModel() foreach {
+    val config = ModelConfig(args, defaultConfig)
+    val data = loadDocuments(config)
+    readModel(config) foreach {
       model => {
         println("Plotting Entropy")
         val (k, variation) = plotEntropy(model, 0.9997, 50)
