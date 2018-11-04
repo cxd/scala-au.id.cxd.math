@@ -12,3 +12,16 @@ examples/target
 examples/target/**
 app/target
 app/target/**
+
+.DS_Store
+.DS_Store/**
+**/.DS_Store
+**/.DS_Store/**
+
+**/*.log
+
+**/target
+**/out
+
+*.zip
+**/*.zip

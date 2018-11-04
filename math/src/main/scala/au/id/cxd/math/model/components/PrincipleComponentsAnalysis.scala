@@ -43,16 +43,31 @@ object PrincipleComponentsAnalysis {
     * @param eigenValues
     * @return
     */
-  def varianceExplained(eigenValues:DenseVector[Double]) = {
+  def varianceExplained(eigenValues:DenseVector[Double]): DenseVector[Double] = {
     val total = eigenValues.toArray.sum
     val percentExplained = eigenValues.map { v => v / total }
     percentExplained
   }
 
 
-  def apply(X:DenseMatrix[Double]) =
+  /**
+    * apply PCA to the supplied matrix.
+    * @param X
+    * @return
+    *         tuple of
+    *         (eigenValues, eigenVectors, variance explained, projection of X into the eigenvectors)
+    */
+  def apply(X:DenseMatrix[Double]): (DenseVector[Double], DenseMatrix[Double], DenseVector[Double], DenseMatrix[Double]) =
     new PrincipleComponentsAnalysis().op(X)
 
-  def apply(scale:Boolean, X:DenseMatrix[Double]) =
+  /**
+    * apply PCA to the supplied matrix.
+    * @param scale : a flag indicating whether to normalise X
+    * @param X
+    * @return
+    * *         tuple of
+    * *         (eigenValues, eigenVectors, variance explained, projection of X into the eigenvectors)
+    */
+  def apply(scale:Boolean, X:DenseMatrix[Double]): (DenseVector[Double], DenseMatrix[Double], DenseVector[Double], DenseMatrix[Double]) =
     new PrincipleComponentsAnalysis(scale).op(X)
 }
