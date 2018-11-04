@@ -20,7 +20,7 @@ object SingularSpectrumAnalysis extends WindowedMatrix {
     *
     * At least two of the eigenVectors must have a trigonometric function offset by pi/2
     */
-  def apply(series: Seq[Double], stride: Int): (DenseVector[Double], DenseMatrix[Double], DenseVector[Double], DenseMatrix[Double]) = {
+  def apply(series: Seq[Double], stride: Int, scale:Boolean=true): (DenseVector[Double], DenseMatrix[Double], DenseVector[Double], DenseMatrix[Double]) = {
     val matrix = windowedMatrix(series, stride)
     val (eigenValues, eigenVectors, varExplained, projection) = PrincipleComponentsAnalysis(matrix)
     (eigenValues, eigenVectors, varExplained, projection)
