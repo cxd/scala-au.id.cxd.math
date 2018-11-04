@@ -18,7 +18,9 @@ class TestQDA extends FlatSpec with Matchers {
 
     val groupParams = QuadraticDiscriminant(data, groups)
 
-    groupParams.length should equal(groups.length)
+    println(groupParams.length)
+    println(groups.distinct.length)
+    groupParams.length should equal(groups.distinct.length)
   }
 
   "QDA" should "label with params" in new MandibleClassData {
