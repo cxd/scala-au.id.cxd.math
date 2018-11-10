@@ -5,7 +5,7 @@ import com.typesafe.sbt.SbtGit.GitKeys._
 import sbt.Keys._
 
 
-val breezeVersion = "0.12"
+lazy val breezeVersion = "0.12"
 
 
 javaOptions += "-Xmx2G -Xms1G -XX:MaxPermSize=512M"
@@ -119,7 +119,12 @@ lazy val swing = (project in file("app"))
   .settings(commonSettings: _*)
   .settings(uiDependencies: _*)
   .settings(
-    name := "au.id.cxd.math.app"
+    name := "au.id.cxd.math.app",
+
+    assemblyExcludedJars in assembly := {
+      val cp = (fullClasspath in assembly).value
+      cp filter { x => exclude.exists(item => x.data.getName.matches(item)) }
+    }
   ).settings(Common.commonPluginSettings: _*)
   .dependsOn(math)
 
