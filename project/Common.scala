@@ -53,7 +53,9 @@ object Common extends AutoPlugin {
     },
 
     // attach this task to doc task
-    mathFormulaInDoc <<= mathFormulaInDoc triggeredBy (doc in Compile)
+    mathFormulaInDoc := {
+      mathFormulaInDoc.dependsOn(doc in Compile).value
+    }
 
   )
 

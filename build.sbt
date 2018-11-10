@@ -3,7 +3,7 @@ import java.io.PrintWriter
 import scala.io.Source
 import com.typesafe.sbt.SbtGit.GitKeys._
 import sbt.Keys._
-import AssemblyKeys._
+
 
 val breezeVersion = "0.12"
 
@@ -69,9 +69,7 @@ lazy val uiDependencies = Seq(
 //test in assembly := {}
 
 lazy val math = (project in file("math"))
-  .settings(unidocSettings: _*)
   .settings(commonSettings: _*)
-  .settings(assemblySettings: _*)
   .settings(
 
     name := "au.id.cxd.math",
@@ -89,6 +87,7 @@ lazy val math = (project in file("math"))
 
 
   ).settings(Common.commonPluginSettings: _*)
+  .enablePlugins(ScalaUnidocPlugin)
 
 lazy val exclude = List(
   "jcommon-1.0.16.jar",
@@ -99,7 +98,6 @@ lazy val exclude = List(
 lazy val examples = (project in file("examples"))
   .settings(commonSettings: _*)
   .settings(uiDependencies: _*)
-  .settings(assemblySettings: _*)
   .settings(
     name := "au.id.cxd.math.examples",
 
@@ -108,8 +106,9 @@ lazy val examples = (project in file("examples"))
       "com.typesafe" % "config" % "1.3.2"
     ),
 
-    excludedJars in assembly <<= (fullClasspath in assembly) map { cp =>
-      cp filter {x => exclude.exists(item => x.data.getName.matches(item))}
+    assemblyExcludedJars in assembly := {
+      val cp = (fullClasspath in assembly).value
+      cp filter { x => exclude.exists(item => x.data.getName.matches(item)) }
     }
   )
   .settings(Common.commonPluginSettings: _*)
@@ -117,7 +116,6 @@ lazy val examples = (project in file("examples"))
 
 
 lazy val swing = (project in file("app"))
-  .settings(unidocSettings: _*)
   .settings(commonSettings: _*)
   .settings(uiDependencies: _*)
   .settings(
