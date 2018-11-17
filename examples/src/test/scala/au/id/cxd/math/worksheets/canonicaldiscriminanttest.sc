@@ -3,6 +3,7 @@ import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.example.charting.VegasHelper
 import au.id.cxd.math.function.transform.StandardisedNormalisation
 import au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis
+import breeze.linalg.DenseMatrix
 import vegas.DSL.Layer
 import vegas.spec.Spec.MarkEnums.{Square, Text}
 import vegas.{Point, Quantitative, Vegas}
@@ -31,6 +32,8 @@ val result1 = CanonicalDiscriminantAnalysis.classify(Y, coeffs, intercept, group
 
 val result2 = CanonicalDiscriminantAnalysis.classifyDiscriminant(Y, coeffs, intercept, groupMeans, uniqueGroups)
 
+
+
 val test1 = result1._4.map(_._2)
 val crosstab1 = CrossTabulate(groupsY, test1)
 val r1 = CrossTabulate.metrics(crosstab1)
@@ -38,3 +41,10 @@ val r1 = CrossTabulate.metrics(crosstab1)
 val test2 = result2._4.map(_._2)
 val crosstab2 = CrossTabulate(groupsY, test2)
 val r2 = CrossTabulate.metrics(crosstab2)
+
+def writeMatCsv(path:String, m:DenseMatrix[Double]):Unit = {
+  val file = new java.io.File(path)
+  breeze.linalg.csvwrite(file, m, separator=',')
+}
+
+writeMatCsv("/Users/cd/Projects/scala/au.id.cxd.math/data/test.csv", cor)

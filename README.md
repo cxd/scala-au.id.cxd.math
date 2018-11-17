@@ -24,6 +24,22 @@ Part of this is experimenting with library design, or to simply attempt an imple
 
  The library will change over time, and progress will be limited by other activities. This library is not intended as a stable production library, and is experimental in nature.
 
+## Building
+
+The build process can be achieved via:
+
+```
+sbt compile package publishLocal
+```
+
+This gets around an issue with finding dependencies between projects during
+the cross compile phase. Then to produce the cross compiled assemblies.
+
+```
+sbt +assembly
+```
+
+
 ### Documentation.
 
 The documentation consists both of [API documentation](https://cxd.github.io/scala-au.id.cxd.math/latest/math/api/index.html) and some of this information is extracted into separate notes and examples.

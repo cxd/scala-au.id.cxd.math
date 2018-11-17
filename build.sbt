@@ -68,8 +68,6 @@ lazy val math = (project in file("math"))
 
     name := "au.id.cxd.math",
 
-    scalaVersion := "2.11.8",
-
     // note to cross compile for multiple versions of scala use the
     // > + compile
     // > + assembly
