@@ -2,6 +2,7 @@
 title: "Quadratic Discriminant Functions"
 output: 
   html_document:
+    highlight: pygments
     css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
     includes:
       in_header: quadraticdiscrimfunc_head.html
@@ -89,39 +90,61 @@ The following example makes use of the [wine data set](https://archive.ics.uci.e
 
 
 ```{r, echo=FALSE}
-# set the JVM
-Sys.setenv(JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/') 
-Sys.setenv(LD_LIBRARY_PATH = '$LD_LIBRARY_PATH:$JAVA_HOME/lib')
-
-# setup the jvmr interpreter
-library(rJava)
-
-options(java.parameters = c("-Xmx1G", "-XX:MaxPermGen=1G"))
-
-cp <- getwd()
-includes <- list.files(file.path(cp, "../target"), full.names=TRUE)
-
-library(jvmr)
+library(rscala)
 library(knitr)
+cp <- getwd()
+includes <- list.files(file.path(cp, "../target/scala-2.12"), full.names=TRUE)
+# ... args passed to rscala::scala functions. See ?rscala::scala for more informations.
+make_scala_engine <- function(...) {
+ 
+  engine <- scala(serialize.output = TRUE, stdout = "", JARs=includes)
+  engine <- force(engine)
+  function(options) {
+    code <- paste(options$code, collapse = "\n")
+    output <- capture.output(invisible(engine + code))
+    engine_output(options, options$code, output)
+  }
+}
 
-scala <- scalaInterpreter(includes)
-knit_engines$set(scalainr = function(options) {
-  code <- paste(options$code, collapse = "\n")
-  output <- capture.output(interpret(scala, code, echo.output = TRUE))
-  engine_output(options, options$code, output)
-})
+# Register new engine in knitr
+knit_engines$set(scala = make_scala_engine())
+
 ```
 
 
-```{r, engine='scalainr', message=FALSE, results='hide'}
+
+```{r, engine='scala', echo=FALSE, message=FALSE, results='hide'}
+import java.io._
+import breeze.linalg._
+
+def toCsv[A](path:String, items:Seq[A]) {
+  val writer = new PrintWriter(new File(path))
+  val data = items.mkString("\n")
+  writer.write(data)
+  writer.flush()
+  writer.close()
+}
+
+def writeMatCsv(path:String, m:DenseMatrix[Double]):Unit = {
+  val file = new java.io.File(path)
+  csvwrite(file, m, separator=',')
+}
+```
+
+
+```{r, engine='scala', echo=FALSE}
+val basePath ="/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math"
+```
+
+```{r, engine='scala', message=FALSE, results='hide'}
 import au.id.cxd.math.count.CrossTabulate
 import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.function.transform.StandardisedNormalisation
 import au.id.cxd.math.model.components.{CanonicalDiscriminantAnalysis, QuadraticDiscriminant}
 
-val file1:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/wine_data_train.csv"
+val file1:String = s"$basePath/data/wine_data_train.csv"
 
-val file2:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/wine_data_test.csv"
+val file2:String = s"$basePath/data/wine_data_test.csv"
 
 val mat1 = MatrixReader.readFileAt(file1)
 val mat2 = MatrixReader.readFileAt(file2)
@@ -150,18 +173,26 @@ val results = CrossTabulate.metrics(crosstab)
 
 
 // translate for display in r
-val tabrows = crosstab.rows
-val tabcols = crosstab.cols
-val tab = crosstab.toArray
 
 val metrics = Array(results._1, results._2, results._3, results._4, results._5, results._6)
 ```
 
+
+```{r, engine='scala', message=FALSE, results='hide', echo=FALSE}
+
+writeMatCsv(s"$basePath/temp/crosstab.csv", crosstab)
+toCsv(s"$basePath/temp/metrics.csv", metrics)
+
+```
+
+```{r, echo=FALSE,message=FALSE,error=FALSE,warning=FALSE}
+crosstab <- as.matrix(read.csv("../temp/crosstab.csv", header=FALSE))
+metrics <- c(t(read.csv("../temp/metrics.csv", header=FALSE)))
+```
+
 ```{r}
-(crosstab <- matrix(scala["tab"], scala["tabrows"], scala["tabcols"]))
+crosstab
 
-
-metrics <- scala["metrics"]
 (accuracy <- metrics[4])
 (error <- metrics[5])
 ```
@@ -169,7 +200,7 @@ The qda method correctly assigns 40 out of the 44 examples to the original group
 
 The comparison with lda is given below.
 
-```{r, engine='scalainr', message=FALSE, results='hide'}
+```{r, engine='scala', message=FALSE, results='hide'}
 val groupNames = trainGroups.distinct.sorted
 
 val compareLDA = CanonicalDiscriminantAnalysis(trainGroups, trainData)
@@ -187,20 +218,25 @@ val results2 = CrossTabulate.metrics(crosstab2)
 
 
 // translate for display in r
-val tabrows2 = crosstab2.rows
-val tabcols2 = crosstab2.cols
-val tab2 = crosstab2.toArray
-
 val metrics2 = Array(results2._1, results2._2, results2._3, results2._4, results2._5, results2._6)
 ```
 
 
+```{r, engine='scala', message=FALSE, results='hide', echo=FALSE}
+
+writeMatCsv(s"$basePath/temp/crosstab2.csv", crosstab)
+toCsv(s"$basePath/temp/metrics2.csv", metrics)
+
+```
+
+```{r, echo=FALSE,message=FALSE,error=FALSE,warning=FALSE}
+crosstab <- as.matrix(read.csv("../temp/crosstab2.csv", header=FALSE))
+metrics <- c(t(read.csv("../temp/metrics2.csv", header=FALSE)))
+```
 
 ```{r}
-(crosstab <- matrix(scala["tab2"], scala["tabrows2"], scala["tabcols2"]))
+crosstab
 
-
-metrics <- scala["metrics2"]
 (accuracy <- metrics[4])
 (error <- metrics[5])
 ```

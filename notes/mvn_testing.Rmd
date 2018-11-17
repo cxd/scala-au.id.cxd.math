@@ -2,6 +2,7 @@
 title: "Notes on Testing for Multivariate Normality"
 output: 
   html_document:
+    highlight: pygments
     css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
     includes:
       in_header: mvn_testing_head.html
@@ -28,37 +29,56 @@ $$
 Where $S_{X,X}^{-1}$ is the inverse of the estimated variance-covariance matrix and $\bar{X}$ is the estimated column mean vector for the matrix X.
 
 
-```{r}
-# set the JVM
-Sys.setenv(JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/') 
-Sys.setenv(LD_LIBRARY_PATH = '$LD_LIBRARY_PATH:$JAVA_HOME/lib')
-
-# setup the jvmr interpreter
-library(rJava)
-
-options(java.parameters = c("-Xmx1G", "-XX:MaxPermGen=1G"))
-
-cp <- getwd()
-includes <- list.files(file.path(cp, "../target"), full.names=TRUE)
-
-library(jvmr)
+```{r, echo=FALSE}
+library(rscala)
 library(knitr)
+cp <- getwd()
+includes <- list.files(file.path(cp, "../target/scala-2.12"), full.names=TRUE)
+# ... args passed to rscala::scala functions. See ?rscala::scala for more informations.
+make_scala_engine <- function(...) {
+ 
+  engine <- scala(serialize.output = TRUE, stdout = "", JARs=includes)
+  engine <- force(engine)
+  function(options) {
+    code <- paste(options$code, collapse = "\n")
+    output <- capture.output(invisible(engine + code))
+    engine_output(options, options$code, output)
+  }
+}
 
-scala <- scalaInterpreter(includes)
-knit_engines$set(scalainr = function(options) {
-  code <- paste(options$code, collapse = "\n")
-  output <- capture.output(interpret(scala, code, echo.output = TRUE))
-  engine_output(options, options$code, output)
-})
+# Register new engine in knitr
+knit_engines$set(scala = make_scala_engine())
+
+```
+
+
+```{r, engine='scala', echo=FALSE, message=FALSE, results='hide'}
+import java.io._
+import breeze.linalg._
+
+def toCsv[A](path:String, items:Seq[A]) {
+  val writer = new PrintWriter(new File(path))
+  val data = items.mkString("\n")
+  writer.write(data)
+  writer.flush()
+  writer.close()
+}
+
+def writeMatCsv(path:String, m:DenseMatrix[Double]):Unit = {
+  val file = new java.io.File(path)
+  csvwrite(file, m, separator=',')
+}
+```
+
+
+```{r, engine='scala', echo=FALSE}
+val basePath ="/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math"
 ```
 
 The visual assessment can be demonstrated on two data sets. The first example is a subset of the iris data set, subsetted on the species "virginica", in order to generate an example of a multivariate normal data sample.
 
-```{r, engine='scalainr', echo=FALSE, results='hide'}
-System.getProperty("java.version")
-```
 
-```{r, engine='scalainr', message=FALSE, results='hide'}
+```{r, engine='scala', message=FALSE, results='hide'}
 // imports
 import java.io.File
 import scala.collection.mutable
@@ -74,7 +94,7 @@ import au.id.cxd.math.probability.continuous.ChiSquare
 
 
 
-val fileName:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/iris_virginica.csv"
+val fileName:String = s"$basePath/data/iris_virginica.csv"
 
 val mat = MatrixReader.readFileAt(fileName)
 // extract the columns of interest.
@@ -83,7 +103,7 @@ val data = mat(::, 0 to 3)
 
 Once the data is loaded we then obtain the distance measures for each observation.
 
-```{r, engine='scalainr', message=FALSE, results='hide'}
+```{r, engine='scala', message=FALSE, results='hide'}
 // get the distance measures for each example.
 val distance = MahalanobisDistance(data)
 
@@ -102,10 +122,21 @@ val quantiles = x.map(chisq.invcdf(_))
 Now we will produce a plot of the ordered distance measure over the chisq quantiles.
 
 
+```{r, engine='scala', message=FALSE, results='hide', echo=FALSE}
+
+toCsv(s"$basePath/temp/distSorted.csv", distSorted)
+toCsv(s"$basePath/temp/x.csv", x)
+toCsv(s"$basePath/temp/quantiles.csv", quantiles)
+
+```
+
+```{r, echo=FALSE}
+x <- c(t(read.csv("../temp/x.csv", header=FALSE)))
+distances <- c(t(read.csv("../temp/distSorted.csv", header=FALSE)))
+quantiles <-c(t(read.csv("../temp/quantiles.csv", header=FALSE)))
+```
+
 ```{r cleaned, results="asis"}
-x <- scala["x"]
-quantiles <- scala["quantiles"]
-distances <- scala["distSorted"]
 distances <- sapply(distances, function(d) d^2)
 
 m <- lm(quantiles ~ distances)
@@ -149,10 +180,10 @@ The mandible data set is not multivariate normally distributed, as the groups do
 
 The qqplot can be displayed in a similar manner using the Mahalanobis distance measures.
 
-```{r, engine='scalainr', message=FALSE, results='hide'}
+```{r, engine='scala', message=FALSE, results='hide'}
 
 
-val fileName2:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/test_mandible_data.csv"
+val fileName2:String = s"$basePath/data/test_mandible_data.csv"
 
 val dataRange:Seq[Int] = 2 to 10
 
@@ -174,12 +205,25 @@ val quantiles2 = x2.map(chisq2.invcdf(_))
 
 ```
 
+
+```{r, engine='scala', message=FALSE, results='hide', echo=FALSE}
+
+toCsv(s"$basePath/temp/distSorted2.csv", distSorted2)
+toCsv(s"$basePath/temp/x2.csv", x2)
+toCsv(s"$basePath/temp/quantiles2.csv", quantiles2)
+
+```
+
+```{r, echo=FALSE}
+x <- c(t(read.csv("../temp/x2.csv", header=FALSE)))
+distances2 <- c(t(read.csv("../temp/distSorted2.csv", header=FALSE)))
+quantiles2 <-c(t(read.csv("../temp/quantiles2.csv", header=FALSE)))
+```
+
 Displaying the plot below
 
 ```{r results="asis"}
-x <- scala["x"]
-quantiles2 <- scala["quantiles2"]
-distances2 <- scala["distSorted2"]
+
 distances2 <- sapply(distances2, function(d) d^2)
 
 plot(distances2, quantiles2, col="blue", main="QQPlot of mandible data")
@@ -246,7 +290,7 @@ then $z1 = \frac{nc}{6}b_{1,p}$.
 The null hypothesis asserts that the data is MVN distributed. Two tests are performed using the statistics and associated distributions. In order to reject the null hypothesis, either of the tests must disagree, both tests must agree in order to accept the MVN hypothesis.
 
 
-```{r, engine='scalainr', message=FALSE, results='hide'}
+```{r, engine='scala', message=FALSE, results='hide'}
 import au.id.cxd.math.probability.analysis.MardiaTest
 
 // test with standardised data
@@ -256,32 +300,32 @@ val test = MardiaTest(0.05, X)
 
 Printing the result:
 
-```{r, engine='scalainr'}
+```{r, engine='scala'}
 println(test.toString)
 ```
 
 As both tests do not reject the null hypothesis, the outcome suggests that the set of observations are from a multivariate normal distribution.
 
 
-The Mardia Test from the MVN package is demonstrated below for the iris subset of data from above.
+The Mardia Test from the MVN package is demonstrated below for the iris subset of data from above. The results in the mardia test require at least one of the kurtosis and skew test results to disagree in order to for the null hypothesis to be rejected. 
 
 ```{r, message=FALSE, error=FALSE, warning=FALSE}
 require(MVN)
-mardiaTest(data, qqplot=TRUE)
+mvn(data, mvnTest="mardia", multivariatePlot="qq")
 ```
 
 ## An example of testing non-MVN data.
 
 Similarly we can observe the result for the non-multivariate data for the mandible dataset.
 
-```{r, engine='scalainr', message=FALSE, results='hide'}
+```{r, engine='scala', message=FALSE, results='hide'}
 // test with standardised data
 val test2 = MardiaTest(0.05, data2)
 ```
 
 Printing the results;
 
-```{r, engine='scalainr'}
+```{r, engine='scala'}
 println(test2)
 ```
 
@@ -291,7 +335,7 @@ For comparison in R as below,
 
 ```{r}
 data2 <- read.csv("../data/test_mandible_data.csv", header=TRUE)
-mardiaTest(data2[,1:9])
+mvn(data2[,1:9], mvnTest="mardia")
 
 ```
 

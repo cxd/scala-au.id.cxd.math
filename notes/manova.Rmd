@@ -2,6 +2,7 @@
 title: "Notes on MANOVA"
 output: 
   html_document:
+    highlight: pygments
     css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
     includes:
       in_header: manova_head.html
@@ -152,35 +153,41 @@ The Manova procedure is implemented in the library by the class 'au.id.cxd.math.
 
 The following example illustrates the procedure with two data sets.
 
-
-```{r}
-# setup the jvmr interpreter
-library(rJava)
-
-options(java.parameters = c("-Xmx1G", "-XX:MaxPermGen=1G"))
-
-cp <- getwd()
-includes <- list.files(file.path(cp, "../target"), full.names=TRUE)
-
-library(jvmr)
-library(knitr)
-
-scala <- scalaInterpreter(includes)
-knit_engines$set(scalainr = function(options) {
-  code <- paste(options$code, collapse = "\n")
-  output <- capture.output(interpret(scala, code, echo.output = TRUE))
-  engine_output(options, options$code, output)
-})
-```
-
 Firstly the example will load a data file given a location and select a subset of columns
 for the matrix data and the column representing the groups.
 
 The groups column may contain strings, which could represent the group labels. The data format is expected to be a wide data format.
 
+```{r, echo=FALSE}
+library(rscala)
+library(knitr)
+cp <- getwd()
+includes <- list.files(file.path(cp, "../target/scala-2.12"), full.names=TRUE)
+# ... args passed to rscala::scala functions. See ?rscala::scala for more informations.
+make_scala_engine <- function(...) {
+ 
+  engine <- scala(serialize.output = TRUE, stdout = "", JARs=includes)
+  engine <- force(engine)
+  function(options) {
+    code <- paste(options$code, collapse = "\n")
+    output <- capture.output(invisible(engine + code))
+    engine_output(options, options$code, output)
+  }
+}
+
+# Register new engine in knitr
+knit_engines$set(scala = make_scala_engine())
+
+```
+
+
 The first example uses a dataset from @manly which consists of the measurements mandibles taken from a number of skulls for different species of dog. 
 
-```{r, engine='scalainr', results='hide'}
+```{r, engine='scala', echo=FALSE}
+val basePath ="/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math"
+```
+
+```{r, engine='scala'}
 
 
 import java.io.File
@@ -192,7 +199,7 @@ import au.id.cxd.math.function.transform.StandardisedNormalisation
 import au.id.cxd.math.probability.analysis._
 import breeze.linalg.{DenseMatrix, eigSym, inv, svd}
 
-val fileName:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/test_mandible_data.csv"
+val fileName:String = s"$basePath/data/test_mandible_data.csv"
 
 val dataRange:Seq[Int] = 2 to 10
 val groupColumn:Int = 1
@@ -211,7 +218,7 @@ val lawley = Manova(groups, data, alpha=0.05, method=LawesHotellingTrace())
 ```
 We can inspect the result from the use of the Wilks lambda statistic.
 
-```{r, engine='scalainr'}
+```{r, engine='scala'}
 println(wilks.toString)
 ```
 
@@ -221,7 +228,7 @@ In this case the analysis rejected the null hypothesis that the groups were from
 
 However it is worth while testing against the other methods to ensure they are consistent.
 
-```{r, engine='scalainr'}
+```{r, engine='scala'}
 
 List(pillai, roys, lawley).foreach(println)
 
@@ -238,10 +245,10 @@ The second example illustrates a set of measures for the body dimensions for spa
 
 The approach is repeated on a new data set.
 
-```{r, engine='scalainr'}
+```{r, engine='scala'}
 
 
-val fileName:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/test_sparrows.csv"
+val fileName:String = s"$basePath/data/test_sparrows.csv"
 
 val dataRange:Seq[Int] = 1 to 5
 val groupColumn:Int = 6
