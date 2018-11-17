@@ -14,3 +14,4 @@ it uses the reconfiguration command
 
   sudo R CMD javareconf
   
+To use rscala instead see [Running Scala in R](RUNNING_SCALA_README.md)
