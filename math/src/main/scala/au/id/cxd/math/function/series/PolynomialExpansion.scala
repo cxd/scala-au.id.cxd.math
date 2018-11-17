@@ -244,7 +244,7 @@ class PolynomialExpansion(val X: DenseMatrix[Double], val degree: Int) {
       (accum, k) => {
         val total = accum._1
         val set = accum._2
-        accum == n match {
+        accum._1 == n match {
           case true => (n, set)
           case false => (total + k, set :+ k)
         }

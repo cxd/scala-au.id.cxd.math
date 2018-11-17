@@ -102,7 +102,8 @@ object ExampleCarsStopDist {
     dataset.add(rSeries1, "df-1", "df-1")
     dataset.add(rSeries2, "df-4", "df-4")
     dataset.add(rSeries3, "df-8", "df-8")
-    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset, title="Residuals of 3 models")
+    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset)
+    box.title = "Residuals of 3 models"
 
 
     val frame = new JFrame("Example car speed and predicted stopping distance")

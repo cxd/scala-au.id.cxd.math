@@ -6,6 +6,7 @@ import vegas.DSL.Layer
 import vegas.spec.Spec.MarkEnums.{Square, Text}
 import vegas.{Point, Quantitative, Vegas}
 import vegas.spec.Spec.TypeEnums.Nominal
+import vegas._
 
 import scala.io.Source
 // investigate the use of canonical discriminant analysis.

@@ -5,7 +5,7 @@ import com.typesafe.sbt.SbtGit.GitKeys._
 import sbt.Keys._
 
 
-lazy val breezeVersion = "0.12"
+lazy val breezeVersion = "0.13.2"
 
 
 javaOptions += "-Xmx2G -Xms1G -XX:MaxPermSize=512M"
@@ -20,23 +20,17 @@ javaOptions ++= Seq(
 
 lazy val commonSettings = Seq(
   scalaVersion := "2.11.8",
-  // note to cross compile for multiple versions of scala use the
-  // > + compile
-  // > + assembly
-  // to manually switch between versions
-  // > ++ 2.11.8
-  // > ++ 2.12.2
-  // this should generate multiple targets
-  // breeze does not seem to be available for 2.12
-  crossScalaVersions := Seq("2.11.8"),
+
 
   version := "1.0",
 
-  resolvers += Opts.resolver.sonatypeReleases,
+  resolvers ++= Seq(Resolver.sonatypeRepo("public"),
+    Resolver.sonatypeRepo("snapshots"),
+    Resolver.sonatypeRepo("releases")),
 
   coverageEnabled := false,
 
-  libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test",
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   libraryDependencies ++= Seq(
     //// scalax io
     //"com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
@@ -46,7 +40,7 @@ lazy val commonSettings = Seq(
     // native libraries greatly improve performance, but increase jar sizes.
     "org.scalanlp" %% "breeze-natives" % breezeVersion,
     // add the scalaz library
-    "org.scalaz" %% "scalaz-core" % "7.1.0",
+    "org.scalaz" %% "scalaz-core" % "7.2.27",
     // json4s
     "org.json4s" %% "json4s-jackson" % "3.6.0-M2"
   )
@@ -57,12 +51,12 @@ lazy val uiDependencies = Seq(
     // add breeze visualization
     "org.scalanlp" %% "breeze-viz" % breezeVersion,
     // wrapper around jfreechart
-    "com.github.wookietreiber" %% "scala-chart" % "0.5.0",
+    "com.github.wookietreiber" %% "scala-chart" % "0.5.1",
     // include kumo for tag cloud generation
     "com.kennycason" % "kumo" % "1.8",
     // vegas library
-    "com.github.vegas-viz" %% "vegas" % "0.3.5",
-    "com.github.vegas-viz" %% "vegas-macros" % "0.3.5"
+    "org.vegas-viz" %% "vegas" % "0.3.11",
+    "org.vegas-viz" %% "vegas-macros" % "0.3.11"
   )
 )
 
@@ -74,11 +68,20 @@ lazy val math = (project in file("math"))
 
     name := "au.id.cxd.math",
 
+    // note to cross compile for multiple versions of scala use the
+    // > + compile
+    // > + assembly
+    // to manually switch between versions
+    // > ++ 2.11.8
+    // > ++ 2.12.2
+    // this should generate multiple targets
+    crossScalaVersions := Seq("2.11.8", "2.12.2"),
+
     libraryDependencies ++= Seq(
       // add breeze visualization
       "org.scalanlp" %% "breeze-viz" % breezeVersion % "test",
       // wrapper around jfreechart
-      "com.github.wookietreiber" %% "scala-chart" % "0.5.0" % "test",
+      "com.github.wookietreiber" %% "scala-chart" % "0.5.1" % "test",
       // include kumo for tag cloud generation
       "com.kennycason" % "kumo" % "1.8" % "test"
     ),

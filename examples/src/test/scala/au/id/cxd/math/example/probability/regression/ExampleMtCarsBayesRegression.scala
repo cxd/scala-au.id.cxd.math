@@ -76,7 +76,9 @@ object ExampleMtCarsBayesRegression {
     dataset.add(rSeries2, "df-updated", "df-updated")
 
 
-    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset, title = "Residuals of 2 models")
+    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset)
+
+    box .title = "Residuals of 2 models"
 
 
     val frame = new JFrame("Example mtcars data set and predicted miles per gallon")

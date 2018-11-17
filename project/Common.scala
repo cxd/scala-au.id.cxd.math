@@ -10,7 +10,7 @@ object Common extends AutoPlugin {
 
   // details here on how to post process the generated html and insert mathjax
   // http://stackoverflow.com/questions/15996651/is-there-a-way-to-include-math-formulae-in-scaladoc
-  lazy val mathFormulaInDoc = TaskKey[Unit]("add MathJax script import in doc html to display nice latex formula")
+  lazy val mathFormulaInDoc = TaskKey[File]("add MathJax script import in doc html to display nice latex formula")
 
   // function that find html files recursively
   def listHtmlFile(dir: java.io.File): List[java.io.File] = {
@@ -24,7 +24,7 @@ object Common extends AutoPlugin {
   val commonPluginSettings = Seq(
 
     mathFormulaInDoc := {
-      val apiDir = (doc in (Compile)).value
+      val apiDir = (doc in Compile).value
       val docDirs = List(apiDir) // /"some"/"subfolder"  // in my case, only api/some/solder is parsed
       // will replace this "importTag" by "scriptLine
       val importTag = "##import MathJax"
@@ -49,12 +49,7 @@ object Common extends AutoPlugin {
             }
           }
       }
-
-    },
-
-    // attach this task to doc task
-    mathFormulaInDoc := {
-      mathFormulaInDoc.dependsOn(doc in Compile).value
+      apiDir
     }
 
   )

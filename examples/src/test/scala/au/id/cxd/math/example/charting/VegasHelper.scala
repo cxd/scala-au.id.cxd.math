@@ -3,6 +3,8 @@ package au.id.cxd.math.example.charting
 import java.io.{File, PrintWriter}
 
 import vegas.DSL.{ExtendedUnitSpecBuilder, SpecBuilder}
+import vegas._
+import vegas.render._
 import org.json4s._
 import org.json4s.JsonDSL._
 import org.json4s.jackson.JsonMethods._
@@ -27,7 +29,7 @@ object VegasHelper {
 
   def showPlot(p:SpecBuilder, fileName:String="temp.html") = {
 
-    val plotFrame = p.pageHTML()
+    val plotFrame = p.html.pageHTML()
     runBrowser(plotFrame, fileName)
   }
 
@@ -60,13 +62,13 @@ object VegasHelper {
     * @return
     */
   def transformAndShowPlot(p:SpecBuilder, fn:(String => String) = id => id, divName:String="", fileName:String="temp.html") = {
-    val div = if (divName.equalsIgnoreCase("")) p.defaultName
+    val div = if (divName.equalsIgnoreCase("")) "plot"
     else divName
-    val plotJson = p.specJson
-    val updateSpec = fn(p.specJson).trim
+    val plotJson = p.toJson
+    val updateSpec = fn(p.toJson).trim
     val json = parse(updateSpec)
     val newJson = json merge JObject("$schema" -> JString("https://vega.github.io/schema/vega-lite/v2.json"))
-    val newSpec = compact(render(newJson))
+    val newSpec = compact( org.json4s.jackson.JsonMethods.render(newJson))
 
 
     val pageData = s"""
@@ -99,6 +101,6 @@ object VegasHelper {
     val newJson1 = json transformField {
       case JField("mark", JString(s)) => ("mark", JString(mark))
     }
-    compact(render(newJson1))
+    compact( org.json4s.jackson.JsonMethods.render(newJson1))
   }
 }

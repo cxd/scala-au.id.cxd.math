@@ -104,7 +104,8 @@ object ExampleMtCarsConsumption {
     dataset.add(rSeries3, "df-3", "df-3")
 
 
-    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset, title = "Residuals of 3 models")
+    val box = scalax.chart.module.BoxAndWhiskerChartFactories.BoxAndWhiskerChart(dataset)
+    box.title = "Residuals of 3 models"
 
 
     val frame = new JFrame("Example mtcars data set and predicted miles per gallon")
