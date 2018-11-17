@@ -68,6 +68,8 @@ lazy val math = (project in file("math"))
 
     name := "au.id.cxd.math",
 
+    scalaVersion := "2.11.8",
+
     // note to cross compile for multiple versions of scala use the
     // > + compile
     // > + assembly
@@ -109,6 +111,8 @@ lazy val examples = (project in file("examples"))
       "com.typesafe" % "config" % "1.3.2"
     ),
 
+    aggregate in assembly := false,
+
     assemblyExcludedJars in assembly := {
       val cp = (fullClasspath in assembly).value
       cp filter { x => exclude.exists(item => x.data.getName.matches(item)) }
@@ -123,6 +127,8 @@ lazy val swing = (project in file("app"))
   .settings(uiDependencies: _*)
   .settings(
     name := "au.id.cxd.math.app",
+
+    aggregate in assembly := false,
 
     assemblyExcludedJars in assembly := {
       val cp = (fullClasspath in assembly).value

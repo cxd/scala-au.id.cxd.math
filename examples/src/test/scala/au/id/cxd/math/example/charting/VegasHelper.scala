@@ -28,7 +28,6 @@ object VegasHelper {
   }
 
   def showPlot(p:SpecBuilder, fileName:String="temp.html") = {
-
     val plotFrame = p.html.pageHTML()
     runBrowser(plotFrame, fileName)
   }

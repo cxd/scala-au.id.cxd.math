@@ -4,7 +4,6 @@ import au.id.cxd.math.data.GroupPartition
 import au.id.cxd.math.function.column.ColMeans
 import au.id.cxd.math.function.distance.Cov
 import breeze.linalg.{*, DenseMatrix, DenseVector, diag, inv, sum, tile}
-import org.apache.commons.math3.linear.EigenDecomposition
 
 /**
   * ##import MathJax
