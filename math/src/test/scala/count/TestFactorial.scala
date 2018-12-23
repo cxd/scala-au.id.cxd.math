@@ -8,7 +8,7 @@ import org.scalatest._
  *
  * Created by cd on 5/11/14.
  */
-class TestFactorial extends FlatSpec with ShouldMatchers {
+class TestFactorial extends FlatSpec with Matchers {
 
   val x = List(1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0)
   val testResults = List(1.0, 2.0, 6.0, 24.0, 120.0, 720.0, 5040.0, 40320.0, 362880.0, 3628800.0)

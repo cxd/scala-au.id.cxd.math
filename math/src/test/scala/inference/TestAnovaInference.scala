@@ -17,7 +17,7 @@ import org.scalatest._
  *
  * Created by cd on 15/11/14.
  */
-class TestAnovaInference extends FlatSpec with ShouldMatchers {
+class TestAnovaInference extends FlatSpec with Matchers {
 
   /**
    * columns correspond to k samples

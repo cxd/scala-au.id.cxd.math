@@ -5,12 +5,12 @@ import java.io.File
 import au.id.cxd.text.count.TfIdfCount
 import au.id.cxd.text.helpers.{EmbeddedStopwordsLoader, IndexedTextCsvReader}
 import au.id.cxd.text.preprocess.StemmingPatternFilter
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Created by cd on 8/1/17.
   */
-class TestTfIdfCount extends FlatSpec with ShouldMatchers {
+class TestTfIdfCount extends FlatSpec with Matchers {
 
   /**
     * test reading some of the apache defect data

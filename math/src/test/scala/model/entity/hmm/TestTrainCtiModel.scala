@@ -10,7 +10,7 @@ import org.scalatest._
 /**
   * Created by cd on 7/02/15.
   */
-class TestTrainCtiModel extends FlatSpec with ShouldMatchers {
+class TestTrainCtiModel extends FlatSpec with Matchers {
 
 
   def getTrainFile() = {

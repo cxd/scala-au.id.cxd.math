@@ -1,9 +1,9 @@
 package probability.continuous
 
 import au.id.cxd.math.probability.continuous.Beta
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
-class TestBeta extends FlatSpec with ShouldMatchers {
+class TestBeta extends FlatSpec with Matchers {
 
   // TODO: further debugging required on Inverse Beta function.
   "Quartiles of Beta distribution" should "agree with R" in {

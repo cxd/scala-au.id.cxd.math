@@ -2,12 +2,12 @@ package function
 
 import au.id.cxd.math.function.approximate.NumericIntegral
 import au.id.cxd.math.probability.continuous.Normal
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Created by cd on 13/03/2016.
   */
-class TestTrapIntegrate extends FlatSpec with ShouldMatchers {
+class TestTrapIntegrate extends FlatSpec with Matchers {
 
   "Integrate std normal" should "equal expected value" in {
     // standard normal distribution p-value between -1.0 and 1.0

@@ -7,7 +7,7 @@ import scala.collection.immutable.Range.Double
 /**
  * Created by cd on 13/11/14.
  */
-class TestNormal extends FlatSpec with ShouldMatchers {
+class TestNormal extends FlatSpec with Matchers {
 
   val range:NumericRange[Double] = Range.Double.apply(-4.0, 4.0, 0.1)
 

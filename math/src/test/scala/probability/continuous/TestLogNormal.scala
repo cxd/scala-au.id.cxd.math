@@ -2,9 +2,9 @@ package probability.continuous
 
 import au.id.cxd.math.probability.continuous.{Gamma, LogNormal}
 import function.TestEvaluation
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
-class TestLogNormal extends FlatSpec with ShouldMatchers with TestEvaluation {
+class TestLogNormal extends FlatSpec with Matchers with TestEvaluation {
   val quantiles = List[Double](
     0.1,
     0.2,

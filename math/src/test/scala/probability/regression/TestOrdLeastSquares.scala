@@ -10,7 +10,7 @@ import scalax.chart.module.ChartFactories.XYLineChart
 /**
  * Created by cd on 29/06/2014.
  */
-class TestOrdLeastSquares extends FlatSpec with ShouldMatchers {
+class TestOrdLeastSquares extends FlatSpec with Matchers {
 
   lazy val input = {
     for (i <- 0.0 to Math.PI*2.0 by 0.1) yield i

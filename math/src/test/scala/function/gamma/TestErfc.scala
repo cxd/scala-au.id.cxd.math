@@ -1,9 +1,9 @@
 package function.gamma
 
 import au.id.cxd.math.function.gamma.Erfc
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
-class TestErfc extends FlatSpec with ShouldMatchers {
+class TestErfc extends FlatSpec with Matchers {
 
   "Erfc" should "agree with GSL" in {
     val data = List[(Double,Double)](

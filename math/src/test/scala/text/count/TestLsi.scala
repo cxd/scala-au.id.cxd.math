@@ -6,14 +6,14 @@ import au.id.cxd.math.data.CsvReader
 import au.id.cxd.text.count.TfIdfCount
 import au.id.cxd.text.helpers.EmbeddedStopwordsLoader
 import au.id.cxd.text.model.{LatentSemanticIndex, LsiComponentCluster}
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
 import scala.util.Success
 
 /**
   * Created by cd on 12/1/17.
   */
-class TestLsi extends FlatSpec with ShouldMatchers {
+class TestLsi extends FlatSpec with Matchers {
 
   "LSI" should "build model" in {
     val input = "subset_text_input.csv"

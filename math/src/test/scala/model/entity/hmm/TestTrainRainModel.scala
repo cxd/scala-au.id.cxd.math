@@ -8,7 +8,7 @@ import org.scalatest._
 /**
  * Created by cd on 31/01/15.
  */
-class TestTrainRainModel  extends FlatSpec with ShouldMatchers {
+class TestTrainRainModel  extends FlatSpec with Matchers {
 
   val data = TestRainExample.data
 

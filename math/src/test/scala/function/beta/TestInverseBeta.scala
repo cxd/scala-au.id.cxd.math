@@ -1,9 +1,9 @@
 package function.beta
 
 import au.id.cxd.math.function.beta.InverseBeta
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
-class TestInverseBeta extends FlatSpec with ShouldMatchers {
+class TestInverseBeta extends FlatSpec with Matchers {
 
   "Inverse Beta" should "Agree with GSL" in {
     def fn(P:Double,a:Double,b:Double) = InverseBeta(P,a,b)

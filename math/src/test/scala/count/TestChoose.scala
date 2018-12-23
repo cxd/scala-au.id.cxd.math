@@ -8,7 +8,7 @@ import org.scalatest._
  *
  * Created by cd on 5/11/14.
  */
-class TestChoose  extends FlatSpec with ShouldMatchers {
+class TestChoose  extends FlatSpec with Matchers {
 
   val x = List(1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0)
   val testResults = List(10.0, 45.0, 120.0, 210.0, 252.0, 210.0, 120.0,  45.0,  10.0,  1.0)

@@ -1,9 +1,9 @@
 package function.beta
 
 import au.id.cxd.math.function.beta.IncompleteBetaFn
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
-class TestIncompleteBetaFn extends FlatSpec with ShouldMatchers {
+class TestIncompleteBetaFn extends FlatSpec with Matchers {
 
   "Inverse beta" should "match with GSL tests" in {
 

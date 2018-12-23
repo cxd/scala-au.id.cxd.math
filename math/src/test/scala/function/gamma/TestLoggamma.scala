@@ -1,9 +1,9 @@
 package function.gamma
 
 import au.id.cxd.math.function.gamma.LogGammaFn
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
-class TestLoggamma extends FlatSpec with ShouldMatchers {
+class TestLoggamma extends FlatSpec with Matchers {
 
   "Log gamma" should "return result" in {
     val (y1, err1) = LogGammaFn(0.1)

@@ -4,7 +4,7 @@ import org.scalatest._
 import au.id.cxd.math.function.hypergeometric._
 
 
-class TestGaussHypergeometric extends FlatSpec with ShouldMatchers {
+class TestGaussHypergeometric extends FlatSpec with Matchers {
 
   "Hypergeometric Function" should "Agree with GSL" in {
     val results = List(2.0,

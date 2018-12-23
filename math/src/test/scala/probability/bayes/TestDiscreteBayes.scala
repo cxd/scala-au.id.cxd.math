@@ -118,7 +118,7 @@ trait TestData {
 /**
   * Created by cd on 27/03/2016.
   */
-class TestDiscreteBayes extends FlatSpec with ShouldMatchers {
+class TestDiscreteBayes extends FlatSpec with Matchers {
 
   "Discrete Bayes" should "find posterior" in new TestData {
     val posterior = computePosterior

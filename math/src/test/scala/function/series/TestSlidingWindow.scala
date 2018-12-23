@@ -1,9 +1,9 @@
 package function.series
 
 import au.id.cxd.math.function.series.{Sliding, WindowedMatrix}
-import org.scalatest.{FlatSpec, ShouldMatchers}
+import org.scalatest.{FlatSpec, Matchers}
 
-class TestSlidingWindow extends FlatSpec with ShouldMatchers {
+class TestSlidingWindow extends FlatSpec with Matchers {
 
   "sliding window" should "have rows: N - M + 1" in new Sliding {
 

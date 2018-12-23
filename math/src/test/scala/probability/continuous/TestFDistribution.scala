@@ -12,7 +12,7 @@ import scala.collection.immutable.NumericRange
  * A simple comparison with output from R.
  * Created by cd on 13/11/14.
  */
-class TestFDistribution extends FlatSpec with ShouldMatchers {
+class TestFDistribution extends FlatSpec with Matchers {
 
   val range:NumericRange[Double] = Range.Double.apply(0.1, 4.0, 0.1)
 
