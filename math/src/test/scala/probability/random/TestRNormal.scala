@@ -24,7 +24,7 @@ class TestRNormal extends FlatSpec with Matchers {
     val norm = Normal(mu=0.0)(1.0)
     val cdf = (x:Double) => norm.cdf(x)
     val test = AndersonDarling(samples, cdf)
-    val result = test.test(0.05)
+    val result = test.test(0.001)
     println(result.toString)
     result.reject should be (false)
   }
