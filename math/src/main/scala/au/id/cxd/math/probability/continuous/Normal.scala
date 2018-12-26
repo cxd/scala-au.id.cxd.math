@@ -64,4 +64,7 @@ class Normal(mu: Double, varianceVal: Double) extends ContinuousDistribution {
 
 object Normal {
   def apply(mu: Double)(variance: Double) = new Normal(mu, variance)
+
+
+
 }
