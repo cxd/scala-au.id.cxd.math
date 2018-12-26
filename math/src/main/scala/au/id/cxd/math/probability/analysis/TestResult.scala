@@ -35,6 +35,15 @@ class TestResult(
                   val criticalValue:Double
 ) {
 
+  override def toString: String =
+    s"""
+       |significance = $significance
+       |reject = $reject
+       |pValue = $pValue
+       |observedValue = $observedValue
+       |criticalValue = $criticalValue
+     """.stripMargin
+
 }
 object TestResult {
   def apply(significance:Double,

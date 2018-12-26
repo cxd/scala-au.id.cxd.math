@@ -3,6 +3,7 @@ package au.id.cxd.math.probability.analysis
 /**
   * AndersonDarling test for univariate distribution
   * https://en.wikipedia.org/wiki/Anderson–Darling_test
+  * https://www.itl.nist.gov/div898/handbook/eda/section3/eda35e.htm
   *
   * The implementation is based on the article "Evaluating the Anderson-Darling Distribution" by George Marsaglia
   * The corresponding C implementation used in R for the anderson darling test is given in:
@@ -19,7 +20,7 @@ class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends St
     * @param z
     */
   private def adinf(z: Double):Double = {
-    if (z < 2.)
+    if (z < 2.0)
       Math.exp(-1.2337141 / z) / Math.sqrt(z) * (2.00012 + (.247105 - (.0649821 - (.0347962 - (.011672 -.00168691 * z) * z) * z) * z) * z)
     else
     /* max |error| < .000002 for z<2, (p=.90816...) */
@@ -42,7 +43,7 @@ class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends St
   private def ad(n:Int, z:Double):Double = {
     val x = adinf(z)
     val c = .01265 + .1757 / n
-    if (x > .8) {
+    if (x > 0.8) {
       val v = (-130.2137 + (745.2337 - (1705.091 - (1950.646 - (1116.360 - 255.7844 * x) * x) * x) * x) * x) / n
       x + v
     } else if (x < c) {
@@ -59,8 +60,8 @@ class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends St
 
   def computeF(data: Seq[Double]): Seq[Double] = data.map(cdf(_))
 
-  def computeStat(n: Double, forward: Seq[Double], backward: Seq[Double]): (Double,Double) = {
-    val indexes: Seq[Int] = for (i in 1 to n) yield i
+  def computeStat(n: Int, forward: Seq[Double], backward: Seq[Double]): (Double,Double) = {
+    val indexes: Seq[Int] = for (i <- 1 to n) yield i
     val pairs = indexes.zip(forward.zip(backward))
     val s = pairs.foldLeft(0.0) {
       (accum, pair) => {
