@@ -9,6 +9,13 @@ package au.id.cxd.math.probability.analysis
   * The corresponding C implementation used in R for the anderson darling test is given in:
   * https://github.com/bbolker/ADmarsaglia.git
   *
+  * Note that the same C routines are included in the goftest package: https://github.com/cran/goftest.git
+  *
+  * Initialise test with series X and a cdf function for the distribution to test whether the series is distributed as such.
+  * For example, to test if a series is distributed normally use the Normal.cdf(x) function.
+  *
+  * The test method will order the observations in x prior to performing the test.
+  *
   */
 class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends StatisticalTest {
 
@@ -63,19 +70,23 @@ class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends St
   def computeStat(n: Int, forward: Seq[Double], backward: Seq[Double]): (Double,Double) = {
     val indexes: Seq[Int] = for (i <- 1 to n) yield i
     val pairs = indexes.zip(forward.zip(backward))
-    val s = pairs.foldLeft(0.0) {
+    /**
+      * note the implementation from AnDarl.c line 95 uses the
+      * calculation below. which is slightly different to the one described
+      * on wikipedia and on the nist reference.
+      */
+    val z = pairs.foldLeft(0.0) {
       (accum, pair) => {
         val i = pair._1
         val f = pair._2._1
         val b = pair._2._2
-        val c = (2 * i - 1) / n
-        val logs = Math.log(f) + Math.log(1.0 - b)
-        accum + (c * logs)
+        val c = (i + i + 1)
+        val logs = Math.log(f * (1.0 - b))
+        if (logs.isInfinite()) accum - c
+        else accum - (c * logs)
       }
     }
-    val a = -1.0 * n - s
-    // undo the divide by n in computing s to hand back to AD test.
-    val z = s*n
+    val a = -n + z/n
     (z, a)
   }
 
@@ -86,7 +97,7 @@ class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends St
     val forward = computeF(runA)
     val backward = computeF(runB)
     val (z,a) =  computeStat(data.length, forward, backward)
-    val pval = ad(data.length, z)
+    val pval = 1.0 - ad(data.length, a)
     val result = TestResult(significance = alpha,
       reject = pval <= alpha,
       pValue = pval,
