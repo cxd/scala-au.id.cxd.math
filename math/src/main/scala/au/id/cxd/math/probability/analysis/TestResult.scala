@@ -11,6 +11,10 @@ import scala.collection.immutable.Stream
  */
 class TestResult(
                   /**
+                    * name of the test.
+                    */
+                val name:String,
+                  /**
                    * significance
                    * test at the level of significance
                    * alpha
@@ -37,20 +41,24 @@ class TestResult(
 
   override def toString: String =
     s"""
+       |Test Results: $name
+       |
        |significance = $significance
        |reject = $reject
        |pValue = $pValue
        |observedValue = $observedValue
        |criticalValue = $criticalValue
+       |
      """.stripMargin
 
 }
 object TestResult {
-  def apply(significance:Double,
+  def apply(name:String,
+            significance:Double,
              reject:Boolean,
              pValue:Double,
              observedValue:Double,
-             criticalValue:Double) = new TestResult(significance, reject, pValue, observedValue, criticalValue)
+             criticalValue:Double) = new TestResult(name, significance, reject, pValue, observedValue, criticalValue)
 
 
 

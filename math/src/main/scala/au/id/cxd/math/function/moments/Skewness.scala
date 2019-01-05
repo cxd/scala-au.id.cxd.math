@@ -5,6 +5,8 @@ package au.id.cxd.math.function.moments
   * https://www.itl.nist.gov/div898/handbook/eda/section3/eda35b.htm
   * adjusted Fisher-Pearson coefficient of skewness
   * G = \frac{\sqrt{N(N-1)}}{N-2} \frac{\sum_{i=1}^N(X_i - \bar{X})^3/N}{s^3}
+  *
+  * For standard normal distribution skewness should be 0.
   */
 class Skewness {
   def op(series:Seq[Double]):Double = {

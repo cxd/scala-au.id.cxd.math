@@ -1,6 +1,6 @@
 package probability.random
 
-import au.id.cxd.math.probability.analysis.AndersonDarling
+import au.id.cxd.math.probability.analysis.AndersonDarlingTest
 import au.id.cxd.math.probability.continuous.Normal
 import au.id.cxd.math.probability.random.RUniform
 import org.scalatest.{FlatSpec, Matchers}

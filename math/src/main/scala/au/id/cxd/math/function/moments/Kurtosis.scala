@@ -6,6 +6,9 @@ package au.id.cxd.math.function.moments
   *
   * k = \frac{\sum_{i=1}^N (X-\bar{X})^4 / N}{s^4)
   *
+  * For standard normal distribution kurtosis should be E{X^4] = 3.
+  *
+  * Hence k - 3 should be 0.^
   */
 class Kurtosis {
   def op(series:Seq[Double]):Double = {

@@ -17,7 +17,7 @@ package au.id.cxd.math.probability.analysis
   * The test method will order the observations in x prior to performing the test.
   *
   */
-class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends StatisticalTest {
+class AndersonDarlingTest(val series: Seq[Double], cdf: Double => Double) extends StatisticalTest {
 
   /**
     * from line 27 of AnDarl.c from ADmarsaglia library.
@@ -97,7 +97,9 @@ class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends St
     val backward = forward.reverse
     val (z,a) =  computeStat(data.length, forward, backward)
     val pval = 1.0 - ad(data.length, a)
-    val result = TestResult(significance = alpha,
+    val result = TestResult(
+      name="Anderson-Darling Test",
+      significance = alpha,
       reject = pval <= alpha,
       pValue = pval,
       observedValue = a,
@@ -106,6 +108,6 @@ class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends St
   }
 }
 
-object AndersonDarling {
-  def apply(series: Seq[Double], cdf: Double => Double) = new AndersonDarling(series, cdf)
+object AndersonDarlingTest {
+  def apply(series: Seq[Double], cdf: Double => Double) = new AndersonDarlingTest(series, cdf)
 }

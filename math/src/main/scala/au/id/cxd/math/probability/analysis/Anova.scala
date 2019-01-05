@@ -496,7 +496,7 @@ class AnovaTable(/**
                    */
                  totalSS: Double
 
-                ) extends TestResult(significance, reject, pValue, observedValue, criticalValue) {
+                ) extends TestResult("Anova", significance, reject, pValue, observedValue, criticalValue) {
 
   override def toString() = {
     s"""NumeratorDF: $numeratorDf\nDenominatorDF: $denominatorDf\n""" +
