@@ -80,22 +80,21 @@ class AndersonDarling(val series: Seq[Double], cdf: Double => Double) extends St
         val i = pair._1
         val f = pair._2._1
         val b = pair._2._2
-        val c = (i + i + 1)
+        val c = (i + i - 1)
         val logs = Math.log(f * (1.0 - b))
-        if (logs.isInfinite()) accum - c
+        if (logs.isInfinite()) accum
         else accum - (c * logs)
       }
     }
-    val a = -n + z/n
+    val a = z/n - n
     (z, a)
   }
 
   override def test(alpha: Double): TestResult = {
     val data = series.sorted
     val runA = data
-    val runB = data.reverse
     val forward = computeF(runA)
-    val backward = computeF(runB)
+    val backward = forward.reverse
     val (z,a) =  computeStat(data.length, forward, backward)
     val pval = 1.0 - ad(data.length, a)
     val result = TestResult(significance = alpha,
