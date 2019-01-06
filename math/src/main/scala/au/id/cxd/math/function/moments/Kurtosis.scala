@@ -15,7 +15,8 @@ class Kurtosis {
     val n = series.length
     val mu = Mean(series)
     val s = Math.sqrt(Variance(series))
-    val fourth = series.reduce((b,a) => b + Math.pow(a - mu, 4.0) / n)
+    val all = Seq(Math.pow(series.head - mu, 4.0)/n) ++ series.tail
+    val fourth = all.reduce((b,a) => b + Math.pow(a - mu, 4.0) / n)
     fourth / Math.pow(s, 4.0)
   }
 }

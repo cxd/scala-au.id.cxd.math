@@ -13,7 +13,8 @@ class Skewness {
     val n = series.length
     val mu = Mean(series)
     val s = Math.sqrt(Variance(series))
-    val third = series.reduce((b,a) => b + Math.pow(a - mu, 3.0) / n)
+    val all = Seq(Math.pow(series.head - mu, 3.0)/n) ++ series.tail
+    val third = all.reduce((b,a) => b + Math.pow(a - mu, 3.0) / n)
     val scale = Math.sqrt(n * (n-1)) / (n-2)
     scale * (third / Math.pow(s, 3.0))
   }

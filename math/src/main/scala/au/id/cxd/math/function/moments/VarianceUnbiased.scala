@@ -7,7 +7,8 @@ class VarianceUnbiased {
   def op(series:Seq[Double]): Double = {
     val n = series.length
     val mu = Mean(series)
-    val sqErr = series.reduce((b,a) => b + Math.pow(a - mu, 2.0))
+    val all = Seq(Math.pow(series.head - mu, 2.0)) ++ series.tail
+    val sqErr = all.reduce((b,a) => b + Math.pow(a - mu, 2.0))
     val c = 1.0 / (n-1.0)
     c * sqErr
   }
