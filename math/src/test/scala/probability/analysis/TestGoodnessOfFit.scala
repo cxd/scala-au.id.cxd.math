@@ -1,6 +1,6 @@
 package probability.analysis
 
-import au.id.cxd.math.probability.analysis.{AndersonDarlingTest, JarqueBeraTest}
+import au.id.cxd.math.probability.analysis.{AndersonDarlingTest, JarqueBeraTest, ShapiroWilksTest}
 import au.id.cxd.math.probability.continuous.Normal
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -48,5 +48,24 @@ class TestGoodnessOfFit extends FlatSpec
     println(result.toString)
     result.reject should be(false)
   }
+
+  "ShapiroWilks wiebull" should "suggest evidence to reject null hypothesis" in {
+    val samples = weibullTest
+    val test = ShapiroWilksTest(samples)
+    val result = test.test(0.05)
+    println(result.toString)
+    // should reject the null hypothesis
+    result.reject should be (true)
+  }
+
+  "ShapiroWilks normtest" should "not suggest evidence to reject null hypothesis" in {
+    val samples = normTest
+    val test = ShapiroWilksTest(samples)
+    val result = test.test(0.05)
+    println(result.toString)
+    // should reject the null hypothesis
+    result.reject should be (false)
+  }
+
 
 }

@@ -26,7 +26,7 @@ class AndersonDarlingTest(val series: Seq[Double], cdf: Double => Double) extend
     *
     * @param z
     */
-  private def adinf(z: Double):Double = {
+  private def adinf(z: Double): Double = {
     if (z < 2.0)
       Math.exp(-1.2337141 / z) / Math.sqrt(z) * (2.00012 + (.247105 - (.0649821 - (.0347962 - (.011672 -.00168691 * z) * z) * z) * z) * z)
     else
@@ -47,16 +47,16 @@ class AndersonDarlingTest(val series: Seq[Double], cdf: Double => Double) extend
     * @param z
     * @return
     */
-  private def ad(n:Int, z:Double):Double = {
+  private def ad(n: Int, z: Double): Double = {
     val x = adinf(z)
-    val c = .01265 + .1757 / n
+    val c =.01265 +.1757 / n
     if (x > 0.8) {
       val v = (-130.2137 + (745.2337 - (1705.091 - (1950.646 - (1116.360 - 255.7844 * x) * x) * x) * x) * x) / n
       x + v
     } else if (x < c) {
       val v = x / c
       val v1 = Math.sqrt(v) * (1.0 - v) * (49.0 * v - 102)
-      x + v1 * (.0037 / (n * n) + .00078 / n + .00006) / n
+      x + v1 * (.0037 / (n * n) +.00078 / n + .00006) / n
     } else {
       val v = (x - c) / (.8 - c)
       val v1 = -.00022633 + (6.54034 - (14.6538 - (14.458 - (8.259 - 1.91864 * v) * v) * v) * v) * v
@@ -67,7 +67,7 @@ class AndersonDarlingTest(val series: Seq[Double], cdf: Double => Double) extend
 
   def computeF(data: Seq[Double]): Seq[Double] = data.map(cdf(_))
 
-  def computeStat(n: Int, forward: Seq[Double], backward: Seq[Double]): (Double,Double) = {
+  def computeStat(n: Int, forward: Seq[Double], backward: Seq[Double]): (Double, Double) = {
     val indexes: Seq[Int] = for (i <- 1 to n) yield i
     val pairs = indexes.zip(forward.zip(backward))
     /**
@@ -86,7 +86,7 @@ class AndersonDarlingTest(val series: Seq[Double], cdf: Double => Double) extend
         else accum - (c * logs)
       }
     }
-    val a = z/n - n
+    val a = z / n - n
     (z, a)
   }
 
@@ -95,15 +95,21 @@ class AndersonDarlingTest(val series: Seq[Double], cdf: Double => Double) extend
     val runA = data
     val forward = computeF(runA)
     val backward = forward.reverse
-    val (z,a) =  computeStat(data.length, forward, backward)
+    val (z, a) = computeStat(data.length, forward, backward)
     val pval = 1.0 - ad(data.length, a)
+    val message = if (series.length >= 2000)
+      "Test may not be accurate for samples sizes greater than 2000"
+    else ""
+
     val result = TestResult(
-      name="Anderson-Darling Test",
+      name = "Anderson-Darling Test",
       significance = alpha,
       reject = pval <= alpha,
       pValue = pval,
       observedValue = a,
-      criticalValue = a)
+      criticalValue = a,
+      message = message)
+
     result
   }
 }

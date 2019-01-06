@@ -9,7 +9,9 @@ class Variance {
   def op(series:Seq[Double]): Double = {
     val n = series.length
     val mu = Mean(series)
-    val sqErr = series.reduce((b,a) => b + Math.pow(a - mu, 2.0))
+    val start = Math.pow(series.head - mu, 2.0)
+    val all = Seq(start) ++ series.tail
+    val sqErr = all.reduce((b,a) => b + Math.pow(a - mu, 2.0))
     val c = 1.0 / n
     c * sqErr
   }

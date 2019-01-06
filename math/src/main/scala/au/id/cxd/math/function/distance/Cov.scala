@@ -18,7 +18,7 @@ import breeze.linalg.DenseMatrix
   * @param b
   */
 class Cov (a:DenseMatrix[Double], b:DenseMatrix[Double]) {
-  protected  def deltaMat (m:DenseMatrix[Double]) = {
+  protected  def deltaMat (m:DenseMatrix[Double]):DenseMatrix[Double] = {
 
     val x = if (m.rows == 1) m.t
             else m
@@ -47,13 +47,30 @@ class Cov (a:DenseMatrix[Double], b:DenseMatrix[Double]) {
   }
 }
 object Cov {
-  def apply(a:DenseMatrix[Double]) =
+  def apply(a:DenseMatrix[Double]):DenseMatrix[Double] =
     new Cov(a, a).op()
 
-  def apply(a:DenseMatrix[Double], b:DenseMatrix[Double]) = {
+  def apply(a:DenseMatrix[Double], b:DenseMatrix[Double]):DenseMatrix[Double] = {
     a.rows == b.rows && a.cols == b.cols match {
       case true => new Cov(a,b).op()
       case _ => throw new InvalidParameterException("Dimensions of A and B must match.")
     }
+  }
+
+  /**
+    * Calculate the univariate covariance between two sequences.
+    * @param a
+    * @param b
+    * @return
+    */
+  def apply(a:Seq[Double],b:Seq[Double]) : Double = {
+    val mA = DenseMatrix.tabulate[Double](a.length, 1) {
+      case (i,j) => a(j)
+    }
+    val mB = DenseMatrix.tabulate[Double](b.length, 1) {
+      case (i, j) => b(j)
+    }
+    val result = new Cov(mA, mB).op()
+    result(0,0)
   }
 }
