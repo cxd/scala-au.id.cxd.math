@@ -10,9 +10,12 @@ import breeze.linalg.DenseVector
   * Shapiro Wilks
   * Univariate test for normality
   *
-  * TODO:
+  * https://en.wikipedia.org/wiki/Shapiro%E2%80%93Wilk_test
   *
-  * see:
+  *
+  *
+  *
+  * See:
   * https://ww2.mathworks.cn/matlabcentral/mlc-downloads/downloads/submissions/13964/versions/2/previews/swtest.m/index.html
   *
   * as well as:
