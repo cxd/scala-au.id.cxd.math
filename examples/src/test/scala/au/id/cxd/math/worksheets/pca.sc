@@ -1,6 +1,7 @@
 import java.io.{File, PrintWriter}
 
 import au.id.cxd.math.data.MatrixReader
+
 import au.id.cxd.math.example.charting.VegasHelper
 import au.id.cxd.math.model.components.PrincipleComponentsAnalysis
 import vegas.DSL.ExtendedUnitSpecBuilder

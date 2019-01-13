@@ -9,7 +9,7 @@ import scala.util.Random
   * @param min
   * @param max
   */
-class RUniform(val min:Double, val max:Double, val seed:Long = 42L) extends RandomDeviate  {
+class RUniform(val min:Double=0.0, val max:Double=1.0, val seed:Long = 42L) extends RandomDeviate  {
   val rand = Random
   rand.setSeed(seed)
 
@@ -27,5 +27,5 @@ class RUniform(val min:Double, val max:Double, val seed:Long = 42L) extends Rand
 }
 object RUniform {
 
-  def apply(min:Double, max:Double, seed:Long=42L) = new RUniform(min, max, seed)
+  def apply(min:Double=0.0, max:Double=1.0, seed:Long=42L) = new RUniform(min, max, seed)
 }
