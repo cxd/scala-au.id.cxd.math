@@ -18,16 +18,22 @@ trait McmcSampling {
 
   /**
     * Sample n times producing the final state
+    * fold a starting seed state through the iteration via an accumulator function.
     * @param n
     * @param initial
-    * @return final state.
+    * @return final state and accumulated data
     */
-  def run(n:Int, initial:State):State = {
+  def run[T](n:Int, initial:State, seed:T)(accumFn:(T,State) => T):(State,T) = {
     @tailrec
-    def innerSample(i:Int, prev:State):State =
-      if (i > n) prev
-      else innerSample(i+1, step(i,prev))
-    innerSample(0,initial)
+    def innerSample(i:Int, prev:State, seed:T, accumFn:(T,State) => T):(State,T) =
+      if (i > n) (prev, seed)
+      else {
+        val nextSt = step(i,prev)
+        val seed2 = accumFn(seed, nextSt)
+        innerSample(i+1, nextSt, seed2, accumFn)
+      }
+    val seed1 = accumFn(seed, initial)
+    innerSample(0,initial, seed1, accumFn)
   }
 
 }

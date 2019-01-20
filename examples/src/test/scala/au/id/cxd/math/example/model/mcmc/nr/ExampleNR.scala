@@ -1,6 +1,6 @@
 package au.id.cxd.math.example.model.mcmc.nr
 
-import au.id.cxd.math.model.particle.mcmc.{GibbsSampling, Proposal, State, StateLikelihood}
+import au.id.cxd.math.model.particle.mcmc._
 import au.id.cxd.math.probability.continuous.Gamma
 import au.id.cxd.math.probability.random.{RNormal, RPoisson}
 
@@ -206,22 +206,12 @@ object ExampleNR {
 
     val sampler = GibbsSampling(initialState: State, proposal: Proposal, likelihood: StateLikelihood)
 
-
-    def runsampler[T](max: Int, i: Int, sampler: GibbsSampling, prevState: State, seed: T)(accumFn: (T, State) => T): (Int, GibbsSampling, State, T) = {
-      if (i > max) (i, sampler, prevState, seed)
-      else {
-        val state = sampler.step(i, prevState)
-        val seed1 = accumFn(seed, state)
-        runsampler(max, i + 1, sampler, state, seed1)(accumFn)
-      }
-    }
-
-
     // burnin for first 1000 iterations.
-    val (steps1, sampler1, lastState, accum1) = runsampler(1000, 1, sampler, initialState, 0)((accum, st) => 0)
+    val (lastState1,s1) = sampler.run(1000, initialState, 0)((accum, st) => 0)
 
-    // collect data for the next 1000 samples.
-    val (steps2, sampler2, lastState2, accum2) = runsampler(1000, 1, sampler, lastState, Seq[ExampleState]()) {
+
+    // collect the data.
+    val (lastState2, accum2) = sampler.run(1000, lastState1, Seq[ExampleState]()) {
       (accum, state) => accum :+ state.asInstanceOf[ExampleState]
     }
 
@@ -231,6 +221,7 @@ object ExampleNR {
     val lambda2 = accum2.map(s => s.lambda2)
     val t = accum2.map(s => Math.round(s.t).toInt)
 
+    // TODO: cut and paste these values into R and examine visually.
     println("k1")
     println(k1)
 
@@ -246,7 +237,26 @@ object ExampleNR {
     println("tc")
     println(t)
 
+    // try a couple of other simulations.
+    val (lastState3, accum3) = sampler.run(1000, lastState1, Seq[ExampleState]()) {
+      (accum, state) => accum :+ state.asInstanceOf[ExampleState]
+    }
 
+    val (lastState4, accum4) = sampler.run(1000, lastState1, Seq[ExampleState]()) {
+      (accum, state) => accum :+ state.asInstanceOf[ExampleState]
+    }
+
+    val labels = Seq("1","2","3")
+    val runs = Seq(
+      ("1",accum2.map(_.lambda1)),
+      ("2",accum3.map(_.lambda1)),
+      ("3",accum4.map(_.lambda1))
+    )
+
+    val rHat = EvalMixing(runs)
+
+    println("Mixing RHat")
+    println(rHat)
   }
 
 }
