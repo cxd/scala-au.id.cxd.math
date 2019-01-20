@@ -1,5 +1,7 @@
 package au.id.cxd.math.probability.random
 
+import scala.annotation.tailrec
+
 /**
   * An approximate random draw from the binomial distribution with parameters n and p
   *
@@ -19,7 +21,15 @@ class RApproxBinom(val n:Double, val p:Double) extends RandomDeviate {
     *
     * @return
     */
-  override def draw(): Double = Math.round(norm.draw()).toDouble
+  override def draw(): Double = {
+    @tailrec
+    def innerDraw():Double = {
+      val d = Math.round(norm.draw()).toDouble
+      if (d >= 0) d
+      else innerDraw()
+    }
+    innerDraw()
+  }
 }
 object RApproxBinom {
   def apply(n:Double, p:Double) = new RApproxBinom(n,p)

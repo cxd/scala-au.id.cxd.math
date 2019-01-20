@@ -19,7 +19,7 @@ package au.id.cxd.math.probability.random
   * Where d = \alpha - 1/3 and v = (1 + x/\sqrt{9x^2}
   *
   *
-  * The RGamma can be used as the building block for randon variates of beta, chisq and the f-distribution and can be used
+  * The RGamma can be used as the building block for random variates of beta, chisq and the f-distribution and can be used
   * to generate samples from the student-t distribution.
   *
   *

@@ -190,16 +190,22 @@ class RBinom(val n: Double, val p: Double) extends RandomDeviate {
     * @return
     */
   override def draw(): Double = {
-    // the probability is swapped when p > 0.5
-    if (p > 0.5) {
-      val ix = if (np < SMALL_MEAN) smallMeanEstimate(p)
-      else triangularEstimate(1.0 - p, p, n * (1.0 - p))
-      n - ix
-    } else {
-      val ix = if (np < SMALL_MEAN) smallMeanEstimate(1.0 - p)
-      else triangularEstimate(p, q, n * p)
-      ix
-    }
+   @tailrec
+   def innerDraw() : Double = {
+     // the probability is swapped when p > 0.5
+     val d = if (p > 0.5) {
+       val ix = if (np < SMALL_MEAN) smallMeanEstimate(p)
+       else triangularEstimate(1.0 - p, p, n * (1.0 - p))
+       n - ix
+     } else {
+       val ix = if (np < SMALL_MEAN) smallMeanEstimate(1.0 - p)
+       else triangularEstimate(p, q, n * p)
+       ix
+     }
+     if (d >= 0) d
+     else innerDraw()
+   }
+   innerDraw()
   }
 }
 object RBinom {
