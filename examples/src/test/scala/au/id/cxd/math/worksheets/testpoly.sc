@@ -11,5 +11,5 @@ val u = 1.0 / Math.sqrt(n)
 
 val polyval = new ContinuedSeries {}
 
-val test = polyval.poly(c1, u)
+val test = polyval.poly(c1.toList, u)
 

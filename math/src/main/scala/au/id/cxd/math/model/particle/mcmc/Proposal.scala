@@ -20,8 +20,10 @@ trait Proposal {
   /**
     * draw a new proposal given the previous state
     * @param prior
-    * @return
+    * @return (nextState x qratio)
+    *
+    *         where qratio = q(x_1|x_1) / q(x_2|x_1)
     */
-  def propose (step:Int, prior:State, likelihood: StateLikelihood):(State, Double, Double)
+  def propose (step:Int, prior:State, likelihood: StateLikelihood):(State, Double)
 
 }

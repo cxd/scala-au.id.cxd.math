@@ -14,7 +14,9 @@ import au.id.cxd.math.probability.random.RNormal
   * The log likelihood function p(s|X)
   * the likelihood of the state given the data.
   */
-class GibbsSampling(override val initialState: State, override val proposal: Proposal, likelihood: StateLikelihood) extends McmcSampling {
+class GibbsSampling(override val initialState: State,
+                    override val proposal: Proposal,
+                    likelihood: StateLikelihood) extends McmcSampling {
 
   /**
     * mutable values storing counts of accepted states over the iteration.
@@ -37,8 +39,7 @@ class GibbsSampling(override val initialState: State, override val proposal: Pro
     * @return
     */
   override def step(i: Int, prev: State): State = {
-    val (nextState, q1, q2) = proposal.propose(i, prev, likelihood)
-    val qratio = q1 / q2
+    val (nextState, qratio) = proposal.propose(i, prev, likelihood)
     val prevLogP = likelihood.logLikelihood(prev)
     val nextLogP = likelihood.logLikelihood(nextState)
     val scores = Array(1.0, qratio * Math.exp(nextLogP - prevLogP))
