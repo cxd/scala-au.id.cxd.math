@@ -2,6 +2,8 @@ package au.id.cxd.math.data
 
 import breeze.linalg.DenseMatrix
 
+import scala.collection.immutable
+
 /**
   * group partitioning trait takes
   * a set of group labels for each observation and
@@ -34,7 +36,7 @@ trait GroupPartition {
     *
     * @param groupNames
     */
-  def groupIndexes(groupNames: List[String]) =
+  def groupIndexes(groupNames: List[String]): Map[String, Vector[Int]] =
     groupNames.foldLeft((0, Map[String, Vector[Int]]())) {
       (accum, groupName) => {
         val i = accum._1
@@ -61,7 +63,7 @@ trait GroupPartition {
     * where n_i is the size of the group
     * and \pi_i is the proportion of the training data for the group.
     */
-  def groupSizes(groupNames: List[String]) = {
+  def groupSizes(groupNames: List[String]): immutable.Iterable[(String, Int, Double)] = {
     val totalSize = groupNames.length
 
     groups.map {

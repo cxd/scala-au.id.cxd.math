@@ -94,7 +94,7 @@ if length(x) < 3
 end
 
 if length(x) > 5000
-    warning('Shapiro-Wilk test might be inaccurate due to large sample size ( > 5000).');
+  error('Shapiro-Wilk test might be inaccurate due to large sample size ( > 5000).');
 end
 
 %
@@ -217,7 +217,10 @@ else
     %
 
     newn    =   log(n);
-
+    newSWstatistic = 0;
+    mu = 0;
+    sigma=1;
+    gam = 0;
     if (n >= 4) && (n <= 11)
 
         mu      =   polyval(PolyCoef_3 , n);

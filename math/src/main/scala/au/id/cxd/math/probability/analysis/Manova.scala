@@ -4,7 +4,7 @@ import au.id.cxd.math.data.GroupPartition
 import au.id.cxd.math.function.column.ColMeans
 import au.id.cxd.math.function.distance.Cov
 import au.id.cxd.math.probability.continuous.FDistribution
-import breeze.linalg.{DenseMatrix, DenseVector, det, eigSym, inv, svd}
+import breeze.linalg.{DenseMatrix, DenseVector, det, eigSym, inv, sum, svd}
 
 import scala.collection.immutable.Stream
 
@@ -124,6 +124,44 @@ class Manova(method: ManovaMethod = WilksLambda(),
   }
 
   /**
+    * generate a matrix of column means for each group.
+    * return the index of the group and the column means
+    */
+  def computeGroupMeans(m:DenseMatrix[Double]): (Int, DenseMatrix[Double]) = partitions
+    .foldLeft((0, DenseMatrix.zeros[Double](partitions.length, m.cols))) {
+    (accum, partition) => {
+      val key = partition._1
+      val submat = partition._2
+      val mu = ColMeans(submat)
+      val mat = accum._2
+      mat(accum._1, ::) := mu(0, ::)
+      (accum._1 + 1, mat)
+    }
+  }
+
+  /**
+    * generate a matrix of column means for each group.
+    * return the index of the group and the column means
+    */
+  def computeGroupVariance(m:DenseMatrix[Double]): (Int, DenseMatrix[Double]) = {
+    partitions
+      .foldLeft((0, DenseMatrix.zeros[Double](partitions.length, 1))) {
+        (accum, partition) => {
+          val key = partition._1
+          val submat = partition._2
+          val mu = ColMeans(submat)
+          val ss1 = DenseMatrix.tabulate(submat.rows, submat.cols) {
+            case (i,j) => Math.pow(submat(i,j) - mu(0,j),2.0)
+          }
+          val v = 1.0/(submat.cols - 1.0) * sum(ss1)
+          val mat = accum._2
+          mat(accum._1, 0) = v
+          (accum._1 + 1, mat)
+        }
+      }
+  }
+
+  /**
     * compute the between group variation
     *
     * # Between Group Variation
@@ -151,16 +189,7 @@ class Manova(method: ManovaMethod = WilksLambda(),
     */
   def computeB(m: DenseMatrix[Double]): (DenseMatrix[Double], DenseMatrix[Double]) = {
     // generate a matrix of column means for each group.
-    val mu = partitions.foldLeft((0, DenseMatrix.zeros[Double](partitions.length, m.cols))) {
-      (accum, partition) => {
-        val key = partition._1
-        val submat = partition._2
-        val mu = ColMeans(submat)
-        val mat = accum._2
-        mat(accum._1, ::) := mu(0, ::)
-        (accum._1 + 1, mat)
-      }
-    }
+    val mu = computeGroupMeans (m)
 
     val nSS = DenseMatrix.tabulate[Double](partitions.length, m.cols) {
       case (i, j) => mu._2(i, j) * partitions(i)._2.rows
