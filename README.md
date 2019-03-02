@@ -23,6 +23,10 @@ This library is a hobby project, and is only occasionally worked on. It serves s
 Part of this is experimenting with library design, or to simply attempt an implementation of an algorithm in order to get to grips with the mechanics behind it. Alot of it is reading, reading other material, attempting to unravel and capture some form of it. 
 
  The library will change over time, and progress will be limited by other activities. This library is not intended as a stable production library, and is experimental in nature.
+ 
+If you're cloning it and modifying it, it'd be great to receive constructive feedback, so let me know (there seems to be alot of regular clones of the repo). 
+ 
+It's not necessarily going to be as robust as other tools with large numbers of maintainers, so as its only a single maintainer experimenting with these methods, you may need to experimentally compare outcomes with other more mature projects. The accuracy of this project is likely to have a high margin of error in comparison to tools such as GSL, R, SciPy, Scalalab or Matlab.
 
 ## Building
 
