@@ -35,12 +35,14 @@ class Sequence(override val layers:Seq[Layer],
 
     // number of input columns are mandatory.
 
+
+    val output = layers.last
+    val hidden = layers.reverse.tail.reverse
     // inputs + 1 column for bias
-    val newLayers = layers.map {
-      l => if (l.isInstanceOf[InputLayer]) {
-        l.withUnits(l.units + 1)
-      } else l
-    }
+    val newLayers = hidden.map {
+      l => l.withUnits(l.units + 1)
+    } :+ output
+
 
     val inputs :Int = layers.head.units
 

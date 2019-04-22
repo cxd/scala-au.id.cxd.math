@@ -6,7 +6,7 @@ import au.id.cxd.math.data.{MatrixReader, Partition}
 import au.id.cxd.math.example.charting.VegasHelper
 import au.id.cxd.math.example.probability.regression.ExampleMtCarsBayesRegression.inputFile
 import au.id.cxd.math.function.transform.StandardisedNormalisation
-import au.id.cxd.math.model.network.activation.{Identity, Linear, Relu}
+import au.id.cxd.math.model.network.activation.{Identity, Linear, Relu, Sigmoid}
 import au.id.cxd.math.model.network.builder.{Builder, Sequence}
 import au.id.cxd.math.model.network.layers.{DenseLayer, InputLayer}
 import au.id.cxd.math.model.network.train.SGDTrainer
@@ -55,7 +55,21 @@ object ExampleCarsNetwork {
   def buildNetwork():Builder = {
     Sequence(Seq(
       InputLayer(activation=Identity(), units=9),
-      DenseLayer(activation=Relu(), units=5),
+      DenseLayer(activation=Relu(), units=9),
+      DenseLayer(activation=Linear(), units=1)
+    )).compile()
+  }
+
+  /**
+    * create a simple network
+    * @return
+    */
+  def buildNetwork2():Builder = {
+    Sequence(Seq(
+      InputLayer(activation=Identity(), units=9),
+      DenseLayer(activation=Relu(), units=4),
+      DenseLayer(activation=Relu(), units=3),
+      DenseLayer(activation=Relu(), units=3),
       DenseLayer(activation=Linear(), units=1)
     )).compile()
   }
@@ -66,7 +80,7 @@ object ExampleCarsNetwork {
     (loss, valloss, network2)
   }
 
-  def plot(obs:DenseMatrix[Double], sim:DenseMatrix[Double]) = {
+  def plot(obs:DenseMatrix[Double], sim:DenseMatrix[Double], filename:String) = {
 
     val plotData2 = obs(::, 0).data
       .zip(sim(::, 0).data)
@@ -117,7 +131,7 @@ object ExampleCarsNetwork {
         )
 
     VegasHelper.showPlot(plot2,
-      fileName = "docs/plots/example_cars_network.html")
+      fileName = filename)
   }
 
   def main(args:Array[String]): Unit = {
@@ -134,9 +148,16 @@ object ExampleCarsNetwork {
     val validY = partitions(1)._2
     val testY = partitions(1)._3
 
-    val trainer = SGDTrainer(trainX, trainY, validX, validY, learnRate = 0.0005, momentum=0.001)
+    val trainer = SGDTrainer(trainX, trainY, validX, validY, learnRate = 0.00000001, momentum=0)
 
-    val (loss, valloss, network2) = trainNetwork(21, trainer, buildNetwork().asInstanceOf[Sequence], trainX, trainY, validX, validY)
+    // 437
+    // 720
+    // 745
+    // lr = 0.000001
+    val (loss, valloss, network2) = trainNetwork(745, trainer, buildNetwork().asInstanceOf[Sequence], trainX, trainY, validX, validY)
+
+    //val (loss, valloss, network2) = trainNetwork(4000, trainer, buildNetwork2().asInstanceOf[Sequence], trainX, trainY, validX, validY)
+
 
     val targets = testY(::,0).toDenseMatrix
 
@@ -147,7 +168,16 @@ object ExampleCarsNetwork {
     val target2 = translateY(targets.t, norm)
     val sim2 = translateY(sim.t, norm)
 
-    plot(target2.t, sim2.t)
+    plot(target2.t, sim2.t, "docs/plots/example_cars_network.html")
+
+    val trainDataX = trainer.addBias(trainX)
+    val sim3 = network2.transfer(trainDataX)
+    val trainTargets = trainY(::,0).toDenseMatrix
+    val translateObs2 = translateY(trainTargets.t, norm)
+    val translateSim2 = translateY(sim3.t, norm)
+
+    plot(translateObs2.t, translateSim2.t, "docs/plots/example_train_carts_network.html")
+
 
   }
 

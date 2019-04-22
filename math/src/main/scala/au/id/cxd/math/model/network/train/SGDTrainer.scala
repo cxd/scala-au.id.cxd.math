@@ -34,6 +34,8 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
   /**
     * compute the gradient for the output layer
     *
+    * The gradient is a vector that is the same size as the number of units in the layer.
+    *
     * @param errors
     * @param network
     * @return
@@ -42,13 +44,13 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
 
     // compute the local gradient of output node with respect to weights and errors.
     val d_j = network.layers.last.derivative
-    val h_i = network.layers.reverse.tail.head.output
+    val y_i = network.layers.reverse.tail.head.output
 
     /**
       * compute the gradient
       * We require the gradient at the output layer to be a single value.
       */
-    val grad = errors.t * d_j * h_i.t
+    val grad = errors.t * d_j * y_i.t
 
     grad
 
@@ -57,6 +59,8 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
   /**
     * compute the gradient for the hidden layers.
     *
+    * The local gradient is a vector that is the same length as the number of units in the layer.
+    *
     * @param gradient
     * @param network
     * @return
@@ -64,21 +68,38 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
   def hiddenGradient(gradient: Seq[DenseMatrix[Double]], network: Sequence): Seq[DenseMatrix[Double]] = {
 
     @tailrec
-    def gradients(accum: Seq[DenseMatrix[Double]], layers: Seq[Layer]): Seq[DenseMatrix[Double]] = {
+    def gradients(accum: Seq[DenseMatrix[Double]], lastLayer:Layer, layers: Seq[Layer]): Seq[DenseMatrix[Double]] = {
       layers.size == 1 match {
         case true => accum
         case _ => {
           val hidden = layers.head
           val grad_k = accum.last
-          val g = hidden.derivative * grad_k * hidden.weights.t
-          gradients(accum :+ g.t, layers.tail)
+
+          // we have a gradient vector input, we multiply
+          // \sigma_k w_{kj}
+          // we expect the gradient to have same number of columns as units
+          // so we take the columnwise sums of the gradient
+
+          val g_k = if (grad_k.cols != lastLayer.weights.cols) grad_k.t
+                    else grad_k
+
+          val a = DenseMatrix.tabulate(lastLayer.weights.rows, g_k.cols) {
+            case (i,j) => {
+              val total = g_k(::,j).data.sum
+              total * lastLayer.weights(i,j)
+            }
+          }
+
+          val g = if (hidden.derivative.cols != a.rows) hidden.derivative.t * a
+                  else hidden.derivative * a
+          gradients(accum :+ g.t, hidden, layers.tail)
         }
       }
     }
 
     // we are working from the hidden layers backward
     val hiddenLayers = network.layers.reverse.tail
-    gradients(gradient, hiddenLayers) reverse
+    gradients(gradient, network.layers.last, hiddenLayers) reverse
 
   }
 
@@ -104,10 +125,10 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
     // we compute weights for hidden layers upwards.
     @tailrec
     def weightDeltas(accum: Seq[DenseMatrix[Double]], prevLayer: Layer, layerAndGrad: Seq[(Layer, DenseMatrix[Double])]): Seq[DenseMatrix[Double]] = {
-      val h = prevLayer.output
       layerAndGrad.size > 0 match {
         case false => accum
         case true => {
+          val h = prevLayer.output
           val (layer, grad) = layerAndGrad.head
           val (wrows, wcols) = layer.shape.get
           val m = layer.priorWeights match {
@@ -116,9 +137,14 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
           }
           val grad1 = if (grad.cols != h.rows) grad.t
                       else grad
-          val step = learnRate * grad1 * h
+
+          val step = if (grad1.cols != h.rows) learnRate * grad1 * h.t
+                     else learnRate * grad1 * h
+
           // step is columns
-          val stepMat = tile(step.t, m.rows, 1)
+          val stepMat = if (step.rows == 1 && step.cols == 1) tile(step, m.rows, m.cols)
+          else tile(step.t, 1, m.cols)
+
           val delta = m + stepMat
           weightDeltas(accum :+ delta, layer, layerAndGrad.tail)
         }
@@ -200,7 +226,7 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
         // in order to propagate the gradient backward
         // and update the weights.
 
-        val (loss, errors) = lossFn(target, output)
+        val (loss, errors) = lossFn(target, output.t)
 
         // calculate the gradients
         val grads = computeGradients(errors, trainNet)
