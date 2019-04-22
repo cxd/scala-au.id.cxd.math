@@ -1,0 +1,446 @@
+<html>
+  <head>
+    <script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/vega/2.6.3/vega.min.js" charset="utf-8"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/vega-lite/1.2.0/vega-lite.min.js" charset="utf-8"></script>
+<script src="https://vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+  </head>
+  <body>
+ <script>
+   var embedSpec = {
+     mode: "vega-lite",
+     spec: {
+  "width" : 600.0,
+  "height" : 600.0,
+  "mark" : "square",
+  "encoding" : {
+    "x" : {
+      "field" : "component",
+      "type" : "nominal"
+    },
+    "y" : {
+      "field" : "attribute",
+      "type" : "nominal"
+    },
+    "color" : {
+      "field" : "correlation",
+      "type" : "quantitative"
+    }
+  },
+  "description" : "Heatmap of attribute and component correlation",
+  "data" : {
+    "values" : [
+      {
+        "component" : "1",
+        "attribute" : "AGR",
+        "correlation" : -0.994316196223688
+      },
+      {
+        "component" : "2",
+        "attribute" : "AGR",
+        "correlation" : 0.9937104151470134
+      },
+      {
+        "component" : "3",
+        "attribute" : "AGR",
+        "correlation" : -0.9985084089955579
+      },
+      {
+        "component" : "4",
+        "attribute" : "AGR",
+        "correlation" : 0.9967527436952188
+      },
+      {
+        "component" : "5",
+        "attribute" : "AGR",
+        "correlation" : -0.9996554780958361
+      },
+      {
+        "component" : "6",
+        "attribute" : "AGR",
+        "correlation" : 0.9880970283964933
+      },
+      {
+        "component" : "7",
+        "attribute" : "AGR",
+        "correlation" : 0.9955444829614086
+      },
+      {
+        "component" : "8",
+        "attribute" : "AGR",
+        "correlation" : -0.9701219113033487
+      },
+      {
+        "component" : "9",
+        "attribute" : "AGR",
+        "correlation" : 0.9995938687027898
+      },
+      {
+        "component" : "1",
+        "attribute" : "MIN",
+        "correlation" : -0.6037869771465838
+      },
+      {
+        "component" : "2",
+        "attribute" : "MIN",
+        "correlation" : 0.4409507738967526
+      },
+      {
+        "component" : "3",
+        "attribute" : "MIN",
+        "correlation" : -0.4879259467026023
+      },
+      {
+        "component" : "4",
+        "attribute" : "MIN",
+        "correlation" : 0.47246437779159284
+      },
+      {
+        "component" : "5",
+        "attribute" : "MIN",
+        "correlation" : -0.5524118514301175
+      },
+      {
+        "component" : "6",
+        "attribute" : "MIN",
+        "correlation" : 0.43942747077573796
+      },
+      {
+        "component" : "7",
+        "attribute" : "MIN",
+        "correlation" : 0.611774888972244
+      },
+      {
+        "component" : "8",
+        "attribute" : "MIN",
+        "correlation" : -0.7174867707284956
+      },
+      {
+        "component" : "9",
+        "attribute" : "MIN",
+        "correlation" : 0.5207027933656525
+      },
+      {
+        "component" : "1",
+        "attribute" : "MAN",
+        "correlation" : 0.3292774152744745
+      },
+      {
+        "component" : "2",
+        "attribute" : "MAN",
+        "correlation" : -0.23267955991578712
+      },
+      {
+        "component" : "3",
+        "attribute" : "MAN",
+        "correlation" : 0.29002098274410293
+      },
+      {
+        "component" : "4",
+        "attribute" : "MAN",
+        "correlation" : -0.29254060866887566
+      },
+      {
+        "component" : "5",
+        "attribute" : "MAN",
+        "correlation" : 0.3418623824373255
+      },
+      {
+        "component" : "6",
+        "attribute" : "MAN",
+        "correlation" : -0.1740248335877427
+      },
+      {
+        "component" : "7",
+        "attribute" : "MAN",
+        "correlation" : -0.3844575984923243
+      },
+      {
+        "component" : "8",
+        "attribute" : "MAN",
+        "correlation" : 0.4624275290960057
+      },
+      {
+        "component" : "9",
+        "attribute" : "MAN",
+        "correlation" : -0.3250010396435699
+      },
+      {
+        "component" : "1",
+        "attribute" : "PS",
+        "correlation" : 0.25273026524385256
+      },
+      {
+        "component" : "2",
+        "attribute" : "PS",
+        "correlation" : -0.24269480385366907
+      },
+      {
+        "component" : "3",
+        "attribute" : "PS",
+        "correlation" : 0.25653887960424
+      },
+      {
+        "component" : "4",
+        "attribute" : "PS",
+        "correlation" : -0.23549064146947524
+      },
+      {
+        "component" : "5",
+        "attribute" : "PS",
+        "correlation" : 0.28892252778874405
+      },
+      {
+        "component" : "6",
+        "attribute" : "PS",
+        "correlation" : -0.21691454675142735
+      },
+      {
+        "component" : "7",
+        "attribute" : "PS",
+        "correlation" : -0.2924867786247268
+      },
+      {
+        "component" : "8",
+        "attribute" : "PS",
+        "correlation" : 0.36223035673053366
+      },
+      {
+        "component" : "9",
+        "attribute" : "PS",
+        "correlation" : -0.2847249628211045
+      },
+      {
+        "component" : "1",
+        "attribute" : "CON",
+        "correlation" : 0.2692860026366718
+      },
+      {
+        "component" : "2",
+        "attribute" : "CON",
+        "correlation" : -0.2304858715385507
+      },
+      {
+        "component" : "3",
+        "attribute" : "CON",
+        "correlation" : 0.2582294165186288
+      },
+      {
+        "component" : "4",
+        "attribute" : "CON",
+        "correlation" : -0.2712256104330166
+      },
+      {
+        "component" : "5",
+        "attribute" : "CON",
+        "correlation" : 0.2610956535822548
+      },
+      {
+        "component" : "6",
+        "attribute" : "CON",
+        "correlation" : -0.21684579993995431
+      },
+      {
+        "component" : "7",
+        "attribute" : "CON",
+        "correlation" : -0.27957250570246844
+      },
+      {
+        "component" : "8",
+        "attribute" : "CON",
+        "correlation" : 0.30521032989497004
+      },
+      {
+        "component" : "9",
+        "attribute" : "CON",
+        "correlation" : -0.27039460725370756
+      },
+      {
+        "component" : "1",
+        "attribute" : "SER",
+        "correlation" : 0.7474666695561574
+      },
+      {
+        "component" : "2",
+        "attribute" : "SER",
+        "correlation" : -0.7267737839716739
+      },
+      {
+        "component" : "3",
+        "attribute" : "SER",
+        "correlation" : 0.7224797127588525
+      },
+      {
+        "component" : "4",
+        "attribute" : "SER",
+        "correlation" : -0.7184335000419702
+      },
+      {
+        "component" : "5",
+        "attribute" : "SER",
+        "correlation" : 0.7223166104945109
+      },
+      {
+        "component" : "6",
+        "attribute" : "SER",
+        "correlation" : -0.7527219865994473
+      },
+      {
+        "component" : "7",
+        "attribute" : "SER",
+        "correlation" : -0.7226906729092221
+      },
+      {
+        "component" : "8",
+        "attribute" : "SER",
+        "correlation" : 0.7140449734350985
+      },
+      {
+        "component" : "9",
+        "attribute" : "SER",
+        "correlation" : -0.7207181951830217
+      },
+      {
+        "component" : "1",
+        "attribute" : "FIN",
+        "correlation" : 0.08286767718075515
+      },
+      {
+        "component" : "2",
+        "attribute" : "FIN",
+        "correlation" : -0.049393833274539306
+      },
+      {
+        "component" : "3",
+        "attribute" : "FIN",
+        "correlation" : 0.028391555860930333
+      },
+      {
+        "component" : "4",
+        "attribute" : "FIN",
+        "correlation" : -0.009709123942512474
+      },
+      {
+        "component" : "5",
+        "attribute" : "FIN",
+        "correlation" : 0.03530199428182657
+      },
+      {
+        "component" : "6",
+        "attribute" : "FIN",
+        "correlation" : -0.10405452923851104
+      },
+      {
+        "component" : "7",
+        "attribute" : "FIN",
+        "correlation" : -0.04004603288293548
+      },
+      {
+        "component" : "8",
+        "attribute" : "FIN",
+        "correlation" : 0.05914894937826144
+      },
+      {
+        "component" : "9",
+        "attribute" : "FIN",
+        "correlation" : -0.021615913152710838
+      },
+      {
+        "component" : "1",
+        "attribute" : "SPS",
+        "correlation" : 0.8347858630042255
+      },
+      {
+        "component" : "2",
+        "attribute" : "SPS",
+        "correlation" : -0.8343709081986791
+      },
+      {
+        "component" : "3",
+        "attribute" : "SPS",
+        "correlation" : 0.8232664888845065
+      },
+      {
+        "component" : "4",
+        "attribute" : "SPS",
+        "correlation" : -0.8147870501920363
+      },
+      {
+        "component" : "5",
+        "attribute" : "SPS",
+        "correlation" : 0.8180638107414718
+      },
+      {
+        "component" : "6",
+        "attribute" : "SPS",
+        "correlation" : -0.8556880214532004
+      },
+      {
+        "component" : "7",
+        "attribute" : "SPS",
+        "correlation" : -0.8112902558207595
+      },
+      {
+        "component" : "8",
+        "attribute" : "SPS",
+        "correlation" : 0.7730824925472669
+      },
+      {
+        "component" : "9",
+        "attribute" : "SPS",
+        "correlation" : -0.8143158235336022
+      },
+      {
+        "component" : "1",
+        "attribute" : "TC",
+        "correlation" : 0.4620865935746293
+      },
+      {
+        "component" : "2",
+        "attribute" : "TC",
+        "correlation" : -0.5217161168606942
+      },
+      {
+        "component" : "3",
+        "attribute" : "TC",
+        "correlation" : 0.5200456616102481
+      },
+      {
+        "component" : "4",
+        "attribute" : "TC",
+        "correlation" : -0.5270656525537678
+      },
+      {
+        "component" : "5",
+        "attribute" : "TC",
+        "correlation" : 0.5021844652402322
+      },
+      {
+        "component" : "6",
+        "attribute" : "TC",
+        "correlation" : -0.49348075895320326
+      },
+      {
+        "component" : "7",
+        "attribute" : "TC",
+        "correlation" : -0.481150308390862
+      },
+      {
+        "component" : "8",
+        "attribute" : "TC",
+        "correlation" : 0.42652658242939817
+      },
+      {
+        "component" : "9",
+        "attribute" : "TC",
+        "correlation" : -0.5145643622701395
+      }
+    ]
+  }
+}
+   }
+   vg.embed("#vegas-11fde252-1185-46b8-ab4a-a53e0b67c554", embedSpec, function(error, result) {});
+ </script>
+ <div id='vegas-11fde252-1185-46b8-ab4a-a53e0b67c554'></div>
+    </body>
+</html>

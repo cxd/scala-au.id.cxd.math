@@ -17,7 +17,7 @@ import vegas.spec.Spec.TypeEnums.Nominal
 
 object ExampleCarsNetwork {
 
-  val inputFile = "data/cars/mtcars.csv"
+  val inputFile = "data/cars/autompg2.csv"
 
   def readCars() = {
     val reader = new MatrixReader {}
@@ -25,7 +25,7 @@ object ExampleCarsNetwork {
     // normalise M
     val normal = new StandardisedNormalisation()
     val M1 = normal.transform(M)
-    val continuous = Seq(1,2,3,4,5,6,7,9,10)
+    val continuous = Seq(2,3,4,5)
     val X = M1(::, continuous)
     val Y = M1(::, 0)
     (normal, X.toDenseMatrix, Y.toDenseMatrix.t)
@@ -54,8 +54,8 @@ object ExampleCarsNetwork {
     */
   def buildNetwork():Builder = {
     Sequence(Seq(
-      InputLayer(activation=Identity(), units=9),
-      DenseLayer(activation=Relu(), units=9),
+      InputLayer(activation=Identity(), units=4),
+      DenseLayer(activation=Sigmoid(), units=5),
       DenseLayer(activation=Linear(), units=1)
     )).compile()
   }
@@ -66,7 +66,7 @@ object ExampleCarsNetwork {
     */
   def buildNetwork2():Builder = {
     Sequence(Seq(
-      InputLayer(activation=Identity(), units=9),
+      InputLayer(activation=Identity(), units=4),
       DenseLayer(activation=Relu(), units=4),
       DenseLayer(activation=Relu(), units=3),
       DenseLayer(activation=Relu(), units=3),
@@ -148,13 +148,13 @@ object ExampleCarsNetwork {
     val validY = partitions(1)._2
     val testY = partitions(1)._3
 
-    val trainer = SGDTrainer(trainX, trainY, validX, validY, learnRate = 0.00000001, momentum=0)
+    val trainer = SGDTrainer(trainX, trainY, validX, validY, learnRate = 0.0000001, momentum=0.000001)
 
     // 437
     // 720
     // 745
     // lr = 0.000001
-    val (loss, valloss, network2) = trainNetwork(745, trainer, buildNetwork().asInstanceOf[Sequence], trainX, trainY, validX, validY)
+    val (loss, valloss, network2) = trainNetwork(700, trainer, buildNetwork().asInstanceOf[Sequence], trainX, trainY, validX, validY)
 
     //val (loss, valloss, network2) = trainNetwork(4000, trainer, buildNetwork2().asInstanceOf[Sequence], trainX, trainY, validX, validY)
 

@@ -1,0 +1,159 @@
+<html>
+  <head>
+    <script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/d3/3.5.17/d3.min.js" charset="utf-8"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/vega/2.6.3/vega.min.js" charset="utf-8"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/vega-lite/1.2.0/vega-lite.min.js" charset="utf-8"></script>
+<script src="https://vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+  </head>
+  <body>
+ <script>
+   var embedSpec = {
+     mode: "vega-lite",
+     spec: {
+  "width" : 800.0,
+  "height" : 600.0,
+  "layers" : [
+    {
+      "mark" : "text",
+      "encoding" : {
+        "x" : {
+          "field" : "c1",
+          "type" : "quantitative"
+        },
+        "y" : {
+          "field" : "c2",
+          "type" : "quantitative"
+        },
+        "color" : {
+          "field" : "country",
+          "type" : "nominal"
+        },
+        "text" : {
+          "field" : "country",
+          "type" : "nominal"
+        }
+      }
+    }
+  ],
+  "description" : "Ordination of CDF",
+  "data" : {
+    "values" : [
+      {
+        "c1" : 4.488963656433397,
+        "c2" : 0.2609022978992029,
+        "country" : "\"Albania\""
+      },
+      {
+        "c1" : -0.7614703618555796,
+        "c2" : -0.06755707607549859,
+        "country" : "\"Austria\""
+      },
+      {
+        "c1" : -0.7992827663295308,
+        "c2" : 0.021986385572766665,
+        "country" : "\"Belgium\""
+      },
+      {
+        "c1" : 0.4480948219109079,
+        "c2" : -1.0271623332871267,
+        "country" : "\"Bulgaria\""
+      },
+      {
+        "c1" : -0.3116479396924935,
+        "c2" : -0.016487217686590047,
+        "country" : "\"Denmark\""
+      },
+      {
+        "c1" : -0.04770595634546734,
+        "c2" : 0.6949802446308895,
+        "country" : "\"Finland\""
+      },
+      {
+        "c1" : -0.4978805998883362,
+        "c2" : -0.029528764107607935,
+        "country" : "\"France\""
+      },
+      {
+        "c1" : 0.296829704053009,
+        "c2" : 0.4574721306763833,
+        "country" : "\"Greece\""
+      },
+      {
+        "c1" : 2.1293563185202338,
+        "c2" : 0.38927173763331263,
+        "country" : "\"Hungary\""
+      },
+      {
+        "c1" : -0.3124618924798074,
+        "c2" : 0.3893772091362756,
+        "country" : "\"Ireland\""
+      },
+      {
+        "c1" : -0.9048230591051443,
+        "c2" : -1.6618099362014522,
+        "country" : "\"Italy\""
+      },
+      {
+        "c1" : -1.223860094051192,
+        "c2" : 0.771508512284753,
+        "country" : "\"Netherlands\""
+      },
+      {
+        "c1" : -0.2664163261020673,
+        "c2" : 0.7940752684992931,
+        "country" : "\"Norway\""
+      },
+      {
+        "c1" : 0.19156065359440455,
+        "c2" : 0.3818734519098924,
+        "country" : "\"Poland\""
+      },
+      {
+        "c1" : -0.8694088773465319,
+        "c2" : -0.7037826852712168,
+        "country" : "\"Portugal\""
+      },
+      {
+        "c1" : 0.13793210258100855,
+        "c2" : 1.660405056054116,
+        "country" : "\"Romania\""
+      },
+      {
+        "c1" : -0.5555898925359798,
+        "c2" : -0.8457868998881324,
+        "country" : "\"Spain\""
+      },
+      {
+        "c1" : -0.3688554993470621,
+        "c2" : 0.17210453234191575,
+        "country" : "\"Sweden\""
+      },
+      {
+        "c1" : -0.354278781662986,
+        "c2" : -1.8640287833373397,
+        "country" : "\"Switzerland\""
+      },
+      {
+        "c1" : -0.7855434556295366,
+        "c2" : 0.16565942267370362,
+        "country" : "\"UK\""
+      },
+      {
+        "c1" : 1.196661668264504,
+        "c2" : -1.2049983559278885,
+        "country" : "\"USSR\""
+      },
+      {
+        "c1" : -0.8301734229857389,
+        "c2" : 1.2615258024703433,
+        "country" : "\"Yugoslavia\""
+      }
+    ]
+  }
+}
+   }
+   vg.embed("#vegas-66f81f50-3fcc-4c08-bda9-c7ce7eaee783", embedSpec, function(error, result) {});
+ </script>
+ <div id='vegas-66f81f50-3fcc-4c08-bda9-c7ce7eaee783'></div>
+    </body>
+</html>

@@ -11,7 +11,9 @@ case class MeanSquareErrorLoss() extends Loss {
     * @return
     */
   override def apply(obs: DenseMatrix[Double], sim: DenseMatrix[Double]): (Double, DenseMatrix[Double]) = {
-    val errors = obs - sim
+    val errors = if (obs.cols == sim.cols) obs - sim
+                 else if (obs.cols > sim.cols) obs - sim.t
+                 else obs.t - sim
     val mse = MSE(obs.data, sim.data)
     (mse, errors)
   }
