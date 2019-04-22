@@ -48,7 +48,7 @@ case class StandardisedNormalisation() extends ContinuousTransform {
     * @param data
     * @return
     */
-  def filter (data:DenseMatrix[Double]) = {
+  def filter (data:DenseMatrix[Double]):DenseMatrix[Double] = {
     val Z = DenseMatrix.tabulate[Double](data.rows, data.cols) {
       case (i, j) => {
         val x = data(i,j)
@@ -59,5 +59,23 @@ case class StandardisedNormalisation() extends ContinuousTransform {
       }
     }
     Z
+  }
+
+  /**
+    * perform the inverse of the standard normal transformation
+    * @param data
+    * @return
+    */
+  def invert(data:DenseMatrix[Double]):DenseMatrix[Double] = {
+    val X = DenseMatrix.tabulate[Double](data.rows, data.cols) {
+      case (i, j) => {
+        val z = data(i,j)
+        val mean = meanVector(j)
+        val sigma = sigmaVector(j)
+        val x = Math.sqrt(sigma)*z + mean
+        x
+      }
+    }
+    X
   }
 }
