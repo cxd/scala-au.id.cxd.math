@@ -75,4 +75,14 @@ object CrossTabulate {
     val falsePc = (falseTotal/total)
     (total, posTotal, falseTotal, posPc, falsePc, odds)
   }
+
+  def printMetrics(m:DenseMatrix[Double]) = {
+    val (total, posTotal, falseTotal, posPc, falsePc, odds) = metrics(m)
+    println(s"Total Records: $total")
+    println(s"Total Match: $posTotal")
+    println(s"Total Mismatch: $falseTotal")
+    println(s"Positive Percent: $posPc")
+    println(s"False percent: $falsePc")
+    println(s"Odds: $odds")
+  }
 }

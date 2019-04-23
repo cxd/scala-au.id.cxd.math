@@ -18,7 +18,8 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
                  learnRate: Double = 0.02,
                  momentum: Double = 0.0,
                  lossThreshold: Double = Math.E,
-                 verbose:Boolean = true) extends Trainer {
+                 verbose:Boolean = true,
+                 bias:Double = 1.0) extends Trainer {
 
 
   /**
@@ -26,9 +27,8 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
     * @param data
     * @return
     */
-  def addBias(data:DenseMatrix[Double]):DenseMatrix[Double] = {
-    val bias = DenseMatrix.ones[Double](data.rows, 1)
-    DenseMatrix.horzcat(data, bias)
+  def addBias(data:DenseMatrix[Double], network:Sequence):DenseMatrix[Double] = {
+    network.addBias(data, bias)
   }
 
   /**
@@ -50,7 +50,8 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
       * compute the gradient
       * We require the gradient at the output layer to be a single value.
       */
-    val grad = errors.t * d_j * y_i.t
+    val grad = if (errors.cols != d_j.rows) errors.t * d_j
+               else errors * d_j
 
     grad
 
@@ -80,18 +81,22 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
           // we expect the gradient to have same number of columns as units
           // so we take the columnwise sums of the gradient
 
+
           val g_k = if (grad_k.cols != lastLayer.weights.cols) grad_k.t
                     else grad_k
 
           val a = DenseMatrix.tabulate(lastLayer.weights.rows, g_k.cols) {
             case (i,j) => {
-              val total = g_k(::,j).data.sum
+              val total = g_k(::,j).toArray.sum
               total * lastLayer.weights(i,j)
             }
           }
+          //val a = g_k * lastLayer.weights.t
 
-          val g = if (hidden.derivative.cols != a.rows) hidden.derivative.t * a
-                  else hidden.derivative * a
+
+          /*val g = if (hidden.derivative.cols != a.rows) hidden.derivative.t * a
+                  else hidden.derivative * a*/
+          val g = hidden.derivative.t * a
           gradients(accum :+ g.t, hidden, layers.tail)
         }
       }
@@ -200,8 +205,8 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
       .takeWhile(_ => exitLoss > lossThreshold)
 
 
-    val trainDataX = addBias(trainX)
-    val validDataX = addBias(validX)
+    val trainDataX = addBias(trainX, network)
+    val validDataX = addBias(validX, network)
 
     for (epoch <- range) {
 
@@ -216,10 +221,11 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
 
         val input = trainDataX(i, ::).inner.toDenseMatrix
         val target = trainY(i, ::).inner.toDenseMatrix
+
         val output = trainNet.transfer(input)
 
-        alloutputs ++= output.data.toSeq
-        alltargets ++= target.data.toSeq
+        alloutputs ++= output.toArray.toSeq
+        alltargets ++= target.toArray.toSeq
 
         // we have a loss function we need to calculate the error signal
         // and we then need to calculate the derivative of the error signal
@@ -254,8 +260,8 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
         val target = validY(i, ::).inner.toDenseMatrix
         val output = network.transfer(input)
 
-        valtargets ++= target.data.toSeq
-        valoutputs ++= output.data.toSeq
+        valtargets ++= target.toArray.toSeq
+        valoutputs ++= output.toArray.toSeq
       }
 
       val targetsV = DenseMatrix.tabulate(1,valtargets.size) {

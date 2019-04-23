@@ -1,5 +1,6 @@
 package au.id.cxd.math.data
 
+import au.id.cxd.math.data.filter.Which
 import au.id.cxd.math.function.transform.ContinuousTransform
 import breeze.linalg.DenseMatrix
 /**
@@ -26,9 +27,32 @@ class DataSet(val data: DenseMatrix[Double], val continuousCols: Int, val discre
     * @param data
     * @return
     */
-  def makeSet(nrows: Int, data: DenseMatrix[Double]) = {
-    def randRange() = for (i <- 1 to nrows) yield (i * Math.random()).round.toInt
+  def makeSet(nrows: Int, data: DenseMatrix[Double]): DenseMatrix[Double] = {
+    def randRange(): Seq[Int] = for (i <- 1 to nrows) yield (i * Math.random()).round.toInt
     data(randRange, ::).toDenseMatrix
+  }
+
+  /**
+    * convert an indicator matrix to a set of class labels
+    * based on the internal mappings for the supplied feature name
+    * @param featureName
+    * @param indicators
+    * @return
+    */
+  def convertToClassLabels(featureName:String, indicators:DenseMatrix[Double]):Seq[String] = {
+    val classLabels = discreteMapping.filter(p => p._1.equalsIgnoreCase(featureName)).head._2.toList
+    val range = for (i <- 0 until indicators.rows) yield i
+    range.foldLeft(Seq[String]()) {
+      (accum, i) => {
+        val row = indicators(i, ::).inner
+        // we now need to find the maximum output value.
+        val maxS = indicators.toArray.max
+        val idx = Which[Double](row.toArray, d => d == maxS)
+        val label = classLabels(idx.head)
+        accum :+ label
+      }
+    }
+
   }
 
 
@@ -39,9 +63,17 @@ class DataSet(val data: DenseMatrix[Double], val continuousCols: Int, val discre
     val trainRows = (trainPc * data.rows).round
     val cvRows = (cvPc * data.rows).round
     val testRows = (testPc * data.rows).round
-    trainData = makeSet(trainRows.toInt, data)
-    crossValidateData = makeSet(cvRows.toInt, data)
-    testData = makeSet(testRows.toInt, data)
+
+    // first we want to sample without replacement so we'll randomly permute the rows of the matrix.
+    val alldata = makeSet(data.rows, data)
+    // now we partition the data
+    val dataset = Partition(Seq(alldata), trainPc, cvPc, testPc)
+
+    val (train, valid, test) = dataset.head
+
+    trainData = train
+    crossValidateData = valid
+    testData = test
   }
 
 }

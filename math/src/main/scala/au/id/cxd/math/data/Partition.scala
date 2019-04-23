@@ -12,7 +12,8 @@ object Partition {
     */
   def makeRange (rows:Int, percent:Double, offset:Int=0):IndexedSeq[Int] = {
     val total = Math.round(rows * percent).toInt
-    for (i <- 0 until total) yield i + offset
+    val range = for (i <- 0 until total) yield i + offset
+    range.filter { i => i < rows && i >= 0 }
   }
 
   /**

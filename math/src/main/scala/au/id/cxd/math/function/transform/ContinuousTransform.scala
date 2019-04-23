@@ -20,6 +20,13 @@ trait ContinuousTransform extends Serializable {
   def transform(continousData:DenseMatrix[Double]): DenseMatrix[Double]
 
   /**
+    * perform the inverse of the standard normal transformation
+    * @param data
+    * @return
+    */
+  def invert(data:DenseMatrix[Double]):DenseMatrix[Double]
+
+  /**
     * already having calculated to parameters simply
     * filter the supplied data through the transformation.
     * @param data

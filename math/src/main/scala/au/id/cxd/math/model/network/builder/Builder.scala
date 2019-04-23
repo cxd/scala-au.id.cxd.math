@@ -1,5 +1,6 @@
 package au.id.cxd.math.model.network.builder
 
+import au.id.cxd.math.data.filter.Which
 import au.id.cxd.math.model.network.initialisation.WeightInitialisationStrategy
 import au.id.cxd.math.model.network.layers.Layer
 import breeze.linalg.DenseMatrix
@@ -10,6 +11,8 @@ trait Builder extends Serializable {
     * sequence of layers.
     */
   val layers:Seq[Layer]
+
+  val bias:Double = 1.0
 
   /**
     * a weight initialisation strategy
@@ -38,6 +41,16 @@ trait Builder extends Serializable {
   def initialiseWeights():Builder
 
   /**
+    * add bias to the training data.
+    * @param data
+    * @return
+    */
+  def addBias(data:DenseMatrix[Double], biasVal:Double = bias):DenseMatrix[Double] = {
+    val b = bias*DenseMatrix.ones[Double](data.rows, 1)
+    DenseMatrix.horzcat(data, b)
+  }
+
+  /**
     * propogate data forward through the network.
     * @param x
     * @return
@@ -51,6 +64,40 @@ trait Builder extends Serializable {
       }
     }
     output
+  }
+
+  /**
+    * predict continuous variables.
+    * @param x
+    * @return
+    */
+  def predict(x:DenseMatrix[Double]):DenseMatrix[Double] = {
+    val input = addBias(x)
+    transfer(x)
+  }
+
+  /**
+    * perform the classification task
+    * given the data set identify the maximum class label associated with
+    * the output of each record in the network.
+    * @param x
+    * @param labels
+    * @return
+    */
+  def classify(x:DenseMatrix[Double], labels:List[String]):Seq[String] = {
+    val input = addBias(x)
+    val range = for (i <- 0 until x.rows) yield i
+    range.foldLeft(Seq[String]()) {
+      (accum, i) => {
+        val row = input(i,::)
+        val output = transfer(row.inner.toDenseMatrix)
+        // we now need to find the maximum output value.
+        val maxS = output.toArray.max
+        val idx = Which[Double](output.toArray, d => d == maxS)
+        val label = labels(idx.head)
+        accum :+ label
+      }
+    }
   }
 
 }

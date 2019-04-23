@@ -22,4 +22,13 @@ case class IdentityTransform() extends ContinuousTransform {
     * @return
     */
   def filter (data:DenseMatrix[Double]) = data
+
+  /**
+    * perform the inverse of the transformation
+    *
+    * identity transformation makes no modification to the original data
+    * @param data
+    * @return
+    */
+  def invert(data:DenseMatrix[Double]):DenseMatrix[Double] = data
 }

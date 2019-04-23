@@ -23,7 +23,7 @@ import scala.util.Random
   *
   * @param seed
   */
-case class RandomWeightInitialisation(val seed:Long = 42L, val range:(Double,Double)=(-1.0,1.0)) extends WeightInitialisationStrategy {
+class RandomWeightInitialisation(val seed:Long = 42L, val range:(Double,Double)=(-1.0,1.0)) extends WeightInitialisationStrategy {
 
   val rand = RUniform(min = range._1, max=range._2, seed=seed)
 
@@ -37,5 +37,25 @@ case class RandomWeightInitialisation(val seed:Long = 42L, val range:(Double,Dou
     */
   override def op(rows: Int, cols: Int): DenseMatrix[Double] = DenseMatrix.tabulate(rows,cols) {
     case (i,j) => rand.draw
+  }
+}
+
+object RandomWeightInitialisation {
+  def apply(range:(Double,Double)=(-1.0,1.0), seed:Long = 42L):RandomWeightInitialisation =
+    new RandomWeightInitialisation(seed, range)
+
+  def apply(rows:Int, cols:Int):RandomWeightInitialisation = {
+    val m = cols.toDouble
+    val n = rows.toDouble
+    val threshold = Math.sqrt(6.0 / (m + n))
+    val range = (-threshold, threshold)
+    apply(range)
+  }
+
+  def apply(rows:Int):RandomWeightInitialisation = {
+    val n = rows.toDouble
+    val threshold = 1.0 / Math.sqrt(n)
+    val range = (-threshold, threshold)
+    apply(range)
   }
 }
