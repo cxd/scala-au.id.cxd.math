@@ -48,10 +48,10 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
 
     /**
       * compute the gradient
-      * We require the gradient at the output layer to be a single value.
+      * At the output layer the gradient is the element wise multiplication between
+      * derivative and error.
       */
-    val grad = if (errors.cols != d_j.rows) errors.t * d_j
-               else errors * d_j
+    val grad = errors.t *:* d_j
 
     grad
 
@@ -76,27 +76,30 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
           val hidden = layers.head
           val grad_k = accum.last
 
+          // grad_l = W_{l+1}^T grad_{l+1} *:* sigma_l
+
           // we have a gradient vector input, we multiply
           // \sigma_k w_{kj}
           // we expect the gradient to have same number of columns as units
           // so we take the columnwise sums of the gradient
 
 
-          val g_k = if (grad_k.cols != lastLayer.weights.cols) grad_k.t
+
+
+          val g_k = if (lastLayer.weights.cols != grad_k.rows) grad_k.t
                     else grad_k
 
+          val a = lastLayer.weights * g_k
+          /*
           val a = DenseMatrix.tabulate(lastLayer.weights.rows, g_k.cols) {
             case (i,j) => {
               val total = g_k(::,j).toArray.sum
               total * lastLayer.weights(i,j)
             }
           }
-          //val a = g_k * lastLayer.weights.t
 
-
-          /*val g = if (hidden.derivative.cols != a.rows) hidden.derivative.t * a
-                  else hidden.derivative * a*/
-          val g = hidden.derivative.t * a
+          */
+          val g = hidden.derivative *:* a
           gradients(accum :+ g.t, hidden, layers.tail)
         }
       }
@@ -136,21 +139,17 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
           val h = prevLayer.output
           val (layer, grad) = layerAndGrad.head
           val (wrows, wcols) = layer.shape.get
+
           val m = layer.priorWeights match {
             case None => DenseMatrix.zeros[Double](wrows, wcols)
             case Some(w) => momentum * w
           }
-          val grad1 = if (grad.cols != h.rows) grad.t
-                      else grad
 
-          val step = if (grad1.cols != h.rows) learnRate * grad1 * h.t
-                     else learnRate * grad1 * h
+          val step = if (h.cols != grad.rows) learnRate * h * grad.t
+                     else learnRate * h * grad
 
-          // step is columns
-          val stepMat = if (step.rows == 1 && step.cols == 1) tile(step, m.rows, m.cols)
-          else tile(step.t, 1, m.cols)
 
-          val delta = m + stepMat
+          val delta = m + step
           weightDeltas(accum :+ delta, layer, layerAndGrad.tail)
         }
       }

@@ -73,7 +73,20 @@ trait Builder extends Serializable {
     */
   def predict(x:DenseMatrix[Double]):DenseMatrix[Double] = {
     val input = addBias(x)
-    transfer(x)
+    val outputN = layers.last.units
+    var target:Option[DenseMatrix[Double]] = None
+    (for (i <- 0 until input.rows) yield i).foreach {
+      i => {
+        val output = transfer(input(i,::).inner.toDenseMatrix)
+        if (target.isEmpty) target = Some(output)
+        else {
+          val temp = target.get
+          val temp2 = DenseMatrix.vertcat(temp, output.t)
+          target = Some(temp2)
+        }
+      }
+    }
+    target.get
   }
 
   /**

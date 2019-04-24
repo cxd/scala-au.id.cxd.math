@@ -4,6 +4,8 @@ import au.id.cxd.math.function.distance.{Cor, MahalanobisDistance}
 import au.id.cxd.math.probability.analysis.Manova
 import breeze.linalg.{DenseMatrix, DenseVector, diag}
 
+import scala.collection.immutable
+
 /**
   * ##import MathJax
   *
@@ -239,15 +241,15 @@ class CanonicalDiscriminantAnalysis(val classes: List[String], dataX: DenseMatri
 }
 
 object CanonicalDiscriminantAnalysis {
-  def apply(groups: List[String], dataX: DenseMatrix[Double]) =
+  def apply(groups: List[String], dataX: DenseMatrix[Double]): (DenseVector[Double], DenseMatrix[Double], DenseVector[Double], DenseVector[Double], DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double]) =
     new CanonicalDiscriminantAnalysis(groups, dataX).computeZ()
 
 
-  def classify(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
+  def classify(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]): (DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double], immutable.IndexedSeq[(Int, String)]) = {
     new CanonicalDiscriminantAnalysis(groupLabels, Y).classify(Y, coeffs, intercept, groupMeans, groupLabels)
   }
 
-  def classifyDiscriminant(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]) = {
+  def classifyDiscriminant(Y: DenseMatrix[Double], coeffs: DenseMatrix[Double], intercept:DenseVector[Double], groupMeans: DenseMatrix[Double], groupLabels: List[String]): (DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double], immutable.IndexedSeq[(Int, String)]) = {
     new CanonicalDiscriminantAnalysis(groupLabels, Y).classifyDiscriminant(Y, coeffs, intercept, groupMeans, groupLabels)
   }
 }

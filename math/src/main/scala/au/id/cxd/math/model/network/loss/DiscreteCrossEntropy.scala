@@ -17,7 +17,9 @@ case class DiscreteCrossEntropy() extends Loss with Accuracy {
     */
   override def apply(obs: DenseMatrix[Double], sim: DenseMatrix[Double]): (Double, DenseMatrix[Double]) = {
     val errors = DenseMatrix.tabulate (obs.rows, obs.cols) {
-      case (i, j) => obs(i,j) - sim(i,j)
+      case (i, j) =>
+        obs(i,j) - sim(i,j)
+        //-obs(i,j)/ sim(i,j)
     }
     val loss = DenseMatrix.tabulate(obs.rows, obs.cols) {
       case (i, j) =>

@@ -500,7 +500,7 @@ object OrdLeastSquares {
     * @param weightMatrixFile
     * @param degree
     */
-  def loadWeights(weightMatrixFile: File, degree: Int) = {
+  def loadWeights(weightMatrixFile: File, degree: Int=1) = {
     val weights = csvread(weightMatrixFile)
     val ols = new OrdLeastSquares(DenseMatrix.zeros[Double](1, 1), DenseVector.zeros[Double](1), degree)
     ols.Beta = weights

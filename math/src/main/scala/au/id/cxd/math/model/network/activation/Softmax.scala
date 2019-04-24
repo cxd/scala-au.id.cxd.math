@@ -1,5 +1,5 @@
 package au.id.cxd.math.model.network.activation
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, diag}
 
 case class Softmax() extends Activation {
   /**
@@ -23,14 +23,17 @@ case class Softmax() extends Activation {
     * @return
     */
   override def derivative(h: DenseMatrix[Double]): DenseMatrix[Double] = {
+    // here we expect f to be a n x 1 vector.
     val f = apply(h)
     // calculate the matrix of kronecker delta - f(x)
+    //
     val k = DenseMatrix.tabulate(f.rows, f.cols) {
-      case(i,j) => if (i == j) 0.0
-      else 1.0
+      case(i,j) => if (i == j) 1.0
+      else 0.0
     }
     val kf = k - f
-    // memberwise multiplication of f and kf
-    f *:* kf
+    val d1 = f *:* kf
+    d1
+    //d1*h
   }
 }

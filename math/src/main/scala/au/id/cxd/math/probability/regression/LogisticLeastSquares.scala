@@ -47,7 +47,7 @@ object LogisticLeastSquares {
     * @param m
     * @return
     */
-  def apply(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int) = {
+  def apply(X: DenseMatrix[Double], Y: DenseVector[Double], m: Int=1) = {
     val ols = new LogisticLeastSquares(X, Y, m)
     ols
   }

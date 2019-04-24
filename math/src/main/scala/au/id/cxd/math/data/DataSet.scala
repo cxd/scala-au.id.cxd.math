@@ -21,6 +21,11 @@ class DataSet(val data: DenseMatrix[Double], val continuousCols: Int, val discre
   var testData: DenseMatrix[Double] = DenseMatrix.zeros[Double](1, 1)
 
   /**
+    * reference the random permutation of the data before partitioning.
+    */
+  var randData:DenseMatrix[Double] = DenseMatrix.zeros[Double](1,1)
+
+  /**
     * make a random selection of the data for the supplied number of rows.
     *
     * @param nrows
@@ -65,9 +70,9 @@ class DataSet(val data: DenseMatrix[Double], val continuousCols: Int, val discre
     val testRows = (testPc * data.rows).round
 
     // first we want to sample without replacement so we'll randomly permute the rows of the matrix.
-    val alldata = makeSet(data.rows, data)
+    randData = makeSet(data.rows, data)
     // now we partition the data
-    val dataset = Partition(Seq(alldata), trainPc, cvPc, testPc)
+    val dataset = Partition(Seq(randData), trainPc, cvPc, testPc)
 
     val (train, valid, test) = dataset.head
 

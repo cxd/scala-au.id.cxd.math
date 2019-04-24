@@ -137,7 +137,7 @@ object ExampleCarsRegressionNetwork {
 
     val plotData2 = obs(::, 0).toArray
       .zip(sim(::, 0).toArray)
-      .zip(1 to obs.cols)
+      .zip(1 to obs.rows)
       .map {
         tuple1 => {
           val y1 = tuple1._1._1
@@ -212,7 +212,7 @@ object ExampleCarsRegressionNetwork {
     // 720
     // 745
     // lr = 0.000001
-    val (loss, valloss, network2) = trainNetwork(3000, trainer, buildNetwork(initialisation).asInstanceOf[Sequence])
+    val (loss, valloss, network2) = trainNetwork(2000, trainer, buildNetwork(initialisation).asInstanceOf[Sequence])
 
     //val (loss, valloss, network2) = trainNetwork(1500, trainer, buildNetwork2(initialisation).asInstanceOf[Sequence], trainX, trainY, validX, validY)
 
@@ -224,16 +224,16 @@ object ExampleCarsRegressionNetwork {
     val sim = network2.predict(testX)
 
     val target2 = translateY(targets.t, norm)
-    val sim2 = translateY(sim.t, norm)
+    val sim2 = translateY(sim, norm)
 
-    plot(target2.t, sim2.t, "docs/plots/example_cars_network.html")
+    plot(target2, sim2, "docs/plots/example_cars_network.html")
 
     val sim3 = network2.predict(trainX)
     val trainTargets = trainY(::,0).toDenseMatrix
     val translateObs2 = translateY(trainTargets.t, norm)
-    val translateSim2 = translateY(sim3.t, norm)
+    val translateSim2 = translateY(sim3, norm)
 
-    plot(translateObs2.t, translateSim2.t, "docs/plots/example_train_carts_network.html")
+    plot(translateObs2, translateSim2, "docs/plots/example_train_carts_network.html")
 
     // compare with OLS
     val ols1 = OrdLeastSquares(trainX, trainY.toDenseVector, 1)
@@ -244,7 +244,7 @@ object ExampleCarsRegressionNetwork {
     val rSeries1 = List.tabulate(ols1.residuals.length) { i => ols1.residuals(i) }
 
     val sim4 = translateY(Y1.t, norm)
-    plot(target2.t, sim4.t, "docs/plots/example_cars_ols.html")
+    plot(target2, sim4, "docs/plots/example_cars_ols.html")
 
 
     val metrics1 = Map(

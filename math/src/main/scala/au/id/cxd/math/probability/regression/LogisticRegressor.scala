@@ -45,7 +45,7 @@ trait LogisticRegressor extends OrdLeastSquares {
     * @param logitY
     * @return
     */
-  def transform(logitY:DenseVector[Double]) = {
+  def transform(logitY:DenseVector[Double]): DenseMatrix[Double] = {
     val resultP = DenseMatrix.tabulate[Double](logitY.length, 3) {
       case (i, j) => {
         val y = logitY(i)
