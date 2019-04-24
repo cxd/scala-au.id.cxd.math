@@ -50,8 +50,13 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
       * compute the gradient
       * At the output layer the gradient is the element wise multiplication between
       * derivative and error.
+      *
+      * Note in the case of softmax derivative we want the dot product of the errors and the derivative.
+      * Since the derivative is a martrix of units x units size.
+      * Whereas if the other activation functions are used we just want the memberwise product *:*.
       */
-    val grad = errors.t *:* d_j
+    val grad = if (errors.cols == d_j.rows && d_j.cols > 1) (errors * d_j).t
+               else errors.t *:* d_j
 
     grad
 
@@ -83,22 +88,11 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
           // we expect the gradient to have same number of columns as units
           // so we take the columnwise sums of the gradient
 
-
-
-
           val g_k = if (lastLayer.weights.cols != grad_k.rows) grad_k.t
                     else grad_k
 
           val a = lastLayer.weights * g_k
-          /*
-          val a = DenseMatrix.tabulate(lastLayer.weights.rows, g_k.cols) {
-            case (i,j) => {
-              val total = g_k(::,j).toArray.sum
-              total * lastLayer.weights(i,j)
-            }
-          }
 
-          */
           val g = hidden.derivative *:* a
           gradients(accum :+ g.t, hidden, layers.tail)
         }
@@ -209,11 +203,11 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
 
     for (epoch <- range) {
 
-      val alloutputs = mutable.Buffer[Double]()
-      val alltargets = mutable.Buffer[Double]()
+      var alloutputs = DenseMatrix.zeros[Double](0,0)
+      var alltargets = DenseMatrix.zeros[Double](0,0)
 
-      val valoutputs = mutable.Buffer[Double]()
-      val valtargets = mutable.Buffer[Double]()
+      var valoutputs = DenseMatrix.zeros[Double](0,0)
+      var valtargets = DenseMatrix.zeros[Double](0,0)
 
       // we process each of the rows of the training input.
       for (i <- 0 until trainDataX.rows) {
@@ -223,8 +217,16 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
 
         val output = trainNet.transfer(input)
 
-        alloutputs ++= output.toArray.toSeq
-        alltargets ++= target.toArray.toSeq
+        if (alloutputs.cols == 0) {
+          alloutputs = output.t
+        } else {
+          alloutputs = DenseMatrix.vertcat(alloutputs, output.t)
+        }
+        if (alltargets.cols == 0) {
+          alltargets = target
+        } else {
+          alltargets = DenseMatrix.vertcat(alltargets, target)
+        }
 
         // we have a loss function we need to calculate the error signal
         // and we then need to calculate the derivative of the error signal
@@ -245,33 +247,28 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
       }
       // calculate loss for epoch
 
-      val targets = DenseMatrix.tabulate(1,alltargets.size) {
-        case (i,j) => alltargets(j)
-      }
-      val outputs = DenseMatrix.tabulate(1, alloutputs.size) {
-        case (i, j) => alloutputs(j)
-      }
 
-      val (loss, errors) = lossFn(targets, outputs)
+      val (loss, errors) = lossFn(alltargets, alloutputs)
 
       for (i <- 0 until validDataX.rows) {
         val input = validDataX(i, ::).inner.toDenseMatrix
         val target = validY(i, ::).inner.toDenseMatrix
-        val output = network.transfer(input)
+        val output = trainNet.transfer(input)
 
-        valtargets ++= target.toArray.toSeq
-        valoutputs ++= output.toArray.toSeq
-      }
-
-      val targetsV = DenseMatrix.tabulate(1,valtargets.size) {
-        case (i,j) => alltargets(j)
-      }
-      val outputsV = DenseMatrix.tabulate(1, valoutputs.size) {
-        case (i, j) => alloutputs(j)
+        if (valtargets.cols == 0) {
+          valtargets = target
+        } else {
+          valtargets = DenseMatrix.vertcat(valtargets, target)
+        }
+        if (valoutputs.cols == 0) {
+          valoutputs = output.t
+        } else {
+          valoutputs = DenseMatrix.vertcat(valoutputs, output.t)
+        }
       }
 
       // calculate the validation loss and accuracy
-      val (valloss, valerrors) = lossFn(targetsV, outputsV)
+      val (valloss, valerrors) = lossFn(valtargets, valoutputs)
 
       trainloss += loss
       validationloss += valloss

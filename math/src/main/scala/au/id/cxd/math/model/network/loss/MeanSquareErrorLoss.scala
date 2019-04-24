@@ -14,7 +14,7 @@ case class MeanSquareErrorLoss() extends Loss {
     val errors = if (obs.cols == sim.cols) obs - sim
                  else if (obs.cols > sim.cols) obs - sim.t
                  else obs.t - sim
-    val mse = MSE(obs.data, sim.data)
+    val mse = MSE(obs.toArray, sim.toArray)
     (mse, errors)
   }
 }

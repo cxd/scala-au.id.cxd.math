@@ -43,8 +43,8 @@ object ExampleMulticlassNetwork {
   def buildNetwork(initialisation: WeightInitialisationStrategy): Sequence = {
     Sequence(Seq(
       InputLayer(activation = Identity(), units = 13),
-      DenseLayer(activation = Linear(), units = 10),
-      //DenseLayer(activation = Relu(), units = 9),
+      DenseLayer(activation = Relu(), units = 15),
+      DenseLayer(activation = Relu(), units = 10),
       DenseLayer(activation = Relu(), units = 3),
       DenseLayer(activation = Softmax(), units = 3)
     ), initialisation).compile()
@@ -80,11 +80,11 @@ object ExampleMulticlassNetwork {
 
     val trainer = SGDTrainer(trainX, trainY, validX, validY,
       learnRate = 0.00001,
-      momentum = 0.0000001,
+      momentum = 0.000001,
       lossFn = DiscreteCrossEntropy())
 
     //
-    val (loss, valloss, network2) = trainNetwork(15000, trainer, network)
+    val (loss, valloss, network2) = trainNetwork(7000, trainer, network)
 
     val classLabels = data.discreteMapping.head._2
 
