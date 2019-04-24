@@ -43,6 +43,13 @@ the cross compile phase. Then to produce the cross compiled assemblies.
 sbt +assembly
 ```
 
+Note the build process is currently dependent on jdk8. 
+Using jenv is a good way to manage multiple java versions on a single environment.
+
+```
+jenv versions
+jenv local 1.8
+```
 
 ### Documentation.
 

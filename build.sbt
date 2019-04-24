@@ -86,7 +86,12 @@ lazy val math = (project in file("math"))
       "com.kennycason" % "kumo" % "1.8" % "test"
     ),
 
-    test in assembly := {}
+    test in assembly := {},
+
+    assemblyMergeStrategy in assembly := {
+      case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+      case x => MergeStrategy.first
+    }
 
 
   ).settings(Common.commonPluginSettings: _*)
@@ -136,7 +141,10 @@ lazy val swing = (project in file("app"))
   .dependsOn(math)
 
 
-
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
+}
 
 lazy val root = (project in file("."))
   .aggregate(math, examples, swing)

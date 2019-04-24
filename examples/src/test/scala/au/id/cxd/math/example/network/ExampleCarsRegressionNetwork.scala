@@ -22,7 +22,7 @@ object ExampleCarsRegressionNetwork {
 
   val inputFile = "data/cars/autompg2.csv"
 
-  def readCars() = {
+  def readCars(): (StandardisedNormalisation, DenseMatrix[Double], DenseMatrix[Double]) = {
     val reader = new MatrixReader {}
     val M = reader.read(new File(inputFile))
     // normalise M
