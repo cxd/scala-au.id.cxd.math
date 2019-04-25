@@ -1,0 +1,42 @@
+---
+title: "Singular Spectrum Analysis"
+output: 
+  html_document:
+    css: ['../stylesheets/styles.css','../stylesheets/github-light.css']
+    includes:
+      in_header: mvn_testing_head.html
+csl: journal-of-combinatorics.csl
+bibliography: bibliography.bib
+---
+
+<a href="../index.html">Home</a>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Singular Spectrum Analysis
+
+```{r, engine="scala", message=FALSE, results='hide', engine.path='/usr/local/opt/scala@2.11/bin/scala',  engine.opts='-savecompiled -classpath /Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/target/*.jar', cache=TRUE}
+// imports
+import java.io.File
+import scala.collection.mutable
+import au.id.cxd.math.data.CsvReader
+
+import au.id.cxd.math.data.MatrixReader
+import au.id.cxd.math.function.transform.StandardisedNormalisation
+import au.id.cxd.math.probability.analysis._
+import breeze.linalg.{DenseMatrix, eigSym, inv, svd}
+
+import au.id.cxd.math.function.distance.MahalanobisDistance
+import au.id.cxd.math.probability.continuous.ChiSquare
+
+
+
+val fileName:String = "/Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/data/iris_virginica.csv"
+
+val mat = MatrixReader.readFileAt(fileName)
+// extract the columns of interest.
+val data = mat(::, 0 to 3)
+```
