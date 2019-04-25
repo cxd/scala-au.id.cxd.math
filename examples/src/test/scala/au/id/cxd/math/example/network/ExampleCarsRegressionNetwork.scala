@@ -212,7 +212,9 @@ object ExampleCarsRegressionNetwork {
     // 720
     // 745
     // lr = 0.000001
-    val (loss, valloss, network2) = trainNetwork(2000, trainer, buildNetwork(initialisation).asInstanceOf[Sequence])
+    val (loss, valloss, network2) = trainNetwork(2200, trainer, buildNetwork(initialisation).asInstanceOf[Sequence])
+
+    val losses = DenseMatrix.horzcat(DenseVector(loss.toArray).toDenseMatrix.t, DenseVector(valloss.toArray).toDenseMatrix.t)
 
     //val (loss, valloss, network2) = trainNetwork(1500, trainer, buildNetwork2(initialisation).asInstanceOf[Sequence], trainX, trainY, validX, validY)
 
@@ -225,6 +227,8 @@ object ExampleCarsRegressionNetwork {
 
     val target2 = translateY(targets.t, norm)
     val sim2 = translateY(sim, norm)
+
+    val targetSim = DenseMatrix.horzcat(target2, sim2)
 
     plot(target2, sim2, "docs/plots/example_cars_network.html")
 
@@ -245,6 +249,8 @@ object ExampleCarsRegressionNetwork {
 
     val sim4 = translateY(Y1.t, norm)
     plot(target2, sim4, "docs/plots/example_cars_ols.html")
+
+    val targetSim2 = DenseMatrix.horzcat(target2, sim4)
 
 
     val metrics1 = Map(

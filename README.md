@@ -65,6 +65,9 @@ Notes on [Bayesian Linear Regression](https://cxd.github.io/scala-au.id.cxd.math
 
 Notes on [Bayesian Regression applied to estimation of Project durations](https://cxd.github.io/scala-au.id.cxd.math/notes/bayesianestimation.html)
 
+Notes on [Neural Network Regression](https://cxd.github.io/scala-au.id.cxd.math/notes/neural_network.html)
+
+
 ### Notes Inference.
 
 Notes on [ANOVA](https://cxd.github.io/scala-au.id.cxd.math/notes/anova.html)
