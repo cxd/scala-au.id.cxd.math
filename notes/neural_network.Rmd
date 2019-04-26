@@ -322,7 +322,9 @@ legend("topright", col=c("blue", "red"), legend=c("observed", "simulated"), pch=
 ```{r, echo=FALSE, fig.width=5, fig.height=7}
 resid <- targetSim1$obs - targetSim1$sim
 par.old <- par(mfrow=c(3,1))
-plot(resid)
+plot(targetSim1$sim ~ targetSim1$obs, main="Simulated vs Observed NN model", ylab="Simulated", xlab="Observed")
+m1 <- lm(targetSim1$sim ~ targetSim1$obs)
+abline(m1$coefficients[1], m1$coefficients[2], col="red")
 hist(resid)
 qqnorm(resid, col="blue", main="Q-Q Plot for residuals")
 qqline(resid, col="red")
@@ -392,7 +394,9 @@ legend("topright", col=c("blue", "red"), legend=c("observed", "simulated"), pch=
 ```{r, echo=FALSE, fig.width=5, fig.height=7}
 resid2 <- targetSim2$obs - targetSim2$sim
 par.old <- par(mfrow=c(3,1))
-plot(resid2)
+plot(targetSim2$sim ~ targetSim2$obs, main="Simulated vs Observed OLS model", ylab="Simulated", xlab="Observed")
+m1 <- lm(targetSim2$sim ~ targetSim2$obs)
+abline(m1$coefficients[1], m1$coefficients[2], col="red")
 hist(resid2)
 qqnorm(resid2, col="blue", main="Q-Q Plot for residuals of OLS")
 qqline(resid2, col="red")
@@ -405,7 +409,7 @@ We can obtain metrics for the model to compare to the original neural network mo
 
 
 
-```{r, engine='scala', message=FALSE, results='hide'}
+```{r, engine='scala', message=FALSE}
 
 val metrics2 = Map(
       "RSquared" -> RSquared(targets.toArray.toSeq, Y1.toArray.toSeq),
