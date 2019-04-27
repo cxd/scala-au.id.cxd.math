@@ -128,11 +128,180 @@ Other optimisation methods make use of second order derivatives or approximation
 
 The above does not describe in detail the choice of activation functions, these depend on the type of application applied in the network. Popular choices of activation function for hidden layers include the "Restricted Linear Unit (Relu)" or the Sigmoid unit.
 
+### Activation Functions
+
+A good list of activation functions is given on wikipedia @wikiactivation.
+
+Aside from the linear (identity function) the following activation functions are implemented by the library. 
+
+- __Sigmoid__
+
+```{r, echo=FALSE, fig.width=6, fig.height=3}
+sigmoid <- function(y) 1.0 / (1.0+exp(-y))
+
+sigmoid_d <- function(y) sigmoid(y)*(1-sigmoid(y))
+  
+x <- seq(from=-5, to=5)
+
+
+y <- sigmoid(x)
+y2 <- sigmoid_d(x)
+
+par.old <- par(mfrow=c(1,2))
+plot(x, y, type="l", col="red", main="sigmoid")
+plot(x,y2, type="l", col="red", ylab="y", main="derivative of sigmoid")
+par(par.old)
+```
+
+$$
+\phi(x) = \frac{1}{1 + e^{-x}}
+$$
+With its derivative
+$$
+\phi'(x) = \phi(x)(1 - \phi(x)) = \frac{e^{-x}}{(1 + e^{-x})^2}
+$$
+we can introduce slope $\alpha$ and temperature $\rho$ parameters which influence the steepness and width of the function producting $\phi(x) = \frac{1}{1 + e^{-c x}}$ and $\phi' = -c \phi(x)(1 - \phi(x)) = \frac{ce^{-cx}}{(1+e^{-cx})^2}$ where $c = \frac{\alpha}{\rho}$.
+
+- __Tanh__
+
+```{r, echo=FALSE, fig.width=6, fig.height=3}
+
+tanh_d <- function(x) 1.0 - tanh(x)*tanh(x)
+
+
+x <- seq(from=-5, to=5)
+y <- tanh(x)
+y2 <- tanh_d(x)
+
+par.old <- par(mfrow=c(1,2))
+plot(x, y, type="l", col="red", main="tanh")
+plot(x,y2, type="l", col="red", ylab="y", main="derivative of tanh")
+par(par.old)
+```
+
+The hyperbolic tanh function $\phi(x) = tanh(x) = \frac{e^x - e^{-x}}{e^{-x} + e^x}$ and its derivative $\phi'(x) = 1 - tanh^2(x)$.
+
+- __Relu__ - rectified linear unit.
+
+
+```{r, echo=FALSE, fig.width=6, fig.height=3}
+
+relu <- function(x) sapply(x, function(x) if (x > 0) x else 0.0)
+
+relu_d <- function(x) sapply(x, function(x) if (x > 0) 1.0 else 0.0)
+
+x <- seq(from=-5, to=5)
+
+#x <- (x - min(x))/(max(x) - min(x))
+
+y <- relu(x)
+y2 <- relu_d(x)
+
+par.old <- par(mfrow=c(1,2))
+plot(x, y, type="l", col="red", main="relu")
+plot(x,y2, type="l", col="red", ylab="y", main="derivative of relu")
+par(par.old)
+```
+The relu function is expressed as
+$$
+\phi(x) = \begin{cases}
+x & x > 0\\
+0 & \text{otherwise}
+\end{cases}
+$$
+and its derivative
+$$
+\phi'(x) = \begin{cases}
+1 & x > 0\\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+- __Softmax__
+
+The softmax function is an aggregating function that is applied generally at the last layer of the network when used for assigning probabilities to class indicator matrices. This function has an interesting derivative, which is a matrix form rather than a vector.
+
+$$
+\phi(\overrightarrow{x}) = \frac{e^{x_i}}{\sum_{i=0}^m e^{x_i}} 
+$$
+This yields an approximate probability, and the maximum value is taken as the index of the predicted class. The appropriate loss function for training is the cross entropy loss function. 
+The derivative of the softmax is
+$$
+\phi'(\overrightarrow{x}) = \phi_i(\overrightarrow{x})(\delta_{ij} - \phi_j(\overrightarrow{x})) 
+$$
+Where the Kronecker Delta 
+$$
+\delta_{ij} = \begin{cases}
+1 & i = j\\
+0 & i <> j
+\end{cases}
+$$
+The derivative can be evaluated a set of matrix operations. Note however this explanation I first found in a tutorial by Sait Celebi located at http://saitcelebi.com/tut/output/part2.html, which was an excellent explanation of the derivative of the softmax function, it is quite a good resource well worth the read, which is reflected in summary form below @saitcelebisoftmax.
+
+$$
+\phi'(\overrightarrow{x}) = \left(\begin{bmatrix}
+\phi(x_1)\\
+\phi(x_2)\\
+\vdots\\
+\phi(x_m)
+\end{bmatrix}\begin{bmatrix}
+1 & 1 \cdots & 1
+\end{bmatrix}\right)\otimes\left(
+\begin{bmatrix}
+1 & 0 & \cdots & 0\\
+0 & 1 & \cdots & 0\\
+\vdots & \ddots & \vdots\\
+0 & 0 & \cdots & 1
+\end{bmatrix}
+-
+\begin{bmatrix}
+1\\
+1\\
+\vdots\\
+1
+\end{bmatrix}
+\begin{bmatrix}
+\phi(x_1) & \phi(x_2) \cdots \phi(x_m)
+\end{bmatrix}
+\right) 
+$$
+$$
+= \phi(\overrightarrow{x})e^T \otimes (I - e\phi(\overrightarrow{x})^T)
+$$
+where $e$ is a vector of ones the same size as the $x$ vector.
+
+The kroneker delta $\delta$ is the diagonal ones matrix in the expression above the outer product $\otimes$ results in a matrix of $m \times m$ in dimension. During back propogation this is converted back into a one dimensional vector due to the dot product between the error vector of the output layer and the derivative of the output layer. 
+
+### Loss Functions
+
+In calculating the error and its gradient a differentiable loss function is required. For the purposes of demonstration two loss functions are implemented. The first being the __Squared Error__ loss function
+
+$$
+\mathcal{E} = \frac{1}{2}\sum_{i=1}^ne_i^2
+$$
+with its derivative
+$$
+\mathcal{E}' = e
+$$
+where $e_i = y_i - \hat{y}_i$, @Haykin.
+
+The second being the __Cross Entropy__ measure giving a measure of entropy between two discrete probability distributions, if both distributions are the same the cross entropy should be close to 0.
+
+
+$$
+\mathcal{E} = -\sum_{i=1}^m p(y_i) \log q(y_i)
+$$
+
+The probability function $p(y)$ refers to the distribution of the observations and $q(y)$ refers to the distribution of the predictions generated by the network (output by the softmax layer).
+
+Its derivative is $\mathcal{E}' = p(y_i) - q(y_i)$ or $y_i - \hat{y}_i = e_j$. The derivative of the loss function is the first term used in computing the gradient described earlier.
+
+
 ## Library Implementation Examples
 
 The au.id.cxd.math library implements a simple means of training networks with stocastic gradient descent, however this is for demonstration purposes, industrial applications should make use of tools such as tensorflow or pytorch for example. 
 
-The library provides activation functions for sigmoid, tanh, Relu, Linear and Softmax, as well as loss functions for Mean Squared Error for use with continuous data and Cross Entropy for discrete probabilities.
+The library provides activation functions for sigmoid, tanh, Relu, Linear and Softmax, as well as loss functions for Squared Error for use with continuous data and Cross Entropy for discrete probabilities.
 
 
 The following sections provide an example of two simple networks, one used for regression and the other for classification of multiple classes.
