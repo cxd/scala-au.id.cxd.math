@@ -595,6 +595,261 @@ printMetrics(metrics2)
 
 Reviewing the OLS model, it has an efficiency lower than the first model, however both models have a negative efficiency which indicates that they do not predict anymore skillfully than the simply using the mean value on this data set. However the second model has a higher MAE as well as a higher MSE as well as a higher PDV which indicates the first model is slightly more skillful a prediction than the second.
 
+## Neural Network Classification
+
+The following example uses the library to build a neural network for classification. The data set used in this example is the wine data set. The idea is to use chemical measures of wine to determine which origin winery the wine was made at. There are 3 origin wineries.
+
+In this example a helper class implements a DataSetReader in order to onehot encode discrete class labels.
+
+```{r, engine='scala', message=FALSE, results='hide'}
+
+import au.id.cxd.math.data.{DataSet, DataSetReader, Partition}
+import au.id.cxd.math.function.transform.{ContinuousTransform, MinMaxNormalisation}
+import au.id.cxd.math.model.network.initialisation.{RandomGaussianInitialisation, RandomWeightInitialisation, WeightInitialisationStrategy}
+
+val filename = s"$basePath/data/wine_data.csv"
+
+val wineDataReader = new DataSetReader {
+    /**
+      * the continuous columns in the wine data set
+      */
+    override val continuousCols: List[Int] = (for (i <- 1 to 13) yield i).toList
+    // the discrete column is the first column.
+    override val discreteCols: List[Int] = List(0)
+    override val file: File = new File(filename)
+
+    override val continuousFn: ContinuousTransform = MinMaxNormalisation()
+
+}
+
+def readData(): DataSet = {
+
+    val dataset = wineDataReader.readSync()
+    dataset
+
+}
+
+```
+
+We first read the data.
+
+```{r, engine='scala', message=FALSE, results='hide'}
+val data = readData()
+
+val trainX = data.trainData(::, 0 to 12)
+val trainY = data.trainData(::, 13 to 15)
+val validX = data.crossValidateData(::, 0 to 12)
+val validY = data.crossValidateData(::, 13 to 15)
+val testX = data.testData(::, 0 to 12)
+val testY = data.testData(::, 13 to 15)
+    
+```
+
+A helper function defines the structure of the network, and the SGD trainer is defined.
+
+```{r, engine='scala', message=FALSE, results='hide'}
+import au.id.cxd.math.model.network.activation.{Identity, Linear, Relu, Sigmoid, Softmax}
+import au.id.cxd.math.model.network.loss.{DiscreteCrossEntropy, MeanSquareErrorLoss}
+
+def buildNetwork(initialisation: WeightInitialisationStrategy): Sequence = {
+    Sequence(Seq(
+      InputLayer(activation = Identity(), units = 13),
+      DenseLayer(activation = Relu(), units = 15),
+      DenseLayer(activation = Relu(), units = 10),
+      DenseLayer(activation = Relu(), units = 3),
+      DenseLayer(activation = Softmax(), units = 3)
+    ), initialisation).compile()
+      .asInstanceOf[Sequence]
+}
+
+def trainNetwork(epochs: Int, trainer: SGDTrainer, network: Sequence): (Seq[Double], Seq[Double], Sequence) = {
+    val (loss, valloss, network2) = trainer.train(epochs)(network)
+    (loss, valloss, network2)
+}
+
+
+val initialisation = RandomWeightInitialisation()
+
+val network = buildNetwork(initialisation)
+
+val trainer = SGDTrainer(trainX, trainY, validX, validY,
+      learnRate = 0.00001,
+      momentum = 0.000001,
+      lossFn = DiscreteCrossEntropy())
+
+val (loss, valloss, network2) = trainNetwork(7000, trainer, network)
+
+```
+
+The network in this case has 1 input layer, 3 hidden layers and 1 output layer with 3 output units. A softmax function is used to aggregate the output results and convert them into probabilities. The loss function is a discrete cross entropy loss function.
+
+The network is trained for 7000 epochs and the following graph illustrates the loss.
+
+```{r, engine='scala', message=FALSE, results='hide', echo=FALSE}
+val losses = DenseMatrix.horzcat(DenseVector(loss.toArray).toDenseMatrix.t, DenseVector(valloss.toArray).toDenseMatrix.t)
+
+writeMatCsv(s"$basePath/temp/net03_train.csv", losses)
+```
+
+
+```{r, echo=FALSE}
+losses <- read.csv("../temp/net03_train.csv")
+colnames(losses) <- c("train_loss", "val_loss")
+minL <- min(losses[,1], losses[,2])
+maxL <- max(losses[,1], losses[,2])
+plot(1:nrow(losses), losses[,1], ylim=c(minL - 0.5,maxL + 0.5), col="blue", xlab="epoch", ylab="train loss", type='l')
+lines(1:nrow(losses), losses[,2], col="red")
+#points(1:nrow(losses), losses[,2], col="red")
+legend("topright", col=c("blue", "red"), legend=c("train loss", "val loss"), pch=1, lwd=2)
+
+```
+
+To evaluate the network we use cross tabulation and provide some basic metrics.
+
+
+```{r, engine='scala', message=FALSE}
+import au.id.cxd.math.count.CrossTabulate
+
+val classLabels = data.discreteMapping.head._2
+
+val labels = network2.classify(testX, classLabels.toList)
+
+val actualLabels = data.convertToClassLabels("origin", testY)
+
+val xtab = CrossTabulate(actualLabels, labels)
+val metrics1 = CrossTabulate.metrics(xtab)
+
+println("Network classification performance")
+println(xtab)
+
+CrossTabulate.printMetrics(xtab)
+```
+
+The network matches a good number of records correctly.
+
+#### Comparison with Canonical Discriminant Analysis
+
+In order to compare the performance of the network against other models we will make a comparison against [canonical discriminent analysis](canonicaldiscriminantfunc.html) which is a linear model that relies on between group variation.
+
+
+```{r, engine='scala', message=FALSE}
+import au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis
+
+
+// lets compare this with a linear model such as canonical discriminant analysis
+val data1 = data.randData
+val groupNames = data.discreteMapping.head._2
+// we know the data has 3 sites in it 1, 2 and 3 these are mapped below
+val origins = Map("1" -> "Site 1",
+      "2" -> "Site 2",
+      "3" -> "Site 3")
+
+// we will create an ordinary partition
+val (train, valid, test) = Partition(Seq(data1), 0.6, 0.2, 0.2).head
+
+val trainX2 = train(::, 0 to 12)
+val trainY2 = data.convertToClassLabels("origin", train(::, 13 to 15))
+val validX2 = valid(::, 0 to 12)
+val validY2 = data.convertToClassLabels("origin", valid(::, 13 to 15))
+val testX2 = test(::, 0 to 12)
+val testY2 = data.convertToClassLabels("origin", test(::, 13 to 15))
+
+val (components, coeffs, intercept, percentVar, zMat, cor, groupMeans) =
+      CanonicalDiscriminantAnalysis(trainY2.toArray.toList.map(_.toString), trainX2)
+val (testProjection, groupProjection, distances, groupAssignments) =
+      CanonicalDiscriminantAnalysis.classify(testX2, coeffs, intercept, groupMeans, groupNames.toList)
+    
+val predictions = groupAssignments.map(_._2)
+
+val xtab2 = CrossTabulate(testY2, predictions)
+val metrics2 = CrossTabulate.metrics(xtab2)
+
+println("Canonical discriminant analysis performance")
+println(xtab2)
+
+CrossTabulate.printMetrics(xtab2)
+
+```
+We can see that the canonical discriminant function is not very accurate. In this case the neural network classifier outperforms the canonical discriminant analysis function in terms of classification. However we may still use the canonical discriminant function as an analysis method to interpret coefficients for covariates on the training data.
+
+
+#### Comparison with Logistic Regression.
+
+As a third comparison we'll make use of a set of linear models built from an ensemble of ordinary least squares performing logistic regression.
+
+To do so we need to convert the target classes into three seperate groups, since each of the logistic regression classifiers will be a binary classifier, we need to generate three separate training targets, one for each class. 
+
+```{r, engine='scala', message=FALSE, results='hide'}
+import au.id.cxd.math.data.filter.Which
+
+// compare with logistic regression labelling.
+// to do this we need 3 models one for each class as we are using a two class logistic regressor.
+val targets1 = Which[String](trainY2, _.equalsIgnoreCase("1"))
+val targets2 = Which[String](trainY2, _.equalsIgnoreCase("2"))
+val targets3 = Which[String](trainY2, _.equalsIgnoreCase("3"))
+
+
+def tabulateTargets(n:Int, targets:Seq[Int]) = DenseVector.tabulate(n) {
+      case i => if (targets.contains(i)) 1.0
+      else 0.0
+}
+
+val trainY2_target1 = tabulateTargets(trainY2.size, targets1)
+
+val trainY2_target2 = tabulateTargets(trainY2.size, targets2)
+
+val trainY2_target3 = tabulateTargets(trainY2.size, targets3)
+
+val validY2_target1 = tabulateTargets(validY2.size, Which[String](validY2, _.equalsIgnoreCase("1")))
+
+val validY2_target2 = tabulateTargets(validY2.size, Which[String](validY2, _.equalsIgnoreCase("2")))
+
+val validY2_target3 = tabulateTargets(validY2.size, Which[String](validY2, _.equalsIgnoreCase("3")))
+```
+
+Once the data is prepared we train three separate models and combine the results again using a softmax function in order to obtain the ensemble classification.
+
+
+```{r, engine='scala', message=FALSE, results='hide'}
+import au.id.cxd.math.probability.regression.LogisticLeastSquares
+import breeze.linalg.DenseVector
+
+val model1 = LogisticLeastSquares(trainX2, trainY2_target1)
+val model2 = LogisticLeastSquares(trainX2, trainY2_target2)
+val model3 = LogisticLeastSquares(trainX2, trainY2_target3)
+Seq(model1, model2, model3).foreach(_.train())
+
+// to combine them we'll need to use the softmax for the results of each three of the probabilities
+
+val (y1,c1) = model1.estimate(testX)
+val (y2, c2) = model2.estimate(testX)
+val (y3, c3) = model3.estimate(testX)
+
+val classes3 = (for (i <- 0 until y1.length) yield i).map {
+      i =>
+        val (a,b,c) = (y1(i), y2(i), y3(i))
+        val total = Seq(a,b,c).map(Math.exp(_)).sum
+        val p = Seq(a,b,c).map(x => Math.exp(x)/total)
+        val maxP = p.max
+        val idx = Which[Double](p, x => x == maxP).head + 1
+        idx.toString
+}
+```
+
+The resulting set of classes can be passed into the cross tabulation in order to evaluate the models.
+
+```{r, engine='scala', message=FALSE}
+// now we have classes
+val xtab3 = CrossTabulate(testY2, classes3)
+
+println("Logistic Regression performance")
+println(xtab3)
+
+CrossTabulate.printMetrics(xtab3)
+```
+
+The ensemble of separate logistic regressors in this case are more accurate on the dataset than the single neural network. This may be due to the small size of the dataset and the way that three separate logistic models are combined by converting the problem into an ensemble of binary classifiers. However the procedure above demonstrates how such a network can be constructed and compared against a range of other multi-class classifiers.
+
 ## References.
 
 
