@@ -11,7 +11,7 @@ import spire.syntax.cfor
 import scala.util.Try
 
 /**
-  * #import MathJax
+  * ##import MathJax
   *
   * The Henze Zirkler test for normality defines the statistic
   *

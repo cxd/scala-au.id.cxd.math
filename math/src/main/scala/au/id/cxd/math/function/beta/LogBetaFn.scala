@@ -3,7 +3,7 @@ package au.id.cxd.math.function.beta
 import au.id.cxd.math.function.gamma.{GammaFn, LogGammaFn}
 
 /**
-  * #import MathJax
+  * ##import MathJax
   *
   * Log beta is implemented as the log of the beta function.
   *

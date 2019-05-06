@@ -5,7 +5,7 @@ import au.id.cxd.math.function.Constants
 import scala.annotation.tailrec
 
 /**
-  * #import MathJax
+  * ##import MathJax
   *
   * Use the wallis algorithm to evaluate a continued fraction
   *

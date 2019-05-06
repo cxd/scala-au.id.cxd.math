@@ -4,7 +4,7 @@ import au.id.cxd.math.function.beta.{IncompleteBetaFn, InverseBeta}
 import au.id.cxd.math.function.gamma.GammaFn
 
 /**
-  * #import MathJax
+  * ##import MathJax
   *
   * @param df
   * @param mu

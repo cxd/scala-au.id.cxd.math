@@ -3,7 +3,7 @@ package au.id.cxd.math.function.gamma
 import au.id.cxd.math.function.Constants
 
 /**
-  * #import MathJax
+  * ##import MathJax
   *
   * Implementation of the error function
   *

@@ -55,6 +55,12 @@ jenv local 1.8
 
 The documentation consists both of [API documentation](https://cxd.github.io/scala-au.id.cxd.math/latest/math/api/index.html) and some of this information is extracted into separate notes and examples.
 
+The api documentation can be generated via the task 
+
+```aidl
+sbt mathFormulaInDoc
+```
+
 ### Notes on Regression.
 
 Notes on [Linear Regression](https://cxd.github.io/scala-au.id.cxd.math/notes/linearregression.html)

@@ -6,7 +6,7 @@ import au.id.cxd.math.probability.continuous.{ChiSquare, Normal}
 import breeze.linalg.{DenseMatrix, diag, inv}
 
 /**
-  * #import MathJax
+  * ##import MathJax
   *
   *
   * The main reference for the multivariate tests is the paper discussing the MVN package for R

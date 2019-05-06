@@ -5,7 +5,7 @@ import au.id.cxd.math.function.approximate.Chebyshev
 import au.id.cxd.math.function.series.ContinuedSeries
 
 /**
-  * # import MathJax
+  * ##import MathJax
   *
   * approximate implementation of the regulated gamma function $\Gamma&#94;*$
   * based on the notes in GSL where

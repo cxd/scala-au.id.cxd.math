@@ -1,7 +1,7 @@
 package au.id.cxd.math.function.gamma
 
 /**
-  * #import MathJax
+  * ##import MathJax
   *
   * This class provides an implementation of the inverse erfc function.
   *

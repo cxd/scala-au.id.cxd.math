@@ -26,7 +26,7 @@ import breeze.linalg.{*, DenseMatrix, DenseVector, diag, inv, sum, tile}
   * $$
   * and
   * $$
-  * w_{i0} = -\frac{1}{2}\mu_i'\Sigma&#94;{-1}\mu_i + \log{P (w_i))
+  * w_{i0} = -\frac{1}{2}\mu_i' \Sigma&#94;{-1} \mu_i + \log{P (w_i)}
   * $$
   *
   * To introduce the quadratic term $W_i$ giving the discriminant functions from [1] below
