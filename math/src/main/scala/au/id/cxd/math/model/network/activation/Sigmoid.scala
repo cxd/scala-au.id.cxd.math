@@ -30,7 +30,7 @@ case class Sigmoid(val slope:Double = 1.0, val temperature:Double = 1.0) extends
     */
   override def derivative(h: DenseMatrix[Double]): DenseMatrix[Double] = {
     val result = DenseMatrix.tabulate(h.rows, h.cols) {
-      case (i, j) => -slope/temperature * sigma(h(i,j)) * (1.0 - sigma(h(i,j)))
+      case (i, j) => slope/temperature * sigma(h(i,j)) * (1.0 - sigma(h(i,j)))
     }
     result
   }

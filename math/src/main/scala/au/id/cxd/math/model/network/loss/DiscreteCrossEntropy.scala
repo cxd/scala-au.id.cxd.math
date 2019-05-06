@@ -22,7 +22,7 @@ case class DiscreteCrossEntropy() extends Loss {
     //
     val errors = DenseMatrix.tabulate(obs.rows, obs.cols) {
       case (i, j) =>
-        obs(i, j) / sim(i, j)
+        obs(i, j) - sim(i, j)
     }
     // loss function.
     val loss = DenseMatrix.tabulate(obs.rows, obs.cols) {
