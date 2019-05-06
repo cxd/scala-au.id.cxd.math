@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>#import MathJax</p><p>This class provides an implementation of the inverse erfc function.</p><p>There were two sources of information where I could find details on the inverse error function.</p><p>The first from the Numerical Recipes, which prohibits reuse of their algorithms,
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>This class provides an implementation of the inverse erfc function.</p><p>There were two sources of information where I could find details on the inverse error function.</p><p>The first from the Numerical Recipes, which prohibits reuse of their algorithms,
 hence the implementation will not be leverage this approach in the long term.
 It does serve as the starting reference point with a variety of sources being cited from that resource on the implementation.</p><p>There are a number of other references describing the inverse erf function.
 An implementation that reads in a fairly straight forward manner is available from the compute-io library:

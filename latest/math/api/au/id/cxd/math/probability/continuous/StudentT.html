@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>#import MathJax
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ 
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="ContinuousDistribution.html" class="extype" name="au.id.cxd.math.probability.continuous.ContinuousDistribution">ContinuousDistribution</a>, <a href="../Distribution.html" class="extype" name="au.id.cxd.math.probability.Distribution">Distribution</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>

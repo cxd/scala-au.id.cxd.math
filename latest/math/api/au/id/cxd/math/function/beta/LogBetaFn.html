@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>#import MathJax</p><p>Log beta is implemented as the log of the beta function.</p><p>So for example if beta is:</p><p>$$
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Log beta is implemented as the log of the beta function.</p><p>So for example if beta is:</p><p>$$
 B(a,b) = \Gamma(a)\Gamma(b) / \Gamma(a + b)
 $$</p><p>Then log beta is</p><p>$$
 \log B(a,b) = \log \Gamma(a) + \log \Gamma(b) - \log \Gamma(a + b)

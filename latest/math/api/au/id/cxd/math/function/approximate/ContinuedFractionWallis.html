@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>#import MathJax</p><p>Use the wallis algorithm to evaluate a continued fraction</p><p>$$
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Use the wallis algorithm to evaluate a continued fraction</p><p>$$
 f_n = \frac{A_n}{B_n}
 $$</p><p>where
 $A_{-1} = 1$, $B_{-1} = 0$

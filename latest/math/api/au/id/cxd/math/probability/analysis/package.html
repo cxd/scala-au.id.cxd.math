@@ -66,7 +66,31 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="au.id.cxd.math.probability.analysis.Anova" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="au.id.cxd.math.probability.analysis.AndersonDarlingTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AndersonDarlingTestextendsStatisticalTest"></a>
+      <a id="AndersonDarlingTest:AndersonDarlingTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AndersonDarlingTest.html"><span class="name">AndersonDarlingTest</span></a><span class="result"> extends <a href="StatisticalTest.html" class="extype" name="au.id.cxd.math.probability.analysis.StatisticalTest">StatisticalTest</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@AndersonDarlingTestextendsStatisticalTest" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">AndersonDarling test for univariate distribution
+https://en.wikipedia.org/wiki/Anderson–Darling_test
+https://www.itl.nist.gov/div898/handbook/eda/section3/eda35e.htm</p><div class="fullcomment"><div class="comment cmt"><p>AndersonDarling test for univariate distribution
+https://en.wikipedia.org/wiki/Anderson–Darling_test
+https://www.itl.nist.gov/div898/handbook/eda/section3/eda35e.htm</p><p>The implementation is based on the article &quot;Evaluating the Anderson-Darling Distribution&quot; by George Marsaglia
+The corresponding C implementation used in R for the anderson darling test is given in:
+https://github.com/bbolker/ADmarsaglia.git</p><p>Note that the same C routines are included in the goftest package: https://github.com/cran/goftest.git</p><p>Initialise test with series X and a cdf function for the distribution to test whether the series is distributed as such.
+For example, to test if a series is distributed normally use the Normal.cdf(x) function.</p><p>The test method will order the observations in x prior to performing the test.</p></div></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Anova" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="AnovaextendsStatisticalTest"></a>
       <a id="Anova:Anova"></a>
       <h4 class="signature">
@@ -281,7 +305,21 @@ $$</p><p>Created by cd on 11/11/14.
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">#import MathJax</p><div class="fullcomment"><div class="comment cmt"><p>#import MathJax</p><p>The Henze Zirkler test for normality defines the statistic</p><p>$$
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>The Henze Zirkler test for normality defines the statistic</p><p>$$
 HZ = \frac{1}{n}\sum_{i=1}&#94;n\sum_{j=1}&#94;n \exp {-\frac{\beta&#94;2}{2} D_{ij}} - 2(1+\beta&#94;2)&#94;{-p/2} \sum_{i=1}&#94;n \exp{-\frac{\beta&#94;2}{2(1+\beta&#94;2)}D_i} + n(1+2\beta&#94;2)&#94;{-p/2}
 $$
 where $p$ is the number of attributes.
@@ -329,6 +367,24 @@ If $1 - P(|z| &lt;= Y) &lt; \alpha/2$ then the null hypothesis is rejected.</p><
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.probability.analysis.JarqueBeraTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JarqueBeraTestextendsStatisticalTest"></a>
+      <a id="JarqueBeraTest:JarqueBeraTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JarqueBeraTest.html"><span class="name">JarqueBeraTest</span></a><span class="result"> extends <a href="StatisticalTest.html" class="extype" name="au.id.cxd.math.probability.analysis.StatisticalTest">StatisticalTest</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@JarqueBeraTestextendsStatisticalTest" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Test for normality based on test of skewness = 0 and excess kurtosis (k - 3) = 0.</p><div class="fullcomment"><div class="comment cmt"><p>Test for normality based on test of skewness = 0 and excess kurtosis (k - 3) = 0.</p><p>https://en.wikipedia.org/wiki/Jarque%E2%80%93Bera_test</p><p>The test statistic has a chi-square distribution with df=2.</p><p>The null hypothesis is that skewness = 0 and excess kurtosis = 0, implying the sample is from a normal distribution.</p><p>This implementation is a univariate implementation of the test (number of regressors p = 1)</p><p>The series should be scaled prior to using this test.
+</p></div></div>
     </li><li name="au.id.cxd.math.probability.analysis.LawesHotellingTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LawesHotellingTraceextendsManovaMethodwithProductwithSerializable"></a>
       <a id="LawesHotellingTrace:LawesHotellingTrace"></a>
@@ -364,7 +420,7 @@ If $1 - P(|z| &lt;= Y) &lt; \alpha/2$ then the null hypothesis is rejected.</p><
     </span>
       
     </li><li name="au.id.cxd.math.probability.analysis.Manova" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ManovaextendsAnyRef"></a>
+      <a id="ManovaextendsGroupPartition"></a>
       <a id="Manova:Manova"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -372,10 +428,10 @@ If $1 - P(|z| &lt;= Y) &lt; \alpha/2$ then the null hypothesis is rejected.</p><
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Manova.html"><span class="name">Manova</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Manova.html"><span class="name">Manova</span></a><span class="result"> extends <a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@ManovaextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@ManovaextendsGroupPartition" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -463,12 +519,12 @@ $$</p></div></div>
       <p class="shortcomment cmt">a class to hold the statistic/
 </p><div class="fullcomment"><div class="comment cmt"><p>a class to hold the statistic/
 </p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>
-            the name of the method used to calculate the statistic</p></dd><dt class="param">stat</dt><dd class="cmt"><p>
-            the resulting statistic</p></dd><dt class="param">df1</dt><dd class="cmt"><p>
-           the first degree of freedom for the f-distribution</p></dd><dt class="param">df2</dt><dd class="cmt"><p>
-           the second degree of freedom for the f-distribution</p></dd><dt class="param">Fstatistic</dt><dd class="cmt"><p>
-            the measure calculated by the method following the F distribution at df1 and df2 degrees of freedom.
-            the value is dependent on the kind of method used.</p></dd></dl></div>
+the name of the method used to calculate the statistic</p></dd><dt class="param">stat</dt><dd class="cmt"><p>
+the resulting statistic</p></dd><dt class="param">df1</dt><dd class="cmt"><p>
+the first degree of freedom for the f-distribution</p></dd><dt class="param">df2</dt><dd class="cmt"><p>
+the second degree of freedom for the f-distribution</p></dd><dt class="param">Fstatistic</dt><dd class="cmt"><p>
+the measure calculated by the method following the F distribution at df1 and df2 degrees of freedom.
+the value is dependent on the kind of method used.</p></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.analysis.ManovaTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ManovaTestextendsProductwithSerializable"></a>
       <a id="ManovaTest:ManovaTest"></a>
@@ -490,15 +546,15 @@ In the case of the MANOVA test the null hypothesis asserts that the groups share
 In the case of the MANOVA test the null hypothesis asserts that the groups share the same mean and common variance.
 The f statistic is used to test whether the null hypothesis holds.
 </p></div><dl class="paramcmts block"><dt class="param">reject</dt><dd class="cmt"><p>
-              a flag indicating whether to reject $H_0$</p></dd><dt class="param">alpha</dt><dd class="cmt"><p>
-             the threshold where the alpha level was evaluated eg .05</p></dd><dt class="param">criticalVal</dt><dd class="cmt"><p>
-              the critical value is the quantile of the fdistribution for the alpha threshold
-              and the degrees of freedom produced in the test.
-              In order to reject the null hypothesis the observed statistic must be greater than the
-              critical value</p></dd><dt class="param">pValue</dt><dd class="cmt"><p>
-              the pValue is the probability of the observed statistic for the
-              f-distribution based on the resulting degrees of freedom</p></dd><dt class="param">manovaStat</dt><dd class="cmt"><p>
-              the manova stat instance containing the parameters output from the test process.</p></dd></dl></div>
+a flag indicating whether to reject $H_0$</p></dd><dt class="param">alpha</dt><dd class="cmt"><p>
+the threshold where the alpha level was evaluated eg .05</p></dd><dt class="param">criticalVal</dt><dd class="cmt"><p>
+the critical value is the quantile of the fdistribution for the alpha threshold
+and the degrees of freedom produced in the test.
+In order to reject the null hypothesis the observed statistic must be greater than the
+critical value</p></dd><dt class="param">pValue</dt><dd class="cmt"><p>
+the pValue is the probability of the observed statistic for the
+f-distribution based on the resulting degrees of freedom</p></dd><dt class="param">manovaStat</dt><dd class="cmt"><p>
+the manova stat instance containing the parameters output from the test process.</p></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.analysis.MardiaTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MardiaTestextendsAnyRef"></a>
       <a id="MardiaTest:MardiaTest"></a>
@@ -515,7 +571,21 @@ The f statistic is used to test whether the null hypothesis holds.
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">#import MathJax</p><div class="fullcomment"><div class="comment cmt"><p>#import MathJax</p><p>The main reference for the multivariate tests is the paper discussing the MVN package for R</p><p>https://journal.r-project.org/archive/2014-2/korkmaz-goksuluk-zararsiz.pdf</p><p>Korkmaz S, Goksuluk D, Zararsiz G. MVN: An R Package for Assessing Multivariate Normality, The R Journal. 2014 6(2):151-162.</p><p>Mardia test for multivariate normality based on measures of kurtosis and skewness</p><p>The matrix R is formed by the covariance variance matrix and the difference between the sample from the column means</p><p>$$
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>The main reference for the multivariate tests is the paper discussing the MVN package for R</p><p>https://journal.r-project.org/archive/2014-2/korkmaz-goksuluk-zararsiz.pdf</p><p>Korkmaz S, Goksuluk D, Zararsiz G. MVN: An R Package for Assessing Multivariate Normality, The R Journal. 2014 6(2):151-162.</p><p>Mardia test for multivariate normality based on measures of kurtosis and skewness</p><p>The matrix R is formed by the covariance variance matrix and the difference between the sample from the column means</p><p>$$
 R = (X-\bar{X})'S&#94;{-1}(X-\bar{X})
 $$</p><p>The matrix $S$ is the sample estimate of the variance covariance matrix.</p><p>The measures of kurtosis is fiven as the measure of the ratio between the fourth moment and the third moment of the distribution.</p><p>And the skewness the ratio between the third and second moments.</p><p>The measures of skewness $b_{1,p}$ and kurtosis $b_{2,p}$ are calculated as</p><p>$$
 b_{1,p} = \frac{1}{n&#94;2} \sum_{i,j=1}&#94;n r&#94;3_{ij}
@@ -640,6 +710,32 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.probability.analysis.ShapiroWilksTest" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ShapiroWilksTestextendsStatisticalTest"></a>
+      <a id="ShapiroWilksTest:ShapiroWilksTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ShapiroWilksTest.html"><span class="name">ShapiroWilksTest</span></a><span class="result"> extends <a href="StatisticalTest.html" class="extype" name="au.id.cxd.math.probability.analysis.StatisticalTest">StatisticalTest</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@ShapiroWilksTestextendsStatisticalTest" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Shapiro Wilks
+Univariate test for normality</p><div class="fullcomment"><div class="comment cmt"><p>Shapiro Wilks
+Univariate test for normality</p><p>https://en.wikipedia.org/wiki/Shapiro%E2%80%93Wilk_test</p><p>See:
+https://ww2.mathworks.cn/matlabcentral/mlc-downloads/downloads/submissions/13964/versions/2/previews/swtest.m/index.html</p><p>as well as:
+https://github.com/wch/r-source/blob/trunk/src/library/stats/src/swilk.c</p><p>Both reference the AS R94 article on the shapiro wilk normality test.
+The R source version swilk.c is converted from the fortran implementation of that algorithm.
+The matlab source being a DSL is much easier to read through.
+However in both cases the coefficients of the polynomials are provided in tables and these are used in the expansion when
+calculating the a_i coefficients in the statistic.</p><p>In order to provide an implementation, the same constant coefficients will be used.
+However simplification of the C version is attempted with heavy influence from the approach taken in matlab.</p></div></div>
     </li><li name="au.id.cxd.math.probability.analysis.StatisticalTest" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="StatisticalTestextendsAnyRef"></a>
       <a id="StatisticalTest:StatisticalTest"></a>
@@ -754,7 +850,24 @@ $$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p>
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="au.id.cxd.math.probability.analysis.Anova" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="au.id.cxd.math.probability.analysis.AndersonDarlingTest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AndersonDarlingTest"></a>
+      <a id="AndersonDarlingTest:AndersonDarlingTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AndersonDarlingTest$.html"><span class="name">AndersonDarlingTest</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@AndersonDarlingTest" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.analysis.Anova" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Anova"></a>
       <a id="Anova:Anova"></a>
       <h4 class="signature">
@@ -805,6 +918,23 @@ $$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p>
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.probability.analysis.JarqueBeraTest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JarqueBeraTest"></a>
+      <a id="JarqueBeraTest:JarqueBeraTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JarqueBeraTest$.html"><span class="name">JarqueBeraTest</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@JarqueBeraTest" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="au.id.cxd.math.probability.analysis.Manova" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Manova"></a>
       <a id="Manova:Manova"></a>
@@ -835,6 +965,23 @@ $$</p><p>this can be used to estimate P(.) when the distribution is unknown.</p>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@MardiaTest" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.analysis.ShapiroWilksTest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ShapiroWilksTest"></a>
+      <a id="ShapiroWilksTest:ShapiroWilksTest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ShapiroWilksTest$.html"><span class="name">ShapiroWilksTest</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.package@ShapiroWilksTest" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

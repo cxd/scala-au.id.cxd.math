@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 echo Create scaladoc
 cd /Users/cd/Projects/scala/au.id.cxd.math/
-sbt doc
+sbt clean mathFormulaInDoc
 
 echo Copy to site
 cd /Users/cd/Projects/scala/scala-au.id.cxd.math-gh-pages/scala-au.id.cxd.math/

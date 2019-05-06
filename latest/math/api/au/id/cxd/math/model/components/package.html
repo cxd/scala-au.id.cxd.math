@@ -109,6 +109,23 @@ The subsequent discriminant function $Z_2$ represents the variation within and b
 Subsequent discriminant functions capture the variation within and between groups not correlated with previous discriminant functions.</p><p>The correlation between the original attributes and the canonical discriminant functions can then be used to identify which attributes
 are represented by each of the discriminant functions. As these are a linear combination of covariates there may be more than one attribute
 with a large magnitude of correlation with the resulting function.</p><p>The resulting projection of the canonical functions can be used for visualisation of the ordination.</p><p>The associated correlation matrix between attributes and components can be used to assist in the interpretation of the ordination.</p><p>This technique can serve as a form of dimensionality reduction as well as a method for visualisation and interpretation.</p></div></div>
+    </li><li name="au.id.cxd.math.model.components.EigenDecomposition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EigenDecompositionextendsAnyRef"></a>
+      <a id="EigenDecomposition:EigenDecomposition"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="EigenDecomposition.html"><span class="name">EigenDecomposition</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.package@EigenDecompositionextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="au.id.cxd.math.model.components.PrincipleComponentsAnalysis" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="PrincipleComponentsAnalysisextendsAnyRef"></a>
       <a id="PrincipleComponentsAnalysis:PrincipleComponentsAnalysis"></a>
@@ -139,7 +156,79 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
 });
 </script>
 <script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
- </p><p>implement operations to support PCA</p><p>generate the PCA of the correlation matrix for the sphereised data.</p><p>Created by cd on 10/07/2016.
+ </p><p>implement operations to support PCA</p><p>generate the PCA of the correlation matrix for the sphereised data.</p><p>The opertion returns a tuple of:</p><p>(eigenValues, eigenVectors, varExplained, projection)</p><p>Created by cd on 10/07/2016.
+</p></div></div>
+    </li><li name="au.id.cxd.math.model.components.QuadraticDiscriminant" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="QuadraticDiscriminantextendsGroupPartition"></a>
+      <a id="QuadraticDiscriminant:QuadraticDiscriminant"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="QuadraticDiscriminant.html"><span class="name">QuadraticDiscriminant</span></a><span class="result"> extends <a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.package@QuadraticDiscriminantextendsGroupPartition" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>the quadratic discriminant function has the following assumptions.</p><p>i) Data is multivariate normally distributed.
+ii) Groups do not share common covariance matrix.</p><p>This differs from the assumptions of the linear discriminant analysis in the second point.</p><p>The resulting discriminant functions are quadratic since the original discriminant functions
+are altered from the discriminant function used in LDA</p><p>$$
+g_i(x) = w&#94;t_i x + w_{i0}
+$$
+$$
+w_i = \Sigma&#94;{-1}\mu_i
+$$
+and
+$$
+w_{i0} = -\frac{1}{2}\mu_i' \Sigma&#94;{-1} \mu_i + \log{P (w_i)}
+$$</p><p>To introduce the quadratic term $W_i$ giving the discriminant functions from [1] below</p><p>$$
+g_i(x) = x'W_ix + w_i' x + w_{i0}
+$$
+where
+$$
+W_i = -\frac{1}{2}\Sigma_i&#94;{-1}
+$$
+$$
+w_i = \Sigma_i&#94;{-1}\mu_i
+$$
+and
+$$
+w_{i0} = -\frac{1}{2}\mu'_i \Sigma_i&#94;{-1}\mu_i - \frac{1}{2}\log |\Sigma_i| + \log P(\omega_i)
+$$</p><p>The calculation of the quadratic functions can employ the eigen decomposition of the estimate for $\hat{\Sigma}$ as follows (from [2]).</p><p>$$
+\hat{\Sigma_i} = U_i D_i U'_i
+$$</p><p>$$
+\mu'_i \Sigma_i&#94;{-1} \mu_i = [U'_i\mu_i]'D_i&#94;{-1}[U'_i\mu_i]
+$$
+$$
+(x-\hat{\mu_i})' \Sigma_i&#94;{-1} (x-\hat{\mu_i}) = [U'_i(x-\hat{\mu_i})]'D_i&#94;{-1}[U'_i(x-\hat{\mu_i})]
+$$</p><p>$$
+\log|\Sigma_i| = \sum_l \log d_{il}
+$$
+where $d_{il}$ is the $lth$ diagonal value of the eigenvalue matrix $D_i$</p><p>The maximum probability estimated by the discriminant function is then used to provide classification.</p><p>This implementation provides a naive implementation of the approach.
+The primary drawback is where the number of groups $m$ increases so too does the number of resulting decompositions.
+Hence memory and storage can be an issue for computing the entire set of discriminant functions in one go.</p><p>One option is to compute each decomposition separately, since the covariance matrix is estimated within groups and to
+store those separately, rather than computing all at once.</p><p>Note that a separate ordination may be necessary such as a princomp, svd or lda in order to visualise
+the dimensional reduction overall without projections within each individual group.</p><p>References:
+1. Duda, Richard O. Hart, Peter E. Stork, David G. (2001 ). Pattern Classification, 2nd Edition. Wiley Interscience Publication
+2. Hastie, T. Tibshirani, R. Friedman, J. The Elements of Statistical Learning, Second Ed. Springer 2009.
 </p></div></div>
     </li><li name="au.id.cxd.math.model.components.SingularValueDecomposition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SingularValueDecompositionextendsAnyRef"></a>
@@ -217,6 +306,23 @@ performing the procedure.</p><p>There are some exceptions to this rule as in the
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.model.components.EigenDecomposition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EigenDecomposition"></a>
+      <a id="EigenDecomposition:EigenDecomposition"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EigenDecomposition$.html"><span class="name">EigenDecomposition</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.package@EigenDecomposition" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="au.id.cxd.math.model.components.PrincipleComponentsAnalysis" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PrincipleComponentsAnalysis"></a>
       <a id="PrincipleComponentsAnalysis:PrincipleComponentsAnalysis"></a>
@@ -230,6 +336,23 @@ performing the procedure.</p><p>There are some exceptions to this rule as in the
       </span>
       </h4><span class="permalink">
       <a href="../../../../../../index.html#au.id.cxd.math.model.components.package@PrincipleComponentsAnalysis" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.model.components.QuadraticDiscriminant" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="QuadraticDiscriminant"></a>
+      <a id="QuadraticDiscriminant:QuadraticDiscriminant"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="QuadraticDiscriminant$.html"><span class="name">QuadraticDiscriminant</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.model.components.package@QuadraticDiscriminant" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>#import MathJax</p><p>The main reference for the multivariate tests is the paper discussing the MVN package for R</p><p>https://journal.r-project.org/archive/2014-2/korkmaz-goksuluk-zararsiz.pdf</p><p>Korkmaz S, Goksuluk D, Zararsiz G. MVN: An R Package for Assessing Multivariate Normality, The R Journal. 2014 6(2):151-162.</p><p>Mardia test for multivariate normality based on measures of kurtosis and skewness</p><p>The matrix R is formed by the covariance variance matrix and the difference between the sample from the column means</p><p>$$
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>The main reference for the multivariate tests is the paper discussing the MVN package for R</p><p>https://journal.r-project.org/archive/2014-2/korkmaz-goksuluk-zararsiz.pdf</p><p>Korkmaz S, Goksuluk D, Zararsiz G. MVN: An R Package for Assessing Multivariate Normality, The R Journal. 2014 6(2):151-162.</p><p>Mardia test for multivariate normality based on measures of kurtosis and skewness</p><p>The matrix R is formed by the covariance variance matrix and the difference between the sample from the column means</p><p>$$
 R = (X-\bar{X})'S&#94;{-1}(X-\bar{X})
 $$</p><p>The matrix $S$ is the sample estimate of the variance covariance matrix.</p><p>The measures of kurtosis is fiven as the measure of the ratio between the fourth moment and the third moment of the distribution.</p><p>And the skewness the ratio between the third and second moments.</p><p>The measures of skewness $b_{1,p}$ and kurtosis $b_{2,p}$ are calculated as</p><p>$$
 b_{1,p} = \frac{1}{n&#94;2} \sum_{i,j=1}&#94;n r&#94;3_{ij}

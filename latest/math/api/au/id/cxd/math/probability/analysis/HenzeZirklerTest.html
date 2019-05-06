@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>#import MathJax</p><p>The Henze Zirkler test for normality defines the statistic</p><p>$$
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>The Henze Zirkler test for normality defines the statistic</p><p>$$
 HZ = \frac{1}{n}\sum_{i=1}&#94;n\sum_{j=1}&#94;n \exp {-\frac{\beta&#94;2}{2} D_{ij}} - 2(1+\beta&#94;2)&#94;{-p/2} \sum_{i=1}&#94;n \exp{-\frac{\beta&#94;2}{2(1+\beta&#94;2)}D_i} + n(1+2\beta&#94;2)&#94;{-p/2}
 $$
 where $p$ is the number of attributes.

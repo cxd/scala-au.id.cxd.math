@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>#import MathJax</p><p>Implementation of the error function</p><p>$$
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Implementation of the error function</p><p>$$
 erf(x) = \frac{2}{\pi} \int_0&#94;x e&#94;{-t&#94;2}dt
 $$</p><p>based on the GSL implementation file erfc.c line 357 gsl_sf_erf_e</p><p>http://mathworld.wolfram.com/Erfc.html
 </p></div><div class="toggleContainer block">

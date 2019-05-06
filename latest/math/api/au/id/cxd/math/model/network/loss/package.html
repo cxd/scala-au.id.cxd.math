@@ -1,0 +1,172 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>loss - au.id.cxd.math.model.network.loss</title>
+          <meta name="description" content="loss - au.id.cxd.math.model.network.loss" />
+          <meta name="keywords" content="loss au.id.cxd.math.model.network.loss" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../../index.html';
+            var hash = 'au.id.cxd.math.model.network.loss.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math.model">model</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.model.network">network</a></p>
+        <h1>loss</h1><span class="permalink">
+      <a href="../../../../../../../index.html#au.id.cxd.math.model.network.loss.package" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loss</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="au.id.cxd.math.model.network.loss.Accuracy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AccuracyextendsAnyRef"></a>
+      <a id="Accuracy:Accuracy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Accuracy.html"><span class="name">Accuracy</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#au.id.cxd.math.model.network.loss.package@AccuracyextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.model.network.loss.DiscreteCrossEntropy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DiscreteCrossEntropyextendsLosswithProductwithSerializable"></a>
+      <a id="DiscreteCrossEntropy:DiscreteCrossEntropy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DiscreteCrossEntropy.html"><span class="name">DiscreteCrossEntropy</span></a><span class="params">()</span><span class="result"> extends <a href="Loss.html" class="extype" name="au.id.cxd.math.model.network.loss.Loss">Loss</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#au.id.cxd.math.model.network.loss.package@DiscreteCrossEntropyextendsLosswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">compute the cross entropy loss
+for two distributions where
+obs represents the distribution for the observed data
+and sim represents the distribution for predicted data.</p>
+    </li><li name="au.id.cxd.math.model.network.loss.Loss" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LossextendsAnyRef"></a>
+      <a id="Loss:Loss"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Loss.html"><span class="name">Loss</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#au.id.cxd.math.model.network.loss.package@LossextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.model.network.loss.MeanSquareErrorLoss" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MeanSquareErrorLossextendsLosswithProductwithSerializable"></a>
+      <a id="MeanSquareErrorLoss:MeanSquareErrorLoss"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MeanSquareErrorLoss.html"><span class="name">MeanSquareErrorLoss</span></a><span class="params">()</span><span class="result"> extends <a href="Loss.html" class="extype" name="au.id.cxd.math.model.network.loss.Loss">Loss</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#au.id.cxd.math.model.network.loss.package@MeanSquareErrorLossextendsLosswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

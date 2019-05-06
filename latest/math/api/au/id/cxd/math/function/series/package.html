@@ -83,6 +83,26 @@
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.function.series.PolyVal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PolyValextendsContinuedSeries"></a>
+      <a id="PolyVal:PolyVal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PolyVal.html"><span class="name">PolyVal</span></a><span class="result"> extends <a href="ContinuedSeries.html" class="extype" name="au.id.cxd.math.function.series.ContinuedSeries">ContinuedSeries</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.series.package@PolyValextendsContinuedSeries" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the matlab function polyval
+which evaluates the coefficients in descending order from nth order to 1.</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the matlab function polyval
+which evaluates the coefficients in descending order from nth order to 1.
+In this function the coefficients are taken in ascending order so that instead of</p><p>p(x) = p_1 x<sup>n + p_2 x</sup>n-1 + ... + p_n x^1 + p_{n+1}</p><p>Where the coefficients are specified from highest order (n) to lowest (1)</p><p>We implement:</p><p>p(x) = p_0 + p_1 x<sup>1 + p_2 x</sup>2 + p_3 x<sup>3 + ... p_n x</sup>n</p><p>Or rather</p><p>p(x) = p_0 + \sum_{i=1}<sup>n p_i x</sup>i</p><p>This is a convenience function for the underlying polynomial defined in Continued series.</p></div></div>
     </li><li name="au.id.cxd.math.function.series.PolynomialExpansion" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="PolynomialExpansionextendsAnyRef"></a>
       <a id="PolynomialExpansion:PolynomialExpansion"></a>
@@ -109,6 +129,40 @@ $$</p><p>the coefficients up to n can be determined using the rule</p><p>$$
 \left( n \choose {k_1, k_2, k_3, ..., k_m} \right)
 $$</p><p>where for any combination of $k$ $\sum_{i=1}&#94;m k$ must equal $n$.</p><p>$m$ represents the number of columns in matrix $X$ and has</p><p>the number of combinations of coefficients would be ${n + m - 1} \choose {m - 1}$.</p><p>The theorem is described here:</p><p>https://en.wikipedia.org/wiki/Multinomial_theorem
 </p></div></div>
+    </li><li name="au.id.cxd.math.function.series.Sliding" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SlidingextendsAnyRef"></a>
+      <a id="Sliding:Sliding"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sliding.html"><span class="name">Sliding</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.series.package@SlidingextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.series.WindowedMatrix" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WindowedMatrixextendsSliding"></a>
+      <a id="WindowedMatrix:WindowedMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="WindowedMatrix.html"><span class="name">WindowedMatrix</span></a><span class="result"> extends <a href="Sliding.html" class="extype" name="au.id.cxd.math.function.series.Sliding">Sliding</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.series.package@WindowedMatrixextendsSliding" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
@@ -116,7 +170,24 @@ $$</p><p>where for any combination of $k$ $\sum_{i=1}&#94;m k$ must equal $n$.</
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="au.id.cxd.math.function.series.PolynomialExpansion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="au.id.cxd.math.function.series.PolyVal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PolyVal"></a>
+      <a id="PolyVal:PolyVal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PolyVal$.html"><span class="name">PolyVal</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.function.series.package@PolyVal" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.function.series.PolynomialExpansion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PolynomialExpansion"></a>
       <a id="PolynomialExpansion:PolynomialExpansion"></a>
       <h4 class="signature">

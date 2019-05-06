@@ -66,7 +66,25 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="au.id.cxd.math.data.CsvReader" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="au.id.cxd.math.data.Batch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BatchextendsAnyRef"></a>
+      <a id="Batch:Batch"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Batch.html"><span class="name">Batch</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.package@BatchextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">create sets of indexes for the number of rows specified
+that partitions the data set into batchSize batches.</p>
+    </li><li name="au.id.cxd.math.data.CsvReader" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CsvReaderextendsTextReader"></a>
       <a id="CsvReader:CsvReader"></a>
       <h4 class="signature">
@@ -121,6 +139,24 @@ Created by cd on 30/04/2016.</p>
 the number of continuous colums and number of discrete columns.</p><div class="fullcomment"><div class="comment cmt"><p>The data set class contains the full dataset
 the number of continuous colums and number of discrete columns.</p><p>The data set contains the continuous data first, followed by the discrete data.</p><p>Created by cd on 7/05/2016.
 </p></div></div>
+    </li><li name="au.id.cxd.math.data.DataSetReader" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DataSetReaderextendsAnyRef"></a>
+      <a id="DataSetReader:DataSetReader"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DataSetReader.html"><span class="name">DataSetReader</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.package@DataSetReaderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">a base class for reading data sets
+</p>
     </li><li name="au.id.cxd.math.data.DummyVariableBuilder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DummyVariableBuilderextendsAnyRef"></a>
       <a id="DummyVariableBuilder:DummyVariableBuilder"></a>
@@ -144,6 +180,30 @@ the order of unique values determine the sequence of 0 or 1 indicators.</p><div 
 the order of unique values determine the sequence of 0 or 1 indicators.</p><p>The column values are converted into vectors before being used to lookup the data.
 The vector has an almost constant apply() method as opposed to other sequences which are Linear.
 http://docs.scala-lang.org/overviews/collections/performance-characteristics</p><p>Created by cd on 3/05/2016.
+</p></div></div>
+    </li><li name="au.id.cxd.math.data.GroupPartition" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="GroupPartitionextendsAnyRef"></a>
+      <a id="GroupPartition:GroupPartition"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupPartition.html"><span class="name">GroupPartition</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.package@GroupPartitionextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">group partitioning trait takes
+a set of group labels for each observation and
+then generates group partitions for a supplied input matrix
+where the ith row of the input matrix corresponds with the ith group label.</p><div class="fullcomment"><div class="comment cmt"><p>group partitioning trait takes
+a set of group labels for each observation and
+then generates group partitions for a supplied input matrix
+where the ith row of the input matrix corresponds with the ith group label.</p><p>It returns an ordered set of group partitions which contains the subset of observations for each group</p><p>type GroupName = String</p><p>List [ (GroupName, DenseMatrix[Double] )]</p><p>Where the set of tuples are ordered by the group name in the first item of the tuple
 </p></div></div>
     </li><li name="au.id.cxd.math.data.MatrixReader" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="MatrixReaderextendsAnyRef"></a>
@@ -423,6 +483,23 @@ with the <a href="../model/sequence/HiddenMarkovModel$.html" class="extype" name
       </a>
     </span>
       
+    </li><li name="au.id.cxd.math.data.Partition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Partition"></a>
+      <a id="Partition:Partition"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Partition$.html"><span class="name">Partition</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.package@Partition" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="au.id.cxd.math.data.PreProcessor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="PreProcessor"></a>
       <a id="PreProcessor:PreProcessor"></a>
@@ -504,6 +581,23 @@ with the <a href="../model/sequence/HiddenMarkovModel$.html" class="extype" name
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#au.id.cxd.math.data.package@archive" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.data.filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="filter"></a>
+      <a id="filter:filter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="filter/package.html"><span class="name">filter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#au.id.cxd.math.data.package@filter" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

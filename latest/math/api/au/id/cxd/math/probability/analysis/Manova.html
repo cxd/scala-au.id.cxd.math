@@ -47,7 +47,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Manova</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">Manova</span><span class="result"> extends <a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></span>
       </span>
       </h4>
       
@@ -93,7 +93,7 @@ $$
 U = \sum_{i=1}&#94;k \lambda+i
 $$</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
             <div class="subClasses hiddenContent"><a href="../../model/components/CanonicalDiscriminantAnalysis.html" class="extype" name="au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis">CanonicalDiscriminantAnalysis</a></div>
@@ -114,7 +114,7 @@ $$</p></div><div class="toggleContainer block">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="au.id.cxd.math.probability.analysis.Manova"><span>Manova</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="au.id.cxd.math.probability.analysis.Manova"><span>Manova</span></li><li class="in" name="au.id.cxd.math.data.GroupPartition"><span>GroupPartition</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -290,19 +290,57 @@ B = n G_{\mu}' G_{\mu}
 $$</p><p>$n$ here is the column vector with the number of observations for each group.</p><p>Note that $G_{\mu}$ is a matrix of $m \times k$ where $k$ is the number of attributes
 and $m$ the number of groups.</p><p>The matrix $B$ is $k \times k$.
 </p></div></div>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#computeT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="computeT(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]"></a>
-      <a id="computeT(DenseMatrix[Double]):DenseMatrix[Double]"></a>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#computeGroupMeans" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="computeGroupMeans(m:breeze.linalg.DenseMatrix[Double]):(Int,breeze.linalg.DenseMatrix[Double])"></a>
+      <a id="computeGroupMeans(DenseMatrix[Double]):(Int,DenseMatrix[Double])"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">computeT</span><span class="params">(<span name="m">m: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">computeGroupMeans</span><span class="params">(<span name="m">m: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@computeT(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@computeGroupMeans(m:breeze.linalg.DenseMatrix[Double]):(Int,breeze.linalg.DenseMatrix[Double])" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">generate a matrix of column means for each group.</p><div class="fullcomment"><div class="comment cmt"><p>generate a matrix of column means for each group.
+return the index of the group and the column means
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#computeGroupVariance" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="computeGroupVariance(m:breeze.linalg.DenseMatrix[Double]):(Int,breeze.linalg.DenseMatrix[Double])"></a>
+      <a id="computeGroupVariance(DenseMatrix[Double]):(Int,DenseMatrix[Double])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">computeGroupVariance</span><span class="params">(<span name="m">m: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@computeGroupVariance(m:breeze.linalg.DenseMatrix[Double]):(Int,breeze.linalg.DenseMatrix[Double])" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">generate a matrix of column means for each group.</p><div class="fullcomment"><div class="comment cmt"><p>generate a matrix of column means for each group.
+return the index of the group and the column means
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#computeT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="computeT(m:breeze.linalg.DenseMatrix[Double]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double])"></a>
+      <a id="computeT(DenseMatrix[Double]):(DenseMatrix[Double],DenseMatrix[Double])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">computeT</span><span class="params">(<span name="m">m: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: (<span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@computeT(m:breeze.linalg.DenseMatrix[Double]):(breeze.linalg.DenseMatrix[Double],breeze.linalg.DenseMatrix[Double])" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -313,6 +351,23 @@ $$
 The matrix $T$ is $k \times k$ in size where $k$ is the number of attributes in $X$.
 $n$ is the total number of rows in the data set.
 </p></div></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#data" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="data:breeze.linalg.DenseMatrix[Double]"></a>
+      <a id="data:DenseMatrix[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">data</span><span class="result">: <span class="extype" name="breeze.linalg.DenseMatrix">DenseMatrix</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@data:breeze.linalg.DenseMatrix[Double]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a> → <a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.analysis.Manova#eig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="eig(m:breeze.linalg.DenseMatrix[Double]):breeze.linalg.DenseVector[Double]"></a>
       <a id="eig(DenseMatrix[Double]):DenseVector[Double]"></a>
@@ -406,8 +461,8 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#groupIndexes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="groupIndexes(groupNames:List[String]):scala.collection.immutable.Map[String,Vector[Int]]"></a>
+    </li><li name="au.id.cxd.math.data.GroupPartition#groupIndexes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupIndexes(groupNames:List[String]):Map[String,Vector[Int]]"></a>
       <a id="groupIndexes(List[String]):Map[String,Vector[Int]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -415,16 +470,75 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">groupIndexes</span><span class="params">(<span name="groupNames">groupNames: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]]</span>
+        <span class="name">groupIndexes</span><span class="params">(<span name="groupNames">groupNames: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groupIndexes(groupNames:List[String]):scala.collection.immutable.Map[String,Vector[Int]]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groupIndexes(groupNames:List[String]):Map[String,Vector[Int]]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">identify the group indexes.</p>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#groups" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="groups:scala.collection.immutable.Map[String,Vector[Int]]"></a>
+      <p class="shortcomment cmt">identify the group indexes.</p><div class="fullcomment"><div class="comment cmt"><p>identify the group indexes.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#groupLabels" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupLabels:List[String]"></a>
+      <a id="groupLabels:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupLabels</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groupLabels:List[String]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the group name for each observation in the dataset that is to be partitioned.</p><div class="fullcomment"><div class="comment cmt"><p>the group name for each observation in the dataset that is to be partitioned.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="au.id.cxd.math.probability.analysis.Manova">Manova</a> → <a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.probability.analysis.Manova#groupNames" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="groupNames:List[String]"></a>
+      <a id="groupNames:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupNames</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groupNames:List[String]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.data.GroupPartition#groupSizes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupSizes(groupNames:List[String]):scala.collection.immutable.Iterable[(String,Int,Double)]"></a>
+      <a id="groupSizes(List[String]):Iterable[(String,Int,Double)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupSizes</span><span class="params">(<span name="groupNames">groupNames: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Iterable">Iterable</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groupSizes(groupNames:List[String]):scala.collection.immutable.Iterable[(String,Int,Double)]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">given the group names for each row
+determine the size of each group and the approximate proportion of each group.</p><div class="fullcomment"><div class="comment cmt"><p>given the group names for each row
+determine the size of each group and the approximate proportion of each group.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>
+(groupname x n_i x \pi_i)
+where n_i is the size of the group
+and \pi_i is the proportion of the training data for the group.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.data.GroupPartition#groups" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groups:Map[String,Vector[Int]]"></a>
       <a id="groups:Map[String,Vector[Int]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -432,14 +546,14 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">groups</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]]</span>
+        <span class="name">groups</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Int">Int</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groups:scala.collection.immutable.Map[String,Vector[Int]]" title="Permalink" target="_top">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.analysis.Manova@groups:Map[String,Vector[Int]]" title="Permalink" target="_top">
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -559,7 +673,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
       </a>
     </span>
       
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#partitionGroups" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="au.id.cxd.math.data.GroupPartition#partitionGroups" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partitionGroups(m:breeze.linalg.DenseMatrix[Double])(groups:Map[String,Vector[Int]]):List[(String,breeze.linalg.DenseMatrix[Double])]"></a>
       <a id="partitionGroups(DenseMatrix[Double])(Map[String,Vector[Int]]):List[(String,DenseMatrix[Double])]"></a>
       <h4 class="signature">
@@ -575,8 +689,9 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">extract the partitions for each of the groups.</p>
-    </li><li name="au.id.cxd.math.probability.analysis.Manova#partitions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">extract the partitions for each of the groups.</p><div class="fullcomment"><div class="comment cmt"><p>extract the partitions for each of the groups.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></dd></dl></div>
+    </li><li name="au.id.cxd.math.data.GroupPartition#partitions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partitions:List[(String,breeze.linalg.DenseMatrix[Double])]"></a>
       <a id="partitions:List[(String,DenseMatrix[Double])]"></a>
       <h4 class="signature">
@@ -592,7 +707,7 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></dd></dl></div>
     </li><li name="au.id.cxd.math.probability.analysis.Manova#pillaisTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="pillaisTrace(eigenValues:breeze.linalg.DenseVector[Double],n:Int,m:Int,p:Int):au.id.cxd.math.probability.analysis.ManovaStat"></a>
       <a id="pillaisTrace(DenseVector[Double],Int,Int,Int):ManovaStat"></a>
@@ -774,7 +889,9 @@ http://web.mit.edu/be.400/www/SVD/Singular_Value_Decomposition.htm
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="au.id.cxd.math.data.GroupPartition">
+              <h3>Inherited from <a href="../../data/GroupPartition.html" class="extype" name="au.id.cxd.math.data.GroupPartition">GroupPartition</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

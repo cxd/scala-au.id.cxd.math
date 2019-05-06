@@ -51,7 +51,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p># import MathJax</p><p>approximate implementation of the regulated gamma function $\Gamma&#94;*$
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>approximate implementation of the regulated gamma function $\Gamma&#94;*$
 based on the notes in GSL where</p><p>$$
 \Gamma&#94;*(x) = \Gamma(x) / \left( \sqrt{2\pi}x&#94;{(x-1/2)}\exp(-x) \right)
 $$</p></div><div class="toggleContainer block">

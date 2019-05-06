@@ -1,0 +1,592 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>random - au.id.cxd.math.probability.random</title>
+          <meta name="description" content="random - au.id.cxd.math.probability.random" />
+          <meta name="keywords" content="random au.id.cxd.math.probability.random" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'au.id.cxd.math.probability.random.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="au">au</a>.<a href="../../../../package.html" class="extype" name="au.id">id</a>.<a href="../../../package.html" class="extype" name="au.id.cxd">cxd</a>.<a href="../../package.html" class="extype" name="au.id.cxd.math">math</a>.<a href="../package.html" class="extype" name="au.id.cxd.math.probability">probability</a></p>
+        <h1>random</h1><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">random</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="au.id.cxd.math.probability.random.RApproxBinom" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RApproxBinomextendsRandomDeviate"></a>
+      <a id="RApproxBinom:RApproxBinom"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RApproxBinom.html"><span class="name">RApproxBinom</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RApproxBinomextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An approximate random draw from the binomial distribution with parameters n and p</p><div class="fullcomment"><div class="comment cmt"><p>An approximate random draw from the binomial distribution with parameters n and p</p><p>This is based on the commentry given in the GSL implementation of the randist binomial
+which will be implemented in RBinom.</p><p>This method if given for fast approximations derived from the normal distribution with mean n*p and variance n*p*(1-p)</p><p>The results are rounded to integers
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.random.RBeta" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RBetaextendsRandomDeviate"></a>
+      <a id="RBeta:RBeta"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RBeta.html"><span class="name">RBeta</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RBetaextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A random variate from the beta distribution Beta(alpha, beta)</p><div class="fullcomment"><div class="comment cmt"><p>A random variate from the beta distribution Beta(alpha, beta)</p><p>Given in numerical recipes as being drawn from two separate RGamma variates</p><p>x \sim Gamma(alpha, 1)
+y \sim Gamma(beta, 1)
+x / (x + y) \sim Beta(alpha, beta)
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.random.RBinom" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RBinomextendsRandomDeviate"></a>
+      <a id="RBinom:RBinom"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RBinom.html"><span class="name">RBinom</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RBinomextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Draw random variates from the binomial distribution.</p><div class="fullcomment"><div class="comment cmt"><p>Draw random variates from the binomial distribution.
+This implementation is derived from the GSL implementation in randist/binomial_tpe.c
+The method is based on gsl_ran_binomial.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.random.RBinomOutputs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RBinomOutputsextendsProductwithSerializable"></a>
+      <a id="RBinomOutputs:RBinomOutputs"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RBinomOutputs.html"><span class="name">RBinomOutputs</span></a><span class="params">(<span name="ix">ix: <span class="extype" name="scala.Double">Double</span></span>, <span name="vari">vari: <span class="extype" name="scala.Double">Double</span></span>, <span name="accept">accept: <span class="extype" name="scala.Double">Double</span></span>, <span name="u">u: <span class="extype" name="scala.Double">Double</span></span>, <span name="v">v: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RBinomOutputsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RBinomParameters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RBinomParametersextendsProductwithSerializable"></a>
+      <a id="RBinomParameters:RBinomParameters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RBinomParameters.html"><span class="name">RBinomParameters</span></a><span class="params">(<span name="p">p: <span class="extype" name="scala.Double">Double</span></span>, <span name="q">q: <span class="extype" name="scala.Double">Double</span></span>, <span name="np">np: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RBinomParametersextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Parameters used in the GSL RBinom algorithm
+These are computed once and then used during the calculation</p>
+    </li><li name="au.id.cxd.math.probability.random.RChisq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RChisqextendsRandomDeviate"></a>
+      <a id="RChisq:RChisq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RChisq.html"><span class="name">RChisq</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RChisqextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RFDistribution" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RFDistributionextendsRandomDeviate"></a>
+      <a id="RFDistribution:RFDistribution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RFDistribution.html"><span class="name">RFDistribution</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RFDistributionextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RGamma" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RGammaextendsRandomDeviate"></a>
+      <a id="RGamma:RGamma"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RGamma.html"><span class="name">RGamma</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RGammaextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Generate a random gamma deviate.</p><div class="fullcomment"><div class="comment cmt"><p>Generate a random gamma deviate.
+Based on the procedure of Marsaglia and Tsang. 'A simple method for generating gamma variables' ACM Transactions on Mathematical Software Sept 2000.</p><p>https://doi.org/10.1145/358407.358414</p><p>A wide variety of example implementations are available such as the one outlined here: https://gist.github.com/fasiha/f289c1d4b9c244a42abee54d1d6206ed</p><p>The method makes use of a rejection sampling method.</p><p>The core procedure is:</p><p>- generate normal x and uniform U
+- until ln(U) &lt; 0.5x^2 + d - dv + dln(v)
+- return dv</p><p>Where d = \alpha - 1/3 and v = (1 + x/\sqrt{9x^2}</p><p>The RGamma can be used as the building block for random variates of beta, chisq and the f-distribution and can be used
+to generate samples from the student-t distribution.</p><p>I haven't yet implemented a test for gamma distribution goodness of fit.
+visually inspecting the samples produced from above and
+using rgamma(100, alpha, beta) in R produces similar density plots.</p><p>There is a test proposed in https://doi.org/10.1016/j.spl.2014.10.001
+which could be used to test for membership of gamma distribution.
+It would be useful to implement for univariate tests of measurements from gamma.
+The article also proposes methods of approximating alpha and beta from a gamma distribution
+with unknown parameters.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.random.RGammaFn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RGammaFnextendsRandomDeviate"></a>
+      <a id="RGammaFn:RGammaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RGammaFn.html"><span class="name">RGammaFn</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RGammaFnextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">raw a random deviate from the gamma function $\Gamma(\alpha)$
+Base on the implementation from the GSL gamma.c line 65
+</p>
+    </li><li name="au.id.cxd.math.probability.random.RNormal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RNormalextendsRandomDeviate"></a>
+      <a id="RNormal:RNormal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RNormal.html"><span class="name">RNormal</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RNormalextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RPoisson" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RPoissonextendsRandomDeviate"></a>
+      <a id="RPoisson:RPoisson"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RPoisson.html"><span class="name">RPoisson</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RPoissonextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Random deviate from the poisson distribution based on the GSL implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Random deviate from the poisson distribution based on the GSL implementation.
+File poisson.c Line 26. gsl_ran_gamma</p><p>The poisson distribution has the form</p><p>p(n) = (mu^n / n!) exp(-mu)</p><p>for n = 0, 1, 2, ... . The method used here is the one from Knuth.</p><p>The implementation of gsl_ran_poisson is somewhat more concise than that given in the Numerical Recipes.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.random.RStudentT" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RStudentTextendsRandomDeviate"></a>
+      <a id="RStudentT:RStudentT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RStudentT.html"><span class="name">RStudentT</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RStudentTextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Draw random deviate from student t distribution.</p><div class="fullcomment"><div class="comment cmt"><p>Draw random deviate from student t distribution.
+Given in numerical methods as</p><p>x \sim N(0,1)
+y \sim Gamma(\nu/2, 1/2)</p><p>x\sqrt{\nu/y} \sim StudentT(\nu, 0, 1)
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.random.RUniform" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RUniformextendsRandomDeviate"></a>
+      <a id="RUniform:RUniform"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RUniform.html"><span class="name">RUniform</span></a><span class="result"> extends <a href="RandomDeviate.html" class="extype" name="au.id.cxd.math.probability.random.RandomDeviate">RandomDeviate</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RUniformextendsRandomDeviate" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Random draw from a uniform distribution.</p><div class="fullcomment"><div class="comment cmt"><p>Random draw from a uniform distribution.
+This uses the built in random function with a min max parameter.
+</p></div></div>
+    </li><li name="au.id.cxd.math.probability.random.RUniformPos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RUniformPosextendsRUniform"></a>
+      <a id="RUniformPos:RUniformPos"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RUniformPos.html"><span class="name">RUniformPos</span></a><span class="result"> extends <a href="RUniform.html" class="extype" name="au.id.cxd.math.probability.random.RUniform">RUniform</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RUniformPosextendsRUniform" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">random uniform sampling in distribution (0,1) excludes 0 and 1.</p>
+    </li><li name="au.id.cxd.math.probability.random.RandomDeviate" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RandomDeviateextendsAnyRef"></a>
+      <a id="RandomDeviate:RandomDeviate"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RandomDeviate.html"><span class="name">RandomDeviate</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RandomDeviateextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">a random deviate.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="au.id.cxd.math.probability.random.RApproxBinom" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RApproxBinom"></a>
+      <a id="RApproxBinom:RApproxBinom"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RApproxBinom$.html"><span class="name">RApproxBinom</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RApproxBinom" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RBeta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RBeta"></a>
+      <a id="RBeta:RBeta"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RBeta$.html"><span class="name">RBeta</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RBeta" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RBinom" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RBinom"></a>
+      <a id="RBinom:RBinom"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RBinom$.html"><span class="name">RBinom</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RBinom" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RChisq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RChisq"></a>
+      <a id="RChisq:RChisq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RChisq$.html"><span class="name">RChisq</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RChisq" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RFDistribution" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RFDistribution"></a>
+      <a id="RFDistribution:RFDistribution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RFDistribution$.html"><span class="name">RFDistribution</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RFDistribution" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RGamma" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RGamma"></a>
+      <a id="RGamma:RGamma"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RGamma$.html"><span class="name">RGamma</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RGamma" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RGammaFn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RGammaFn"></a>
+      <a id="RGammaFn:RGammaFn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RGammaFn$.html"><span class="name">RGammaFn</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RGammaFn" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RNormal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RNormal"></a>
+      <a id="RNormal:RNormal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RNormal$.html"><span class="name">RNormal</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RNormal" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RPoisson" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RPoisson"></a>
+      <a id="RPoisson:RPoisson"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RPoisson$.html"><span class="name">RPoisson</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RPoisson" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RStudentT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RStudentT"></a>
+      <a id="RStudentT:RStudentT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RStudentT$.html"><span class="name">RStudentT</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RStudentT" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RUniform" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RUniform"></a>
+      <a id="RUniform:RUniform"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RUniform$.html"><span class="name">RUniform</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RUniform" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="au.id.cxd.math.probability.random.RUniformPos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RUniformPos"></a>
+      <a id="RUniformPos:RUniformPos"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RUniformPos$.html"><span class="name">RUniformPos</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#au.id.cxd.math.probability.random.package@RUniformPos" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

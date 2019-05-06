@@ -360,7 +360,14 @@ $$</p></div></div>
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">#import MathJax
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ 
 </p>
     </li><li name="au.id.cxd.math.probability.continuous.Uniform" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="UniformextendsContinuousDistribution"></a>

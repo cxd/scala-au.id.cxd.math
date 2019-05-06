@@ -526,7 +526,7 @@ println("Network model")
 printMetrics(metrics1)
 ```
 
-Note that the R-squared indicates the model explains roughly 1.2% of variation, the agreement is roughly close to the mean, the MSE about 49 miles per gallon (given the data we are predicting) and the mean absoluate error MAE is about 5.6 miles per gallon.
+Note that the R-squared indicates the model explains only a small percent of variation, the agreement is roughly close to the mean, the MSE about 49 miles per gallon (given the data we are predicting) and the mean absoluate error MAE is about 5.6 miles per gallon.
 
 We can generate another model using ordinary least squares and compare using the same metrics.
 

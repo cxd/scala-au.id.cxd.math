@@ -114,7 +114,21 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">#import MathJax</p><div class="fullcomment"><div class="comment cmt"><p>#import MathJax</p><p>Implementation of the error function</p><p>$$
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>Implementation of the error function</p><p>$$
 erf(x) = \frac{2}{\pi} \int_0&#94;x e&#94;{-t&#94;2}dt
 $$</p><p>based on the GSL implementation file erfc.c line 357 gsl_sf_erf_e</p><p>http://mathworld.wolfram.com/Erfc.html
 </p></div></div>
@@ -205,7 +219,21 @@ in special/gamma.c gsl_sf_lngamma_e</p><p>Created by cd on 5/11/14.
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"># import MathJax</p><div class="fullcomment"><div class="comment cmt"><p># import MathJax</p><p>approximate implementation of the regulated gamma function $\Gamma&#94;*$
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>approximate implementation of the regulated gamma function $\Gamma&#94;*$
 based on the notes in GSL where</p><p>$$
 \Gamma&#94;*(x) = \Gamma(x) / \left( \sqrt{2\pi}x&#94;{(x-1/2)}\exp(-x) \right)
 $$</p></div></div>
@@ -260,7 +288,21 @@ based on the implementation provided in:</p><p>&quot;Approximating the erfinv fu
         <img src="../../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">#import MathJax</p><div class="fullcomment"><div class="comment cmt"><p>#import MathJax</p><p>This class provides an implementation of the inverse erfc function.</p><p>There were two sources of information where I could find details on the inverse error function.</p><p>The first from the Numerical Recipes, which prohibits reuse of their algorithms,
+      <p class="shortcomment cmt"><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><div class="fullcomment"><div class="comment cmt"><p><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+"HTML-CSS": {preferredFont: 'TeX'}
+});
+</script>
+<script type="text/javascript" async src="https://cxd.github.io/scala-au.id.cxd.math/javascripts/MathJax-2.7.2/MathJax.js?config=TeX-AMS_CHTML"></script>
+ </p><p>This class provides an implementation of the inverse erfc function.</p><p>There were two sources of information where I could find details on the inverse error function.</p><p>The first from the Numerical Recipes, which prohibits reuse of their algorithms,
 hence the implementation will not be leverage this approach in the long term.
 It does serve as the starting reference point with a variety of sources being cited from that resource on the implementation.</p><p>There are a number of other references describing the inverse erf function.
 An implementation that reads in a fairly straight forward manner is available from the compute-io library:
