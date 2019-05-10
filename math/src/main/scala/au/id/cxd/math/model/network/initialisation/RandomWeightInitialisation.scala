@@ -19,7 +19,7 @@ import scala.util.Random
   * W_{i,j} = U(-\sqrt{6/(m+n), \sqrt{6/(m+n)})
   * $$
   *
-  * Where $m$ is the number of columns in the input layer and $n$ the number of rows in the data.
+  * Where $m$ is the number of columns in the input layer and $n$ the number of outputs in the data.
   *
   * @param seed
   */
