@@ -1,6 +1,7 @@
 package au.id.cxd.math.model.network.layers
 
 import au.id.cxd.math.model.network.activation.Activation
+import au.id.cxd.math.model.network.initialisation.WeightInitialisationStrategy
 import breeze.linalg.DenseMatrix
 
 /**
@@ -14,7 +15,11 @@ import breeze.linalg.DenseMatrix
   * @param activation
   * @param shape
   */
-class DenseLayer(override val activation: Activation, override val units:Int, override val shape: Option[(Int, Int)] = None) extends Layer {
+class DenseLayer(override val activation: Activation,
+                 override val units:Int,
+                 override val shape: Option[(Int, Int)] = None,
+                 override val batchNormalise: Boolean = false,
+                 override val weightInitialisation: WeightInitialisationStrategy = new WeightInitialisationStrategy {}) extends Layer {
 
   /**
     * default weights
@@ -30,7 +35,7 @@ class DenseLayer(override val activation: Activation, override val units:Int, ov
     * @param cols
     * @return
     */
-  def initialiseWeights(rows:Int, cols:Int): DenseMatrix[Double] = DenseMatrix.ones[Double](rows, cols)
+  def initialiseWeights(rows:Int, cols:Int): DenseMatrix[Double] = weightInitialisation.op(rows, cols)
 
   /**
     * copy with shape parameter
@@ -91,7 +96,8 @@ class DenseLayer(override val activation: Activation, override val units:Int, ov
 }
 
 object DenseLayer {
-  def apply(activation: Activation, units:Int, shape: Option[(Int, Int)] = None):DenseLayer = {
-    new DenseLayer(activation, units, shape)
+  def apply(activation: Activation, units:Int, shape: Option[(Int, Int)] = None,
+            weightInitialisation:WeightInitialisationStrategy=new WeightInitialisationStrategy {}):DenseLayer = {
+    new DenseLayer(activation, units, shape, weightInitialisation=weightInitialisation)
   }
 }

@@ -29,14 +29,14 @@ case class StandardisedNormalisation() extends ContinuousTransform {
     meanVector = DenseVector.tabulate[Double](data.cols) {
       j => {
         val col = data(::,j)
-        col.foldLeft(0.0) { (a, b) => a + b } / N
+        col.foldLeft(0.0) { (a, b) => a + b } / N.toDouble
       }
     }
     sigmaVector = DenseVector.tabulate[Double](data.cols) {
       j => {
         val col = data(::, j)
         val mean = meanVector(j)
-        col.foldLeft(0.0) { (a, b) => a + Math.pow(b - mean, 2) } / (N - 1)
+        col.foldLeft(0.0) { (a, b) => a + Math.pow(b - mean, 2) } / (N - 1).toDouble
       }
     }
     filter(data)
@@ -54,7 +54,10 @@ case class StandardisedNormalisation() extends ContinuousTransform {
         val x = data(i,j)
         val mean = meanVector(j)
         val sigma = sigmaVector(j)
-        val z = (x - mean) / Math.sqrt(sigma)
+        val s = Math.sqrt(sigma)
+        val z = if (s.isNaN)
+          x
+        else (x - mean) / Math.sqrt(sigma)
         z
       }
     }

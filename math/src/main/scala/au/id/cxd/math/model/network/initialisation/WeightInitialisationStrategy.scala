@@ -14,6 +14,6 @@ trait WeightInitialisationStrategy {
     * @param cols
     * @return
     */
-  def op(rows:Int, cols:Int) :DenseMatrix[Double]
+  def op(rows:Int, cols:Int) :DenseMatrix[Double] = DenseMatrix.rand(rows, cols)
 
 }

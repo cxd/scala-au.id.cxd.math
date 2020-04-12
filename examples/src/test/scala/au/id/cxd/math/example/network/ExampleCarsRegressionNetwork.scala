@@ -9,7 +9,7 @@ import au.id.cxd.math.function.transform.StandardisedNormalisation
 import au.id.cxd.math.model.evaluation.{Efficiency, MAE, MSE, PeakPercentDeviation, RSquared, WillmotsIndex}
 import au.id.cxd.math.model.network.activation.{Identity, LeakyRelu, Linear, Relu, Sigmoid}
 import au.id.cxd.math.model.network.builder.{Builder, Sequence}
-import au.id.cxd.math.model.network.initialisation.RandomWeightInitialisation
+import au.id.cxd.math.model.network.initialisation.{RandomGaussianInitialisation, RandomWeightInitialisation, WeightInitialisationStrategy}
 import au.id.cxd.math.model.network.layers.{DenseLayer, InputLayer}
 import au.id.cxd.math.model.network.train.SGDTrainer
 import au.id.cxd.math.probability.regression.{BayesLinearRegression, OrdLeastSquares}
@@ -55,11 +55,13 @@ object ExampleCarsRegressionNetwork {
     * create a simple network
     * @return
     */
-  def buildNetwork(weightInitialisation:RandomWeightInitialisation = RandomWeightInitialisation()):Builder = {
+  def buildNetwork(weightInitialiser:WeightInitialisationStrategy = RandomWeightInitialisation()):Builder = {
     Sequence(Seq(
       InputLayer(activation=Identity(), units=4),
-      DenseLayer(activation=Relu(), units=4),
-      DenseLayer(activation=Linear(), units=1)
+      DenseLayer(activation=Relu(), units=4,
+        weightInitialisation=weightInitialiser),
+      DenseLayer(activation=Linear(), units=1,
+        weightInitialisation=weightInitialiser)
     )).compile()
   }
 
@@ -67,12 +69,15 @@ object ExampleCarsRegressionNetwork {
     * create a simple network
     * @return
     */
-  def buildNetwork2(weightInitialisation:RandomWeightInitialisation = RandomWeightInitialisation()):Builder = {
+  def buildNetwork2(weightInitialiser:WeightInitialisationStrategy = RandomWeightInitialisation()):Builder = {
     Sequence(Seq(
       InputLayer(activation=Identity(), units=4),
-      DenseLayer(activation=Relu(), units=5),
-      DenseLayer(activation=Relu(), units=4),
-      DenseLayer(activation=Linear(), units=1)
+      DenseLayer(activation=Relu(), units=5,
+        weightInitialisation=weightInitialiser),
+      DenseLayer(activation=Relu(), units=4,
+        weightInitialisation=weightInitialiser),
+      DenseLayer(activation=Linear(), units=1,
+        weightInitialisation=weightInitialiser)
     )).compile()
   }
 
@@ -201,11 +206,12 @@ object ExampleCarsRegressionNetwork {
     val validY = partitions(1)._2
     val testY = partitions(1)._3
 
+    // momentum=0.000001
     val trainer = SGDTrainer(trainX, trainY, validX, validY, learnRate = 0.000001, momentum=0.000001)
 
     val rows = x.rows
     val cols = x.cols
-    val initialisation = RandomWeightInitialisation(rows, cols)
+    val initialisation = RandomGaussianInitialisation(rows, cols)
 
 
     // 437
