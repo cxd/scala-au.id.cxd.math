@@ -37,9 +37,9 @@ class CosineDistance {
 }
 
 object CosineDistance {
-  def apply(x:DenseVector[Double], y:DenseVector[Double] ) = new CosineDistance().op(x,y)
+  def apply(x:DenseVector[Double], y:DenseVector[Double] ): Double = new CosineDistance().op(x,y)
 
-  def apply(M:DenseMatrix[Double], y:DenseVector[Double]) = new CosineDistance().op(M,y)
+  def apply(M:DenseMatrix[Double], y:DenseVector[Double]): DenseVector[Double] = new CosineDistance().op(M,y)
 }
 
 

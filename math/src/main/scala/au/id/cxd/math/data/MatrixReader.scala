@@ -120,7 +120,7 @@ trait MatrixReader {
       case _ => data.length
     }
     val cols = data(0).length
-    convertToMatrix(rows, cols, data)
+    convertToMatrix(rows, cols, data.toSeq)
   }
 
   /**
@@ -136,7 +136,7 @@ trait MatrixReader {
       case true => data.length - 1
       case _ => data.length
     }
-    convertToMatrix(rows, cols, data)
+    convertToMatrix(rows, cols, data.toSeq)
   }
 }
 

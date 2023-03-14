@@ -4,7 +4,13 @@ import com.typesafe.sbt.SbtGit.GitKeys._
 
 
 lazy val breezeVersion = "0.13.2"
-
+lazy val breezeVersionScala13 = "1.3"
+lazy val jacksonJsonVersion = "3.6.0-M2"
+lazy val jacksonJsonVersionScala13 = "4.1.0-M2"
+lazy val scalazVersion = "7.2.27"
+lazy val scalazVersionScala13 = "7.4.0-M13"
+lazy val scalaTestVersion = "3.0.5"
+lazy val scalaTestVersionScala13 = "3.2.15"
 
 javaOptions += "-Xmx2G -Xms1G -XX:MaxPermSize=512M"
 
@@ -35,7 +41,7 @@ def listHtmlFile(dir: java.io.File): List[java.io.File] = {
 val commonPluginSettings = Seq(
 
   mathFormulaInDoc := {
-    val apiDir = (doc in Compile).value
+    val apiDir = (Compile / doc).value
     val docDirs = List(apiDir) // /"some"/"subfolder"  // in my case, only api/some/solder is parsed
     // will replace this "importTag" by "scriptLine
     val importTag = "##import MathJax"
@@ -67,31 +73,46 @@ val commonPluginSettings = Seq(
 
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.12",
 
 
   version := "1.0",
 
-  resolvers ++= Seq(Resolver.sonatypeRepo("public"),
-    Resolver.sonatypeRepo("snapshots"),
-    Resolver.sonatypeRepo("releases")),
+  resolvers ++= Resolver.sonatypeOssRepos("public") ++
+    Resolver.sonatypeOssRepos("snapshots") ++
+    Resolver.sonatypeOssRepos("releases"),
 
   coverageEnabled := false,
 
-  libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test",
-  libraryDependencies ++= Seq(
+  libraryDependencies ++= {
     //// scalax io
     //"com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",
     // other dependencies here
-    "org.scalanlp" %% "breeze" % breezeVersion,
-    // native libraries are not included by default. add this if you want them (as of 0.7)
-    // native libraries greatly improve performance, but increase jar sizes.
-    "org.scalanlp" %% "breeze-natives" % breezeVersion,
-    // add the scalaz library
-    "org.scalaz" %% "scalaz-core" % "7.2.27",
-    // json4s
-    "org.json4s" %% "json4s-jackson" % "3.6.0-M2"
-  )
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, n)) if n <= 12 =>
+        List("org.scalanlp" %% "breeze" % breezeVersion,
+          // native libraries are not included by default. add this if you want them (as of 0.7)
+          // native libraries greatly improve performance, but increase jar sizes.
+          "org.scalanlp" %% "breeze-natives" % breezeVersion,
+          // add the scalaz library
+          "org.scalaz" %% "scalaz-core" % scalazVersion,
+          // json4s
+          "org.json4s" %% "json4s-jackson" % jacksonJsonVersion,
+
+          "org.scalatest" %% "scalatest" % scalaTestVersion % "test")
+      case Some((2, n)) if n > 12 =>
+        List("org.scalanlp" %% "breeze" % breezeVersionScala13,
+          // native libraries are not included by default. add this if you want them (as of 0.7)
+          // native libraries greatly improve performance, but increase jar sizes.
+          "org.scalanlp" %% "breeze-natives" % breezeVersionScala13,
+          // add the scalaz library
+          "org.scalaz" %% "scalaz-core" % scalazVersionScala13,
+          // json4s
+          "org.json4s" %% "json4s-jackson" % jacksonJsonVersionScala13,
+          "org.scalatest" %% "scalatest" % scalaTestVersionScala13 % "test")
+      case _ => Nil
+    }
+  }
 )
 
 lazy val uiDependencies = Seq(
@@ -121,23 +142,15 @@ lazy val math = (project in file("math"))
     // > + compile
     // > + assembly
     // to manually switch between versions
-    // > ++ 2.11.8
-    // > ++ 2.12.2
+    // > ++ 2.11.12
+    // > ++ 2.12.17
+    // > ++ 2.13.10
     // this should generate multiple targets
-    crossScalaVersions := Seq("2.11.8", "2.12.2"),
+    crossScalaVersions := Seq("2.11.12", "2.12.17", "2.13.10"),
 
-    libraryDependencies ++= Seq(
-      // add breeze visualization
-      "org.scalanlp" %% "breeze-viz" % breezeVersion % "test",
-      // wrapper around jfreechart
-      "com.github.wookietreiber" %% "scala-chart" % "0.5.1" % "test",
-      // include kumo for tag cloud generation
-      "com.kennycason" % "kumo" % "1.8" % "test"
-    ),
+    assembly / test := {},
 
-    test in assembly := {},
-
-    assemblyMergeStrategy in assembly := {
+    assembly / assemblyMergeStrategy  := {
       case PathList("META-INF", xs @ _*) => MergeStrategy.discard
       case x => MergeStrategy.first
     }
@@ -160,13 +173,17 @@ lazy val examples = (project in file("examples"))
 
     libraryDependencies ++= Seq(
       "jfree" % "jcommon" % "1.0.16" % "provided",
-      "com.typesafe" % "config" % "1.3.2"
+      "com.typesafe" % "config" % "1.3.2",
+      // include kumo for tag cloud generation
+      "com.kennycason" % "kumo" % "1.8" % "test",
+      // add breeze visualization
+      "org.scalanlp" %% "breeze-viz" % breezeVersion % "test"
     ),
 
-    aggregate in assembly := false,
+    assembly / aggregate  := false,
 
-    assemblyExcludedJars in assembly := {
-      val cp = (fullClasspath in assembly).value
+    assembly / assemblyExcludedJars := {
+      val cp = (assembly / fullClasspath).value
       cp filter { x => exclude.exists(item => x.data.getName.matches(item)) }
     }
   )
@@ -180,17 +197,22 @@ lazy val swing = (project in file("app"))
   .settings(
     name := "au.id.cxd.math.app",
 
-    aggregate in assembly := false,
+    assembly / aggregate  := false,
 
-    assemblyExcludedJars in assembly := {
-      val cp = (fullClasspath in assembly).value
+    libraryDependencies ++= Seq(
+      // wrapper around jfreechart
+      //"com.github.wookietreiber" %% "scala-chart" % "0.5.1",
+    ),
+
+    assembly / assemblyExcludedJars := {
+      val cp = (assembly / fullClasspath).value
       cp filter { x => exclude.exists(item => x.data.getName.matches(item)) }
     }
   ).settings(Common.commonPluginSettings: _*)
   .dependsOn(math)
 
 
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy := {
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
   case x => MergeStrategy.first
 }

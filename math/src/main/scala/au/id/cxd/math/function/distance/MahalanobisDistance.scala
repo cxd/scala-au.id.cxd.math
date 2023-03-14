@@ -84,11 +84,11 @@ class MahalanobisDistance() {
     * determine the distance from the mean using the variance covariance matrix of the supplied sample
     * @param X
     */
-  def dist(X:DenseMatrix[Double]) = {
+  def dist(X:DenseMatrix[Double]): DenseMatrix[Double] = {
     val Sigma = Cov(X)
     val colMean = ColMeans(X)
 
-    val Delta = X.mapPairs {
+    val Delta:DenseMatrix[Double] = X.mapPairs {
       (ind, x) => x - colMean(0,ind._2)
     }
     mahalanobis(Delta, Sigma)

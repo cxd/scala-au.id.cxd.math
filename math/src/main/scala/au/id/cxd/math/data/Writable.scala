@@ -23,7 +23,7 @@ trait Writable[T] {
       os.flush()
       os.close()
       true
-    } toOption
+    }.toOption
   }
 
 }

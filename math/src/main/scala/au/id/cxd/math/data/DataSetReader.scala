@@ -26,7 +26,7 @@ trait DataSetReader {
 
   val file:File
 
-  val timeout:Duration = 10 seconds
+  val timeout:Duration = 10.seconds
 
   /**
     * override the continuous transformation function in order to perform standardisation.

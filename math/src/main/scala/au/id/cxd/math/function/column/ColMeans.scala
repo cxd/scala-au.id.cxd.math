@@ -30,5 +30,5 @@ object ColMeans {
     * @return
     */
   def apply(m:DenseMatrix[Double]) =
-    new ColMeans(m) op()
+    new ColMeans(m).op()
 }

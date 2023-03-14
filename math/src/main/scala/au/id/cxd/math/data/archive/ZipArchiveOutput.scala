@@ -21,7 +21,7 @@ object ZipArchiveOutput {
     val fos = new FileOutputStream(path)
     val zos = new ZipOutputStream(new BufferedOutputStream(fos))
     zos
-  } toOption
+  }.toOption
 
   /**
     * add a file to the archive
@@ -36,7 +36,7 @@ object ZipArchiveOutput {
     zos.write(data)
     zos.flush()
     zos
-  } toOption
+  }.toOption
 
   /**
     * add a sequence of files to the archive
@@ -56,7 +56,7 @@ object ZipArchiveOutput {
       }
     }
     zos
-  } toOption
+  }.toOption
 
   /**
     * add a sequence of files from disc
@@ -71,7 +71,7 @@ object ZipArchiveOutput {
           val filename = file.getName
           val is = new FileInputStream(file)
           val in = new BufferedInputStream(is)
-          val bytes = Iterator.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
+          val bytes = Iterator.continually(in.read).takeWhile(_ != -1 ).map(_.toByte).toArray
           val entry = new ZipEntry(filename)
           zos.putNextEntry(entry)
           zos.write(bytes)
@@ -80,7 +80,7 @@ object ZipArchiveOutput {
         }
       }
     zos
-  } toOption
+  }.toOption
 
   /**
     * close the archive
@@ -91,7 +91,7 @@ object ZipArchiveOutput {
     zos.flush()
     zos.close()
     true
-  } toOption
+  }.toOption
 
 
 

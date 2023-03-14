@@ -1,6 +1,7 @@
 logLevel := Level.Warn
 
-resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
+resolvers +=  ("jgit-repo" at "http://download.eclipse.org/jgit/maven")
+  .withAllowInsecureProtocol(true)
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.2")
 

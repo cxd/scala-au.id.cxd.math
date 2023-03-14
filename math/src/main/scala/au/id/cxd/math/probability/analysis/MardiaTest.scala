@@ -86,7 +86,7 @@ class MardiaTest(val alpha:Double) {
     * the difference between the mean and the sample.
     * @param X
     */
-  private def parameters (X:DenseMatrix[Double]) = {
+  private def parameters (X:DenseMatrix[Double]): (DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double]) = {
     val Sigma = Cov(X,X)
     val colMean = ColMeans(X)
     val Mean = DenseMatrix.tabulate(X.rows, X.cols) {
@@ -148,7 +148,7 @@ class MardiaTest(val alpha:Double) {
     * @param X
     * @return
     */
-  def mardia(X:DenseMatrix[Double]) = {
+  def mardia(X:DenseMatrix[Double]): MardiaTestStatistic = {
     val (delta, mean, sigma) = parameters(X)
     val rMatrix = computeR(delta.t, sigma)
     val n = X.rows

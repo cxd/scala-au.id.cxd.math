@@ -151,11 +151,11 @@ object DummyVariableBuilder {
             accum.contains(col) match {
               case true => {
                 // mutable update
-                val datum = dataFor(row, idx)
+                val datum = dataFor(row.toSeq, idx)
                 accum.get(col).get.append(datum)
                 (idx + 1, accum)
               }
-              case _ => (idx + 1, accum + (col -> ListBuffer[String](dataFor(row, idx))))
+              case _ => (idx + 1, accum + (col -> ListBuffer[String](dataFor(row.toSeq, idx))))
             }
           }
         }
@@ -171,7 +171,7 @@ object DummyVariableBuilder {
         // the toSet assigns the unique values to the variable builder.
         // potentially a more optimised method of finding unique values could be used.
         // such as a trie.
-        apply(key, values.toSet, values)
+        apply(key, values.toSet, values.toSeq)
       }
     }
     vars.toList

@@ -1,10 +1,10 @@
 package au.id.cxd.text.model
 
-import breeze.linalg.svd.SVD
+import breeze.linalg.svd.{DenseSVD, SVD}
 import breeze.linalg.{DenseMatrix, DenseVector}
+
 import java.nio.file.{Files, Path, Paths}
 import java.io.File
-
 import breeze.linalg._
 import au.id.cxd.math.data.{CsvReader, CsvWriter, Readable, Writable}
 import au.id.cxd.math.data.archive.{ZipArchiveInput, ZipArchiveOutput}
@@ -199,7 +199,7 @@ trait LatentSemanticIndexReader {
             case _ => {
               val rowId = line.head
               val docIds = line.tail
-              accum._2.put(rowId.toInt, docIds)
+              accum._2.put(rowId.toInt, docIds.toSeq)
               (idx + 1, accum._2)
             }
           }
@@ -380,7 +380,7 @@ trait LatentSemanticIndexBuilder {
     * @param tfIdf
     * @return
     */
-  def computeSvd(tfIdf: DenseMatrix[Double]) = {
+  def computeSvd(tfIdf: DenseMatrix[Double]): (DenseSVD, Double, DenseVector[Double]) = {
     val svD = SingularValueDecomposition(tfIdf)
     val entropy = SingularValueDecomposition.entropy(svD)
     val contributions = SingularValueDecomposition.contributions(svD)
@@ -412,8 +412,8 @@ trait LatentSemanticIndexBuilder {
     val (docMap, lines) = readIndexedCsv(inputCsv, docIdCols, skipHeader)
     val stopwords = loadStopWords()
     val terms = stemTerms match {
-      case true => extractStemmedTerms(stopwords, lines)
-      case _ => extractTerms(stopwords, lines)
+      case true => extractStemmedTerms(stopwords, lines.toSeq)
+      case _ => extractTerms(stopwords, lines.toSeq)
     }
     val tfIdfCounter = TfIdfCount()
     // the columnMap has (columnIdx, (Term, HashCode))

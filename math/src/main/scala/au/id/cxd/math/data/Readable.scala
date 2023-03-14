@@ -21,7 +21,7 @@ trait Readable[T] {
       val result = os.readObject().asInstanceOf[T]
       os.close()
       result
-    } toOption
+    }.toOption
   }
 
 }

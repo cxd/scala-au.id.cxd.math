@@ -223,7 +223,8 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
     * @param mst
     * @param mse
     */
-  class Intermediate(val cm: Double, val totalSS: Double, val sst: Double, val sse: Double, val mst: Double, val mse: Double) {}
+  class Intermediate(val cm: Double = 0.0, val totalSS: Double = 0.0, val sst: Double = 0.0, val sse: Double = 0.0, val mst: Double = 0.0,
+                     val mse: Double = 0.0) {}
 
   /**
     * f distribution
@@ -363,6 +364,15 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
   def statistic(): (Double, Intermediate) = {
     val k = X.cols
     val n = X.cols * X.rows
+
+    val seed = cm()
+    val seed1 = totalSS (seed)
+    val seed2 = ssTreatment(seed1)
+    val seed3 = sse(seed2)
+    val seed4 = mse(seed3)
+    val interim = mst(seed4)
+
+    /*
     val builder = PartialFunction[Intermediate, Intermediate](_)
     val result = builder {
       case i => mst(i)
@@ -376,6 +386,8 @@ class Anova(val X: DenseMatrix[Double]) extends StatisticalTest {
       case i => totalSS(i)
     }
     val interim = result(cm)
+
+    */
     val F = interim.mst / interim.mse
     (F, interim)
   }

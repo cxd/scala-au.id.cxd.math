@@ -101,7 +101,7 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
 
     // we are working from the hidden layers backward
     val hiddenLayers = network.layers.reverse.tail
-    gradients(gradient, network.layers.last, hiddenLayers) reverse
+    gradients(gradient, network.layers.last, hiddenLayers).reverse
 
   }
 
@@ -280,7 +280,7 @@ class SGDTrainer(override val trainX: DenseMatrix[Double],
       exitLoss = valloss
     }
 
-    (trainloss, validationloss, trainNet)
+    (trainloss.toSeq, validationloss.toSeq, trainNet)
 
   }
 

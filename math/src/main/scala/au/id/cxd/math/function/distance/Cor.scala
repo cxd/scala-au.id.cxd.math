@@ -13,12 +13,12 @@ class Cor  (a:DenseMatrix[Double], b:DenseMatrix[Double])  extends Cov (a,b) {
 }
 object Cor {
   def apply(a:DenseMatrix[Double]) = {
-    val scaleA = new StandardisedNormalisation().transform(a)
+    val scaleA = StandardisedNormalisation().transform(a)
     new Cor(scaleA, scaleA).op()
   }
   def apply(a:DenseMatrix[Double], b:DenseMatrix[Double]) = {
-    val scaleA = new StandardisedNormalisation().transform(a)
-    val scaleB = new StandardisedNormalisation().transform(b)
+    val scaleA = StandardisedNormalisation().transform(a)
+    val scaleB = StandardisedNormalisation().transform(b)
     new Cor(scaleA, scaleB).op()
   }
 }

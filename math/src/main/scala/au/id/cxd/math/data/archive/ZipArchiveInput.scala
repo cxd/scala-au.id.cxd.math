@@ -40,7 +40,7 @@ object ZipArchiveInput {
     val is = new FileInputStream(file)
     val zis = new ZipInputStream(is)
     zis
-  } toOption
+  }.toOption
 
   /**
     * extract the array in memory into a sequence of
@@ -56,12 +56,12 @@ object ZipArchiveInput {
     while (entry != null) {
       val name = entry.getName
       // note this reads only 1 byte at a time
-      val bytes = Iterator.continually(zis.read()).takeWhile(-1 !=).map(_.toByte).toArray
+      val bytes = Iterator.continually(zis.read()).takeWhile(_ != -1).map(_.toByte).toArray
       data :+ (name, bytes)
       entry = zis.getNextEntry
     }
     (zis, data)
-  } toOption
+  }.toOption
 
   /**
     * extract the files to the base path supplied
@@ -85,14 +85,15 @@ object ZipArchiveInput {
       val targetFile = s"${path}${File.separator}$name"
       val fos = new FileOutputStream(targetFile)
       // note this reads only 1 byte at a time
-      val data:Array[Byte] = Iterator.continually(zis.read()).takeWhile(-1 != ).map(_.toByte).toArray
+      val data:Array[Byte] = Iterator.continually(zis.read()).takeWhile(_ != -1)
+        .map(_.toByte).toArray
       fos.write(data)
       fos.flush()
       fos.close()
       entry = zis.getNextEntry
     }
     zis
-  } toOption
+  }.toOption
 
   /**
     * close the archive.
@@ -103,6 +104,6 @@ object ZipArchiveInput {
   def closeArchive(zis: ZipInputStream) = Try {
     zis.close()
     true
-  } toOption
+  }.toOption
 
 }

@@ -14,7 +14,7 @@ case class EmbeddedStopwordsLoader() extends StopwordsLoader {
     val url = getClass.getClassLoader.getResource(stopwords)
     val source = Source.fromFile(url.getFile)
     source.getLines().toSeq
-  } toOption
+  }.toOption
 
   /**
     * load the set of stopwords.

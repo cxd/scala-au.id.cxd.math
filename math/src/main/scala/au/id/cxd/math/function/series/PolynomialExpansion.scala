@@ -60,7 +60,7 @@ class PolynomialExpansion(val X: DenseMatrix[Double], val degree: Int) {
     val a = X.cols + degree - 1
     val b = degree - 1
     val total = Choose(a)(b)
-    total toInt
+    total.toInt
   }
 
   /**
@@ -70,7 +70,7 @@ class PolynomialExpansion(val X: DenseMatrix[Double], val degree: Int) {
     *
     * @return
     */
-  def permutations(): Int = Permutation(X.cols)(X.cols) toInt
+  def permutations(): Int = Permutation(X.cols)(X.cols).toInt
 
 
   /**
@@ -273,5 +273,5 @@ object PolynomialExpansion {
     * @param degree
     * @return
     */
-  def apply(X: DenseMatrix[Double], degree: Int) = new PolynomialExpansion(X, degree) transform
+  def apply(X: DenseMatrix[Double], degree: Int): DenseMatrix[Double] = new PolynomialExpansion(X, degree).transform
 }

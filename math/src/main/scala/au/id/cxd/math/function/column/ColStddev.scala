@@ -21,5 +21,5 @@ class ColStddev (m:DenseMatrix[Double]) {
 }
 object ColStddev {
   def apply(m:DenseMatrix[Double]) =
-    new ColStddev(m) op
+    new ColStddev(m).op
 }

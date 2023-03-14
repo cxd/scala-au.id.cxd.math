@@ -103,7 +103,7 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
     def step (max:Int, j:Int, trap:Trapezoid, oldS:Double):Double = (j == max) match {
       case true => oldS
       case _ => {
-        val (nextS, nextT) = trap next()
+        val (nextS, nextT) = trap.next()
         //if (j > (max+1)/2 && (Math.abs(nextS._1 - oldS) < epsilon * Math.abs(oldS) ) )  {
         //  nextS._1
         //} else
@@ -136,7 +136,7 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
     def step (max:Int, j:Int, trap:Trapezoid, prevStep:Double, oldS:Double):Double = (j == max) match {
       case true => oldS
       case _ => {
-        val (nextS, nextT) = trap next()
+        val (nextS, nextT) = trap.next()
         val curS = (4.0*nextS._1 - prevStep) / 3.0
         //if (j > (max+1)/2 && (Math.abs (curS - oldS) < epsilon * Math.abs(oldS)) ) {
         //  curS
@@ -164,8 +164,19 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
     * @return
     */
   def approxIntegral():Double = {
-    (min(lower, upper) to max(lower, upper-0.01) by 0.01)
-      .zip(lower+0.01 to upper by 0.01)
+    // scala 2.13 did not support the ranges for double.
+    def step(lower:Double, upper:Double, stepSize:Double):Seq[Double] = {
+      val steps = Math.round(( upper - lower ) / stepSize).toInt
+      (0 to steps).map {
+        i => if ((lower + stepSize*i) < upper) {
+          lower + stepSize*i
+        } else upper
+      }
+
+    }
+
+    step(min(lower, upper), max(lower, upper-0.01), 0.01)
+      .zip(step((lower+0.01), upper, 0.01))
       .map {
         (pair:(Double, Double)) => {
           val a = genFn(pair._1)
