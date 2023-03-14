@@ -171,6 +171,8 @@ lazy val examples = (project in file("examples"))
   .settings(
     name := "au.id.cxd.math.examples",
     crossScalaVersions := Seq("2.11.12"),
+    crossPaths := false,
+    autoScalaLibrary := false,
 
     libraryDependencies ++= Seq(
       "jfree" % "jcommon" % "1.0.16" % "provided",
@@ -198,6 +200,8 @@ lazy val swing = (project in file("app"))
   .settings(
     name := "au.id.cxd.math.app",
     crossScalaVersions := Seq("2.11.12"),
+    crossPaths := false,
+    autoScalaLibrary := false,
 
     assembly / aggregate  := false,
 
@@ -220,4 +224,9 @@ assembly / assemblyMergeStrategy := {
 }
 
 lazy val root = (project in file("."))
+  .settings(
+    // crossScalaVersions must be set to Nil on the aggregating project
+    crossScalaVersions := Nil,
+    publish / skip := false
+  )
   .aggregate(math, examples, swing)
