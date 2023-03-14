@@ -2,7 +2,7 @@
 .Rhistory
 .RData
 .idea
-
+.java-version
 tmp/**
 
 lsiexample.zip

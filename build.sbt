@@ -170,6 +170,7 @@ lazy val examples = (project in file("examples"))
   .settings(uiDependencies: _*)
   .settings(
     name := "au.id.cxd.math.examples",
+    crossScalaVersions := Seq("2.11.12"),
 
     libraryDependencies ++= Seq(
       "jfree" % "jcommon" % "1.0.16" % "provided",
@@ -196,6 +197,7 @@ lazy val swing = (project in file("app"))
   .settings(uiDependencies: _*)
   .settings(
     name := "au.id.cxd.math.app",
+    crossScalaVersions := Seq("2.11.12"),
 
     assembly / aggregate  := false,
 
