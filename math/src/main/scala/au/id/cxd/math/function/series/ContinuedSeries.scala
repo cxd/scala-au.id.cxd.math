@@ -22,6 +22,7 @@ trait ContinuedSeries {
   def poly(coef: List[Double], e: Double): Double = coef match {
     case c :: Nil => c
     case (c :: cs) => c + e * poly(cs, e)
+    case Nil => 0.0
   }
 
 

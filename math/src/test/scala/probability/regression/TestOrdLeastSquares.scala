@@ -2,10 +2,8 @@ package probability.regression
 
 import au.id.cxd.math.probability.regression.OrdLeastSquares
 import breeze.linalg.{DenseMatrix, DenseVector}
-import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 import org.scalatest._
 
-import scalax.chart.module.ChartFactories.XYLineChart
 
 /**
  * Created by cd on 29/06/2014.

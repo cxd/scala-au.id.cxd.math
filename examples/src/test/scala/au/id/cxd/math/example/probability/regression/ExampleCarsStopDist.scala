@@ -2,8 +2,7 @@ package au.id.cxd.math.example.probability.regression
 
 import java.awt.GridLayout
 import java.io.File
-import javax.swing.JFrame
-
+import javax.swing.{JFrame, WindowConstants}
 import au.id.cxd.math.data.{CsvReader, MatrixReader}
 import au.id.cxd.math.example.charting.ChartHelper
 import au.id.cxd.math.probability.regression.OrdLeastSquares
@@ -11,9 +10,9 @@ import breeze.linalg.DenseMatrix
 import org.jfree.chart.ChartPanel
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
-
 import scalax.chart.module.ChartFactories.XYLineChart
 import scalax.chart.module.BoxAndWhiskerChartFactories._
+
 import scala.collection.JavaConversions._
 
 /**
@@ -107,7 +106,7 @@ object ExampleCarsStopDist {
 
 
     val frame = new JFrame("Example car speed and predicted stopping distance")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setLayout(new GridLayout(1,2))
 
 

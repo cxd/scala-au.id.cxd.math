@@ -2,8 +2,7 @@ package au.id.cxd.math.example.probability.regression
 
 import java.awt.GridLayout
 import java.io.File
-import javax.swing.JFrame
-
+import javax.swing.{JFrame, WindowConstants}
 import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.example.charting.ChartHelper
 import au.id.cxd.math.probability.regression.{BayesLogisticLeastSquares, LogisticLeastSquares}
@@ -11,7 +10,6 @@ import breeze.linalg.DenseMatrix
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
 import org.jfree.util.ShapeUtilities
-
 import scalax.chart.module.ChartFactories.XYLineChart
 
 /**
@@ -138,7 +136,7 @@ object ExampleCarsLogitBayesRegression {
     renderer3.setSeriesShape(1, cross2)
 
     val frame = new JFrame("Example mtcars hp x weight 0=auto, 1=manual")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setLayout(new GridLayout(1,2))
 
 

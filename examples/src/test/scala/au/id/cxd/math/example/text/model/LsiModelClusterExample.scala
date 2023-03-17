@@ -34,6 +34,10 @@ import scala.swing.{Color, Dimension}
   * This example investigates the use of clustering
   * via the LSI model.
   * Created by cd on 13/1/17.
+  *
+  * Can be invoked from sbt using
+  *
+  * runMain au.id.cxd.math.example.text.model.LsiModelClusterExample
   */
 object LsiModelClusterExample {
 
@@ -83,7 +87,7 @@ object LsiModelClusterExample {
       }
     }
     val frame = new JFrame(s"Entropy ${entropy}")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setLayout(new GridLayout(1, 1))
     val chart = ChartFactory.createBarChart(s"Variation for first 100 components total Entropy ${entropy}",
       "Component",
@@ -153,7 +157,7 @@ object LsiModelClusterExample {
     }
 
     val frame = new JFrame(s"Population of Clusters")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setLayout(new GridLayout(2, 1))
 
     val chartA = ChartFactory.createBarChart(s"Population of Document Clusters",
@@ -205,8 +209,8 @@ object LsiModelClusterExample {
             // index x docIds x Component x ComponentWeight
             // (Int , Seq[String], Int, Double )
             if (doc._2.length > 0) {
-              val id = doc._2(0)
-              val matchRecord = data.find { row => row(0).equalsIgnoreCase(id) }
+              val id = doc._2(1)
+              val matchRecord = data.find { row => row(1).equalsIgnoreCase(id) }
               matchRecord match {
                 case Some(row) => Some((row(0), row(1), row(2)))
                 case _ => None
@@ -258,7 +262,7 @@ object LsiModelClusterExample {
         val weights = cluster.map(_._3)
         val minWeight = weights.min
         // scaling factor to convert to whole numbers.
-        val factor = 1.0 / minWeight
+        val factor = 100* (1.0 / minWeight)
         val subset = cluster.length > 100 match {
           case true => cluster.take(100)
           case _ => cluster
@@ -318,7 +322,7 @@ object LsiModelClusterExample {
     */
   def createTermFrame(terms: Map[Int, Array[(Int, String, Double)]]) = {
     val termFrame = new JFrame(s"Cluster TermClouds")
-    termFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    termFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     termFrame.setPreferredSize(new Dimension(800, 800))
     termFrame.setLayout(new BorderLayout())
 
@@ -400,7 +404,7 @@ object LsiModelClusterExample {
       true, true, false)
 
     val frame = new JFrame(s"Attribute Components for Clusters")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setLayout(new GridLayout(1, 1))
 
     frame.add(ChartHelper.makeChartPanel(chart, 800, 600))
@@ -439,7 +443,7 @@ object LsiModelClusterExample {
       true, true, false)
 
     val frame = new JFrame(s"Document Components for Clusters")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setLayout(new GridLayout(1, 1))
 
     frame.add(ChartHelper.makeChartPanel(chart, 800, 600))
@@ -459,11 +463,17 @@ object LsiModelClusterExample {
   def createTableModel(k: Int, docs: Map[Int, Array[(String, String, String)]]) = {
     docs.get(k).map {
       doc => {
-        val documents = doc
-        val columnNames = Array("docType", "docId", "text")
 
         new AbstractTableModel() {
+          val documents = doc
+          val columnNames = Array("docType", "docId", "text")
+          val columnClasses = Array(classOf[String], classOf[String], classOf[String])
+
           def getRowCount: Int = documents.length
+
+          override def getColumnClass(columnIndex: Int): Class[_] = {
+            columnClasses(columnIndex)
+          }
 
           def getColumnCount: Int = columnNames.length
 
@@ -494,7 +504,7 @@ object LsiModelClusterExample {
     */
   def createDocumentFrame(docs: Map[Int, Array[(String, String, String)]]) = {
     val docFrame = new JFrame("Document Clusters")
-    docFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    docFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     docFrame.setPreferredSize(new Dimension(800, 800))
     docFrame.setLayout(new BorderLayout())
 

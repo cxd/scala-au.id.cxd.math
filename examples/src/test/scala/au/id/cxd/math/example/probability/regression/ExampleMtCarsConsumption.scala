@@ -2,8 +2,7 @@ package au.id.cxd.math.example.probability.regression
 
 import java.awt.GridLayout
 import java.io.File
-import javax.swing.JFrame
-
+import javax.swing.{JFrame, WindowConstants}
 import au.id.cxd.math.data.MatrixReader
 import au.id.cxd.math.example.charting.ChartHelper
 import au.id.cxd.math.probability.regression.OrdLeastSquares
@@ -11,8 +10,8 @@ import breeze.linalg.DenseVector
 import breeze.linalg._
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset
 import org.jfree.data.xy.{XYSeries, XYSeriesCollection}
-
 import scalax.chart.module.ChartFactories.XYLineChart
+
 import scala.collection.JavaConversions._
 
 /**
@@ -109,7 +108,7 @@ object ExampleMtCarsConsumption {
 
 
     val frame = new JFrame("Example mtcars data set and predicted miles per gallon")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setLayout(new GridLayout(1, 2))
 
 
