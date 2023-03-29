@@ -162,6 +162,26 @@ object SingularValueDecomposition {
     entropy
   }
 
+  /**
+    * scale the left hand (objects or documents) side by the S matrix
+    * @param svD
+    */
+  def scaleObjects(svD:SVD[DenseMatrix[Double], DenseVector[Double]]): DenseMatrix[Double] = {
+    val sMat = singularDiagonal(svD)
+    val scaleU = svD.U * sMat
+    scaleU
+  }
+
+  /**
+    * scale the right hand side (attributes or terms) by the S matrix.
+    * @param svD
+    * @return
+    */
+  def scaleAttributes(svD:SVD[DenseMatrix[Double], DenseVector[Double]]):DenseMatrix[Double] = {
+    val sMat = singularDiagonal(svD)
+    val scaleV = svD.Vt.t * sMat
+    scaleV.t
+  }
 
   /**
     * approximate correlation matrix of object (rows) and attributes (columns)

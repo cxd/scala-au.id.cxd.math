@@ -48,7 +48,7 @@ trait LsiComponentCluster {
   def clusterDocuments(lsi: LatentSemanticIndex, kClusters: Int):Map[Int, Array[(Int, Seq[String], Int, Double)]] = {
     // we select the first kClusters from U
     // there are two clusters for each component, negative and positive.
-    val U = lsi.svD.U(::, 0 until kClusters).toDenseMatrix
+    val U = lsi.svD.U(::, 1 until kClusters + 1).toDenseMatrix
     // subtract the minimum value
     val U2 = subtractMinimum(U)
     // for each row in the documents we map this to the column which has the maximum value.
@@ -94,7 +94,7 @@ trait LsiComponentCluster {
   def clusterAttributes(lsi: LatentSemanticIndex, kClusters: Int):Map[Int, Array[(Int, Int,(String, Int, Int), Double)]] = {
     // we select the first kClusters from Vt and transpose it
     // so that the dimensions are (n, k) - n attributes x k columns
-    val V = lsi.svD.Vt(0 until kClusters, ::).toDenseMatrix.t
+    val V = lsi.svD.Vt(1 until kClusters + 1, ::).toDenseMatrix.t
     // subtract the minimum value
     val V2 = subtractMinimum(V)
     // now for each term index we map it into a cluster

@@ -241,8 +241,11 @@ object LsiModelClusterExample {
         //(Cluster x TermColumnIndex x Term x Weight)
         // map it to
         // (ColumnIndex, TermString, ComponentWeight)
+        // TODO: determine how to get term frequency for identifying key terms
+        // in cluster.
         val mappedTerms = terms.map { term =>
-          (term._2, term._3._1, term._4)
+          //(term._2, term._3._1, term._4)
+          (term._2, term._3._1, math.abs(term._3._2.toDouble))
         }
 
         (cluster, mappedTerms)
@@ -262,10 +265,10 @@ object LsiModelClusterExample {
         val weights = cluster.map(_._3)
         val minWeight = weights.min
         // scaling factor to convert to whole numbers.
-        val factor = 100* (1.0 / minWeight)
+        val factor = 1 //100* (1.0 / minWeight)
         val subset = cluster.length > 100 match {
-          case true => cluster.take(100)
-          case _ => cluster
+          case true => cluster.sortBy(-_._3).take(100)
+          case _ => cluster.sortBy(-_._3)
         }
         // map to a word frequency type for the word cloud renderer.
         val wordFreq = subset.map {
@@ -371,7 +374,7 @@ object LsiModelClusterExample {
     */
   def createTermScatterPlot(lsi: LatentSemanticIndex, dimX: Int, dimY: Int, clusters: Map[Int, Array[(Int, String, Double)]]) = {
     // k x n attribute relations
-    val Vt = lsi.svD.Vt
+    val Vt = SingularValueDecomposition.scaleAttributes(lsi.svD)// lsi.svD.Vt
     val dataA = Vt(dimX, ::).inner.toArray
     val dataB = Vt(dimY, ::).inner.toArray
     val xyData = dataA.zip(dataB)
@@ -415,7 +418,7 @@ object LsiModelClusterExample {
   }
 
   def createDocumentScatterPlot(lsi:LatentSemanticIndex, dimX:Int, dimY:Int, docs: LsiDocumentCluster) = {
-    val U = lsi.svD.U
+    val U = SingularValueDecomposition.scaleObjects(lsi.svD)//lsi.svD.U
     val dataX = U(::,dimX).toArray
     val dataY = U(::, dimY).toArray
     val xyData = dataX.zip(dataY)
