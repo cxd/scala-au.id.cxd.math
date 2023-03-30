@@ -297,7 +297,7 @@ case class TfIdfCount() extends DocumentTermVectoriser {
       val pair = keySorted(i)
       val ndocs = termDocs.get(pair._1).get.keys.size
       val termCount = terms.get(pair._1).getOrElse(0.0)
-      keyMap.put(i, (pair._1, pair._2, ndocs, termCount))
+      keyMap.put(i, (pair._1, pair._2, ndocs, termCount.toInt))
     }
     // now there is a key map which we use to index the columns of each document when calculating the tf-idf
     val tfIdfMat = DenseMatrix.tabulate[Double](data.length, keys.length) {

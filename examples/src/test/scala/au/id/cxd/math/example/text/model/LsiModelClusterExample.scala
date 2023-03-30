@@ -245,7 +245,7 @@ object LsiModelClusterExample {
         // in cluster.
         val mappedTerms = terms.map { term =>
           //(term._2, term._3._1, term._4)
-          (term._2, term._3._1, math.abs(term._3._4))
+          (term._2, term._3._1, math.abs(term._3._4.toDouble))
         }
 
         (cluster, mappedTerms)

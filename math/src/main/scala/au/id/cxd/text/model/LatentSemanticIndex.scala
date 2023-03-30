@@ -232,7 +232,7 @@ trait LatentSemanticIndexReader {
               val hashCode = line(2).toInt
               val docCnt = line(3).toInt
               val termCount = line(4).toDouble
-              accum._2.put(colIdx, (term, hashCode, docCnt, termCount))
+              accum._2.put(colIdx, (term, hashCode, docCnt, termCount.toInt))
               (idx + 1, accum._2)
             }
           }
