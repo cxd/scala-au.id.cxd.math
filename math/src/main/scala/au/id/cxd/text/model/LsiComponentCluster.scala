@@ -1,5 +1,6 @@
 package au.id.cxd.text.model
 
+import au.id.cxd.text.count.TermCountTypeAliases.{TermCount, TermDocumentCount, TermHashCode}
 import breeze.linalg.DenseMatrix
 
 /**
@@ -91,7 +92,7 @@ trait LsiComponentCluster {
     * Whereas each entry in the group for the cluster is a tuple consisting of
     * (Cluster x TermColumnIndex x Term x Weight)
     */
-  def clusterAttributes(lsi: LatentSemanticIndex, kClusters: Int):Map[Int, Array[(Int, Int,(String, Int, Int), Double)]] = {
+  def clusterAttributes(lsi: LatentSemanticIndex, kClusters: Int):Map[Int, Array[(Int, Int,(String, TermHashCode, TermDocumentCount, TermCount), Double)]] = {
     // we select the first kClusters from Vt and transpose it
     // so that the dimensions are (n, k) - n attributes x k columns
     val V = lsi.svD.Vt(1 until kClusters + 1, ::).toDenseMatrix.t
@@ -131,5 +132,5 @@ object LsiComponentCluster extends LsiComponentCluster {
 
   type LsiDocumentCluster = Map[Int, Array[(Int, Seq[String], Int, Double)]]
 
-  type LsiAttributeCluster = Map[Int, Array[(Int, Int,(String, Int, Int), Double)]]
+  type LsiAttributeCluster = Map[Int, Array[(Int, Int,(String, TermHashCode, TermDocumentCount, TermCount), Double)]]
 }

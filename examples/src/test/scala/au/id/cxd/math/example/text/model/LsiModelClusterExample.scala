@@ -240,12 +240,12 @@ object LsiModelClusterExample {
         val terms = termPair._2.sortBy(-_._4)
         //(Cluster x TermColumnIndex x Term x Weight)
         // map it to
-        // (ColumnIndex, TermString, ComponentWeight)
-        // TODO: determine how to get term frequency for identifying key terms
+        // (ColumnIndex, TermString, TermCount)
+        //
         // in cluster.
         val mappedTerms = terms.map { term =>
           //(term._2, term._3._1, term._4)
-          (term._2, term._3._1, math.abs(term._3._2.toDouble))
+          (term._2, term._3._1, math.abs(term._3._4))
         }
 
         (cluster, mappedTerms)

@@ -10,6 +10,7 @@ import au.id.cxd.math.data.{CsvReader, CsvWriter, Readable, Writable}
 import au.id.cxd.math.data.archive.{ZipArchiveInput, ZipArchiveOutput}
 import au.id.cxd.math.function.distance.CosineDistance
 import au.id.cxd.math.model.components.SingularValueDecomposition
+import au.id.cxd.text.count.TermCountTypeAliases.{TermCount, TermDocumentCount, TermHashCode}
 import au.id.cxd.text.count.{DocumentTermVectoriser, TfIdfCount}
 import au.id.cxd.text.helpers.{EmbeddedStopwordsLoader, IndexedTextCsvReader}
 import au.id.cxd.text.preprocess.{LinePatternFilter, StemmingPatternFilter, StopwordPatternFilter}
@@ -31,7 +32,7 @@ import scala.util.Try
   * Created by cd on 10/1/17.
   */
 class LatentSemanticIndex(val docIdMap: mutable.Map[Int, Seq[String]],
-                          val colTermMap: mutable.Map[Int, (String, Int, Int)],
+                          val colTermMap: mutable.Map[Int, (String, TermHashCode, TermDocumentCount, TermCount)],
                           val tfIdf: DenseMatrix[Double],
                           val svD: SVD[DenseMatrix[Double], DenseVector[Double]]) extends Serializable {
 }
@@ -44,10 +45,12 @@ object LatentSemanticIndex
     with LsiDocumentSearch {
 
 
+
+
   type LsiSearchSpace = (DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double])
 
   def apply(docIdMap: mutable.Map[Int, Seq[String]],
-            colTermMap: mutable.Map[Int, (String, Int, Int)],
+            colTermMap: mutable.Map[Int,  (String, TermHashCode, TermDocumentCount, TermCount)],
             tfIdf: DenseMatrix[Double],
             svD: SVD[DenseMatrix[Double], DenseVector[Double]]) = new LatentSemanticIndex(docIdMap, colTermMap, tfIdf, svD)
 
@@ -76,9 +79,9 @@ trait LatentSemanticIndexWriter {
 
   val termMapWriter = new CsvWriter(writeHeaders = true) {
 
-    val headers = Seq("Index", "Term", "Hashcode", "DocCount")
+    val headers = Seq("Index", "Term", "Hashcode", "DocCount", "TermCount")
 
-    def writeBlock(pair: (Int, (String, Int, Int))): Array[String] = {
+    def writeBlock(pair: (Int,  (String, TermHashCode, TermDocumentCount, TermCount))): Array[String] = {
       Array(pair._1.toString, pair._2._1, pair._2._2.toString, pair._2._3.toString)
     }
   }
@@ -96,7 +99,7 @@ trait LatentSemanticIndexWriter {
   }
 
 
-  def writeTermMap(path: String, termMap: mutable.Map[Int, (String, Int, Int)]) = {
+  def writeTermMap(path: String, termMap: mutable.Map[Int,  (String, TermHashCode, TermDocumentCount, TermCount)]) = {
     termMapWriter.write(path, termMapWriter.headers.toArray, termMap.toSeq)(termMapWriter.writeBlock)
   }
 
@@ -216,9 +219,9 @@ trait LatentSemanticIndexReader {
     * @param path
     * @return
     */
-  def readColTermMap(path: String): mutable.Map[Int, (String, Int, Int)] = {
+  def readColTermMap(path: String): mutable.Map[Int, (String, TermHashCode, TermDocumentCount, TermCount)] = {
     val (idx, terms) =
-      CsvReader().readCsv(new File(path), (-1, mutable.Map[Int, (String, Int, Int)]())) {
+      CsvReader().readCsv(new File(path), (-1, mutable.Map[Int, (String, TermHashCode, TermDocumentCount, TermCount)]())) {
         (accum, line) => {
           val idx = accum._1
           idx < 0 match {
@@ -228,7 +231,8 @@ trait LatentSemanticIndexReader {
               val term = line(1)
               val hashCode = line(2).toInt
               val docCnt = line(3).toInt
-              accum._2.put(colIdx, (term, hashCode, docCnt))
+              val termCount = line(4).toDouble
+              accum._2.put(colIdx, (term, hashCode, docCnt, termCount))
               (idx + 1, accum._2)
             }
           }

@@ -1,5 +1,6 @@
 package au.id.cxd.text.count
 
+import au.id.cxd.text.count.TermCountTypeAliases.{TermCount, TermDocumentCount, TermHashCode}
 import au.id.cxd.text.model.LatentSemanticIndex
 import breeze.linalg.{DenseMatrix, DenseVector}
 
@@ -39,5 +40,5 @@ trait DocumentTermVectoriser {
     * corresponding term within the document.
     *
     */
-  def count(data: Seq[Array[String]]): (mutable.Map[Int, (String, Int, Int)], DenseMatrix[Double])
+  def count(data: Seq[Array[String]]): (mutable.Map[Int, (String, TermHashCode, TermDocumentCount, TermCount)], DenseMatrix[Double])
 }
