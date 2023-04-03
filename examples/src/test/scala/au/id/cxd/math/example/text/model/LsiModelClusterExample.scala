@@ -120,8 +120,8 @@ object LsiModelClusterExample {
     *
     * @param lsi
     */
-  def makeDocumentClusters(lsi: LatentSemanticIndex, cluster: LsiComponentCluster, k: Int) = {
-    val clusters = cluster.clusterDocuments(lsi, k)
+  def makeDocumentClusters(lsi: LatentSemanticIndex, cluster: LsiComponentCluster, k: Int, scaleObjects:Boolean = false) = {
+    val clusters = cluster.clusterDocuments(lsi, k, rescale=scaleObjects)
     clusters
   }
 
@@ -133,8 +133,8 @@ object LsiModelClusterExample {
     * @param k
     * @return
     */
-  def makeTermClusters(lsi: LatentSemanticIndex, cluster: LsiComponentCluster, k: Int) = {
-    val clusters = cluster.clusterAttributes(lsi, k)
+  def makeTermClusters(lsi: LatentSemanticIndex, cluster: LsiComponentCluster, k: Int, scaleAttribs:Boolean = false) = {
+    val clusters = cluster.clusterAttributes(lsi, k, rescale=scaleAttribs)
     clusters
   }
 
@@ -560,16 +560,17 @@ object LsiModelClusterExample {
   def main(args: Array[String]) = {
     val config = ModelConfig(args, defaultConfig)
     val data = loadDocuments(config)
+    val rescale = true
     readModel(config) foreach {
       model => {
         println("Plotting Entropy")
-        val (k, variation) = plotEntropy(model, 0.9997, 50)
+        val (k, variation) = plotEntropy(model, 0.85, 20)
         println(s"selected $k clusters")
 
         val cluster = new LsiComponentCluster {}
-        val docClusters = makeDocumentClusters(model, cluster, k)
+        val docClusters = makeDocumentClusters(model, cluster, k, scaleObjects = rescale)
 
-        val termClusters = makeTermClusters(model, cluster, k)
+        val termClusters = makeTermClusters(model, cluster, k, scaleAttribs = rescale)
 
         println("Plotting cluster populations")
         plotClusterSizes(docClusters, termClusters)
