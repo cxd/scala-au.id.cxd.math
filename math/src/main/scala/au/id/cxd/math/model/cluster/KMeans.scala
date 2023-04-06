@@ -54,7 +54,7 @@ class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThresh
       series
     }
     val idx = sample()
-    data(idx,::).toDenseMatrix
+    data(idx.toSeq,::).toDenseMatrix
   }
 
   /**
