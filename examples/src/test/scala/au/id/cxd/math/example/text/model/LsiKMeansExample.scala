@@ -42,7 +42,7 @@ object LsiKMeansExample {
         val docU = reduceLsi.svD.U
         val builder = KMeans(k=20)
         val result = builder.cluster(docU)
-        ()
+        KMeans.writeBinary("kmeansexample.ser", result)
     }
 
     ()

@@ -1,16 +1,27 @@
 package au.id.cxd.math.model.cluster
 
+import au.id.cxd.math.data.{Writable, Readable}
 import au.id.cxd.math.data.filter.Which
 import au.id.cxd.math.function.Constants
 import au.id.cxd.math.function.column.ColMeans
 import au.id.cxd.math.function.distance.EuclideanDistance
 import au.id.cxd.math.probability.random.RUniform
+import au.id.cxd.text.model.LatentSemanticIndex
 import breeze.linalg.{DenseMatrix, DenseVector, argmax, argmin, max}
 
 import scala.annotation.tailrec
 import scala.collection.mutable
 
 
+/**
+  * clustering result
+  * @param indices
+  * The indices of each cluster, for each row of the original data.
+  * @param centroids
+  * Centroid vectors for each cluster.
+  * @param groups
+  * Mapping of data row index and subset of data grouped by each cluster.
+  */
 case class KMeansResult(indices:Seq[Int], centroids:Seq[DenseVector[Double]], groups:Seq[(Seq[Int], DenseMatrix[Double])]) {}
 /**
   * k means clustering.
@@ -20,7 +31,7 @@ case class KMeansResult(indices:Seq[Int], centroids:Seq[DenseVector[Double]], gr
   * @param centroids
   * potential starting centroids can be supplied.
   */
-case class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.DBL_EPSILON) {
+class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.DBL_EPSILON) {
 
 
   /**
@@ -172,4 +183,38 @@ case class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distT
     KMeansResult(clusterIndices, centroidList, groups)
   }
 
+}
+
+object KMeans {
+
+  /**
+    * initialise the algorithm.
+    * @param k
+    * @param initCentroids
+    * @param distThreshold
+    * @return
+    */
+  def apply(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.DBL_EPSILON): KMeans = {
+    new KMeans(k = k, initCentroids = initCentroids, distThreshold = distThreshold)
+  }
+
+  /**
+    * binary serialise the KMeans result.
+    * @param file
+    * @param result
+    */
+  def writeBinary(path:String, result:KMeansResult): Option[Boolean] = {
+    val writer = new Writable[KMeansResult] {}
+    writer.write(path)(result)
+  }
+
+  /**
+    * read file from binary.
+    * @param filePath
+    * @return
+    */
+  def readResults(filePath:String): Option[KMeansResult] = {
+    val reader = new Readable[KMeansResult] {}
+    reader.read(filePath)
+  }
 }
