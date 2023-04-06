@@ -31,7 +31,7 @@ case class KMeansResult(indices:Seq[Int], centroids:Seq[DenseVector[Double]], gr
   * @param centroids
   * potential starting centroids can be supplied.
   */
-class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.DBL_EPSILON) {
+class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.ROOT4_DBL_EPSILON) {
 
 
   /**
