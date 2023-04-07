@@ -31,7 +31,7 @@ case class KMeansResult(indices:Seq[Int], centroids:Seq[DenseVector[Double]], gr
   * @param centroids
   * potential starting centroids can be supplied.
   */
-class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.ROOT4_DBL_EPSILON) {
+class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.ROOT4_DBL_EPSILON, maxIter:Option[Double] = None) {
 
 
   /**
@@ -163,7 +163,7 @@ class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThresh
       randomCentroids(k, data)
     }
     var clusterIndices:Seq[Int] = Seq()
-
+    var i = 0
     do {
       val (idx, minDist) = assignClusters(data, centroids)
       val newCentroids = calculateCentroids(data, idx)
@@ -177,6 +177,11 @@ class KMeans(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThresh
       clusterIndices = newIdx
       // exit condition if the maximum distance from the
       flag = (maxDist <= distThreshold || delta == 0)
+      val maxIterFlag = maxIter.map { m => i >= m }
+      if (maxIterFlag.getOrElse(false) == true) {
+        flag = true
+      }
+      i += 1
     } while(!flag)
     val groups = groupByCluster(data, clusterIndices)
     val centroidList = centroidsToVector(centroids)
