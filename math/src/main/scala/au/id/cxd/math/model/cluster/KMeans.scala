@@ -199,8 +199,8 @@ object KMeans {
     * @param distThreshold
     * @return
     */
-  def apply(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.DBL_EPSILON): KMeans = {
-    new KMeans(k = k, initCentroids = initCentroids, distThreshold = distThreshold)
+  def apply(k:Int=2, initCentroids:Seq[DenseVector[Double]] = Seq(), distThreshold:Double= Constants.DBL_EPSILON, maxIter:Option[Double] = None): KMeans = {
+    new KMeans(k = k, initCentroids = initCentroids, distThreshold = distThreshold, maxIter = maxIter)
   }
 
   /**
