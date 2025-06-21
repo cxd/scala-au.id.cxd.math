@@ -16,7 +16,7 @@ import au.id.cxd.text.helpers.{EmbeddedStopwordsLoader, IndexedTextCsvReader}
 import au.id.cxd.text.preprocess.{LinePatternFilter, StemmingPatternFilter, StopwordPatternFilter}
 
 import scala.collection.mutable
-import scala.util.Try
+import scala.util.{Success, Try}
 
 /**
   * The latent semantic index is a class that contains the data associated with
@@ -82,7 +82,7 @@ trait LatentSemanticIndexWriter {
     val headers = Seq("Index", "Term", "Hashcode", "DocCount", "TermCount")
 
     def writeBlock(pair: (Int,  (String, TermHashCode, TermDocumentCount, TermCount))): Array[String] = {
-      Array(pair._1.toString, pair._2._1, pair._2._2.toString, pair._2._3.toString)
+      Array(pair._1.toString, pair._2._1, pair._2._2.toString, pair._2._3.toString, pair._2._4.toString)
     }
   }
 
@@ -103,7 +103,7 @@ trait LatentSemanticIndexWriter {
     termMapWriter.write(path, termMapWriter.headers.toArray, termMap.toSeq)(termMapWriter.writeBlock)
   }
 
-  def writeZip(index: LatentSemanticIndex)(workingPath: String)(targetPath: String) = Try {
+  def writeZip(index: LatentSemanticIndex)(workingPath: String)(targetPath: String): Try[Boolean] = Try {
     val parent = workingPath.stripSuffix(File.separator)
     val docPath = s"$parent${File.separator}docidmap.csv"
     val termPath = s"$parent${File.separator}termmap.csv"
@@ -150,18 +150,22 @@ trait LatentSemanticIndexWriter {
     * @param index
     * @param path
     */
-  def writeZipTemp(index: LatentSemanticIndex)(path: String) = {
+  def writeZipTemp(index: LatentSemanticIndex)(path: String):Try[Boolean] = {
     val tmpFile = path.stripSuffix(".zip")
     val p1 = Paths.get(tmpFile)
     val cnt = p1.getNameCount()
     val childDir = p1.getName(cnt-1)
-    val tmp = Files.createTempDirectory(childDir.toString)
-    tmp.toFile.deleteOnExit()
-    val tmpPath = tmp.toString
-    // now we can create a set of separate files.
-    val result = writeZip(index)(tmpPath)(path)
-    tmp.toFile.delete()
-    result
+    Try {
+      val tmp = Files.createTempDirectory(childDir.toString)
+      tmp.toFile.deleteOnExit()
+      val tmpPath = tmp.toString
+      val result = writeZip(index)(tmpPath)(path)
+      val _ = tmp.toFile.delete()
+      result
+    } match {
+      case Success(result) => result
+      case _ => Success(false)
+    }
   }
 
   /**
