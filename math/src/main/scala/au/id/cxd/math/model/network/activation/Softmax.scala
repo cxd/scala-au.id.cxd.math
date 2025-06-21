@@ -1,7 +1,7 @@
 package au.id.cxd.math.model.network.activation
 import breeze.linalg.{DenseMatrix, diag}
 
-case class Softmax() extends Activation {
+case class Softmax(val temperature:Double=1.0) extends Activation {
   /**
     * the activation function applies to the input matrix.
     *
@@ -9,10 +9,11 @@ case class Softmax() extends Activation {
     * @return
     */
   override def apply(h: DenseMatrix[Double]): DenseMatrix[Double] = {
+    val h1 = h/temperature
     val m1 = DenseMatrix.tabulate(h.rows, h.cols) {
       case (i,j) =>
-        val maxH = h(::,j).toArray.max
-        Math.exp(h(i,j) - maxH)
+        val maxH = h1(::,j).toArray.max
+        Math.exp(h1(i,j) - maxH)
     }
     val total = m1.toArray.sum
     1.0/total * m1

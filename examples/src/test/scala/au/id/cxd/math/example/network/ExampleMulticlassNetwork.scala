@@ -1,12 +1,12 @@
 package au.id.cxd.math.example.network
 
 import java.io.File
-
 import au.id.cxd.math.count.CrossTabulate
 import au.id.cxd.math.data.filter.Which
 import au.id.cxd.math.data.{DataSet, DataSetReader, Partition}
 import au.id.cxd.math.function.transform.{ContinuousTransform, MinMaxNormalisation}
 import au.id.cxd.math.model.components.CanonicalDiscriminantAnalysis
+import au.id.cxd.math.model.logistic.MultinomialLogisticRegressor
 import au.id.cxd.math.model.network.activation.{Identity, Linear, Relu, Sigmoid, Softmax}
 import au.id.cxd.math.model.network.builder.Sequence
 import au.id.cxd.math.model.network.initialisation.{RandomGaussianInitialisation, RandomWeightInitialisation, WeightInitialisationStrategy}
@@ -99,7 +99,7 @@ object ExampleMulticlassNetwork {
       lossFn = DiscreteCrossEntropy())
 
     //
-    val (loss, valloss, network2) = trainNetwork(10000, trainer, network)
+    val (loss, valloss, network2) = trainNetwork(10, trainer, network)
 
     val classLabels = data.discreteMapping.head._2
 
@@ -109,6 +109,18 @@ object ExampleMulticlassNetwork {
 
     val xtab = CrossTabulate(actualLabels, labels)
     val metrics1 = CrossTabulate.metrics(xtab)
+
+    // compare with simple multinomial logistic regressor trained with negative log likelihood
+    val multilogit = MultinomialLogisticRegressor(dataSet=data,
+      numFeatures = 13,
+      numClasses = 3,
+      featureColRange= (0, 12),
+      targetColRange = (13, 15),
+      classLabels = classLabels.toList,
+      trainEpochs = 10)
+    val logitmodel = multilogit.train()
+    val logitxtab = multilogit.test(logitmodel, classLabels.toList,data)
+
 
 
 
@@ -209,6 +221,17 @@ object ExampleMulticlassNetwork {
     println(xtab)
 
     CrossTabulate.printMetrics(xtab)
+
+    println("============================")
+    println("")
+
+    println("Multinomial Logistic model performance")
+    println(logitxtab._1)
+
+    CrossTabulate.printMetrics(logitxtab._1)
+    println("============================")
+    println("")
+
   }
 
 }

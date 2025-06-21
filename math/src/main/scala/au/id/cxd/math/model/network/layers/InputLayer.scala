@@ -1,6 +1,6 @@
 package au.id.cxd.math.model.network.layers
 
-import au.id.cxd.math.model.network.activation.Activation
+import au.id.cxd.math.model.network.activation.{Activation, Identity}
 import breeze.linalg.DenseMatrix
 
 class InputLayer(override val activation: Activation, override val units:Int, override val shape: Option[(Int, Int)] = None)
@@ -77,7 +77,7 @@ class InputLayer(override val activation: Activation, override val units:Int, ov
   }
 }
 object InputLayer {
-  def apply(activation: Activation, units:Int, shape: Option[(Int, Int)] = None):InputLayer = {
+  def apply(activation: Activation = Identity(), units:Int, shape: Option[(Int, Int)] = None):InputLayer = {
     new InputLayer(activation, units, shape)
   }
 }

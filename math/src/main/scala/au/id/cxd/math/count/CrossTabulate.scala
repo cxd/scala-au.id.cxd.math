@@ -11,7 +11,7 @@ import scala.math.Ordering
   */
 class CrossTabulate[A] {
 
-  def op(a:Seq[A], b:Seq[A])(implicit ord: Ordering[A]) = {
+  def op(a:Seq[A], b:Seq[A])(implicit ord: Ordering[A]): DenseMatrix[Double] = {
 
 
     val uniqueA = a.sorted.distinct
@@ -63,7 +63,7 @@ class CrossTabulate[A] {
 object CrossTabulate {
   def apply[A](a:Seq[A], b:Seq[A])(implicit ord: Ordering[A]) = new CrossTabulate[A]().op(a,b)
 
-  def metrics(m:DenseMatrix[Double]) = {
+  def metrics(m:DenseMatrix[Double]): (Double, Double, Double, Double, Double, Double) = {
     val total = m.toArray.sum.toDouble
     val (posTotal, falseTotal) = (for (i<-0 until m.rows) yield i).foldLeft((0.0,0.0)) {
       (accum, i) => (for (j<-0 until m.cols) yield j).foldLeft(accum) {
