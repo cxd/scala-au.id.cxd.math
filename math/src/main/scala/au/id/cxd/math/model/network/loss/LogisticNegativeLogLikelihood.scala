@@ -24,8 +24,8 @@ case class LogisticNegativeLogLikelihood(val logits:Boolean=false, val temperatu
     * @return
     */
   def errorGrad(obs:DenseMatrix[Double], probs:DenseMatrix[Double]):DenseMatrix[Double] = {
-    val grad = (probs - obs).t
-    grad
+    val grad = (probs - obs)
+    -grad
   }
 
   /**
@@ -38,9 +38,9 @@ case class LogisticNegativeLogLikelihood(val logits:Boolean=false, val temperatu
   override def apply(obs: DenseMatrix[Double], sim: DenseMatrix[Double]): (Double, DenseMatrix[Double]) = {
     val y_hat = if (logits) {
       Softmax(temperature=temperature).apply(sim)
-    } else obs
+    } else sim
     val log_probs = log(y_hat + stable)
-    val log_likelihood = sum(sim * log_probs)
+    val log_likelihood = sum(sim *:* log_probs)
     val grad = errorGrad(obs, y_hat)
     (-log_likelihood, grad)
   }

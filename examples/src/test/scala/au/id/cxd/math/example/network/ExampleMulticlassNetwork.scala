@@ -78,10 +78,10 @@ object ExampleMulticlassNetwork {
     val rows = data.trainData.rows
     val cols = 13
 
+    val trainEpochs = 5000
 
     val initialisation = RandomWeightInitialisation()
 
-    val initialisation2 = RandomGaussianInitialisation()
 
     val network = buildNetwork(initialisation)
 
@@ -99,7 +99,7 @@ object ExampleMulticlassNetwork {
       lossFn = DiscreteCrossEntropy())
 
     //
-    val (loss, valloss, network2) = trainNetwork(10, trainer, network)
+    val (loss, valloss, network2) = trainNetwork(trainEpochs, trainer, network)
 
     val classLabels = data.discreteMapping.head._2
 
@@ -117,7 +117,7 @@ object ExampleMulticlassNetwork {
       featureColRange= (0, 12),
       targetColRange = (13, 15),
       classLabels = classLabels.toList,
-      trainEpochs = 10)
+      trainEpochs = trainEpochs)
     val logitmodel = multilogit.train()
     val logitxtab = multilogit.test(logitmodel, classLabels.toList,data)
 
@@ -201,7 +201,7 @@ object ExampleMulticlassNetwork {
     println("============================")
     println("")
 
-    println("Logistic Regression performance")
+    println("Logistic Regression one-versus-many performance")
     println(xtab3)
 
     CrossTabulate.printMetrics(xtab3)

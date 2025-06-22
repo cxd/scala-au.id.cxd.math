@@ -45,8 +45,7 @@ case class MultinomialLogisticRegressor(val dataSet: DataSet,
     val initialisation = RandomWeightInitialisation()
     Sequence(Seq(
       InputLayer(units = numFeatures),
-      DenseLayer(activation = Identity(), units = numFeatures),
-      DenseLayer(activation = Softmax(), units = numClasses)
+      DenseLayer(activation = Softmax(), units = numClasses, shape=Some(numFeatures, numClasses))
     ), initialisation).compile()
       .asInstanceOf[Sequence]
   }
