@@ -1,5 +1,6 @@
 package au.id.cxd.math.probability.random
 
+import au.id.cxd.math.probability.continuous.StudentT
 /**
   * Draw random deviate from student t distribution.
   * Given in numerical methods as
@@ -13,7 +14,8 @@ package au.id.cxd.math.probability.random
   * @param mu
   * @param sigma
   */
-class RStudentT(val df: Double = 1.0, val mu: Double, val sigma: Double) extends RandomDeviate {
+class RStudentT(override val df: Double = 1.0, override val mu: Double, override val sigma: Double)
+  extends StudentT(df, mu, sigma) with RandomDeviate {
 
   val gamma = RGamma(alpha = df / 2.0, beta = 1.0 / 2.0)
   val norm = RNormal()

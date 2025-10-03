@@ -47,21 +47,21 @@ class TestGamma extends FlatSpec with Matchers with TestEvaluation {
   )
 
   "PDF" should "agree with R" in {
-    val fn = Gamma(0.1)(1.0).pdf(_)
+    val fn = Gamma(0.1, 1.0).pdf(_)
     println("Gamma PDF")
     evaluate1(fn, quantiles, pdftest, 0.01) should be (true)
     println()
   }
 
   "CDF" should "agree with R " in {
-    val fn = (y:Double) => Gamma(0.1)(1.0).cdf(y)
+    val fn = (y:Double) => Gamma(0.1, 1.0).cdf(y)
     println("Gamma CDF")
     evaluate1(fn, quantiles, cdftest, 0.1) should be(true)
     println()
   }
 
   "INVCDF" should "agree with R" in {
-    val fn = Gamma(0.1)(1.0).invcdf(_)
+    val fn = Gamma(0.1, 1.0).invcdf(_)
     println("Gamma INVCDF")
     evaluate1(fn, cdftest, quantiles, 0.1) should be(true)
     println()

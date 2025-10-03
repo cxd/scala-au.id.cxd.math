@@ -1,8 +1,9 @@
 package au.id.cxd.math.probability.random
 
+
 import scala.annotation.tailrec
 import scala.util.Random
-
+import au.id.cxd.math.probability.continuous.Uniform
 /**
   * Random draw from a uniform distribution.
   * This uses the built in random function with a min max parameter.
@@ -10,7 +11,8 @@ import scala.util.Random
   * @param min
   * @param max
   */
-class RUniform(val min:Double=0.0, val max:Double=1.0, val seed:Long = 0L, val allowMax:Boolean = false) extends RandomDeviate  {
+class RUniform(override val min:Double=0.0, override val max:Double=1.0, val seed:Long = 0L, val allowMax:Boolean = false)
+  extends Uniform(min, max) with RandomDeviate  {
   val rand = if (seed != 0L) {
     val rand1 = Random
     rand1.setSeed(seed)

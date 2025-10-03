@@ -15,7 +15,7 @@ package au.id.cxd.math.probability.continuous
   *
   * Created by cd on 6/11/14.
   */
-class Exponential(val beta: Double) extends Gamma(1.0, beta) {
+class Exponential(override val beta: Double) extends Gamma(1.0, beta) {
 
 }
 

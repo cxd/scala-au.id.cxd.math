@@ -170,10 +170,10 @@ case class ExampleLikelihood(val observations: Seq[Double]) extends StateLikelih
     val stl2 = slogtau(data.length - 1) - stl1
     // waiting time  to next event is modelled as a gamma distribution Gamma(k,lambda)
     // p(tau|k,lambda)
-    val gamma1 = Gamma(alpha = curState.k1)(beta = curState.lambda1)
+    val gamma1 = Gamma(alpha = curState.k1, beta = curState.lambda1)
     val p1 = gamma1.pdf(n1)
 
-    val gamma2 = Gamma(alpha = curState.k2)(beta = curState.lambda2)
+    val gamma2 = Gamma(alpha = curState.k2, beta = curState.lambda2)
     val p2 = gamma2.pdf(n2)
 
     // joint likelihood

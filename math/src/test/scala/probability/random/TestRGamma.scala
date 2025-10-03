@@ -10,7 +10,7 @@ class TestRGamma extends FlatSpec with Matchers {
   "rgamma" should "produce variates in gamma distribution" in {
     val alpha = 3.0
     val beta = 2.0
-    val gamma = Gamma(alpha)(beta)
+    val gamma = Gamma(alpha, beta)
     val rgamma = RGamma(alpha,beta)
 
 

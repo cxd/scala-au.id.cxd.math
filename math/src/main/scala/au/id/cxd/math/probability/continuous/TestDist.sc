@@ -38,7 +38,7 @@ q.map(i => normal.cdf(i))
 > dgamma(1,0.5,0.5)
 [1] 0.2419707
 **/
-val gammaD = Gamma(0.5)(0.5)
+val gammaD = Gamma(0.5, 0.5)
 gammaD.pdf(1)
 
 /**

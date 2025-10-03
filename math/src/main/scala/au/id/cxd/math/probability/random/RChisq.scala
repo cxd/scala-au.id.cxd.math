@@ -1,6 +1,9 @@
 package au.id.cxd.math.probability.random
 
-class RChisq(val df:Double) extends RandomDeviate {
+import au.id.cxd.math.probability.continuous.ChiSquare
+
+class RChisq(override val df:Double) extends ChiSquare(df)
+  with  RandomDeviate {
 
   val gamma = RGamma(0.5*df.toDouble, 0.5)
 

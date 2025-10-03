@@ -38,7 +38,7 @@ import scala.math._
   *
   * Created by cd on 11/09/2014.
   */
-class Gamma(alpha: Double, beta: Double) extends ContinuousDistribution {
+class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution {
 
   val a = if (alpha == 0.0) 1.0
   else alpha
@@ -87,5 +87,6 @@ class Gamma(alpha: Double, beta: Double) extends ContinuousDistribution {
 }
 
 object Gamma {
-  def apply(alpha: Double)(beta: Double) = new Gamma(alpha, beta)
+
+  def apply(alpha: Double, beta: Double) = new Gamma(alpha, beta)
 }

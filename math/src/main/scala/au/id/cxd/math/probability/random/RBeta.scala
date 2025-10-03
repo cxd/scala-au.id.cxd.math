@@ -1,5 +1,7 @@
 package au.id.cxd.math.probability.random
 
+import au.id.cxd.math.probability.continuous.Beta
+
 /**
   * A random variate from the beta distribution Beta(alpha, beta)
   *
@@ -12,7 +14,7 @@ package au.id.cxd.math.probability.random
   * @param alpha
   * @param beta
   */
-class RBeta(val alpha:Double, val beta:Double) extends RandomDeviate {
+class RBeta(override val alpha:Double, override val beta:Double) extends Beta(alpha, beta) with RandomDeviate {
 
   val g1 = RGamma(alpha, 1.0)
   val g2 = RGamma(beta, 1.0)

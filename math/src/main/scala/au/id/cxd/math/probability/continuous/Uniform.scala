@@ -24,7 +24,7 @@ import scala.math._
   * $$
   *
   */
-class Uniform(min: Double, max: Double) extends ContinuousDistribution {
+class Uniform(val min: Double, val max: Double) extends ContinuousDistribution {
 
 
   def pdf(y: Double): Double = {
@@ -59,5 +59,5 @@ class Uniform(min: Double, max: Double) extends ContinuousDistribution {
 }
 
 object Uniform {
-  def apply(min: Double)(max: Double) = new Uniform(min, max)
+  def apply(min: Double, max: Double) = new Uniform(min, max)
 }

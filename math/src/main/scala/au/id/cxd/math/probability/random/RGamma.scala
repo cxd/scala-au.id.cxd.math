@@ -1,5 +1,6 @@
 package au.id.cxd.math.probability.random
 
+import au.id.cxd.math.probability.continuous.Gamma
 /**
   * Generate a random gamma deviate.
   * Based on the procedure of Marsaglia and Tsang. 'A simple method for generating gamma variables' ACM Transactions on Mathematical Software Sept 2000.
@@ -36,7 +37,8 @@ package au.id.cxd.math.probability.random
   * @param alpha
   * @param beta
   */
-class RGamma(val alpha: Double, val beta: Double) extends RandomDeviate {
+class RGamma(override val alpha: Double, override val beta: Double)
+  extends Gamma(alpha, beta) with RandomDeviate {
 
   val alpha1: Double =
     if (alpha < 1.0) alpha + 1.0
