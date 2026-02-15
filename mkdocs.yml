@@ -78,6 +78,7 @@ nav:
   - Reference:
     - API Quick Reference: API-Quick-Reference.md
     - Examples Catalog: Examples-Catalog.md
+    - Mathematical Functions: Mathematical-Functions.md
   - Development:
     - Contributing: Contributing.md
     - Architecture: Architecture.md
