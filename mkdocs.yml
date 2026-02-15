@@ -74,6 +74,7 @@ nav:
     - Neural Networks: Neural-Networks.md
     - Text Processing: Text-Processing.md
     - Multivariate Analysis: Multivariate-Analysis.md
+    - Data Processing: Data-Processing.md
   - Reference:
     - API Quick Reference: API-Quick-Reference.md
     - Examples Catalog: Examples-Catalog.md
