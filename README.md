@@ -9,6 +9,7 @@ Further details are available at the "github pages" branch for the project locat
 
 [au.id.cxd.math](https://cxd.github.io/scala-au.id.cxd.math/)
 
+Automatically generated docs can be found here: [Wiki Docs](wiki-docs/Home.md) 
 
 ### A library experimenting with statistics.
 
