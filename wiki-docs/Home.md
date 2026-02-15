@@ -1,6 +1,15 @@
 # scala-au.id.cxd.math Wiki
 
-Welcome to the **scala-au.id.cxd.math** documentation wiki! This is a comprehensive Scala library for statistical computing, machine learning, and mathematical operations.
+Welcome to the **scala-au.id.cxd.math** documentation wiki! 
+
+This is a hobby project consisting of a Scala library for statistical computing, machine learning, and mathematical operations.
+
+Documentation in this wiki has been generated automatically with copilot, but gives the gist of how the library usage works.
+
+Human written documentation can also be found here: https://cxd.github.io/scala-au.id.cxd.math/index.html
+
+The library uses the matrix data type provided by Breeze Library: https://github.com/scalanlp/breeze
+
 
 ## 🎯 Overview
 
