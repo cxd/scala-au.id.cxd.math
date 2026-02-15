@@ -65,6 +65,24 @@ The wiki documentation includes:
 - [API Quick Reference](wiki-docs/API-Quick-Reference.md) - Common operations lookup
 - [Examples Catalog](wiki-docs/Examples-Catalog.md) - Browse all working examples
 
+**🌐 MkDocs Site**: You can build a beautiful static documentation site using [MkDocs](https://www.mkdocs.org/):
+
+```bash
+# Install MkDocs with Material theme
+pip install mkdocs-material mkdocs-minify-plugin
+
+# Serve documentation locally with live reload
+mkdocs serve
+
+# Build static site
+mkdocs build
+
+# Deploy to GitHub Pages
+mkdocs gh-deploy
+```
+
+See the [MkDocs Usage Guide](wiki-docs/MkDocs-Usage.md) for detailed instructions.
+
 The [API documentation](https://cxd.github.io/scala-au.id.cxd.math/latest/math/api/index.html) is also available, and can be generated locally via:
 
 ```

@@ -37,7 +37,7 @@ This library provides a wide range of mathematical and statistical tools impleme
 ### Development
 - **[Contributing Guidelines](Contributing.md)** - How to contribute to the project
 - **[Architecture Overview](Architecture.md)** - Design patterns and structure
-- **[TODOs and Future Work](TODOs.md)** - Planned improvements
+- **[MkDocs Usage](MkDocs-Usage.md)** - Build and serve documentation locally
 
 ## 🔗 External Resources
 

@@ -25,3 +25,7 @@ app/target/**
 
 *.zip
 **/*.zip
+
+# MkDocs build output
+site/
+site/**

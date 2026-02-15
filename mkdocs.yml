@@ -1,0 +1,165 @@
+# MkDocs configuration for scala-au.id.cxd.math documentation
+
+# Project information
+site_name: scala-au.id.cxd.math Documentation
+site_description: 'A comprehensive Scala library for statistical computing, machine learning, and mathematical operations'
+site_author: 'cxd'
+site_url: 'https://cxd.github.io/scala-au.id.cxd.math/'
+
+# Repository
+repo_name: 'cxd/scala-au.id.cxd.math'
+repo_url: 'https://github.com/cxd/scala-au.id.cxd.math'
+edit_uri: 'edit/main/wiki-docs/'
+
+# Copyright
+copyright: 'Copyright &copy; 2024 cxd'
+
+# Documentation directory
+docs_dir: wiki-docs
+
+# Build directory
+site_dir: site
+
+# Theme configuration
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+# Navigation structure
+nav:
+  - Home: Home.md
+  - Getting Started:
+    - Installation & Setup: Getting-Started.md
+    - Quick Start Examples: Quick-Start-Examples.md
+  - Core Guides:
+    - Probability Distributions: Probability-Distributions.md
+    - Statistical Tests: Statistical-Tests.md
+    - Regression Methods: Regression-Methods.md
+    - Neural Networks: Neural-Networks.md
+  - Reference:
+    - API Quick Reference: API-Quick-Reference.md
+    - Examples Catalog: Examples-Catalog.md
+  - Development:
+    - Contributing: Contributing.md
+    - Architecture: Architecture.md
+    - Wiki Setup: WIKI-SETUP.md
+    - MkDocs Usage: MkDocs-Usage.md
+
+# Plugins
+plugins:
+  - search:
+      lang: en
+      separator: '[\s\-\.]+'
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+
+# Extensions
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Extra configuration
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/cxd/scala-au.id.cxd.math
+      name: GitHub Repository
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
+  version:
+    provider: mike
+
+# Extra CSS
+extra_css:
+  - stylesheets/extra.css
+
+# Extra JavaScript
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+# Validation
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
