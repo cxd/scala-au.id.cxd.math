@@ -51,13 +51,23 @@ jenv versions
 jenv local 1.8
 ```
 
-### Documentation.
+### Documentation
 
-The documentation consists both of [API documentation](https://cxd.github.io/scala-au.id.cxd.math/latest/math/api/index.html) and some of this information is extracted into separate notes and examples.
+**📚 [Comprehensive Wiki Documentation](wiki-docs/Home.md)** - Start here for detailed guides and examples!
 
-The api documentation can be generated via the task 
+The wiki documentation includes:
+- [Getting Started Guide](wiki-docs/Getting-Started.md) - Installation and first steps
+- [Quick Start Examples](wiki-docs/Quick-Start-Examples.md) - Jump right in with code
+- [Probability Distributions](wiki-docs/Probability-Distributions.md) - Complete distribution reference
+- [Statistical Tests](wiki-docs/Statistical-Tests.md) - Hypothesis testing and inference
+- [Regression Methods](wiki-docs/Regression-Methods.md) - Linear, logistic, and Bayesian regression
+- [Neural Networks](wiki-docs/Neural-Networks.md) - Building and training neural networks
+- [API Quick Reference](wiki-docs/API-Quick-Reference.md) - Common operations lookup
+- [Examples Catalog](wiki-docs/Examples-Catalog.md) - Browse all working examples
 
-```aidl
+The [API documentation](https://cxd.github.io/scala-au.id.cxd.math/latest/math/api/index.html) is also available, and can be generated locally via:
+
+```
 sbt mathFormulaInDoc
 ```
 
