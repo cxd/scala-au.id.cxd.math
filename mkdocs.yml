@@ -72,6 +72,7 @@ nav:
     - Statistical Tests: Statistical-Tests.md
     - Regression Methods: Regression-Methods.md
     - Neural Networks: Neural-Networks.md
+    - Multivariate Analysis: Multivariate-Analysis.md
   - Reference:
     - API Quick Reference: API-Quick-Reference.md
     - Examples Catalog: Examples-Catalog.md
