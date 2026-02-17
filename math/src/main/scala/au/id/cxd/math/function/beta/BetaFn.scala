@@ -23,9 +23,13 @@ import au.id.cxd.math.function.gamma.GammaFn
   */
 class BetaFn {
 
+    // Use log-space computation for large parameters to avoid overflow
+    // Threshold chosen based on typical Gamma function overflow point
+    private val OVERFLOW_THRESHOLD = 100.0
+
     def op(a: Double, b: Double) = {
       // For large values, use log beta to avoid overflow
-      if (a > 100 || b > 100 || (a + b) > 100) {
+      if (a > OVERFLOW_THRESHOLD || b > OVERFLOW_THRESHOLD || (a + b) > OVERFLOW_THRESHOLD) {
         Math.exp(LogBetaFn(a, b))
       } else {
         (GammaFn(a) * GammaFn(b)) / GammaFn(a + b)

@@ -57,7 +57,6 @@ class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution 
     if (y < 0.0) return 0.0
     val gamma = GammaFn(a)
     ( pow(b, a)/gamma ) * pow(y, a-1.0)*exp(-b*y)
-    //(pow(y, a - 1.0) * exp(-y / b)) / (pow(b, a) * gamma)
   }
 
   def mean(): Double = a / b
