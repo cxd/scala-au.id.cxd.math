@@ -23,7 +23,14 @@ import au.id.cxd.math.function.gamma.GammaFn
   */
 class BetaFn {
 
-    def op(a: Double, b: Double) = (GammaFn(a) * GammaFn(b)) / GammaFn(a + b)
+    def op(a: Double, b: Double) = {
+      // For large values, use log beta to avoid overflow
+      if (a > 100 || b > 100 || (a + b) > 100) {
+        Math.exp(LogBetaFn(a, b))
+      } else {
+        (GammaFn(a) * GammaFn(b)) / GammaFn(a + b)
+      }
+    }
 
 }
 
