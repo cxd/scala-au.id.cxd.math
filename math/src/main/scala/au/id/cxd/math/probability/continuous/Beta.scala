@@ -62,7 +62,10 @@ class Beta(val alpha: Double, val beta: Double) extends ContinuousDistribution {
 
   override def variance(): Double = alpha * beta / (Math.pow(alpha + beta, 2.0) * (alpha + beta + 1))
 
-  override def pdf(y: Double): Double = Math.pow(y, alpha - 1) * Math.pow(1 - y, beta - 1) / betaVal
+  override def pdf(y: Double): Double = {
+    if (y < 0.0 || y > 1.0) return 0.0
+    Math.pow(y, alpha - 1) * Math.pow(1 - y, beta - 1) / betaVal
+  }
 
   override def cdf(y:Double) :Double = {
     IncompleteBetaFn(y, alpha, beta)

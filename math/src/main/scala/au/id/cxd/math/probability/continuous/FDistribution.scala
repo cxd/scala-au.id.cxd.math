@@ -105,16 +105,19 @@ class FDistribution(val numeratorDf: Double, val denominatorDf: Double) extends 
     * @param y
     */
   def cdf(y:Double) = {
-    val alpha = numeratorDf/2.0
-    val beta = denominatorDf/2.0
-    val x = numeratorDf*y / (numeratorDf*y + denominatorDf)
-    /**
-      * method 3.
-      * apply the incomplete beta function derived from the GSL.
-      * This is currently tending toward 0 too quickly need further debugging to test out the
-      * method.
-      */
-    IncompleteBetaFn(x,alpha, beta)
+    if (y <= 0.0) 0.0
+    else {
+      val alpha = numeratorDf/2.0
+      val beta = denominatorDf/2.0
+      val x = numeratorDf*y / (numeratorDf*y + denominatorDf)
+      /**
+        * method 3.
+        * apply the incomplete beta function derived from the GSL.
+        * This is currently tending toward 0 too quickly need further debugging to test out the
+        * method.
+        */
+      IncompleteBetaFn(x,alpha, beta)
+    }
   }
 
   /**
