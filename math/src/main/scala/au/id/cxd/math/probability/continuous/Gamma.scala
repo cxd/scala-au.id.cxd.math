@@ -54,15 +54,16 @@ class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution 
     * @return
     */
   def pdf(y: Double): Double = {
+    if (y < 0.0) return 0.0
     val gamma = GammaFn(a)
     ( pow(b, a)/gamma ) * pow(y, a-1.0)*exp(-b*y)
     //(pow(y, a - 1.0) * exp(-y / b)) / (pow(b, a) * gamma)
   }
 
-  def mean(): Double = a * b
+  def mean(): Double = a / b
 
 
-  def variance(): Double = a * pow(b, 2.0)
+  def variance(): Double = a / pow(b, 2.0)
 
   /**
     *  * $$
@@ -74,14 +75,16 @@ class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution 
     * @param y
     */
   override def cdf(y:Double):Double = {
-    val y1 = y / b
+    val y1 = b * y
     if (y1 <= 0.0) 0.0
     else if (y1 > a) 1 - IncompleteGamma.Q(a,y1)
     else IncompleteGamma.P(a,y1)
   }
 
   override def invcdf(p: Double): Double = {
-    InverseGamma(p, a, b)
+    // InverseGamma uses scale parameterization, but we use rate parameterization
+    // So we need to convert: if our beta is rate, then scale = 1/rate
+    InverseGamma(p, a, 1.0 / b)
   }
 
 }

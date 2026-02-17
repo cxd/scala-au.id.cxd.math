@@ -56,6 +56,21 @@ class Uniform(val min: Double, val max: Double) extends ContinuousDistribution {
     else 1.0
   }
 
+  /**
+    * Inverse CDF (quantile function) for uniform(a,b)
+    * $$
+    * Q(p) = a + p(b-a)
+    * $$
+    * @param p probability value in [0,1]
+    * @return the quantile value
+    */
+  override def invcdf(p: Double): Double = {
+    if (p < 0.0 || p > 1.0) {
+      throw new IllegalArgumentException(s"p = $p is out of range [0,1]")
+    }
+    min + p * (max - min)
+  }
+
 }
 
 object Uniform {
