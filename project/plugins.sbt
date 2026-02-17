@@ -3,14 +3,14 @@ logLevel := Level.Warn
 resolvers +=  ("jgit-repo" at "http://download.eclipse.org/jgit/maven")
   .withAllowInsecureProtocol(true)
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.2")
+//addSbtPlugin("com.github.sbt" % "sbt-site" % "1.5.0")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.2")
+//addSbtPlugin("com.github.sbt" % "sbt-ghpages" % "0.7.0")
 
 // sbt unidoc
-addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.2")
+addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 
 // fat jar
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.8")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.0")
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")

@@ -1,6 +1,6 @@
 import java.io.PrintWriter
 import scala.io.Source
-import com.typesafe.sbt.SbtGit.GitKeys._
+//import com.typesafe.sbt.SbtGit.GitKeys._
 
 
 lazy val breezeVersion = "0.13.2"
