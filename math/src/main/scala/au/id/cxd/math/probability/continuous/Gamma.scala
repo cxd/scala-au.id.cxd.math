@@ -38,7 +38,7 @@ import scala.math._
   *
   * Created by cd on 11/09/2014.
  * @param alpha is equivalent to the shape parameter in R
- * @param beta is equivalent to the scale parameter in R. it is 1/rate
+ * @param beta is equivalent to the scale parameter in R. it is scale = 1/rate
   */
 class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution {
 
@@ -86,7 +86,7 @@ class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution 
   }
 
   override def invcdf(p: Double): Double = {
-    InverseGamma(p, a, b)
+    InverseGamma(p, a, 1.0/b)
   }
 
 }
