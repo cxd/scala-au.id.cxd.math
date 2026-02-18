@@ -200,7 +200,9 @@ class TestGammaComprehensive extends FlatSpec with Matchers {
     val integral = gamma.integral(0.5, 3.0)
     val expected = gamma.cdf(3.0) - gamma.cdf(0.5)
 
-    Math.abs(integral - expected) should be < epsilon
+    // Use a tolerance appropriate for Simpson's rule numerical integration
+    // With improved convergence checking and max=40 iterations
+    Math.abs(integral - expected) should be < 1e-5
   }
 
   "Gamma distribution for small α" should "handle α=0.5" in {

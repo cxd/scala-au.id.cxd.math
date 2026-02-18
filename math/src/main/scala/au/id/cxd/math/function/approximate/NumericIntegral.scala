@@ -104,9 +104,12 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
       case true => oldS
       case _ => {
         val (nextS, nextT) = trap.next()
-        //if (j > (max+1)/2 && (Math.abs(nextS._1 - oldS) < epsilon * Math.abs(oldS) ) )  {
-        //  nextS._1
-        //} else
+        // Use absolute tolerance when oldS is near zero, otherwise use relative tolerance
+        val absDiff = Math.abs(nextS._1 - oldS)
+        val tolerance = if (Math.abs(oldS) < 1e-10) epsilon else epsilon * Math.abs(oldS)
+        if (j > (max+1)/2 && absDiff < tolerance )  {
+          nextS._1
+        } else
         step (max, j+1, nextT, nextS._1)
       }
     }
@@ -132,15 +135,18 @@ class NumericIntegral(val lower: Double, val upper: Double, val genFn: Double =>
     * @param epsilon
     * @return
     */
-  def simpson(epsilon:Double = Math.E, max:Int = 20) : Double = {
+  def simpson(epsilon:Double = Math.E, max:Int = 40) : Double = {
     def step (max:Int, j:Int, trap:Trapezoid, prevStep:Double, oldS:Double):Double = (j == max) match {
       case true => oldS
       case _ => {
         val (nextS, nextT) = trap.next()
         val curS = (4.0*nextS._1 - prevStep) / 3.0
-        //if (j > (max+1)/2 && (Math.abs (curS - oldS) < epsilon * Math.abs(oldS)) ) {
-        //  curS
-        //} else
+        // Use absolute tolerance when oldS is near zero, otherwise use relative tolerance
+        val absDiff = Math.abs(curS - oldS)
+        val tolerance = if (Math.abs(oldS) < 1e-10) epsilon else epsilon * Math.abs(oldS)
+        if (j > (max+1)/2 && absDiff < tolerance ) {
+          curS
+        } else
         step  (max, j+1, nextT, nextS._1, curS)
       }
     }
