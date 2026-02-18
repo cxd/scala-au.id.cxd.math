@@ -37,6 +37,8 @@ import scala.math._
   *
   *
   * Created by cd on 11/09/2014.
+ * @param alpha is equivalent to the shape parameter in R
+ * @param beta is equivalent to the scale parameter in R. it is 1/rate
   */
 class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution {
 
@@ -54,15 +56,18 @@ class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution 
     * @return
     */
   def pdf(y: Double): Double = {
-    val gamma = GammaFn(a)
-    ( pow(b, a)/gamma ) * pow(y, a-1.0)*exp(-b*y)
-    //(pow(y, a - 1.0) * exp(-y / b)) / (pow(b, a) * gamma)
+    if (y <= 0.0) 0.0
+    else {
+      val gamma = GammaFn(a)
+      ( pow(b, a)/gamma ) * pow(y, a-1.0)*exp(-b*y)
+      //(pow(y, a - 1.0) * exp(-y / b)) / (pow(b, a) * gamma)
+    }
   }
 
-  def mean(): Double = a * b
+  def mean(): Double = a / b
 
 
-  def variance(): Double = a * pow(b, 2.0)
+  def variance(): Double = a / pow(b, 2.0)
 
   /**
     *  * $$
@@ -74,7 +79,7 @@ class Gamma(val alpha: Double, val beta: Double) extends ContinuousDistribution 
     * @param y
     */
   override def cdf(y:Double):Double = {
-    val y1 = y / b
+    val y1 = y * b
     if (y1 <= 0.0) 0.0
     else if (y1 > a) 1 - IncompleteGamma.Q(a,y1)
     else IncompleteGamma.P(a,y1)
