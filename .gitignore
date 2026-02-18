@@ -29,3 +29,9 @@ app/target/**
 # MkDocs build output
 site/
 site/**
+
+000_project/**
+.bsp/**
+.ai/**
+go.work
+go.work.sum
