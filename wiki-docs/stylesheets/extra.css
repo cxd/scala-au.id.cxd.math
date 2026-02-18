@@ -1,0 +1,98 @@
+/* Extra CSS for scala-au.id.cxd.math documentation */
+
+/* Custom styling for code blocks */
+.highlight {
+  border-radius: 4px;
+}
+
+/* Improve table styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+table th {
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  font-weight: 600;
+  padding: 0.6em 1em;
+  text-align: left;
+}
+
+table td {
+  padding: 0.6em 1em;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+table tr:hover {
+  background-color: var(--md-default-fg-color--lightest);
+}
+
+/* Warning and info boxes */
+.admonition {
+  margin: 1.5em 0;
+  padding: 0.8em 1em;
+  border-left: 4px solid;
+  border-radius: 4px;
+}
+
+.admonition.warning {
+  border-left-color: #ff9800;
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.admonition.info {
+  border-left-color: #2196f3;
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.admonition.tip {
+  border-left-color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+/* Improve inline code appearance */
+code {
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Scala syntax highlighting enhancements */
+.language-scala .k { color: #d73a49; }  /* Keywords */
+.language-scala .s { color: #032f62; }  /* Strings */
+.language-scala .c { color: #6a737d; }  /* Comments */
+
+/* Navigation improvements */
+.md-nav__item--active > .md-nav__link {
+  font-weight: 600;
+}
+
+/* Better spacing for headings */
+h2 {
+  margin-top: 2em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+h3 {
+  margin-top: 1.5em;
+}
+
+/* Emoji support */
+img.emoji {
+  height: 1.2em;
+  vertical-align: middle;
+}
+
+/* Custom classes for documentation */
+.pros-cons-table td:first-child {
+  font-weight: 600;
+}
+
+/* Math equation styling */
+.arithmatex {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
